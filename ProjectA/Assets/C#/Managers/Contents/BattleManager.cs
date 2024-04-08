@@ -122,7 +122,21 @@ public class BattleManager
     public void NextTurn(bool isInit = false)
     {
         if (isInit == false)
+        {
+            if (Managers.ObjectMng.Monsters.Count <= 0)
+            {
+                EndBattle(Define.BattleResultType.Victory);
+                return;
+            }
+        
+            if (Managers.ObjectMng.Heroes.Count <= 0)
+            {
+                EndBattle(Define.BattleResultType.Defeat);
+                return;
+            }
+            
             TurnSystem.NextTurn();
+        }
 
         CurrentTurnCreature.CreatureBattleState = Define.CreatureBattleState.PrepareAction;
     }

@@ -99,7 +99,7 @@ public class ObjectManager
 			    Heroes.Remove(id);
 			    break;
 		    case Define.CreatureType.Monster:
-			    creature = Heroes[id];
+			    creature = Monsters[id];
 			    Monsters.Remove(id);
 			    break;
 	    }

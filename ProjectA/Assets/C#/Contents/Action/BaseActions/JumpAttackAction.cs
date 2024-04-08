@@ -26,7 +26,7 @@ public abstract class JumpAttackAction : BaseAction
             return;
         
         Creature targetCreature = TargetCell.CellCreature;
-        targetCreature.OnDamage(Owner.CreatureStat.Attack * (CoinHeadNum / CoinNum), 1);
+        targetCreature.OnDamage(Owner.CreatureStat.Attack * CoinHeadNum / CoinNum, 1);
     }
     
     public override void OnJumpFWDStart()

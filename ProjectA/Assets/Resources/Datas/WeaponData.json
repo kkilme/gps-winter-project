@@ -3,7 +3,7 @@
     {
       "DataId": 201000,
       "Name": "SampleSingleSword",
-      "Attack": 6,
+      "Attack": 10,
       "RightIndex": 1,
       "Actions": [
         402000,

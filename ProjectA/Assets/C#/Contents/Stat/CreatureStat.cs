@@ -43,5 +43,6 @@ public class CreatureStat : MonoBehaviour
     {
         Hp = Mathf.Clamp(Hp + amount, 0, MaxHp);
     }
+    
     #endregion
 }

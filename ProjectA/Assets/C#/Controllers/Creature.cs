@@ -123,6 +123,8 @@ public abstract class Creature : MonoBehaviour
             OnDead();
             return;
         }
+        
+        Debug.Log($"{CreatureStat.Name}: {CreatureStat.Hp}");
 
         // TODO - 애니메이션
     }
@@ -130,6 +132,8 @@ public abstract class Creature : MonoBehaviour
     public void OnDead()
     {
         CreatureBattleState = Define.CreatureBattleState.Dead;
+        
+        Managers.ObjectMng.Despawn(CreatureType, Id);
     }
 
     public void OnHeal(int heal)
