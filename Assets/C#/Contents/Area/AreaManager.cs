@@ -27,7 +27,7 @@ public class AreaManager
     private List<GameObject> _players = new();
 
     private Vector3 _currentPlayerPosition;
-    private AreaGridTile _currentTile; // 현재 플레이어가 밟고있는 타일
+    private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
     private Vector3 _currentMouseoverPosition;
 
     private Camera _areaCamera;

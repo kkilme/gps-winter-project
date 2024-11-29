@@ -24,11 +24,13 @@ public class AreaMapGeneratorEditor : Editor
         DrawSetupPlayableFieldButton();
         DrawGenerateUnplayableFieldDecorationButton();
         DrawGeneratePlayableFieldDecorationButton();
+        DrawGenerateEventTilesButton();
 
         EditorGUILayout.LabelField("Info Text");
         DrawGridPositionTextButton();
         DrawTileTypeTextButton();
-        DrawClearTextButton();
+        DrawPathToBossButton();
+        DrawClearDebugObjects();
     }
 
     private void DrawGenerateSubtileButton()
@@ -134,6 +136,33 @@ public class AreaMapGeneratorEditor : Editor
         EditorGUILayout.EndHorizontal();
     }
 
+    private void DrawGenerateEventTilesButton()
+    {
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Generate Event Tiles"))
+        {
+            if (_generator.CurrentGeneratePhase == AreaMapGenerator.MapGeneratePhase.PlayableFieldDecorationGenerate)
+            {
+                _generator.GenerateEventTiles();
+            }
+            else
+            {
+                _generator.Init();
+                _generator.GenerateSubtiles();
+                _generator.GenerateMainTile();
+                _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
+                _playableFieldPos = playableFieldPos;
+                _unplayableFieldPos = unplayableFieldPos;
+                _generator.GenerateUnplayableFieldDecoration(unplayableFieldPos);
+                _generator.GeneratePlayableFieldDecoration(playableFieldPos);
+                _generator.GenerateEventTiles();
+            }
+
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
+
     private void DrawGridPositionTextButton()
     {
         EditorGUILayout.BeginHorizontal();
@@ -153,14 +182,24 @@ public class AreaMapGeneratorEditor : Editor
         }
         EditorGUILayout.EndHorizontal();
     }
-
-    private void DrawClearTextButton()
+    private void DrawPathToBossButton()
     {
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Clear Text"))
+        if (GUILayout.Button("Show path to boss"))
         {
-            _generator.ClearText();
+            _generator.ShowPathToBoss();
         }
         EditorGUILayout.EndHorizontal();
     }
+
+    private void DrawClearDebugObjects()
+    {
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Clear Debug Objects"))
+        {
+            AreaMapGenerator.ClearDebugObjects();
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
 }

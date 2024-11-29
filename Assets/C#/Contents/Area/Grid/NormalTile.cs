@@ -1,7 +1,7 @@
 using UnityEngine;
 using static Define;
 
-public sealed class NormalTile : AreaGridTile
+public sealed class NormalTile : AreaEventTile
 {
     public NormalTile(Vector3 position, GameObject tileObject = null) : base(position, tileObject)
     {

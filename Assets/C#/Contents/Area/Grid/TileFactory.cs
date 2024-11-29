@@ -3,7 +3,7 @@ using UnityEngine;
 using static Define;
 public static class TileFactory
 {
-    public static AreaGridTile CreateTile(Vector3 position, AreaTileType type, GameObject tileObject = null)
+    public static AreaEventTile CreateTile(Vector3 position, AreaTileType type, GameObject tileObject = null)
     {
         switch (type)
         {

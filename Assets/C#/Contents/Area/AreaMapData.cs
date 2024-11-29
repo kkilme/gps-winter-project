@@ -18,6 +18,9 @@ public class AreaMapData
     public float UnplayableFieldDecorationProportion;
     [Range(0, 0.8f), Tooltip("Proportion of decoration tiles in playable field")]
     public float PlayableFieldDecorationProportion;
+
+    public int BattleTileNum;
+    public int EncounterTileNum;
     public AreaTileGroupData MainTileGroupData;
     public AreaSubTileGroupData[] SubTileGroupData;
 }

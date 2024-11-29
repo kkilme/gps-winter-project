@@ -10,7 +10,7 @@ public enum TileColorChangeType
     ToNormal
 }
 
-public abstract class AreaGridTile
+public abstract class AreaEventTile
 {
     // 스프라이트 등을 갖는 이 타일에 해당하는 게임 오브젝트 (Name: grid_hex)
     public GameObject TileObject { get; private set; }
@@ -52,7 +52,7 @@ public abstract class AreaGridTile
     private const string GRID_TILE_PATH = "Area/grid_hex";
 
     // tileObject를 생성자에 줄 시, 기존의 TileObject 오브젝트 재활용. 타일의 type을 바꾸는 데 사용됨. (AreaGrid의 ChangeTile 참조)
-    protected AreaGridTile(Vector3 position, GameObject tileObject = null)
+    protected AreaEventTile(Vector3 position, GameObject tileObject = null)
     {   
         _worldPosition = position;
         if (tileObject == null)
@@ -99,7 +99,7 @@ public abstract class AreaGridTile
 
     private void InitTileObject()
     {
-        Transform tileParent = GameObject.Find("Tiles").transform;
+        Transform tileParent = GameObject.Find("@EventTiles").transform;
         TileObject = Managers.ResourceMng.Instantiate(GRID_TILE_PATH, tileParent);
         TileObject.transform.position = _worldPosition;
     }

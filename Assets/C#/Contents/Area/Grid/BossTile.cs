@@ -1,7 +1,7 @@
 using UnityEngine;
 using static Define;
 
-public sealed class BossTile : AreaGridTile
+public sealed class BossTile : AreaEventTile
 {
     private const string _iconPath = "Area/icon_boss";
 

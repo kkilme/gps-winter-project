@@ -64,7 +64,7 @@ public class Define
     public enum AreaTileType
     {
         OutOfField,
-        Unblockable,
+        ForceEmpty,
         Obstacle,
         Empty,
         MainTile,

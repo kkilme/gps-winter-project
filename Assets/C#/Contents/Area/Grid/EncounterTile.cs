@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
-public sealed class EncounterTile : AreaGridTile
+public sealed class EncounterTile : AreaEventTile
 {
     private const string _iconPath = "Area/icon_encounter";
 

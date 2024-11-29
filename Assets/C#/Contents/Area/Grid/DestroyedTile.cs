@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using static Define;
 
-public sealed class DestroyedTile : AreaGridTile
+public sealed class DestroyedTile : AreaEventTile
 {
     private const string _iconPath = "Area/icon_caution";
 

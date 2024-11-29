@@ -25,7 +25,7 @@ public class AreaGrid
     private Vector3 _originPosition;
 
     private AreaTileType[,] _typeArray;
-    private AreaGridTile[,] _tileArray;
+    private AreaEventTile[,] _tileArray;
     //private bool[,] _isValid;
 
     private GameObject _mouseoverIndicator;
@@ -47,7 +47,7 @@ public class AreaGrid
         _tilewidth = tilewidth;
         _tileheight = tileheight;
         _originPosition = originposition;
-        _tileArray = new AreaGridTile[height, width];
+        _tileArray = new AreaEventTile[height, width];
         _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
         _mouseoverIndicator.transform.position = GetWorldPosition(width / 2, 0, 1.04f);
      
@@ -106,7 +106,7 @@ public class AreaGrid
         }
     }
 
-    public void SetTile(int x, int z, AreaGridTile gridObject)
+    public void SetTile(int x, int z, AreaEventTile gridObject)
     {
         _tileArray[z,x] = gridObject;
     }
@@ -116,12 +116,12 @@ public class AreaGrid
         _typeArray[z, x] = tileType;
     }
     
-    public AreaGridTile GetTile(int x, int z)
+    public AreaEventTile GetTile(int x, int z)
     {
         return _tileArray[z,x];
     }
 
-    public AreaGridTile GetTile(Vector3 worldPosition)
+    public AreaEventTile GetTile(Vector3 worldPosition)
     {
         GetGridPosition(worldPosition, out int x, out int z);
         return GetTile(x, z);
@@ -216,10 +216,10 @@ public class AreaGrid
     public void ChangeTile(Vector3 tileWorldPosition, AreaTileType newType)
     {
         GetGridPosition(tileWorldPosition, out int x, out int z);
-        AreaGridTile oldTile = GetTile(x, z);
+        AreaEventTile oldTile = GetTile(x, z);
         oldTile.DestroyIcon();
 
-        AreaGridTile newTile = TileFactory.CreateTile(tileWorldPosition, newType, oldTile.TileObject);
+        AreaEventTile newTile = TileFactory.CreateTile(tileWorldPosition, newType, oldTile.TileObject);
 
         SetTile(x, z, newTile);
         SetTileType(x, z, newType);
