@@ -33,7 +33,7 @@ public class AreaGenerator
     private int _battleTileNum;
     private int _encounterTileNum;
 
-    private const string TEST_GRID_POSITION_TEXT_PATH = "Area/TestPositionText";
+    private const string TEST_GRID_POSITION_TEXT_PATH = "Area/InfoText";
     
 
     public AreaGenerator(AreaName areaName, Vector3 originPosition)
@@ -118,7 +118,7 @@ public class AreaGenerator
     {
         Vector3 worldPosition = _grid.GetWorldPosition(x, z, 1.02f);
 
-        AreaGridTile tile = TileFactory.CreateTile(worldPosition, tileType);
+        AreaEventTile tile = TileFactory.CreateTile(worldPosition, tileType);
 
         _grid.SetTile(x, z, tile);
         _grid.SetTileType(x, z, tileType);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Util : MonoBehaviour
@@ -57,6 +58,7 @@ public class Util : MonoBehaviour
         return transform.gameObject;
     }
     
+    // Sprite로 Mesh 생성
     public static Mesh SpriteToMesh(Sprite sprite)
     {
         Mesh mesh = new()
@@ -68,4 +70,31 @@ public class Util : MonoBehaviour
 
         return mesh;
     }
+
+    // 2차원 정수 배열에서 최소값과 그 인덱스를 찾음. 최소값이 여러개일 시 랜덤으로 선택.
+    public static void FindMinIndex(int[,] arr, out int x, out int y)
+    {
+        int minValue = arr.Cast<int>().Min();
+        var minIndex =
+            Enumerable.Range(0, arr.GetLength(0))
+                .SelectMany(i => Enumerable.Range(0, arr.GetLength(1)).Select(j => (i, j)))
+                .Where(t => arr[t.Item1, t.Item2] == minValue)
+                .OrderBy(_ => Guid.NewGuid())
+                .First();
+
+        y = minIndex.Item1; x = minIndex.Item2;
+    }
+
+    public static void IncreaseDictCount<T>(Dictionary<T, int> dict, T key)
+    {
+        if (dict.ContainsKey(key))
+        {
+            dict[key]++;
+        }
+        else
+        {
+            dict.TryAdd(key, 1);
+        }
+    }
+
 }

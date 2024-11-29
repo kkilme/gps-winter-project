@@ -39,4 +39,13 @@ public static class Extension
 
         return toString;
     }
+
+    public static void SetLayerRecursively(this GameObject go, int layer)
+    {   
+        go.layer = layer;
+        foreach (Transform child in go.transform)
+        {
+            SetLayerRecursively(child.gameObject, layer);
+        }
+    }
 }

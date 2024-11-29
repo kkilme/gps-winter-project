@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using static Define;
 
-public sealed class BattleTile : AreaGridTile
+public sealed class BattleTile : AreaEventTile
 {
     private const string _iconPath = "Area/icon_battle";
 

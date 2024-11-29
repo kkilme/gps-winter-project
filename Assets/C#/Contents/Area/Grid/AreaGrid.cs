@@ -25,7 +25,7 @@ public class AreaGrid
     private Vector3 _originPosition;
 
     private AreaTileType[,] _typeArray;
-    private AreaGridTile[,] _tileArray;
+    private AreaEventTile[,] _tileArray;
     //private bool[,] _isValid;
 
     private GameObject _mouseoverIndicator;
@@ -47,7 +47,7 @@ public class AreaGrid
         _tilewidth = tilewidth;
         _tileheight = tileheight;
         _originPosition = originposition;
-        _tileArray = new AreaGridTile[height, width];
+        _tileArray = new AreaEventTile[height, width];
         _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
         _mouseoverIndicator.transform.position = GetWorldPosition(width / 2, 0, 1.04f);
      
@@ -63,7 +63,7 @@ public class AreaGrid
                 switch (source[z,x])
                 {
                     case -1:
-                        _typeArray[z, x] = AreaTileType.Invalid;
+                        _typeArray[z, x] = AreaTileType.OutOfField;
                         break;
                     case 0:
                         _typeArray[z, x] = AreaTileType.Obstacle;
@@ -106,7 +106,7 @@ public class AreaGrid
         }
     }
 
-    public void SetTile(int x, int z, AreaGridTile gridObject)
+    public void SetTile(int x, int z, AreaEventTile gridObject)
     {
         _tileArray[z,x] = gridObject;
     }
@@ -116,12 +116,12 @@ public class AreaGrid
         _typeArray[z, x] = tileType;
     }
     
-    public AreaGridTile GetTile(int x, int z)
+    public AreaEventTile GetTile(int x, int z)
     {
         return _tileArray[z,x];
     }
 
-    public AreaGridTile GetTile(Vector3 worldPosition)
+    public AreaEventTile GetTile(Vector3 worldPosition)
     {
         GetGridPosition(worldPosition, out int x, out int z);
         return GetTile(x, z);
@@ -152,7 +152,7 @@ public class AreaGrid
     private bool IsPositionMoveable(int x, int z)
     {
         if (!IsPositionValid(x, z)) return false;
-        return _typeArray[z, x] != AreaTileType.Obstacle && _typeArray[z, x] != AreaTileType.Invalid;
+        return _typeArray[z, x] != AreaTileType.Obstacle && _typeArray[z, x] != AreaTileType.OutOfField;
     }
 
     private bool IsNeighbor(int originx, int originz, int targetx, int targetz)
@@ -216,10 +216,10 @@ public class AreaGrid
     public void ChangeTile(Vector3 tileWorldPosition, AreaTileType newType)
     {
         GetGridPosition(tileWorldPosition, out int x, out int z);
-        AreaGridTile oldTile = GetTile(x, z);
+        AreaEventTile oldTile = GetTile(x, z);
         oldTile.DestroyIcon();
 
-        AreaGridTile newTile = TileFactory.CreateTile(tileWorldPosition, newType, oldTile.TileObject);
+        AreaEventTile newTile = TileFactory.CreateTile(tileWorldPosition, newType, oldTile.TileObject);
 
         SetTile(x, z, newTile);
         SetTileType(x, z, newType);
@@ -236,7 +236,7 @@ public class AreaGrid
 }
 
 
-#region legacy: 유효한 그리드인지 확인해주는 2차원 bool _isValid 초기화. 맵을 미리 생성해 두는 것으로 결정되어 현재 사용하지 않음
+#region legacy: 플레이 가능한 필드를 나타내는 2차원 bool _isValid 초기화.
 //private void InitializeIsValid()
 //{
 //    _isValid = new bool[_height, _width];

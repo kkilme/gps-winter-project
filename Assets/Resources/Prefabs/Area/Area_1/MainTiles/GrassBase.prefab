@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 4244767488133046903}
   - component: {fileID: 2093196101151413949}
   - component: {fileID: 778299623658637887}
+  - component: {fileID: 7154991269721458193}
   m_Layer: 0
-  m_Name: RockBase
+  m_Name: GrassBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 435858176134575976}
-  m_Mesh: {fileID: 4134776599822392979, guid: ea5b484001c3f2d40b4bad360298e9aa, type: 3}
+  m_Mesh: {fileID: 2867195630737719237, guid: 2cad0b74742aeb045b0acb7cd382ed37, type: 3}
 --- !u!23 &2093196101151413949
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -98,3 +99,15 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2867195630737719237, guid: 2cad0b74742aeb045b0acb7cd382ed37, type: 3}
+--- !u!114 &7154991269721458193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435858176134575976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac76fcde976fda4795249be29aab8cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

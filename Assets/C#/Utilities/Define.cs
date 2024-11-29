@@ -57,15 +57,24 @@ public class Define
 
     public enum AreaTileType
     {
-        Invalid,
+        OutOfField,
+        ForceEmpty,
         Obstacle,
         Empty,
+        MainTile,
+        SubTile,
         Start,
         Normal,
         Battle,
         Encounter,
         Boss,
         Destroyed
+    }
+
+    public enum AreaBaseTileType
+    {
+        MainTile,
+        SubTile
     }
 
     public enum QuestRewardType
@@ -212,6 +221,7 @@ public class Define
     public enum AreaName
     {
         Forest,
+        Snowfield
     }
     
     #endregion
