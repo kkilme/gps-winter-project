@@ -1,45 +1,18 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class BattleManager
 {
+    public bool Initialized = false; // TODO - 임시 코드
+    
     #region Field
+    
     public TurnSystem TurnSystem { get; protected set; }
-
-    private Define.BattleState _battleState;
-    public Define.BattleState BattleState
-    {
-        get => _battleState;
-        set
-        {
-            _battleState = value;
-            switch (value)
-            {
-                case Define.BattleState.SelectAction:
-                    CurrentTurnCreature.CreatureBattleState = Define.CreatureBattleState.SelectAction;
-                    break;
-                case Define.BattleState.SelectTarget:
-                    CurrentTurnCreature.CreatureBattleState = Define.CreatureBattleState.SelectTarget;
-                    // TODO - BattleGridCell로 Target 선택 활성화
-                    break;
-                case Define.BattleState.ActionProceed:
-                    CurrentTurnCreature.CreatureBattleState = Define.CreatureBattleState.ActionProceed;
-                    break;
-                case Define.BattleState.Victory:
-                    CurrentTurnCreature.CreatureBattleState = Define.CreatureBattleState.Wait;
-                    break;
-
-            }
-        }
-    }
+    
     public Creature CurrentTurnCreature => TurnSystem.CurrentTurnCreature();
 
     public BattleGridCell[,] HeroGrid { get; protected set; } = new BattleGridCell[2, 3];
     public BattleGridCell[,] MonsterGrid { get; protected set; } = new BattleGridCell[2, 3];
 
-    public BattleGridCell CurrentMouseOverCell { get; protected set; }
     #endregion
     
     public void Init()
@@ -48,13 +21,9 @@ public class BattleManager
     }
     
     #region InitBattle
+    
     public void InitBattle(int monsterSquadDataId)
     {
-        Managers.InputMng.MouseAction += HandleMouseInput;
-
-        // TODO: Test Code
-        Managers.InputMng.KeyAction += (() => EndBattle(Define.BattleResultType.Victory));
-
         GameObject battleGrid = Managers.ResourceMng.Instantiate("Battle/BattleGrid", null, "@BattleGrid");
         battleGrid.transform.position = Vector3.zero;
         GameObject heroSide = Util.FindChild(battleGrid, "HeroSide");
@@ -70,9 +39,7 @@ public class BattleManager
                 MonsterGrid[row, col].SetRowCol(row, col, Define.GridSide.MonsterSide);
             }
         }
-        
-        _battleState = Define.BattleState.Init;
-        
+
         PlaceAllCreatures(monsterSquadDataId);
         
         SetBattleTurns();
@@ -132,80 +99,15 @@ public class BattleManager
             turns[turnNum++] = id;
         
         TurnSystem.Init(turns, turnNum);
-        // TODO - 디버깅 코드
-        Debug.Log(turns);
-    }
-    #endregion
-    
-    #region Input
-    private void HandleMouseInput(Define.MouseEvent mouseEvent)
-    {
-        switch (mouseEvent)
-        {
-            case Define.MouseEvent.Hover:
-                OnMouseOverCell();
-                break;
-            case Define.MouseEvent.Click:
-                if (BattleState == Define.BattleState.SelectTarget && OnMouseOverCell())
-                    OnClickGridCell();
-                break;
-        }
-    }
-
-    public void ReplaceCreature(Creature creature, BattleGridCell cell)
-    {
-        if (cell.GridSide == Define.GridSide.HeroSide) 
-            HeroGrid[creature.Cell.Row, creature.Cell.Col] = null;
-        else
-            MonsterGrid[creature.Cell.Row, creature.Cell.Col] = null;
-        cell.CellCreature = creature;
-    }
-    
-    private bool OnMouseOverCell()
-    {
-        CurrentMouseOverCell?.MouseExit();
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: LayerMask.GetMask("BattleGridCell")))
-        {
-            BattleGridCell gridCell = rayHit.transform.gameObject.GetComponent<BattleGridCell>();
-
-            CurrentMouseOverCell = gridCell;
-            
-            if (gridCell != null)
-            {
-                CurrentMouseOverCell.MouseEnter();
-                return true;
-            }
-        }
-
-        CurrentMouseOverCell = null;
         
-        return false;
+        Debug.Log("Current Turn: " + turns[turnNum]); // TODO - 디버깅 코드
     }
     
-    public void OnClickGridCell()
-    {
-        if (CurrentMouseOverCell == null)
-            return;
-        
-        Hero currentTurnHero = CurrentTurnCreature as Hero;
-        if (currentTurnHero != null)
-        {
-            BattleState = Define.BattleState.ActionProceed;
-        }
-        else
-        {
-            Debug.Log("No currentTurnHero!");
-        }
-
-        CurrentMouseOverCell.RevertColor();
-    }
     #endregion
-    
+
     #region Battle
-    public void MoveCreature(Creature creature, BattleGridCell targetCell, bool isPlace = false)
+
+    public void MoveCreature(Creature creature, BattleGridCell targetCell, bool isInit = false)
     {
         if (creature.Cell != null)
             creature.Cell.CellCreature = null;
@@ -213,24 +115,36 @@ public class BattleManager
         targetCell.CellCreature = creature;
         creature.Cell = targetCell;
 
-        if (isPlace)
+        if (isInit)
             creature.transform.position = targetCell.transform.position;
     }
     
     public void NextTurn(bool isInit = false)
     {
         if (isInit == false)
-            TurnSystem.NextTurn();
+        {
+            if (Managers.ObjectMng.Monsters.Count <= 0)
+            {
+                EndBattle(Define.BattleResultType.Victory);
+                return;
+            }
         
-        BattleState = Define.BattleState.SelectAction;
+            if (Managers.ObjectMng.Heroes.Count <= 0)
+            {
+                EndBattle(Define.BattleResultType.Defeat);
+                return;
+            }
+            
+            TurnSystem.NextTurn();
+        }
+
+        CurrentTurnCreature.CreatureBattleState = Define.CreatureBattleState.PrepareAction;
     }
 
     public void EndBattle(Define.BattleResultType battleResult)
-    {   
-        Managers.InputMng.MouseAction -= HandleMouseInput;
+    {
         ((UI_BattleScene)Managers.UIMng.SceneUI).EndBattle(battleResult);
     }
-    #endregion
-
     
+    #endregion
 }

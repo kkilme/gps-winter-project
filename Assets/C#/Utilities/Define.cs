@@ -1,6 +1,7 @@
 public class Define
 {
     #region Type
+    
     public enum CreatureType
     {
         None,
@@ -52,13 +53,6 @@ public class Define
         Cross,
         Horizontal,
         Vertical,
-    }
-
-    public enum ApproachType
-    {
-        InPlace,
-        Jump,
-        Move,
     }
 
     public enum AreaTileType
@@ -119,38 +113,19 @@ public class Define
         Effect,
         MaxCount,
     }
+    
     #endregion
 
     #region Attribute
+    
     public enum Stat
     {
-        Name,
-        Hp,
-        MaxHp,
-        Attack,
-        Defense,
-        Speed,
+        None,
         Strength,
         Intelligence,
         Vitality,
         Dexterity,
-    }
-
-    public enum ActionAttribute
-    {
-        None,
-        TauntSkill,
-        AttackSkill,
-        BuffSkill,
-        DebuffSkill,
-        HealSkill,
-        HealItem,
-        BuffItem,
-        DebuffItem,
-        AttackItem,
-        Move,
-        Flee,
-        SelectBag
+        Monster,
     }
 
     public enum GridSide
@@ -164,8 +139,7 @@ public class Define
     public enum CreatureBattleState
     {
         Wait,
-        SelectAction,
-        SelectTarget,
+        PrepareAction,
         ActionProceed,
         Dead
     }
@@ -184,15 +158,6 @@ public class Define
         Victory
     }
 
-    public enum BattleState
-    {
-        Init,
-        SelectAction,
-        SelectTarget,
-        ActionProceed,
-        Victory
-    }
-
     public enum AreaState
     {
         Idle,
@@ -201,9 +166,11 @@ public class Define
         Encounter,
         Boss,
     }
+    
     #endregion
 
     #region Event
+    
     public enum UIEvent
     {
         Click,
@@ -222,9 +189,11 @@ public class Define
         Click,
         Hover,
     }
+    
     #endregion
 
     #region NonContent
+    
     public enum Layer
     {
         Ground = 6,
@@ -237,52 +206,50 @@ public class Define
     {
         QuarterView,
     }
+    
     #endregion
 
     #region Path
+    
     public const string HERO_PATH = "Heroes";
     public const string MONSTER_PATH = "Monsters";
+    
     #endregion
-
-    // Name은 나중에 Json으로 관리
+    
     #region Name
+    
     public enum AreaName
     {
         Forest,
         Snowfield
     }
-
-    public enum MonsterName
-    {
-        Slime,
-    }
-
-    public enum ItemName
-    {
-        Sword,
-    }
+    
     #endregion
-
-    // DataId는 나중에 Json으로 관리
+    
     #region DataId
+    
     public const int HERO_KNIGHT_ID = 101000;
 
     public const int MONSTER_BAT_ID = 102000;
 
     public const int WEAPON_SAMPLESINGLESWORD_ID = 201000;
-    public const int WEAPON_SAMPLESWORDANDSHIELD_ID = 201001;
 
     public const int ARMOR_SAMPLEBODY1_ID = 202000;
     public const int ARMOR_SAMPLEBODY2_ID = 202001;
 
     public const int ITEM_HEALPOTION_ID = 301000;
 
-    public const int SKILL_STRIKE_ID = 401000;
+    public const int ACTION_MOVE_ID = 401000;
+    public const int ACTION_FLEE_ID = 401001;
+    public const int ACTION_STRIKE_ID = 402000;
+    public const int ACTION_BITE_ID = 403000;
 
-    public const int MONSTERSQUAD_Squad1_ID = 501000;
+    public const int MONSTERSQUAD_SQUAD1_ID = 501000;
+    
     #endregion
 
     #region Value
+    
     public const float MOVE_SPEED = 5f;
 
     // Animation Name
@@ -300,5 +267,6 @@ public class Define
     public static readonly int PARAMETER_APPROACH_FINISHED = UnityEngine.Animator.StringToHash("ApproachFinished");
     public static readonly int PARAMETER_NEEDS_JUMP = UnityEngine.Animator.StringToHash("NeedsJump");
     public static readonly int PARAMETER_NEEDS_MOVE = UnityEngine.Animator.StringToHash("NeedsMove");
+   
     #endregion
 }

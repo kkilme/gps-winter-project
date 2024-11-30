@@ -25,18 +25,10 @@ public class HeroStat : CreatureStat
         _dexterity = heroData.Dexterity;
     }
 
-    public override int GetStatByDefine(Define.Stat stat)
+    public int GetStatByDefine(Define.Stat stat)
     {
         switch (stat)
         {
-            case Define.Stat.Hp:
-                return Hp;
-            case Define.Stat.MaxHp:
-                return MaxHp;
-            case Define.Stat.Attack:
-                return Attack;
-            case Define.Stat.Defense:
-                return Defense;
             case Define.Stat.Strength:
                 return Strength;
             case Define.Stat.Vitality:

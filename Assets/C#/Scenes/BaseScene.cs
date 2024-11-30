@@ -24,26 +24,23 @@ public abstract class BaseScene : MonoBehaviour
     protected virtual void Init()
     {
         // TODO - 나중엔 최초 Scene에서만 실행
-        if (!Managers.InitComplete)
+        if (!Managers.BattleMng.Initialized)
         {
             Managers.Init();
             Managers.InputMng.Init();
             Managers.DataMng.Init();
-            Managers.NetworkMng.Init();
-            Managers.ServerMng.Init();
             Managers.SoundMng.Init();
             Managers.PoolMng.Init();
             Managers.UIMng.Init();
             Managers.ObjectMng.Init();
             Managers.BattleMng.Init();
+            
+            Managers.BattleMng.Initialized = true;
         }
-
-        Object obj1 = FindObjectOfType(typeof(NetworkManager));
-        Object obj2 = FindObjectOfType(typeof(EventSystem));
         
-        if (obj1 == null)
-            Managers.ResourceMng.Instantiate("Network/NetworkManager").name = "@NetworkManager";
-        if (obj2 == null)
+        Object obj = FindObjectOfType(typeof(EventSystem));
+        
+        if (obj == null)
             Managers.ResourceMng.Instantiate("UI/EventSystem").name = "@EventSystem";
     }
     

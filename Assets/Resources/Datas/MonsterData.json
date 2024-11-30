@@ -6,7 +6,12 @@
       "Hp": 10,
       "Attack": 5,
       "Defense": 0,
-      "Speed": 8
+      "Stat": 60,
+      "Speed": 8,
+      "Actions": [
+        403000,
+        403000
+      ]
     }
   ]
 }

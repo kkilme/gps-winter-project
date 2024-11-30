@@ -28,23 +28,6 @@ public class CreatureStat : MonoBehaviour
         _defense = creatureData.Defense;
     }
 
-    public virtual int GetStatByDefine(Define.Stat stat)
-    {
-        switch (stat)
-        {
-            case Define.Stat.Hp:
-                return Hp;
-            case Define.Stat.MaxHp:
-                return MaxHp;
-            case Define.Stat.Attack:
-                return Attack;
-            case Define.Stat.Defense:
-                return Defense;
-        }
-
-        return -1;
-    }
-
     #region Event
 
     public void OnDamage(int damage, int attackCount = 1)
@@ -60,5 +43,6 @@ public class CreatureStat : MonoBehaviour
     {
         Hp = Mathf.Clamp(Hp + amount, 0, MaxHp);
     }
+    
     #endregion
 }

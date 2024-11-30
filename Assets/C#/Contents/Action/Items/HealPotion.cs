@@ -4,20 +4,30 @@ public class HealPotion : BaseItem
     
     public override void SetInfo(int templateId, Creature owner, Bag bag, int idx, int addNum)
     {
-        ActionAttribute = Define.ActionAttribute.HealItem;
         ActionTargetType = Define.ActionTargetType.Single;
         
         base.SetInfo(templateId, owner, bag, idx, addNum);
     }
 
-    public override void HandleAction(BattleGridCell targetCell, int coinHeadNum)
+    public override bool CanStartAction()
     {
-        if (targetCell.CellCreature == null)
+        // TODO
+        return false;
+    }
+
+    public override void OnStartAction()
+    {
+        // TODO
+    }
+
+    public override void OnHandleAction()
+    {
+        if (TargetCell.CellCreature == null)
             return;
         
-        Creature targetCreature = targetCell.CellCreature;
+        Creature targetCreature = TargetCell.CellCreature;
         targetCreature.OnHeal(ItemData.Heal);
         
-        base.HandleAction(targetCell, coinHeadNum);
+        base.OnHandleAction();
     }
 }

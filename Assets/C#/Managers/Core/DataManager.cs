@@ -17,7 +17,7 @@ public class DataManager
     public Dictionary<int, Data.ItemData> ItemDataDict { get; private set; }
     public Dictionary<int, Data.WeaponData> WeaponDataDict { get; private set; }
     public Dictionary<int, Data.ArmorData> ArmorDataDict { get; private set; }
-    public Dictionary<int, Data.SkillData> SkillDataDict { get; private set; }
+    public Dictionary<int, Data.ActionData> ActionDataDict { get; private set; }
     public Dictionary<Define.AreaName, Data.AreaData> AreaDataDict { get; private set; }
     public Dictionary<int, Data.QuestData> QuestDataDict { get; private set; }
 
@@ -29,7 +29,7 @@ public class DataManager
         ItemDataDict = LoadJson<Data.ItemDataLoader, int, Data.ItemData>("ItemData").MakeDict();
         WeaponDataDict = LoadJson<Data.WeaponDataLoader, int, Data.WeaponData>("WeaponData").MakeDict();
         ArmorDataDict = LoadJson<Data.ArmorDataLoader, int, Data.ArmorData>("ArmorData").MakeDict();
-        SkillDataDict = LoadJson<Data.SkillDataLoader, int, Data.SkillData>("SkillData").MakeDict();
+        ActionDataDict = LoadJson<Data.ActionDataLoader, int, Data.ActionData>("ActionData").MakeDict();
         AreaDataDict = LoadJson<Data.AreaDataSet, Define.AreaName, Data.AreaData>("AreaData").MakeDict();
         QuestDataDict = LoadJson<Data.QuestDataLoader, int, Data.QuestData>("QuestData").MakeDict();
     }

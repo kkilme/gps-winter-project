@@ -16,12 +16,12 @@ public abstract class Equipment
             EquipmentData = Managers.DataMng.ArmorDataDict[templateId];
     }
 
-    public virtual void Equip(Hero hero)
+    public void Equip(Hero hero)
     {
         Owner = hero;
     }
 
-    public virtual void UnEquip()
+    public void UnEquip()
     {
         Owner = null;
     }

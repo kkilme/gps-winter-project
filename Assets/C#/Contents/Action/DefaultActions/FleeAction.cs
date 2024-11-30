@@ -4,18 +4,26 @@ public class FleeAction : BaseAction
 {
     public int CoinNum { get; set; }
     
-    public void SetInfo(Creature owner)
+    public override void SetInfo(int templateId)
     {
-        Owner = owner;
+        base.SetInfo(templateId);
             
-        ActionAttribute = Define.ActionAttribute.Flee;
         ActionTargetType = Define.ActionTargetType.Single;
-        CoinNum = 3;
     }
 
-    public override void HandleAction(BattleGridCell cell, int coinHeadNum)
+    public override bool CanStartAction()
     {
-        // TODO - 구현
-        Debug.Log("Flee Debug");
+        // TODO
+        return false;
+    }
+
+    public override void OnStartAction()
+    {
+        // TODO
+    }
+    
+    public override void OnHandleAction()
+    {
+        // TODO
     }
 }

@@ -1,7 +1,7 @@
 ﻿public class Knight : Hero
 {
-    protected override void Init()
+    public override void SetInfo(int templateId)
     {
-        base.Init();
+        base.SetInfo(templateId);
     }
 }

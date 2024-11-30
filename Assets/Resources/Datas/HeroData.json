@@ -4,12 +4,11 @@
       "DataId": 101000,
       "Name": "Knight",
       "Hp": 30,
-      "Attack": 0,
+      "Attack": 10,
       "Defense": 0,
-      "Dexterity": 60,
-      "Speed": 5,
       "Strength": 75,
       "Vitality": 70,
+      "Dexterity": 60,
       "Intelligence": 50
     }
   ]

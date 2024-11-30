@@ -15,23 +15,4 @@ public class MonsterStat: CreatureStat
         Data.MonsterData monsterData = (Data.MonsterData)creatureData;
         _speed = monsterData.Speed;
     }
-    
-    public override int GetStatByDefine(Define.Stat stat)
-    {
-        switch (stat)
-        {
-            case Define.Stat.Hp:
-                return Hp;
-            case Define.Stat.MaxHp:
-                return MaxHp;
-            case Define.Stat.Attack:
-                return Attack;
-            case Define.Stat.Defense:
-                return Defense;
-            case Define.Stat.Speed:
-                return Speed;
-        }
-
-        return -1;
-    }
 } 

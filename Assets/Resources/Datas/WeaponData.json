@@ -3,15 +3,25 @@
     {
       "DataId": 201000,
       "Name": "SampleSingleSword",
-      "Attack": 6,
-      "RightIndex": 1
+      "Attack": 10,
+      "RightIndex": 1,
+      "Actions": [
+        402000,
+        402000,
+        402000
+      ]
     },
     {
       "DataId": 201001,
       "Name": "SampleSwordAndShield",
       "Attack": 9,
       "LeftIndex" : 17,
-      "RightIndex": 3
+      "RightIndex": 3,
+      "Actions": [
+        402000,
+        402000,
+        402000
+      ]
     }
   ]
 }

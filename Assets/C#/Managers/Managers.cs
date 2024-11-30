@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
-    public static bool Initialized { get; set; }
+    public static bool Initialized { get; protected set; }
     
     private static Managers s_instance;
     public static Managers Instance { get { Init(); return s_instance; } }
 
-    public static bool InitComplete = false;
-    
     #region Contents
     private ObjectManager _objectMng = new ObjectManager();
     private BattleManager _battleMng = new BattleManager();
@@ -30,9 +28,7 @@ public class Managers : MonoBehaviour
     private SceneManagerEx _sceneMng = new SceneManagerEx();
     private SoundManager _soundMng = new SoundManager();
     private UIManager _uiMng = new UIManager();
-    private NetworkManagerEx _networkMng = new NetworkManagerEx();
-    private ServerManager _serverMng = new ServerManager();
-    
+
     public static DataManager DataMng => Instance._dataMng;
     public static InputManager InputMng => Instance._inputMng;
     public static PoolManager PoolMng => Instance._poolMng;
@@ -40,8 +36,7 @@ public class Managers : MonoBehaviour
     public static SceneManagerEx SceneMng => Instance._sceneMng;
     public static SoundManager SoundMng => Instance._soundMng;
     public static UIManager UIMng => Instance._uiMng;
-    public static NetworkManagerEx NetworkMng => Instance._networkMng;
-    public static ServerManager ServerMng => Instance._serverMng;
+    
     #endregion
 
     public static void Init()

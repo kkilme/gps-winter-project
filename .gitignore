@@ -76,7 +76,12 @@ crashlytics-build.properties
 .vscode/
 .idea/
 
+# External Asset
 Sources/
+Assets/Resources/Sources.meta
+_External_Assets/
+Assets/Resources/_External_Assets.meta
+
+# Test
 TestScene/
 Assets/Scenes/TestScene.meta
-Assets/Resources/Sources.meta

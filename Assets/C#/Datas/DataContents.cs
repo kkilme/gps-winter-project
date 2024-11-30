@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Data
 {
@@ -31,7 +29,6 @@ namespace Data
 
     [Serializable]
     public class HeroDataLoader : ILoader<int, HeroData>
-
     {
         public List<HeroData> heroes = new List<HeroData>();
 
@@ -53,12 +50,13 @@ namespace Data
     [Serializable]
     public class MonsterData : CreatureData
     {
+        public int Stat;
         public int Speed;
+        public List<int> Actions = new List<int>();
     }
 
     [Serializable]
     public class MonsterDataLoader : ILoader<int, MonsterData>
-
     {
         public List<MonsterData> monsters = new List<MonsterData>();
 
@@ -138,7 +136,6 @@ namespace Data
         public int Hp;
         public int Attack;
         public int Defense;
-        public int Speed;
         public int Dexterity;
         public int Strength;
         public int Vitality;
@@ -152,6 +149,7 @@ namespace Data
     {
         public int LeftIndex;
         public int RightIndex;
+        public List<int> Actions;
     }
 
     [Serializable]
@@ -194,25 +192,30 @@ namespace Data
     }
     #endregion
 
-    #region SkillData
+    #region ActionData
     [Serializable]
-    public class SkillData : EquipmentData
+    public class ActionData
     {
+        public int DataId;
+        public string Name;
         public string Description;
         public int CoinNum;
-        public int ReducedStat;
+        public Define.Stat UsingStat;
+        public bool IsAttack;
+        public int IncreaseValue;
+        public int ReduceStat;
     }
 
     [Serializable]
-    public class SkillDataLoader : ILoader<int, SkillData>
+    public class ActionDataLoader : ILoader<int, ActionData>
     {
-        public List<SkillData> skills = new List<SkillData>();
+        public List<ActionData> actions = new List<ActionData>();
 
-        public Dictionary<int, SkillData> MakeDict()
+        public Dictionary<int, ActionData> MakeDict()
         {   
-            var dic = new Dictionary<int, SkillData>();
-            foreach (var skill in skills)
-                dic.Add(skill.DataId, skill);
+            var dic = new Dictionary<int, ActionData>();
+            foreach (var action in actions)
+                dic.Add(action.DataId, action);
 
             return dic;
         }

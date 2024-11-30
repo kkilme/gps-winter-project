@@ -1,20 +1,43 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
 
 public class MoveAction : BaseAction
 {
-    public void SetInfo(Creature owner)
+    public override void SetInfo(int templateId)
     {
-        Owner = owner;
-            
-        ActionAttribute = Define.ActionAttribute.Move;
+        base.SetInfo(templateId);
+        
         ActionTargetType = Define.ActionTargetType.Single;
     }
     
-    public override void HandleAction(BattleGridCell targetCell, int coinHeadNum)
+    public override bool CanStartAction()
     {
-        if (targetCell.CellCreature != null)
-            return;
+        if (Owner.CreatureType == Define.CreatureType.Hero && TargetCell.GridSide == Define.GridSide.MonsterSide)
+            return false;
+        if (Owner.CreatureType == Define.CreatureType.Monster && TargetCell.GridSide == Define.GridSide.HeroSide)
+            return false;
+
+        if (TargetCell.CellCreature != null)
+            return false;
         
-        Managers.BattleMng.MoveCreature(Owner, targetCell);
+        return true;
+    }
+    
+    public override void OnStartAction()
+    {
+        OnMoveStart();
+    }
+    
+    public override void OnMoveStart()
+    {
+        Animator.Play("Move");
+        
+        Owner.transform.DOMove(TargetCell.transform.position, 0.8f).OnComplete(OnHandleAction);
+    }
+    
+    public override void OnHandleAction()
+    {
+        Managers.BattleMng.MoveCreature(Owner, TargetCell, false);
+        
+        OnActionEnd();
     }
 }

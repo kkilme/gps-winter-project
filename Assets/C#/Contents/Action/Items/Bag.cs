@@ -7,6 +7,7 @@ public class Bag
     public Hero Owner { get; set; }
     public List<BaseItem> Items { get; protected set; }
     public int Gold { get; protected set; }
+    public event Action<Bag> ContentChange;
 
     public void SetInfo()
     {
@@ -23,6 +24,7 @@ public class Bag
         if (currentItemIdx != -1)
         {
             Items[currentItemIdx].Count += addNum;
+            ContentChange?.Invoke(this);
             return Items[currentItemIdx];
         }
         
@@ -42,6 +44,7 @@ public class Bag
             Debug.Log("Failed to StoreItem: Bag is Full");
         }
         
+        ContentChange?.Invoke(this);
         return item;
     }
     

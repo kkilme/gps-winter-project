@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 // TODO - TEST CODE
 public class Test : MonoBehaviour
@@ -35,12 +32,6 @@ public class Test : MonoBehaviour
             weapon.SetInfo(Define.WEAPON_SAMPLESINGLESWORD_ID);
             hero.EquipWeapon(weapon);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            Weapon weapon = new SampleSwordAndShield();
-            weapon.SetInfo(Define.WEAPON_SAMPLESWORDANDSHIELD_ID);
-            hero.EquipWeapon(weapon);
-        }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             Armor body = new SampleBody1();
@@ -52,10 +43,6 @@ public class Test : MonoBehaviour
             Armor body = new SampleBody2();
             body.SetInfo(Define.ARMOR_SAMPLEBODY2_ID);
             hero.EquipArmor(body);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            hero.MoveAction.HandleAction(Managers.BattleMng.HeroGrid[1, 1], 0);
         }
     }
 }

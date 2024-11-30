@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public abstract class Hero : Creature
 {
     #region Field
+    
     public Data.HeroData HeroData => CreatureData as Data.HeroData;
     public HeroStat HeroStat => (HeroStat)CreatureStat;
 
@@ -13,12 +13,27 @@ public abstract class Hero : Creature
     public GameObject LeftHand { get; protected set; }
     public GameObject RightHand { get; protected set; }
 
-    public SelectBagAction SelectBagAction { get; protected set; }
     public Bag Bag { get; protected set; }
     
     public Weapon Weapon { get; protected set; }
-    public Define.WeaponType? WeaponType => Weapon?.WeaponType;
+    public Define.WeaponType WeaponType => Weapon.WeaponType;
     public Dictionary<Define.ArmorType, Armor> Armors { get; protected set; }
+    
+    private BattleGridCell _currentMouseOverCell;
+    public BattleGridCell CurrentMouseOverCell
+    {
+        get => _currentMouseOverCell;
+        protected set
+        {
+            if (_currentMouseOverCell == value)
+                return;
+            
+            _currentMouseOverCell?.MouseExit();
+            _currentMouseOverCell = value;
+            _currentMouseOverCell?.MouseEnter();
+        }
+    }
+    
     #endregion
     
     protected override void Init()
@@ -29,16 +44,10 @@ public abstract class Hero : Creature
         LeftHand = Util.FindChild(gameObject, "weapon_l", true);
         RightHand = Util.FindChild(gameObject, "weapon_r", true);
 
-        SelectBagAction = new SelectBagAction();
-        SelectBagAction.SetInfo(this);
-        
         Bag = new Bag();
         Bag.SetInfo();
         Bag.Owner = this;
-        
-        // TODO - TEST CODE
-        ApproachType = Define.ApproachType.Jump;
-        
+
         Armors = new Dictionary<Define.ArmorType, Armor>();
         foreach (Define.ArmorType type in (Define.ArmorType[])Enum.GetValues(typeof(Define.ArmorType)))
             Armors.TryAdd(type, null);
@@ -50,90 +59,98 @@ public abstract class Hero : Creature
         
         base.SetInfo(templateId);
     }
-
-    #region Battle
-    public override void DoSelectAction()
+    
+    #region Input
+    
+    private void HandleMouseInput(Define.MouseEvent mouseEvent)
     {
-        ((UI_BattleScene)Managers.UIMng.SceneUI).BattleOrderUI.InitTurn();
+        if (CreatureBattleState == Define.CreatureBattleState.PrepareAction && CurrentAction != null) 
+        {
+            switch (mouseEvent)
+            {
+                case Define.MouseEvent.Hover:
+                    OnMouseOverCell();
+                    break;
+                case Define.MouseEvent.PointerDown:
+                    OnClickGridCell();
+                    break;
+            }
+        }
+    }
+
+    private void OnMouseOverCell()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: LayerMask.GetMask("BattleGridCell")))
+        {
+            BattleGridCell gridCell = rayHit.transform.gameObject.GetComponent<BattleGridCell>();
+            CurrentMouseOverCell = gridCell;
+            return;
+        }
+        
+        CurrentMouseOverCell = null;
     }
     
-    public override void DoSelectTarget()
+    public void OnClickGridCell()
     {
+        if (CurrentMouseOverCell == null)
+            return;
         
+        CurrentAction.Equip(this);
+        TargetCell = CurrentMouseOverCell;
+        
+        if (!CurrentAction.CanStartAction())
+        {
+            CurrentAction.UnEquip();
+            TargetCell = null;
+            return;
+        }
+
+        CreatureBattleState = Define.CreatureBattleState.ActionProceed;
+
+        CurrentMouseOverCell.RevertColor();
+    }
+    
+    #endregion
+
+    #region Battle
+    
+    public override void DoPrepareAction()
+    {
+        ((UI_BattleScene)Managers.UIMng.SceneUI).BattleOrderUI.InitTurn();
+        
+        Managers.InputMng.MouseAction -= HandleMouseInput;
+        Managers.InputMng.MouseAction += HandleMouseInput;
     }
     
     public override void DoAction()
     {
-        TargetCell = Managers.BattleMng.CurrentMouseOverCell;
-        
-        CoinHeadNum = 0;
-        CoinHeadNum = CurrentAction.CoinToss();
-        ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinToss(CurrentAction, CoinHeadNum);
-        
-        switch (CurrentAction.ActionAttribute)
-        {
-            case Define.ActionAttribute.AttackSkill:
-                AnimState = Define.AnimState.Attack;
-                break;
-            case Define.ActionAttribute.Move:
-                OnMove(TargetCell);
-                break;
-        }
+        CurrentAction.DoAction();
     }
 
     public override void DoEndTurn()
     {
-        ((UI_BattleScene)Managers.UIMng.SceneUI).BattleOrderUI.EndTurn();
-    }
-    #endregion
-    
-    #region Action
-    private bool NeedsInvoke(out int percent)
-    {
-        switch (CurrentAction.ActionAttribute)
-        {
-            case Define.ActionAttribute.SelectBag:
-            case Define.ActionAttribute.Flee:
-            case Define.ActionAttribute.Move:
-            case Define.ActionAttribute.AttackItem:
-            case Define.ActionAttribute.BuffItem:
-            case Define.ActionAttribute.DebuffItem:
-            case Define.ActionAttribute.HealItem:
-                percent = 0;
-                return false;
-        }
+        Managers.InputMng.MouseAction -= HandleMouseInput;
         
-        Debug.Log(CurrentAction.ActionAttribute);
-
-        percent = CurrentAction.ActionAttribute switch
-        {
-            Define.ActionAttribute.AttackSkill => WeaponType switch
-            {
-                Define.WeaponType.Bow => HeroStat.Dexterity,
-                Define.WeaponType.Spear => HeroStat.Dexterity,
-                Define.WeaponType.Wand => HeroStat.Intelligence,
-                Define.WeaponType.SingleSword => HeroStat.Strength,
-                Define.WeaponType.DoubleSword => HeroStat.Strength,
-                Define.WeaponType.SwordAndShield => HeroStat.Strength,
-                Define.WeaponType.TwoHandedSword => HeroStat.Strength,
-                null => HeroStat.Strength
-            },
-            Define.ActionAttribute.BuffSkill => HeroStat.Intelligence,
-            Define.ActionAttribute.DebuffSkill => HeroStat.Intelligence,
-            Define.ActionAttribute.HealSkill => HeroStat.Intelligence,
-            Define.ActionAttribute.TauntSkill => HeroStat.Vitality
-        };
-
-        return true;
+        ((UI_BattleScene)Managers.UIMng.SceneUI).BattleOrderUI.EndTurn();
+        ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.EndTurn();
+        
+        CreatureBattleState = Define.CreatureBattleState.Wait;
+        CurrentAction.UnEquip();
+        TargetCell = null;
+        Managers.BattleMng.NextTurn();
     }
-    #endregion
     
+    #endregion
+
     // TODO - Data Id로 무기 및 아머를 장착하도록 구현
     #region Weapon
+    
     public void ChangeAnimator()
     {
-        string path = "Animator Controllers/Players/" + WeaponType.ToString();
-        Animator.runtimeAnimatorController = Resources.Load(path) as RuntimeAnimatorController; 
+        string path = "Animators/Players/" + WeaponType;
+        Animator.runtimeAnimatorController = Managers.ResourceMng.Load<RuntimeAnimatorController>(path);
     }
     
     public void EquipWeapon(Weapon equippingWeapon)
@@ -147,7 +164,6 @@ public abstract class Hero : Creature
         
         Weapon = equippingWeapon;
         HeroStat.AttachEquipment(Weapon.EquipmentData);
-        HeroStat.Attack += 1;
         Weapon.Equip(this);
         ChangeWeaponVisibility(true);
         ChangeAnimator();
@@ -155,13 +171,13 @@ public abstract class Hero : Creature
     
     public void UnEquipWeapon()
     {
-        if (Weapon != null)
-        {
-            HeroStat.DetachEquipment(Weapon.EquipmentData);
-            Weapon.UnEquip();
-            ChangeWeaponVisibility(false);
-            Weapon = null;
-        }
+        if (Weapon == null)
+            return;
+        
+        HeroStat.DetachEquipment(Weapon.EquipmentData);
+        Weapon.UnEquip();
+        ChangeWeaponVisibility(false);
+        Weapon = null;
     }
     
     public void ChangeWeaponVisibility(bool isActive)
@@ -177,9 +193,11 @@ public abstract class Hero : Creature
             RightHand.transform.GetChild(rightIndex).gameObject.SetActive(isActive);
         }
     }
+    
     #endregion
     
     #region Armor
+    
     public void EquipArmor(Armor equippingArmor)
     {
         Define.ArmorType armorType = equippingArmor.ArmorType;
@@ -198,13 +216,13 @@ public abstract class Hero : Creature
 
     public void UnEquipArmor(Define.ArmorType armorType)
     {
-        if (Armors[armorType] != null)
-        {
-            HeroStat.DetachEquipment(Armors[armorType].EquipmentData);
-            Armors[armorType].UnEquip();
-            ChangeArmorVisibility(armorType, false);
-            Armors[armorType] = null;
-        }
+        if (Armors[armorType] == null)
+            return;
+        
+        HeroStat.DetachEquipment(Armors[armorType].EquipmentData);
+        Armors[armorType].UnEquip();
+        ChangeArmorVisibility(armorType, false);
+        Armors[armorType] = null;
     }
 
     public void ChangeArmorVisibility(Define.ArmorType armorType, bool isActive)
@@ -226,5 +244,6 @@ public abstract class Hero : Creature
                  break;
         }
     }
+    
     #endregion
 }

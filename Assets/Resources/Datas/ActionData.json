@@ -1,0 +1,44 @@
+﻿{
+  "actions": [
+    {
+      "DataId": 401000,
+      "Name": "MoveAction",
+      "Description": "",
+      "CoinNum": 0,
+      "UsingStat": "None",
+      "IsAttack": false,
+      "IncreaseValue": 0,
+      "ReduceStat": 0
+    },
+    {
+      "DataId": 401001,
+      "Name": "FleeAction",
+      "Description": "Perfect = Flee",
+      "CoinNum": 2,
+      "UsingStat": "Dexterity",
+      "IsAttack": false,
+      "IncreaseValue": 0,
+      "ReduceStat": 0
+    },
+    {
+      "DataId": 402000,
+      "Name": "Strike",
+      "Description": "",
+      "CoinNum": 3,
+      "UsingStat": "Strength",
+      "IsAttack": true,
+      "IncreaseValue": 0,
+      "ReduceStat": 0
+    },
+    {
+      "DataId": 403000,
+      "Name": "Bite",
+      "Description": "",
+      "CoinNum": 2,
+      "UsingStat": "Strength",
+      "IsAttack": true,
+      "IncreaseValue": 0,
+      "ReduceStat": 0
+    }
+  ]
+}
