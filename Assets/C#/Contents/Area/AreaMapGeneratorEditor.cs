@@ -95,7 +95,7 @@ public class AreaMapGeneratorEditor : Editor
         {
             if (_generator.CurrentGeneratePhase == AreaMapGenerator.MapGeneratePhase.PlayableFieldSetup)
             {
-                _generator.GenerateUnplayableFieldDecoration(_unplayableFieldPos);
+                _generator.GenerateUnplayableFieldObstacles(_unplayableFieldPos);
             }
             else
             {
@@ -105,7 +105,7 @@ public class AreaMapGeneratorEditor : Editor
                 _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
                 _playableFieldPos = playableFieldPos;
                 _unplayableFieldPos = unplayableFieldPos;
-                _generator.GenerateUnplayableFieldDecoration(unplayableFieldPos);
+                _generator.GenerateUnplayableFieldObstacles(unplayableFieldPos);
             }
         }
         EditorGUILayout.EndHorizontal();
@@ -116,9 +116,9 @@ public class AreaMapGeneratorEditor : Editor
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Generate Playable Field Decoration"))
         {   
-            if (_generator.CurrentGeneratePhase == AreaMapGenerator.MapGeneratePhase.UnplayableFieldDecorationGenerate)
+            if (_generator.CurrentGeneratePhase == AreaMapGenerator.MapGeneratePhase.UnplayableFieldObstacleGenerate)
             {
-                _generator.GeneratePlayableFieldDecoration(_playableFieldPos);
+                _generator.GeneratePlayableFieldObstacles(_playableFieldPos);
             }
             else
             {
@@ -128,8 +128,8 @@ public class AreaMapGeneratorEditor : Editor
                 _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
                 _playableFieldPos = playableFieldPos;
                 _unplayableFieldPos = unplayableFieldPos;
-                _generator.GenerateUnplayableFieldDecoration(unplayableFieldPos);
-                _generator.GeneratePlayableFieldDecoration(playableFieldPos);
+                _generator.GenerateUnplayableFieldObstacles(unplayableFieldPos);
+                _generator.GeneratePlayableFieldObstacles(playableFieldPos);
             }
 
         }
@@ -141,7 +141,7 @@ public class AreaMapGeneratorEditor : Editor
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Generate Event Tiles"))
         {
-            if (_generator.CurrentGeneratePhase == AreaMapGenerator.MapGeneratePhase.PlayableFieldDecorationGenerate)
+            if (_generator.CurrentGeneratePhase == AreaMapGenerator.MapGeneratePhase.PlayableFieldObstacleGenerate)
             {
                 _generator.GenerateEventTiles();
             }
@@ -153,8 +153,8 @@ public class AreaMapGeneratorEditor : Editor
                 _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
                 _playableFieldPos = playableFieldPos;
                 _unplayableFieldPos = unplayableFieldPos;
-                _generator.GenerateUnplayableFieldDecoration(unplayableFieldPos);
-                _generator.GeneratePlayableFieldDecoration(playableFieldPos);
+                _generator.GenerateUnplayableFieldObstacles(unplayableFieldPos);
+                _generator.GeneratePlayableFieldObstacles(playableFieldPos);
                 _generator.GenerateEventTiles();
             }
 
