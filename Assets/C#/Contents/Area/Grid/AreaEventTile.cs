@@ -10,20 +10,22 @@ public enum TileColorChangeType
     ToNormal
 }
 
+// 플레이 가능 영역에 생성되는, 플레이어가 이동 가능한 타일.
+// Note: 플레이어가 밟고 서있는 바닥 블록은 AreaBaseTile
 public abstract class AreaEventTile
 {
-    // 스프라이트 등을 갖는 이 타일에 해당하는 게임 오브젝트 (Name: grid_hex)
+    // 색 변화가 가능한 스프라이트를 갖고 있는 셀 오브젝트 (프리팹 이름: grid_hex)
     public GameObject TileObject { get; private set; }
-
+    // 타일의 타입
     public AreaTileType TileType { get; protected set; }
-
+    // 타일의 월드 좌표
     protected Vector3 _worldPosition;
-    
     // 셀 모서리 스프라이트
     protected SpriteRenderer _indicator;
     // 셀 내부 스프라이트
     protected SpriteRenderer _fill;
 
+    // 이 타일이 어떤 타입의 타일인지 나타내는 아이콘 오브젝트
     protected GameObject _icon;
     public GameObject Icon
     {
@@ -38,13 +40,13 @@ public abstract class AreaEventTile
         }
     }
 
-    protected Color _indicatorColor; // 각 tile별 지정된 색
-    protected Color _fillColor;
-    protected Color _indicatorHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되는 색
-    protected Color _fillHighlightColor;
+    protected Color _indicatorColor; // TileObject의 모서리 색상. 타일 타입별로 지정된 색이 다름
+    protected Color _fillColor; // TileObject의 내부 색상.
+    protected Color _indicatorHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 indicator 색상
+    protected Color _fillHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 fill 색상
 
 
-    // DoTween을 통해 스프라이트 색을 바꾸는데, 이 작업을 의미함.
+    // DoTween을 통해 TileObject의 스프라이트 색을 바꾸는데, 이 작업을 의미함.
     // 이를 통해 작업을 도중에 취소할 수 있음
     private Tweener _indicatorColorTween;
     private Tweener _fillColorTween;
