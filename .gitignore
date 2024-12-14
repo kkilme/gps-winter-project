@@ -81,7 +81,3 @@ Sources/
 Assets/Resources/Sources.meta
 _External_Assets/
 Assets/Resources/_External_Assets.meta
-
-# Test
-TestScene/
-Assets/Scenes/TestScene.meta

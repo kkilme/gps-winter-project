@@ -34,7 +34,8 @@ public partial class AreaMapGenerator : MonoBehaviour
     [ReadOnly] public MapGeneratePhase CurrentGeneratePhase = MapGeneratePhase.NotStarted; // 에디터상에서 버튼으로 맵 생성을 테스트하는 데 사용
 
     public void Init(Define.AreaName area = Define.AreaName.Forest)
-    {
+    {   
+        // 에디터상에서 디버그용
         #if UNITY_EDITOR
         area = _testAreaName;
         ClearMap();

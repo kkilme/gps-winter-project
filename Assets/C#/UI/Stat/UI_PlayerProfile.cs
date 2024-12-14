@@ -2,7 +2,7 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 
-public class UI_PlayerStat : UI_Base
+public class UI_PlayerProfile : UI_Base
 {
     private event Action OnClaer;
 
@@ -19,8 +19,6 @@ public class UI_PlayerStat : UI_Base
         Text_Vitality,
         Text_Intelligence,
         Text_Dexterity,
-
-        Text_Gold,
     }
 
     enum Sliders

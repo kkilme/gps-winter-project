@@ -1,15 +1,15 @@
-﻿{
+{
   "heroes": [
     {
       "DataId": 101000,
       "Name": "Knight",
-      "Hp": 30,
-      "Attack": 10,
-      "Defense": 0,
+      "Hp": 100,
+      "Attack": 5,
+      "Defense": 3,
       "Strength": 75,
-      "Vitality": 70,
-      "Dexterity": 60,
-      "Intelligence": 50
+      "Vitality": 60,
+      "Dexterity": 50,
+      "Intelligence": 40
     }
   ]
 }

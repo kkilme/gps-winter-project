@@ -3,18 +3,18 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class UI_PlayerStatGroup : UI_Base
+public class UI_PlayerProfileGroup : UI_Base
 {
-    enum PlayerStatUI
+    enum PlayerProfileUI
     {
-        UI_PlayerStat_Player1,
-        UI_PlayerStat_Player2,
-        UI_PlayerStat_Player3
+        UI_PlayerProfile_Player1,
+        UI_PlayerProfile_Player2,
+        UI_PlayerProfile_Player3
     }
 
     public override void Init()
     {
-        Bind<GameObject>(typeof(PlayerStatUI));
+        Bind<GameObject>(typeof(PlayerProfileUI));
         //DontDestroyOnLoad(transform.parent.gameObject);
     }
 
@@ -29,17 +29,17 @@ public class UI_PlayerStatGroup : UI_Base
         int index = 0;
         foreach (var hero in Managers.ObjectMng.Heroes.Values)
         {
-            var go = GetGameObject((PlayerStatUI)index++);
-            go.GetOrAddComponent<UI_PlayerStat>().BindPlayerStat(hero.HeroStat);
+            var go = GetGameObject((PlayerProfileUI)index++);
+            go.GetOrAddComponent<UI_PlayerProfile>().BindPlayerStat(hero.HeroStat);
             go.SetActive(true);
             
-            go.transform.Find("Bag").GetOrAddComponent<UI_Bag>().BindBag(hero.Bag);
+            //go.transform.Find("Bag").GetOrAddComponent<UI_Bag>().BindBag(hero.Bag);
         }
     }
 
     private void Clear()
     {
-        foreach (PlayerStatUI playerUI in Enum.GetValues(typeof(PlayerStatUI)))
+        foreach (PlayerProfileUI playerUI in Enum.GetValues(typeof(PlayerProfileUI)))
             GetGameObject(playerUI).SetActive(false);
     }
 }
