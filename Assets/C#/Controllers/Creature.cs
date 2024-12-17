@@ -63,11 +63,6 @@ public abstract class Creature : MonoBehaviour
     {
         DataId = templateId;
 
-        if (CreatureType == Define.CreatureType.Hero)
-            CreatureData = Managers.DataMng.HeroDataDict[templateId];
-        else
-            CreatureData = Managers.DataMng.MonsterDataDict[templateId];
-
         gameObject.name = $"{CreatureData.DataId}_{CreatureData.Name}";
         
         CreatureStat.SetStat(CreatureData);

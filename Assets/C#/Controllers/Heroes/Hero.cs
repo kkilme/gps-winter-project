@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Hero : Creature
+public class Hero : Creature
 {
     #region Field
     
@@ -56,7 +56,7 @@ public abstract class Hero : Creature
     public override void SetInfo(int templateId)
     {
         CreatureType = Define.CreatureType.Hero;
-        
+        CreatureData = Managers.DataMng.HeroDataDict[templateId];
         base.SetInfo(templateId);
     }
     
@@ -141,12 +141,13 @@ public abstract class Hero : Creature
         TargetCell = null;
         Managers.BattleMng.NextTurn();
     }
-    
+
     #endregion
 
+    // Prototype버전에선 Weapon, Armor 변경 X
     // TODO - Data Id로 무기 및 아머를 장착하도록 구현
     #region Weapon
-    
+
     public void ChangeAnimator()
     {
         string path = "Animators/Players/" + WeaponType;
@@ -193,11 +194,12 @@ public abstract class Hero : Creature
             RightHand.transform.GetChild(rightIndex).gameObject.SetActive(isActive);
         }
     }
-    
+
     #endregion
+
     
     #region Armor
-    
+
     public void EquipArmor(Armor equippingArmor)
     {
         Define.ArmorType armorType = equippingArmor.ArmorType;

@@ -8,7 +8,7 @@ TagManager:
   - EnemyGrid
   - PlayerGrid
   - AreaLight
-  - TownSpawnPoints
+  - TownHeroSpawnPoint
   layers:
   - Default
   - TransparentFX

@@ -9,7 +9,8 @@ public class UI_PlayerProfileGroup : UI_Base
     {
         UI_PlayerProfile_Player1,
         UI_PlayerProfile_Player2,
-        UI_PlayerProfile_Player3
+        UI_PlayerProfile_Player3,
+        UI_PlayerProfile_Player4
     }
 
     public override void Init()

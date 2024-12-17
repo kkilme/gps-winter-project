@@ -6,10 +6,21 @@
       "Hp": 100,
       "Attack": 5,
       "Defense": 3,
-      "Strength": 75,
+      "Strength": 70,
       "Vitality": 60,
       "Dexterity": 50,
       "Intelligence": 40
+    },
+    {
+      "DataId": 101001,
+      "Name": "Wizard",
+      "Hp": 50,
+      "Attack": 5,
+      "Defense": 0,
+      "Strength": 40,
+      "Vitality": 50,
+      "Dexterity": 60,
+      "Intelligence": 70
     }
   ]
 }

@@ -7,6 +7,6 @@ public abstract class UI_Page : UI_Base
 {
     private void OnEnable()
     {
-        this.GetComponent<RectTransform>().DOLocalMoveX(-250, 0.5f).From(true).SetEase(Ease.OutCirc);
+        this.GetComponent<RectTransform>().DOLocalMoveY(250, 0.5f).From(true).SetEase(Ease.OutCirc);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class ObjectManager
 {
@@ -24,6 +25,7 @@ public class ObjectManager
 	    NextHeroId = 10000;
 	    NextMonsterId = 20000;
 
+		Object.DontDestroyOnLoad(HeroRoot.gameObject);
 	    BindActions();
     }
 
@@ -61,6 +63,11 @@ public class ObjectManager
     #region Creature
     public Hero SpawnHero(int heroDataId)
     {
+        if (!Managers.DataMng.HeroDataDict.ContainsKey(heroDataId))
+        {
+			Debug.LogError($"No hero data exists with heroDataId: {heroDataId}");
+            return null;
+        }
 	    string className = Managers.DataMng.HeroDataDict[heroDataId].Name;
 	    GameObject go = Managers.ResourceMng.Instantiate($"{Define.HERO_PATH}/{className}");
 	    Hero hero = go.GetComponent<Hero>();
@@ -70,7 +77,6 @@ public class ObjectManager
 	    hero.transform.parent = HeroRoot;
 	    hero.Id = NextHeroId;
 	    Heroes[NextHeroId++] = hero;
-		
 	    return hero;
     }
     

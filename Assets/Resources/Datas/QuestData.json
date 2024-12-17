@@ -2,7 +2,7 @@
   "quests": [
       {
           "DataId": 601000,
-          "Name": "Explore Forest",
+          "Name": "Exploring the forest",
           "Description": "Defeat boss in Forest area.",
           "AreaName": "Forest",
           "Rewards": [
@@ -12,14 +12,14 @@
             }
           ],
           "UnlockQuestDataId": [601001],
-          "IsRepeatable": false,
+          "IsRepeatable": true,
           "IsUnlocked": true,
           "IsComplete": false
       },
       {
           "DataId": 601001,
-          "Name": "Explore Snowfield",
-          "Description": "Defeat boss in Snowfield area.",
+          "Name": "Going deeper into the forest",
+          "Description": "Defeat boss in forest area.",
           "AreaName": "Forest",
           "Rewards": [
             {
@@ -28,7 +28,7 @@
             }
           ],
           "UnlockQuestDataId": [],
-          "IsRepeatable": false,
+          "IsRepeatable": true,
           "IsUnlocked": false,
           "IsComplete": false
       }

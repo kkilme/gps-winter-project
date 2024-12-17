@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,6 +42,9 @@ public class UI_TownScene : UI_Scene
         {
             Get<UI_Page>(Pages.UI_Page_Town_Main).gameObject.SetActive(false);
 
+            GetButton(Buttons.Button_ExitAtQuest).GetComponent<RectTransform>().DOLocalMoveY(200, 0.5f).From(true)
+                .SetEase(Ease.OutCirc);
+
             _currentPage = Get<UI_Page>(Pages.UI_Page_Town_Quest);
             _currentPage.gameObject.SetActive(true);
         }
@@ -48,6 +52,9 @@ public class UI_TownScene : UI_Scene
         void OnClickedStoreButton(PointerEventData data)
         {
             Get<UI_Page>(Pages.UI_Page_Town_Main).gameObject.SetActive(false);
+
+            GetButton(Buttons.Button_ExitAtStore).GetComponent<RectTransform>().DOLocalMoveY(200, 0.5f).From(true)
+                .SetEase(Ease.OutCirc);
 
             _currentPage = Get<UI_Page>(Pages.UI_Page_Town_Store);
             _currentPage.gameObject.SetActive(true);

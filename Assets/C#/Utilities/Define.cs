@@ -229,6 +229,7 @@ public class Define
     #region DataId
     
     public const int HERO_KNIGHT_ID = 101000;
+    public const int HERO_WIZARD_ID = 101001;
 
     public const int MONSTER_BAT_ID = 102000;
 

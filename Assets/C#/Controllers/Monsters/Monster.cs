@@ -13,7 +13,7 @@ public abstract class Monster : Creature
     public override void SetInfo(int templateId)
     {
         CreatureType = Define.CreatureType.Monster;
-        
+        CreatureData = Managers.DataMng.MonsterDataDict[templateId];
         base.SetInfo(templateId);
     }
 

@@ -12,7 +12,6 @@ public class MonsterStat: CreatureStat
     {
         base.SetStat(creatureData);
 
-        Data.MonsterData monsterData = (Data.MonsterData)creatureData;
-        _speed = monsterData.Speed;
+        _speed = ((Data.MonsterData)creatureData).Speed;
     }
 } 
