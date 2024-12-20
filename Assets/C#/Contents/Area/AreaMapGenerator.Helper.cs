@@ -33,7 +33,7 @@ public partial class AreaMapGenerator
 
     // 그리드 좌표를 월드 좌표로 변환
     private Vector3 GridToWorldPosition(int x, int z, float y = 0)
-    {
+    {   
         if (x % 2 == 1) return new Vector3(x * TILE_WIDTH * 0.75f, y, (z + 0.5f) * TILE_HEIGHT) + _mapOriginPosition;
         else return new Vector3(x * TILE_WIDTH * 0.75f, y, z * TILE_HEIGHT) + _mapOriginPosition;
     }
@@ -91,6 +91,7 @@ public partial class AreaMapGenerator
         return false;
     }
 
+    // x, z: playable field 기준
     private void CreateEventTile(int x, int z, Define.AreaTileType tileType)
     {
         Vector3 worldPosition = GridToWorldPosition(x + _playableAreaWidthStartOffset, z + _playableAreaHeightStartOffset, 1.02f);
@@ -102,7 +103,7 @@ public partial class AreaMapGenerator
     }
 
 
-    // 시작 위치부터 특정 위치(일반적으로 보스타일)까지 길찾기
+    // 시작 위치부터 특정 위치(일반적으로 보스타일)까지 길찾기 (BFS)
     private bool FindPath(Vector2Int destination, out List<Vector2Int> path)
     {   
         // 타일별 최단거리
@@ -204,20 +205,21 @@ public partial class AreaMapGenerator
     }
 
     #region Debug
-    private static void ClearMap()
+    private void ClearMap()
     {
-        GameObject mapParent = GameObject.Find("@Map");
+        GameObject[] parents = new GameObject[4] { GameObject.Find("@Debug"), GameObject.Find("@SubTiles"), GameObject.Find("@MainTiles"), GameObject.Find("@EventTiles") };
 
-        if (mapParent != null)
-        {
-            for (int j = mapParent.transform.childCount - 1; j >= 0; j--)
+        foreach (var p in parents)
+        {   
+            if(p == null) continue;
+            var pt = p.transform;
+            for (int i = pt.childCount - 1; i >= 0; i--)
             {
-                for (int i = mapParent.transform.GetChild(j).transform.childCount - 1; i >= 0; i--)
-                {
-                    Destroy(mapParent.transform.GetChild(j).GetChild(i).gameObject);
-                }
+                Destroy(pt.GetChild(i).gameObject);
             }
         }
+
+        Debug.Log("Map Cleared");
     }
 
     public static void ClearDebugObjects()
@@ -311,6 +313,21 @@ public partial class AreaMapGenerator
         {
             Vector3 position = GridToWorldPosition(pos.x, pos.y, 1.07f);
             Instantiate(_pathIndicator, position, Quaternion.Euler(90, 0, 0), _debugObjectParent);
+        }
+    }
+
+    public void TestGenerateMap()
+    {
+        if (!Init()) return;
+        GenerateMap();
+    }
+
+    private void Start()
+    {
+        if (Managers.SceneMng.CurrentScene is AreaScene)
+        {
+            _isTestMode = true;
+            
         }
     }
 

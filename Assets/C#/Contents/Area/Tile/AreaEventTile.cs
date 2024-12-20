@@ -51,22 +51,15 @@ public abstract class AreaEventTile
     private Tweener _indicatorColorTween;
     private Tweener _fillColorTween;
 
-    private const string GRID_TILE_PATH = "Area/grid_hex";
-
-    // tileObject를 생성자에 줄 시, 기존의 TileObject 오브젝트 재활용. 타일의 type을 바꾸는 데 사용됨. (AreaGrid의 ChangeTile 참조)
-    protected AreaEventTile(Vector3 position, GameObject tileObject = null)
+    // isRecycle이 True라면 기존의 TileObject 오브젝트 재활용. 타일의 type만을 바꾸는 데 사용됨 (AreaGrid의 ChangeTile 참조).
+    protected AreaEventTile(Vector3 position, GameObject tileObject, bool isRecycle = false)
     {   
         _worldPosition = position;
-        if (tileObject == null)
+        TileObject = tileObject;
+        InitSprites();
+        if (!isRecycle)
         {
-            InitTileObject();
-            InitSprites();
             InitMesh();
-        }
-        else
-        {
-            TileObject = tileObject;
-            InitSprites();
         }
     }
 
@@ -97,13 +90,6 @@ public abstract class AreaEventTile
 
         _fillColorTween?.Kill();
         _fillColorTween = null;
-    }
-
-    private void InitTileObject()
-    {
-        Transform tileParent = GameObject.Find("@EventTiles").transform;
-        TileObject = Managers.ResourceMng.Instantiate(GRID_TILE_PATH, tileParent);
-        TileObject.transform.position = _worldPosition;
     }
 
     private void InitSprites()

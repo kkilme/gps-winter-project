@@ -7,8 +7,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-[Serializable]
-public class AreaMapData
+[CreateAssetMenu(fileName = "Area Map Data", menuName = "Scriptable Object/Area Map Data")]
+public class AreaMapData : ScriptableObject
 {   
     // 전체 맵 크기
     public int MapWidth;
@@ -25,6 +25,57 @@ public class AreaMapData
     public int EncounterTileNum;
     public AreaTileGroupData MainTileGroupData;
     public AreaSubTileGroupData[] SubTileGroupData;
+
+    // 데이터 오류 검증
+    public bool Verify()
+    {
+        if (MainTileGroupData == null)
+        {
+            Debug.LogError("MainTileGroupData is null!");
+            return false;
+        }
+
+        if (SubTileGroupData == null || SubTileGroupData.Length == 0)
+        {
+            Debug.LogError("SubTileGroupData is null or empty!");
+            return false;
+        }
+
+        if (MapHeight <= PlayableMapHeight || MapWidth <= PlayableMapWidth)
+        {
+            Debug.LogError("PlayableMapSize must be smaller than MapSize!");
+            return false;
+        }
+
+        if (BattleTileNum > PlayableMapHeight * PlayableMapWidth / 2 || EncounterTileNum > PlayableMapHeight * PlayableMapWidth / 2)
+        {
+            Debug.LogError("EventTileNum must be smaller than (PlayableMapHeight * PlayableMapWidth) / 2!");
+            return false;
+        }
+
+        foreach (var subTileGroup in SubTileGroupData)
+        {
+            if (subTileGroup.MinLength == 0)
+            {
+                Debug.LogError("SubTileGroup's MinLength must not be 0!");
+                return false;
+            }
+
+            if (subTileGroup.MaxLength < subTileGroup.MinLength)
+            {
+                Debug.LogError("SubTileGroup's MaxLength must be greater than MinLength!");
+                return false;
+            }
+
+            if (subTileGroup.MaxLength - subTileGroup.MinLength == 0)
+            {
+                Debug.LogError("SubTileGroup's MaxLength and MinLength must not be the same!");
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 
 [Serializable]

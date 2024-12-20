@@ -7,7 +7,7 @@ public sealed class EncounterTile : AreaEventTile
 {
     private const string _iconPath = "Area/icon_encounter";
 
-    public EncounterTile(Vector3 position, GameObject tileObject = null) : base(position, tileObject)
+    public EncounterTile(Vector3 position, GameObject tileObject = null, bool isRecycle = false) : base(position, tileObject, isRecycle)
     {
         TileType = AreaTileType.Encounter;
         _indicatorColor = new Color(255f / 255f, 255f / 255f, 20f / 255f, 200f / 255f);
@@ -22,7 +22,7 @@ public sealed class EncounterTile : AreaEventTile
        _indicator.color = _indicatorColor;
        _fill.color = _fillColor;
 
-        Icon = Managers.ResourceMng.Instantiate(_iconPath, TileObject.transform, "icon");
+       Icon = Managers.ResourceMng.Instantiate(_iconPath, TileObject.transform, "icon");
     }
     public override void OnTileEnter()
     {

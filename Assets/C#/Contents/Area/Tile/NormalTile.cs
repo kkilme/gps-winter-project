@@ -3,7 +3,7 @@ using static Define;
 
 public sealed class NormalTile : AreaEventTile
 {
-    public NormalTile(Vector3 position, GameObject tileObject = null) : base(position, tileObject)
+    public NormalTile(Vector3 position, GameObject tileObject = null, bool isRecycle = false) : base(position, tileObject, isRecycle)
     {
         TileType = AreaTileType.Normal;
         _indicatorColor = _indicator.color;

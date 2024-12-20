@@ -230,7 +230,7 @@ public class AreaGrid
         for (int x = 0; x < _width; x++)
         {   
             if (IsPositionMoveable(x, z)) ChangeTile(GetWorldPosition(x, z), AreaTileType.Destroyed);
-            // TODO: 정예몹 전투 진입 구현 완료 시, DestroyedTile의 OnTileEnter 호출하여 바로 전투로 진입할 수 있도록 하기
+            // TODO: 플레이어가 서든데스로 파괴된 타일에 있을 시 효과 발동
         }
     }
 }

@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffb338a5816162a4c9440202e2ae033c, type: 3}
+  m_Name: Forest 1
+  m_EditorClassIdentifier: 
+  MapWidth: 20
+  MapHeight: 20
+  PlayableMapWidth: 9
+  PlayableMapHeight: 14
+  UnplayableFieldDecorationProportion: 0.401
+  PlayableFieldDecorationProportion: 0.299
+  BattleTileNum: 10
+  EncounterTileNum: 5
+  MainTileGroupData:
+    Tiles:
+    - Tile: {fileID: 435858176134575976, guid: 4c882cdd48295aa42a9e9bc133eb1d2f, type: 3}
+      HasGlobalLimit: 0
+      HasLocalLimit: 0
+      GlobalLimitCount: 0
+      LocalLimitCount: 0
+    - Tile: {fileID: 435858176134575976, guid: 3a70696b2ecbe6447926b3636b128d93, type: 3}
+      HasGlobalLimit: 0
+      HasLocalLimit: 0
+      GlobalLimitCount: 0
+      LocalLimitCount: 0
+  SubTileGroupData:
+  - Tiles:
+    - Tile: {fileID: 435858176134575976, guid: b3b0b0bcd82a99f40a683b6690dccc9b, type: 3}
+      HasGlobalLimit: 0
+      HasLocalLimit: 0
+      GlobalLimitCount: 0
+      LocalLimitCount: 0
+    - Tile: {fileID: 435858176134575976, guid: e15e46a573d85034fb6e6b6c299b5324, type: 3}
+      HasGlobalLimit: 0
+      HasLocalLimit: 0
+      GlobalLimitCount: 0
+      LocalLimitCount: 0
+    Proportion: 0.25
+    MinLength: 3
+    MaxLength: 6

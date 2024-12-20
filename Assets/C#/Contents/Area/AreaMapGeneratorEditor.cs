@@ -38,8 +38,7 @@ public class AreaMapGeneratorEditor : Editor
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Generate Subtile"))
         {
-            _generator.Init();
-            _generator.GenerateSubtiles();
+            if(_generator.Init()) _generator.GenerateSubtiles();
         }
         EditorGUILayout.EndHorizontal();
     }
@@ -55,9 +54,11 @@ public class AreaMapGeneratorEditor : Editor
             }
             else
             {
-                _generator.Init();
-                _generator.GenerateSubtiles();
-                _generator.GenerateMainTile();
+                if (_generator.Init())
+                {
+                    _generator.GenerateSubtiles();
+                    _generator.GenerateMainTile();
+                }
             }
         }
         EditorGUILayout.EndHorizontal();
@@ -76,12 +77,14 @@ public class AreaMapGeneratorEditor : Editor
             }
             else
             {
-                _generator.Init();
-                _generator.GenerateSubtiles();
-                _generator.GenerateMainTile();
-                _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
-                _playableFieldPos = playableFieldPos;
-                _unplayableFieldPos = unplayableFieldPos;
+                if (_generator.Init())
+                {
+                    _generator.GenerateSubtiles();
+                    _generator.GenerateMainTile();
+                    _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
+                    _playableFieldPos = playableFieldPos;
+                    _unplayableFieldPos = unplayableFieldPos;
+                }
             }
 
         }
@@ -99,13 +102,15 @@ public class AreaMapGeneratorEditor : Editor
             }
             else
             {
-                _generator.Init();
-                _generator.GenerateSubtiles();
-                _generator.GenerateMainTile();
-                _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
-                _playableFieldPos = playableFieldPos;
-                _unplayableFieldPos = unplayableFieldPos;
-                _generator.GenerateUnplayableFieldObstacles(unplayableFieldPos);
+                if (_generator.Init())
+                {
+                    _generator.GenerateSubtiles();
+                    _generator.GenerateMainTile();
+                    _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
+                    _playableFieldPos = playableFieldPos;
+                    _unplayableFieldPos = unplayableFieldPos;
+                    _generator.GenerateUnplayableFieldObstacles(unplayableFieldPos);
+                }
             }
         }
         EditorGUILayout.EndHorizontal();
@@ -122,14 +127,16 @@ public class AreaMapGeneratorEditor : Editor
             }
             else
             {
-                _generator.Init();
-                _generator.GenerateSubtiles();
-                _generator.GenerateMainTile();
-                _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
-                _playableFieldPos = playableFieldPos;
-                _unplayableFieldPos = unplayableFieldPos;
-                _generator.GenerateUnplayableFieldObstacles(unplayableFieldPos);
-                _generator.GeneratePlayableFieldObstacles(playableFieldPos);
+                if (_generator.Init())
+                {
+                    _generator.GenerateSubtiles();
+                    _generator.GenerateMainTile();
+                    _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
+                    _playableFieldPos = playableFieldPos;
+                    _unplayableFieldPos = unplayableFieldPos;
+                    _generator.GenerateUnplayableFieldObstacles(unplayableFieldPos);
+                    _generator.GeneratePlayableFieldObstacles(playableFieldPos);
+                }
             }
 
         }
@@ -147,15 +154,17 @@ public class AreaMapGeneratorEditor : Editor
             }
             else
             {
-                _generator.Init();
-                _generator.GenerateSubtiles();
-                _generator.GenerateMainTile();
-                _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
-                _playableFieldPos = playableFieldPos;
-                _unplayableFieldPos = unplayableFieldPos;
-                _generator.GenerateUnplayableFieldObstacles(unplayableFieldPos);
-                _generator.GeneratePlayableFieldObstacles(playableFieldPos);
-                _generator.GenerateEventTiles();
+                if (_generator.Init())
+                {
+                    _generator.GenerateSubtiles();
+                    _generator.GenerateMainTile();
+                    _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
+                    _playableFieldPos = playableFieldPos;
+                    _unplayableFieldPos = unplayableFieldPos;
+                    _generator.GenerateUnplayableFieldObstacles(unplayableFieldPos);
+                    _generator.GeneratePlayableFieldObstacles(playableFieldPos);
+                    _generator.GenerateEventTiles();
+                }
             }
 
         }

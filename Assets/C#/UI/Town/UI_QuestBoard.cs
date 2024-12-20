@@ -60,6 +60,7 @@ public class UI_QuestBoard : UI_Base
             }
         }
 
+        // 퀘스트 시작 버튼 누를 시 AreaScene 전환
         void OnStartButtonClicked(PointerEventData eventData)
         {
             Enum.TryParse(_quest.QuestData.AreaName, out Define.AreaName areaName);
@@ -102,7 +103,7 @@ public class UI_QuestBoard : UI_Base
             GetText(Texts.Reward).text = "Reward: " + _quest.QuestData.Rewards.QuestRewardToString();
 
             void OnClickedAccpetButton(PointerEventData eventData)
-            {
+            {   
                 Enum.TryParse(_quest.QuestData.AreaName, out Define.AreaName areaName);
                 Managers.Instance.StartCoroutine((Managers.SceneMng.LoadAreaScene(areaName, _quest)));
                 this.gameObject.SetActive(false);
@@ -143,7 +144,7 @@ public class UI_QuestBoard : UI_Base
             UI_QuestBoard_Quest questBoard_Quest = Managers.UIMng.MakeSubItemUI<UI_QuestBoard_Quest>(content.transform);
             questBoard_Quest.SetQuest(quest);
 
-            #region legacy: 시작 버튼 누를 시 퀘스트 정보 창이 한번 더 뜸. Prototype 버전에서 사용 X
+            #region legacy: 퀘스트 시작 버튼 누를 시 퀘스트 정보 창이 한번 더 뜸. Prototype 버전에서 사용 X
 
             //void OnClicked(PointerEventData eventData)
             //{

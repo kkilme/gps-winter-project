@@ -1,12 +1,11 @@
 using System;
 using UnityEngine;
-using static Define;
 
 public class AreaScene : BaseScene
 {
-    private AreaName _areaName;
+    private Define.AreaName _areaName;
 
-    public AreaName AreaName
+    public Define.AreaName AreaName
     {
         get => _areaName;
         set
@@ -18,8 +17,8 @@ public class AreaScene : BaseScene
     public Quest Quest { get; private set; }
 
     private AreaManager AreaManager => Managers.AreaMng;
-
-    public AreaState AreaState
+    private AreaMapGenerator _areaMapGenerator;
+    public Define.AreaState AreaState
     {
         get => AreaManager.AreaState;
         set => AreaManager.AreaState = value;
@@ -31,20 +30,25 @@ public class AreaScene : BaseScene
     protected override void Init()
     {
         base.Init();
-        SceneType = SceneType.AreaScene;
+        SceneType = Define.SceneType.AreaScene;
         //InitArea(AreaName.Forest); // TODO: Test code. AreaScene에서 직접 테스트 및 작업 시 필요
 
         OnBattleSceneLoadStart -= AreaManager.OnBattleSceneLoadStart;
         OnBattleSceneLoadStart += AreaManager.OnBattleSceneLoadStart;
         OnBattleSceneUnloadFinish -= AreaManager.OnBattleSceneUnloadFinish;
         OnBattleSceneUnloadFinish += AreaManager.OnBattleSceneUnloadFinish;
+
+        _areaMapGenerator = GetComponent<AreaMapGenerator>();
     }
 
-    public void InitArea(AreaName areaName, Quest quest)
+    public void InitArea(Define.AreaName areaName, Quest quest)
     {
         AreaName = areaName;
         Quest = quest;
         AreaManager.InitArea();
+
+        _areaMapGenerator.Init(areaName);
+        _areaMapGenerator.GenerateMap();
     }
 
     public void LoadBattleScene()
@@ -56,7 +60,7 @@ public class AreaScene : BaseScene
     public void UnloadBattleScene()
     {
         StartCoroutine(Managers.SceneMng.UnloadBattleScene());
-        AreaState = AreaState.Idle;
+        AreaState = Define.AreaState.Idle;
     }
     
     public override void Clear()

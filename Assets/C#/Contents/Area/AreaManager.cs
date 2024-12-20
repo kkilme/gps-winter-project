@@ -2,21 +2,20 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using static Define;
 
 public class AreaManager
 {   
-    public AreaName AreaName { get; set; }
+    public Define.AreaName AreaName { get; set; }
 
-    private AreaState _areaState;
+    private Define.AreaState _areaState;
 
-    public AreaState AreaState
+    public Define.AreaState AreaState
     {
         get => _areaState;
         set
         {
             _areaState = value;
-            if (value == AreaState.Idle)
+            if (value == Define.AreaState.Idle)
             {
                 _grid.ChangeNeighborTilesColor(_currentPlayerPosition, TileColorChangeType.Highlight);
             }
@@ -44,7 +43,7 @@ public class AreaManager
         {
             _turnCount = value;
             if (TurnCount != 0 && TurnCount % _suddendeathTimer == 0) HandleSuddendeath();
-            else AreaState = AreaState.Idle;
+            else AreaState = Define.AreaState.Idle;
         }
     }
     private int _suddendeathTimer; // timer번의 이동마다 맨 밑 타일 파괴됨.
@@ -69,7 +68,7 @@ public class AreaManager
         Managers.InputMng.MouseAction -= HandleMouseInput;
         Managers.InputMng.MouseAction += HandleMouseInput;
 
-        AreaState = AreaState.Idle;
+        AreaState = Define.AreaState.Idle;
         _turnCount = 0;
         _suddendeathCount = 0;
         _suddendeathTimer = 4; // Area마다 타이머를 다르게 한다면 Areadata json 사용
@@ -91,7 +90,7 @@ public class AreaManager
         _currentTile = _grid.GetTile(_grid.Width / 2, 0);
         for (int i = 0; i < 3; i++)
         {
-            GameObject player = Managers.ObjectMng.SpawnHero(HERO_KNIGHT_ID).gameObject;
+            GameObject player = Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID).gameObject;
             player.transform.position = spawnOriginPos + new Vector3(HERO_SPAWN_POSITION_OFFSET[i].x, 0, HERO_SPAWN_POSITION_OFFSET[i].y);
             _players.Add(player);
         }
@@ -107,18 +106,18 @@ public class AreaManager
     #endregion
 
     #region Input
-    private void HandleMouseInput(MouseEvent mouseEvent)
+    private void HandleMouseInput(Define.MouseEvent mouseEvent)
     {   
-        if (AreaState != AreaState.Idle || !GetMouseoverCell())
+        if (AreaState != Define.AreaState.Idle || !GetMouseoverCell())
         {
             return;
         }
         switch (mouseEvent)
         {
-            case MouseEvent.PointerUp:
+            case Define.MouseEvent.PointerUp:
                 OnMouseLeftClick.Invoke();
                 break;
-            case MouseEvent.Hover:
+            case Define.MouseEvent.Hover:
                 _grid.HandleMouseHover(_currentMouseoverPosition);
                 break;
         }
@@ -142,7 +141,7 @@ public class AreaManager
         if (_grid.IsNeighbor(_currentPlayerPosition, _currentMouseoverPosition))
         {   
             _grid.GetGridPosition(_currentMouseoverPosition, out int x, out int z);
-            AreaState = AreaState.Moving;
+            AreaState = Define.AreaState.Moving;
             _grid.ChangeNeighborTilesColor(_currentPlayerPosition, TileColorChangeType.Reset);
             MovePlayers( _grid.GetWorldPosition(x, z) + new Vector3(0, 1.02f,0));
         }
@@ -199,11 +198,11 @@ public class AreaManager
     {
         switch (_currentTile.TileType)
         {
-            case AreaTileType.Normal:
+            case Define.AreaTileType.Normal:
                 break;
-            case AreaTileType.Battle:
+            case Define.AreaTileType.Battle:
                 _currentTile.OnTileEventFinish();
-                _grid.ChangeTile(_currentPlayerPosition, AreaTileType.Normal);
+                _grid.ChangeTile(_currentPlayerPosition, Define.AreaTileType.Normal);
                 break;
         }
         Managers.AreaMng.TurnCount++;
@@ -215,7 +214,7 @@ public class AreaManager
 
         _grid.HandleSuddendeath(_suddendeathCount);
         _suddendeathCount++;
-        AreaState = AreaState.Idle;
+        AreaState = Define.AreaState.Idle;
     }
     #endregion
 }

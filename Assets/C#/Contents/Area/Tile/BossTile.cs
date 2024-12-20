@@ -5,7 +5,7 @@ public sealed class BossTile : AreaEventTile
 {
     private const string _iconPath = "Area/icon_boss";
 
-    public BossTile(Vector3 position, GameObject tileObject = null) : base(position, tileObject)
+    public BossTile(Vector3 position, GameObject tileObject = null, bool isRecycle = false) : base(position, tileObject, isRecycle)
     {
         TileType = AreaTileType.Boss;
         _indicatorColor = new Color(138 / 255f, 0 / 255f, 255 / 255f, 255 / 255f);

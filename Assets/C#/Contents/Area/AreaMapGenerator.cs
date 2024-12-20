@@ -28,20 +28,27 @@ public partial class AreaMapGenerator : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField, Tooltip("테스트 용으로 생성할 Area")] private Define.AreaName _testAreaName;
+    
+    private bool _isTestMode = false; // AreaScene에서 직접 실행 시 true
 
     [SerializeField] private GameObject _infoText;
     [SerializeField] private GameObject _pathIndicator;
     [ReadOnly] public MapGeneratePhase CurrentGeneratePhase = MapGeneratePhase.NotStarted; // 에디터상에서 버튼으로 맵 생성을 테스트하는 데 사용
 
-    public void Init(Define.AreaName area = Define.AreaName.Forest)
+    public bool Init(Define.AreaName area = Define.AreaName.Forest)
     {   
-        // 에디터상에서 디버그용
-        #if UNITY_EDITOR
-        area = _testAreaName;
         ClearMap();
-        #endif
+        // 에디터상에서 디버그용
+        if(_isTestMode) area = _testAreaName;
 
         _data = _dataset[area];
+
+        if (!_data.Verify())
+        {
+            Debug.LogError("There is a problem in Map Data! Please refer to the error message above");
+            return false;
+        }
+
         _baseTileMap = new AreaBaseTile[_data.MapHeight, _data.MapWidth];
         _eventTileMap = new AreaEventTile[_data.PlayableMapHeight, _data.PlayableMapWidth];
         _tileTypeMap = new Define.AreaTileType[_data.MapHeight, _data.MapWidth];
@@ -62,6 +69,8 @@ public partial class AreaMapGenerator : MonoBehaviour
 
         _playerStartPosition = new(_data.MapWidth / 2, _playableAreaHeightStartOffset);
         _bossPosition = new(_data.MapWidth / 2, _playableAreaHeightStartOffset + _data.PlayableMapHeight - 1);
+
+        return true;
     }
 
     public void GenerateMap()
@@ -104,7 +113,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             while ((float)(totalGenerated) / (_data.MapHeight * _data.MapWidth) < subTileGroupData.Proportion)
             {
                 // 생성될 Subtile 그룹의 길이
-                int length = Random.Range(subTileGroupData.MinLength, subTileGroupData.MaxLength);
+                int length = Random.Range(subTileGroupData.MinLength, subTileGroupData.MaxLength + 1);
 
                 // 타일이 생성될 위치
                 Vector2Int tilePosition;
@@ -228,7 +237,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             {   
                 // 타일을 플레이 가능 필드로 설정. 해당 타일의 AreaTileType은 다시 Empty가 됨.
                 SetPlayableTile(xStart + xOffset, z);
-                SetPlayableTile(xStart - xOffset, z);
+                if(xOffset != 0) SetPlayableTile(xStart - xOffset, z);
             }
 
             if ((xStart % 2 == 0 && xOffset % 2 == 0) || (xStart % 2 == 1 && xOffset % 2 == 1))
@@ -277,7 +286,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         return;
 
         void SetPlayableTile(int x, int z)
-        {
+        {   
             _baseTileMap[z, x].EnableLight();
             _tileTypeMap[z, x] = Define.AreaTileType.Empty;
             tempPlayablePos.Add(new Vector2Int(x, z));
@@ -394,6 +403,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             }
             int x, z;
             int trycnt = 0;
+            bool createSuccess = true;
             while (true)
             {
                 trycnt++;
@@ -409,9 +419,16 @@ public partial class AreaMapGenerator : MonoBehaviour
                 if (trycnt == 100)
                 {
                     // 해당 z좌표에 더 생성할 수 없음 -> all random 시도
-                    CreateTileWithAllRandom(tileType);
+                    createSuccess = CreateTileWithAllRandom(tileType, out x, out z);
                     break;
                 }
+            }
+
+            // All random으로도 생성 실패 시: 생성 중단
+            if (!createSuccess)
+            {
+                Debug.LogWarning($"Creating {tileType}Tile stopped at count: {count}");
+                break;
             }
 
             CreateEventTile(x, z, tileType);
@@ -433,10 +450,8 @@ public partial class AreaMapGenerator : MonoBehaviour
     }
 
     // 완전한 랜덤으로 이벤트 타일 생성
-    private void CreateTileWithAllRandom(Define.AreaTileType tileType)
+    private bool CreateTileWithAllRandom(Define.AreaTileType tileType, out int x, out int z)
     {
-        int x, z;
- 
         int trycnt = 0;
         while (true)
         {
@@ -446,14 +461,14 @@ public partial class AreaMapGenerator : MonoBehaviour
             // x 좌표: width 범위에서 랜덤
             x = Random.Range(0, _data.PlayableMapWidth);
             if (_tileTypeMap[z + _playableAreaHeightStartOffset, x + _playableAreaWidthStartOffset] == Define.AreaTileType.Empty
-                && !HasNeighborOfType(x + _playableAreaWidthStartOffset, z + _playableAreaHeightStartOffset, tileType)
                 && FindPath(new Vector2Int(x + _playableAreaWidthStartOffset, z + _playableAreaHeightStartOffset), out var path)) break;
             if (trycnt == 100)
-            {
-                Debug.LogError($"Could not choose {tileType} position!");
-                return;
+            {   
+                // 타일 생성 실패
+                return false;
             }
         }
-        CreateEventTile(x, z, tileType);
+
+        return true;
     }
 }
