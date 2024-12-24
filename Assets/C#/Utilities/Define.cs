@@ -1,4 +1,4 @@
-public class Define
+public static class Define
 {
     #region Type
     

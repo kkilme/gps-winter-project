@@ -50,10 +50,10 @@ MonoBehaviour:
   _moveTime: 3
   _zoomAmount: {x: 0, y: -2, z: 2}
   _borderThickness: 10
-  _posLimitX: {x: 100, y: 120}
-  _posLimitZ: {x: 60, y: 110}
-  _zoomoutLimit: -35
-  _zoominLimit: -45
+  _posLimitX: {x: 0, y: 120}
+  _posLimitZ: {x: 0, y: 110}
+  _zoomoutLimit: -25
+  _zoominLimit: -35
 --- !u!1 &4387366094694045893
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +118,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8183
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

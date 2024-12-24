@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffb338a5816162a4c9440202e2ae033c, type: 3}
   m_Name: Forest 1
   m_EditorClassIdentifier: 
+  OriginPosition: {x: 0, y: 0, z: 0}
   MapWidth: 20
   MapHeight: 20
-  PlayableMapWidth: 9
-  PlayableMapHeight: 14
+  PlayableFieldWidth: 10
+  PlayableFieldHeight: 15
   UnplayableFieldDecorationProportion: 0.401
   PlayableFieldDecorationProportion: 0.299
   BattleTileNum: 10

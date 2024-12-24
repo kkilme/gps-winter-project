@@ -4,6 +4,9 @@ using Unity.Collections;
 using UnityEngine;
 using static Define;
 
+
+#region legacy: 동적으로 맵을 생성하기 이전에 사용하던 AreaGrid 클래스
+
 // XZ를 축으로 하는 육각형 그리드
 // 육각형은 평평한 부분이 위 (flat-top)
 public class AreaGrid
@@ -50,7 +53,7 @@ public class AreaGrid
         _tileArray = new AreaEventTile[height, width];
         _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
         _mouseoverIndicator.transform.position = GetWorldPosition(width / 2, 0, 1.04f);
-     
+
     }
 
     public void InitializeTileTypeArray(int[,] source)
@@ -60,7 +63,7 @@ public class AreaGrid
         {
             for (int x = 0; x < _width; x++)
             {
-                switch (source[z,x])
+                switch (source[z, x])
                 {
                     case -1:
                         _typeArray[z, x] = AreaTileType.OutOfField;
@@ -84,8 +87,8 @@ public class AreaGrid
 
     // 그리드 좌표를 월드 좌표로 변환
     public Vector3 GetWorldPosition(int x, int z, float y = 0)
-    {   
-        if (x % 2 == 1) return new Vector3(x * _tilewidth * 0.75f, y, (z+0.5f) * _tileheight) + _originPosition;
+    {
+        if (x % 2 == 1) return new Vector3(x * _tilewidth * 0.75f, y, (z + 0.5f) * _tileheight) + _originPosition;
         else return new Vector3(x * _tilewidth * 0.75f, y, z * _tileheight) + _originPosition;
     }
 
@@ -108,17 +111,17 @@ public class AreaGrid
 
     public void SetTile(int x, int z, AreaEventTile gridObject)
     {
-        _tileArray[z,x] = gridObject;
+        _tileArray[z, x] = gridObject;
     }
 
     public void SetTileType(int x, int z, AreaTileType tileType)
     {
         _typeArray[z, x] = tileType;
     }
-    
+
     public AreaEventTile GetTile(int x, int z)
     {
-        return _tileArray[z,x];
+        return _tileArray[z, x];
     }
 
     public AreaEventTile GetTile(Vector3 worldPosition)
@@ -217,7 +220,7 @@ public class AreaGrid
     {
         GetGridPosition(tileWorldPosition, out int x, out int z);
         AreaEventTile oldTile = GetTile(x, z);
-        oldTile.DestroyIcon();
+        oldTile.Destroy();
 
         AreaEventTile newTile = TileFactory.CreateTile(tileWorldPosition, newType, oldTile.TileObject);
 
@@ -228,14 +231,14 @@ public class AreaGrid
     public void HandleSuddendeath(int z)
     {
         for (int x = 0; x < _width; x++)
-        {   
+        {
             if (IsPositionMoveable(x, z)) ChangeTile(GetWorldPosition(x, z), AreaTileType.Destroyed);
             // TODO: 플레이어가 서든데스로 파괴된 타일에 있을 시 효과 발동
         }
     }
 }
 
-
+#endregion
 #region legacy: 플레이 가능한 필드를 나타내는 2차원 bool _isValid 초기화.
 //private void InitializeIsValid()
 //{

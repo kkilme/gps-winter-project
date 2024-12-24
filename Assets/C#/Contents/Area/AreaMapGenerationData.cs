@@ -8,14 +8,16 @@ using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 [CreateAssetMenu(fileName = "Area Map Data", menuName = "Scriptable Object/Area Map Data")]
-public class AreaMapData : ScriptableObject
+public class AreaMapGenerationData : ScriptableObject
 {   
+    // 맵 원점
+    public Vector3 OriginPosition;
     // 전체 맵 크기
     public int MapWidth;
     public int MapHeight;
     // 플레이 가능(이동 가능)한 맵 크기
-    public int PlayableMapWidth;
-    public int PlayableMapHeight;
+    public int PlayableFieldWidth;
+    public int PlayableFieldHeight;
     [Range(0, 1), Tooltip("플레이 불가능한 필드에서의 장식물 비율")]
     public float UnplayableFieldDecorationProportion;
     [Range(0, 0.8f), Tooltip("플레이 가능한 필드에서의 장식물 비율")]
@@ -41,15 +43,15 @@ public class AreaMapData : ScriptableObject
             return false;
         }
 
-        if (MapHeight <= PlayableMapHeight || MapWidth <= PlayableMapWidth)
+        if (MapHeight <= PlayableFieldHeight || MapWidth <= PlayableFieldWidth)
         {
             Debug.LogError("PlayableMapSize must be smaller than MapSize!");
             return false;
         }
 
-        if (BattleTileNum > PlayableMapHeight * PlayableMapWidth / 2 || EncounterTileNum > PlayableMapHeight * PlayableMapWidth / 2)
+        if (BattleTileNum > PlayableFieldHeight * PlayableFieldWidth / 2 || EncounterTileNum > PlayableFieldHeight * PlayableFieldWidth / 2)
         {
-            Debug.LogError("EventTileNum must be smaller than (PlayableMapHeight * PlayableMapWidth) / 2!");
+            Debug.LogError("EventTileNum must be smaller than (PlayableFieldHeight * PlayableFieldWidth) / 2!");
             return false;
         }
 

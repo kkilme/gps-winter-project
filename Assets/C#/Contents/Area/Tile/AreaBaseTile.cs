@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-// Area의 기본 타일
+// Area 맵의 기본 육각형 타일에 붙는 스크립트
 public class AreaBaseTile : MonoBehaviour
 {   
     // 플레이어가 밟고 서는 타일 오브젝트 그 자체

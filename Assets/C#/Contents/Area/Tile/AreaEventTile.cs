@@ -11,7 +11,7 @@ public enum TileColorChangeType
 }
 
 // 플레이 가능 영역에 생성되는, 플레이어가 이동 가능한 타일.
-// Note: 플레이어가 밟고 서있는 바닥 블록은 AreaBaseTile
+// Note: 플레이어가 밟고 서있는 육각형 블록은 AreaBaseTile
 public abstract class AreaEventTile
 {
     // 색 변화가 가능한 스프라이트를 갖고 있는 셀 오브젝트 (프리팹 이름: grid_hex)
@@ -26,8 +26,8 @@ public abstract class AreaEventTile
     protected SpriteRenderer _fill;
 
     // 이 타일이 어떤 타입의 타일인지 나타내는 아이콘 오브젝트
-    protected GameObject _icon;
-    public GameObject Icon
+    private GameObject _icon;
+    protected GameObject Icon
     {
         get => _icon;
         set
@@ -44,7 +44,6 @@ public abstract class AreaEventTile
     protected Color _fillColor; // TileObject의 내부 색상.
     protected Color _indicatorHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 indicator 색상
     protected Color _fillHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 fill 색상
-
 
     // DoTween을 통해 TileObject의 스프라이트 색을 바꾸는데, 이 작업을 의미함.
     // 이를 통해 작업을 도중에 취소할 수 있음
@@ -83,7 +82,7 @@ public abstract class AreaEventTile
     }
 
     // 기존 진행중인 colorTween을 중지, 삭제
-    public void KillColorTween()
+    private void KillColorTween()
     {
         _indicatorColorTween?.Kill();
         _indicatorColorTween = null;
@@ -105,7 +104,7 @@ public abstract class AreaEventTile
         TileObject.transform.Find("collider").GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 
-    public void DestroyIcon()
+    public void Destroy()
     {
         if (Icon != null)
             Icon.GetComponent<SpriteRenderer>().DOFade(0, 0.5f).OnComplete(() => { GameObject.Destroy(Icon); });

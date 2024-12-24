@@ -33,26 +33,26 @@ public class SceneManagerEx
         CurrentScene.Clear();
     }
 
-    
-    public IEnumerator LoadBattleScene()
-    {
-        var sceneName = "TestBattleScene"; // TODO - Test Code
+    // AreaManager로 이동
+    //public IEnumerator LoadBattleScene()
+    //{
+    //    var sceneName = "TestBattleScene"; // TODO - Test Code
 
-        UI_Loading loadingScreen = Managers.UIMng.ShowSceneUI<UI_Loading>();
+    //    UI_Loading loadingScreen = Managers.UIMng.ShowSceneUI<UI_Loading>();
 
-        yield return loadingScreen.Fade(false); // fade out
+    //    yield return loadingScreen.Fade(false); // fade out
 
-        GetCurrentScene<AreaScene>().OnBattleSceneLoadStart.Invoke(); // 화면이 완전히 fade out 된 후 실행
+    //    GetCurrentScene<AreaScene>().OnBattleSceneLoadStart.Invoke(); // 화면이 완전히 fade out 된 후 실행
 
-        var battleScene = SceneManager.GetSceneByName(sceneName);
-        if (!battleScene.isLoaded)
-        {
-            yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        }
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+    //    var battleScene = SceneManager.GetSceneByName(sceneName);
+    //    if (!battleScene.isLoaded)
+    //    {
+    //        yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+    //    }
+    //    SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
 
-        yield return loadingScreen.Fade(true); // fade in, LoadingUI 삭제
-    }
+    //    yield return loadingScreen.Fade(true); // fade in, LoadingUI 삭제
+    //}
 
     public IEnumerator UnloadBattleScene()
     {

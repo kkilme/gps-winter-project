@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class AreaScene : BaseScene
@@ -14,27 +15,26 @@ public class AreaScene : BaseScene
             AreaManager.AreaName = value;
         }
     }
+
     public Quest Quest { get; private set; }
 
     private AreaManager AreaManager => Managers.AreaMng;
     private AreaMapGenerator _areaMapGenerator;
+
     public Define.AreaState AreaState
     {
         get => AreaManager.AreaState;
         set => AreaManager.AreaState = value;
     }
 
-    public Action OnBattleSceneLoadStart;
     public Action OnBattleSceneUnloadFinish;
-    
+
     protected override void Init()
     {
         base.Init();
         SceneType = Define.SceneType.AreaScene;
-        //InitArea(AreaName.Forest); // TODO: Test code. AreaScene에서 직접 테스트 및 작업 시 필요
+        //Init(AreaName.Forest); // TODO: Test code. AreaScene에서 직접 테스트 및 작업 시 필요
 
-        OnBattleSceneLoadStart -= AreaManager.OnBattleSceneLoadStart;
-        OnBattleSceneLoadStart += AreaManager.OnBattleSceneLoadStart;
         OnBattleSceneUnloadFinish -= AreaManager.OnBattleSceneUnloadFinish;
         OnBattleSceneUnloadFinish += AreaManager.OnBattleSceneUnloadFinish;
 
@@ -45,16 +45,16 @@ public class AreaScene : BaseScene
     {
         AreaName = areaName;
         Quest = quest;
-        AreaManager.InitArea();
 
         _areaMapGenerator.Init(areaName);
-        _areaMapGenerator.GenerateMap();
+        AreaMap map = _areaMapGenerator.GenerateMap();
+
+        AreaManager.Init(map);
     }
 
     public void LoadBattleScene()
-    {   
-        AreaManager.FreezeCamera();
-        StartCoroutine(Managers.SceneMng.LoadBattleScene());
+    {
+        StartCoroutine(AreaManager.LoadBattleScene());
     }
 
     public void UnloadBattleScene()
@@ -62,10 +62,36 @@ public class AreaScene : BaseScene
         StartCoroutine(Managers.SceneMng.UnloadBattleScene());
         AreaState = Define.AreaState.Idle;
     }
-    
+
     public override void Clear()
     {
         Debug.Log("AreaScene Clear!");
     }
 
+    #region Test
+    // AreaScene에서 직접 실행 시 테스트용 코드
+    private void TestInit()
+    {
+        Quest testQuest = new Quest(Managers.DataMng.QuestDataDict.Values.ToList()[0]);
+        if(!Enum.TryParse(testQuest.QuestData.AreaName, out Define.AreaName areaName))
+        {
+            areaName = Define.AreaName.Forest;
+        }
+
+        AreaName = areaName;
+        Quest = testQuest;
+
+        _areaMapGenerator.Init(areaName);
+        AreaMap map = _areaMapGenerator.GenerateMap();
+        AreaManager.Init(map, true);
+    }
+
+    private void Start()
+    {
+        if (Managers.SceneMng.CurrentScene is AreaScene)
+        {
+            TestInit();
+        }
+    }
+    #endregion
 }

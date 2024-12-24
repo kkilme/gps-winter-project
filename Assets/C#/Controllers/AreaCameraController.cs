@@ -17,24 +17,17 @@ public class AreaCameraController : MonoBehaviour
     // zoom 단계에 따라 조정된 moveSpeed 저장하는 배열
     private float[] _moveSpeed;
 
-    [SerializeField]
-    // 카메라의 각종 값들이 새 값으로 변경되는 시간 (클수록 더 빨리 변경됨)
+    [Tooltip("카메라의 각종 값들이 새 값(_newPosition, _newZoom)으로 변경되는 시간 (클수록 더 빨리 변경됨)"), SerializeField]
     private float _moveTime;
-    [SerializeField]
-    // 한 번 입력에 카메라 zoom되는 양
+    [Tooltip("한 번 입력에 카메라 zoom되는 양"), SerializeField]
     private Vector3Int _zoomAmount;
-    [SerializeField]
-    // 화면 이동을 위해 필요한 (마우스 위치 - 스크린 모서리 위치) 값
+    [Tooltip("화면 이동을 위해 필요한 (마우스 위치 - 스크린 모서리 위치) 값"), SerializeField]
     private float _borderThickness;
 
-    // 카메라가 이동할 수 있는 최대, 최소 x, z (Vector2.x: min, Vector2.y: max)
-    [SerializeField]
+    [Tooltip("카메라가 이동할 수 있는 X 범위 (x: min, y: max)"), SerializeField]
     private Vector2 _posLimitX;
-    [SerializeField]
+    [Tooltip("카메라가 이동할 수 있는 Z 범위 (x: min, y: max)"), SerializeField]
     private Vector2 _posLimitZ;
-
-    private Vector2 _adjustedPosLimitZ;
-
 
     // 카메라 zoom 최대, 최소
     [SerializeField]
@@ -49,6 +42,7 @@ public class AreaCameraController : MonoBehaviour
     private Vector3Int _newZoom;
 
     // 마우스 드래그를 통한 화면 이동을 위해 사용되는 변수들
+    private Camera _camera;
     private Vector3 _dragStartPosition;
     private Vector3 _dragCurrentPosition;
     private Plane _plane;
@@ -69,7 +63,7 @@ public class AreaCameraController : MonoBehaviour
         _newZoom = new Vector3Int(0, 0, 0);
         _plane = new Plane(Vector3.up, Vector3.zero);
         _entry = 0;
-        _adjustedPosLimitZ = new Vector2(_posLimitZ.x, _posLimitZ.y);
+        _camera = _cameraTransform.GetComponent<Camera>();
 
         InitializeMoveSpeedWithZoom();
         _zoomLevel = CalculateZoomlevel();
@@ -93,7 +87,7 @@ public class AreaCameraController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             if (_plane.Raycast(ray, out _entry))
             {
                 _dragStartPosition = ray.GetPoint(_entry);
@@ -102,7 +96,7 @@ public class AreaCameraController : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             if (_plane.Raycast(ray, out _entry))
             {
                 _dragCurrentPosition = ray.GetPoint(_entry);
@@ -144,8 +138,6 @@ public class AreaCameraController : MonoBehaviour
 
         _newZoom.y = Mathf.Clamp(_newZoom.y, _zoominLimit, _zoomoutLimit);
         _newZoom.z = Mathf.Clamp(_newZoom.z, -_zoomoutLimit, -_zoominLimit);
-
-        
     }
 
     // 키보드 입력을 통한 카메라 이동
@@ -191,12 +183,17 @@ public class AreaCameraController : MonoBehaviour
     }
     // 카메라 위치 및 zoom 업데이트
     private void UpdateCamera()
-    {
-        _adjustedPosLimitZ = new Vector2( _posLimitZ.x -_zoomAmount.z * (_zoomLevel-1) * 0.6f, _posLimitZ.y - _zoomAmount.z * (_zoomLevel - 1) * 0.3f);
+    {   
+        // Zoom 단계에 따라 Z 범위 조정
+        var adjustedPosLimitZmin = _posLimitZ.x - _zoomAmount.z * (_zoomLevel - 1) * 0.6f;
+        var adjustedPosLimitZmax = _posLimitZ.y - _zoomAmount.z * (_zoomLevel - 1) * 0.3f;
+
         _newPosition.x = Mathf.Clamp(_newPosition.x, _posLimitX.x, _posLimitX.y);
-        _newPosition.z = Mathf.Clamp(_newPosition.z, _adjustedPosLimitZ.x, _adjustedPosLimitZ.y);
+        _newPosition.z = Mathf.Clamp(_newPosition.z, adjustedPosLimitZmin, adjustedPosLimitZmax);
         transform.position = Vector3.Lerp(transform.position, _newPosition, _moveTime * Time.deltaTime);
+        if(Vector3.Distance(transform.position, _newPosition) < 1e-3) transform.position = _newPosition;
         _cameraTransform.localPosition = Vector3.Lerp(_cameraTransform.localPosition, _newZoom, _moveTime * Time.deltaTime);
+        if (Vector3.Distance(_cameraTransform.localPosition, _newZoom) < 1e-3) _cameraTransform.localPosition = _newZoom;
     }
 
     private int CalculateZoomlevel()
@@ -224,6 +221,7 @@ public class AreaCameraController : MonoBehaviour
         {
             return ((value - minOriginal) / (maxOriginal - minOriginal)) * (maxNew - minNew) + minNew;
         }
+
         for (int i = _moveSpeed.Length - 1; i >= 0; i--)
         {
             _moveSpeed[_moveSpeed.Length - 1 - i] = LinearTransform(i + 1, 1, _moveSpeed.Length, _moveSpeedMin, _moveSpeedMax);
