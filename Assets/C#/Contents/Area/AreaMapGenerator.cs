@@ -350,7 +350,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         CreateTileWithWindow(3, _data.BattleTileNum, Define.AreaTileType.Battle);
         // 인카운터 타일
         CreateTileWithWindow(3, _data.EncounterTileNum, Define.AreaTileType.Encounter);
-        // 일반 타일
+        // 남은 빈 공간은 모두 일반 타일
         for (int z = _playableFieldZStart; z < _playableFieldZStart + _data.PlayableFieldHeight; z++)
         {
             for (int x = _playableFieldXStart; x < _playableFieldXStart + _data.PlayableFieldWidth; x++)

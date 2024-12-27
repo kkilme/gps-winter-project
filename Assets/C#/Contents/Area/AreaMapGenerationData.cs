@@ -15,7 +15,8 @@ public class AreaMapGenerationData : ScriptableObject
     // 전체 맵 크기
     public int MapWidth;
     public int MapHeight;
-    // 플레이 가능(이동 가능)한 맵 크기
+    // 플레이 가능(이동 가능)한 영역 크기
+    [Tooltip("플레이 가능한 영역의 가로 크기, Note: 반드시 홀수여야 함")]
     public int PlayableFieldWidth;
     public int PlayableFieldHeight;
     [Range(0, 1), Tooltip("플레이 불가능한 필드에서의 장식물 비율")]
@@ -52,6 +53,12 @@ public class AreaMapGenerationData : ScriptableObject
         if (BattleTileNum > PlayableFieldHeight * PlayableFieldWidth / 2 || EncounterTileNum > PlayableFieldHeight * PlayableFieldWidth / 2)
         {
             Debug.LogError("EventTileNum must be smaller than (PlayableFieldHeight * PlayableFieldWidth) / 2!");
+            return false;
+        }
+
+        if (PlayableFieldWidth % 2 == 0)
+        {
+            Debug.LogError("PlayableFieldWidth must be an odd number!");
             return false;
         }
 

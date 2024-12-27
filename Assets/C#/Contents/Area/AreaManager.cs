@@ -5,6 +5,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class AreaManager
 {   
@@ -27,14 +28,12 @@ public class AreaManager
 
     private AreaMap _map;
 
-    private GameObject _mouseoverIndicator;
+    private GameObject _mouseoverIndicator; // 마우스 오버 위치의 타일 강조하는 게임오브젝트
     private GameObject _player;
-
     private Vector3 _currentPlayerPosition; // 현재 플레이어 WorldPosition
     private Vector3 _currentMouseoverPosition; // 현재 마우스 오버 위치의 WorldPosition
     private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
 
-    private Camera _areaCamera; // Test용
     private AreaCameraController _cameraController;
     private GameObject _light;
 
@@ -87,18 +86,29 @@ public class AreaManager
     private void InitCamera()
     {
         _cameraController = Managers.ResourceMng.Instantiate("Area/AreaCamera").GetComponent<AreaCameraController>();
+        _cameraController.Freeze = true;
+        _cameraController.Init();
+        _map.CalcCameraPosLimitX(out float xmin, out float xmax);
+        _cameraController.InitPosLimit(xmin, xmax, _map.GetPlayerStartPosition().z, _map.GetBossPosition().z);
+        _cameraController.Freeze = false;
+
         _cameraController.transform.position = new Vector3(_currentPlayerPosition.x, 50, _currentPlayerPosition.z - 40);
-        _areaCamera = _cameraController.transform.GetComponentInChildren<Camera>();
     }
     #endregion
 
-    #region Input
     private void HandleMouseInput(Define.MouseEvent mouseEvent)
     {   
-        if (AreaState != Define.AreaState.Idle || !SetMouseoverPosition())
+        if (AreaState != Define.AreaState.Idle)
         {
             return;
         }
+
+        if (_cameraController.GetMouseoverPosition(out Vector3 mouseOverPosition) && _map.IsPositionStandable(mouseOverPosition))
+        {
+            _mouseoverIndicator.transform.position = _map.GetTileCenterPosition(mouseOverPosition);
+            _currentMouseoverPosition = mouseOverPosition;
+        } else return;
+
         switch (mouseEvent)
         {
             case Define.MouseEvent.PointerUp:
@@ -106,30 +116,6 @@ public class AreaManager
                 break;
         }
     }
-    
-    private bool SetMouseoverPosition()
-    {
-        Ray ray = _areaCamera.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: LayerMask.GetMask("AreaGrid")))
-        {
-            var position = rayHit.point;
-
-            _currentMouseoverPosition = position;
-
-            if (_map.IsPositionStandable(position))
-            {
-                _mouseoverIndicator.transform.position = _map.GetTileCenterPosition(position);
-            }
-
-            Debug.DrawLine(_areaCamera.transform.position, rayHit.point, Color.red);
-
-            return true;
-        }
-        return false;
-    }
-
-    #endregion
 
     #region Explore
     private void MovePlayers(Vector3 destination)

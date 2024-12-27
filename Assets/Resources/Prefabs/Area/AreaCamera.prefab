@@ -45,15 +45,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 546583112c804e34a88b391e75ef3d83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeedMax: 1
   _moveSpeedMin: 0.5
+  _moveSpeedMax: 1
   _moveTime: 3
-  _zoomAmount: {x: 0, y: -2, z: 2}
+  _zoomAmount: 2
   _borderThickness: 10
-  _posLimitX: {x: 0, y: 120}
-  _posLimitZ: {x: 0, y: 110}
-  _zoomoutLimit: -25
-  _zoominLimit: -35
+  _posLimitXmin: 0
+  _posLimitXmax: 0
+  _posLimitZmin: 0
+  _posLimitZmax: 0
+  _zoomoutLimit: 25
+  _zoominLimit: 15
+  _newPosition: {x: 0, y: 0, z: 0}
+  _newZoom: 0
 --- !u!1 &4387366094694045893
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,7 +84,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4387366094694045893}
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 0, y: -35, z: 35}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

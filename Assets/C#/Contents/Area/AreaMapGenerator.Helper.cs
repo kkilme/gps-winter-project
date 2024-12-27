@@ -28,7 +28,8 @@ public partial class AreaMapGenerator
     }
 
 
-    // 시작 위치부터 특정 위치(일반적으로 보스타일)까지 길찾기 (다익스트라)
+    // 시작 위치부터 특정 위치까지 길찾기 (다익스트라)
+    // 타일 종류별로 거리에 가중치를 부여하거나 맵 생성 시 보스 타일까지의 거리의 범위를 정하는 등 확장 가능해보임.
     private bool FindPath(Vector2Int destination, out List<Vector2Int> path)
     {   
         // 타일별 최단거리
@@ -36,7 +37,7 @@ public partial class AreaMapGenerator
         {
             [_playerStartPosition] = 0
         };
-        Dictionary<Vector2Int, Vector2Int> previous = new();
+        Dictionary<Vector2Int, Vector2Int> previous = new(); // 타일의 이전 타일 저장 (경로 추적용)
         path = new List<Vector2Int>(); // 최단 경로 저장할 리스트
         List<Vector2Int> queue = new(){_playerStartPosition};
 
@@ -71,7 +72,7 @@ public partial class AreaMapGenerator
             }
         }
 
-        // 보스타일로 가는 경로가 없음
+        // 목적지 타일로 가는 경로가 없음
         return false;
 
         Vector2Int GetClosestNode()
@@ -85,17 +86,18 @@ public partial class AreaMapGenerator
                     closestNode = node;
                 }
             }
-            List<Vector2Int> closestNodes = new() {closestNode};
-            foreach (Vector2Int node in queue)
-            {
-                if (distances[closestNode] == distances[node])
-                {
-                    closestNodes.Add(node);
-                }
-            }
-            Vector2Int selected = closestNodes[Random.Range(0, closestNodes.Count)];
-            queue.Remove(selected);
-            return selected;
+            // 가장 짧은 거리의 노드가 여러 개인 경우 랜덤으로 선택: 굳이 필요해보이진 않음
+            //List<Vector2Int> closestNodes = new() {closestNode};
+            //foreach (Vector2Int node in queue)
+            //{
+            //    if (distances[closestNode] == distances[node])
+            //    {
+            //        closestNodes.Add(node);
+            //    }
+            //}
+            //Vector2Int selected = closestNodes[Random.Range(0, closestNodes.Count)];
+            queue.Remove(closestNode);
+            return closestNode;
         }
     }
     

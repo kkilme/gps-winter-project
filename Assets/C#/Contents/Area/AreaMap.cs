@@ -1,23 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Define;
 
+// XZ를 축으로 하는 육각형 그리드
+// 육각형은 평평한 부분이 위 (flat-top)
 public class AreaMap
 {
-    public Define.AreaTileType[,] TileTypeMap { get; set; }
-    public AreaEventTile[,] EventTileMap { get; set; }
-    public AreaBaseTile[,] BaseTileMap;
+    public Define.AreaTileType[,] TileTypeMap { get; }
+    public AreaEventTile[,] EventTileMap { get; }
+    public AreaBaseTile[,] BaseTileMap { get; }
 
-    public Vector2Int PlayableFieldStart; // 플레이 영역이 시작되는 좌표 (x, z)
+    public Vector2Int PlayableFieldStart; // 플레이 영역이 시작되는 Grid 좌표 (x, z)
     public Vector2Int PlayerStartPosition; // 플레이어 시작 지점의 Grid 좌표
     public Vector2Int BossPosition; // 보스 타일 지점의 Grid 좌표
 
     private Vector3 _originPosition; // 맵 원점: Grid 좌표 (0,0)의 월드 좌표
-    private int _width;
-    private int _height;
-    private int _playableFieldWidth;
-    private int _playableFieldHeight;
+    private int _width; // Grid 단위
+    private int _height; // Grid 단위
+    private int _playableFieldWidth; // Grid 단위
+    private int _playableFieldHeight; // Grid 단위
 
     private const float TILE_PREFAB_WIDTH = 4;
     private const float TILE_PREFAB_HEIGHT = 3.5f;
@@ -42,8 +43,8 @@ public class AreaMap
         }
 
         PlayableFieldStart = new Vector2Int(_width / 2 - _playableFieldWidth / 2, _height / 2 - _playableFieldHeight / 2);
-        PlayerStartPosition = new(_width / 2, PlayableFieldStart.y);
-        BossPosition = new(_width / 2, PlayableFieldStart.y + _playableFieldHeight - 1);
+        PlayerStartPosition = new Vector2Int(_width / 2, PlayableFieldStart.y);
+        BossPosition = new Vector2Int(_width / 2, PlayableFieldStart.y + _playableFieldHeight - 1);
     }
 
     // 그리드 좌표를 월드 좌표로 변환
@@ -57,21 +58,26 @@ public class AreaMap
     public void WorldToGridPosition(Vector3 worldPosition, out int x, out int z)
     {
         x = Mathf.RoundToInt((worldPosition.x - (int)_originPosition.x) / (TILE_PREFAB_WIDTH * 0.75f));
-        //float tempz = (worldPosition.z - (int)_mapOriginPosition.z) / TILE_PREFAB_HEIGHT;
-        //z = x % 2 == 1 ? Mathf.RoundToInt(tempz - 0.5f) : Mathf.RoundToInt(tempz);
         z = Mathf.RoundToInt((worldPosition.z - (int)_originPosition.z) / TILE_PREFAB_HEIGHT - (x % 2 == 1 ? 0.5f : 0f));
     }
 
-    // 월드 좌표를 해당하는 그리드 좌표 타일의 중심 좌표로 변환
+    // 월드 좌표를 해당하는 그리드 좌표 타일의 중심 월드 좌표로 변환
     public Vector3 GetTileCenterPosition(Vector3 worldPosition)
     {
         WorldToGridPosition(worldPosition, out int x, out int z);
         return GridToWorldPosition(x, z, 1.02f);
     }
 
+    // 플레이어 시작 지점을 월드 좌표로 반환
     public Vector3 GetPlayerStartPosition()
     {
         return GridToWorldPosition(PlayerStartPosition.x, PlayerStartPosition.y, 1.04f);
+    }
+
+    // 보스 지점을 월드 좌표로 반환
+    public Vector3 GetBossPosition()
+    {
+        return GridToWorldPosition(BossPosition.x, BossPosition.y, 1.04f);
     }
 
     public AreaEventTile GetEventTile(Vector3 worldPosition)
@@ -214,8 +220,14 @@ public class AreaMap
     {
         for (int x = PlayableFieldStart.x; x < PlayableFieldStart.x + _playableFieldWidth; x++)
         {
-            if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), AreaTileType.Destroyed, true);
+            if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), Define.AreaTileType.Destroyed, true);
             // TODO: 플레이어가 서든데스로 파괴된 타일에 있을 시 효과 발동
         }
+    }
+
+    public void CalcCameraPosLimitX(out float xmin, out float xmax)
+    {
+        xmin = GridToWorldPosition(PlayableFieldStart.x, 0).x;
+        xmax = GridToWorldPosition(PlayableFieldStart.x + _playableFieldWidth - 1, 0).x;
     }
 }
