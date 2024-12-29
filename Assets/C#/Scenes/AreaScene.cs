@@ -54,13 +54,12 @@ public class AreaScene : BaseScene
 
     public void LoadBattleScene()
     {
-        StartCoroutine(AreaManager.LoadBattleScene());
+        StartCoroutine(Managers.SceneMng.LoadBattleScene());
     }
 
     public void UnloadBattleScene()
     {
         StartCoroutine(Managers.SceneMng.UnloadBattleScene());
-        AreaState = Define.AreaState.Idle;
     }
 
     public override void Clear()

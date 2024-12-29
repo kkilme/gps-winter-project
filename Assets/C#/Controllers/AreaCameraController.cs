@@ -9,23 +9,21 @@ public class AreaCameraController : MonoBehaviour
     public bool Freeze { get;  set; } // true: 카메라 정지
 
     private Camera _camera;
-    // 실제 카메라가 부착된 오브젝트의 트랜스폼
-    private Transform _cameraTransform;
+    private Transform _cameraTransform; // 실제 카메라 컴포넌트가 부착된 오브젝트의 트랜스폼
     private float _cameraRotation;
 
-    // 카메라 이동 속도 (이동 속도는 zoom 단계에 따라 조절됨)
-    [SerializeField]
-    private float _moveSpeedMin;
-    [SerializeField]
-    private float _moveSpeedMax;
-    // zoom 단계에 따라 조정된 moveSpeed 저장하는 배열
-    private float[] _moveSpeed;
-    [Tooltip("카메라의 각종 값들이 새 값(_newPosition, _newZoom)으로 변경되는 시간 (클수록 더 빨리 변경됨)"), SerializeField]
-    private float _moveTime;
-    [Tooltip("한 번의 스크롤 입력에 zoom되는 양"), SerializeField]
-    private int _zoomAmount;
-    [Tooltip("화면 이동을 위해 필요한 (마우스 위치 - 스크린 모서리 위치) 값"), SerializeField]
-    private float _borderThickness;
+    // 카메라 이동 속도 최대, 최소 (이동 속도는 zoom 단계에 따라 조절됨)
+    [SerializeField] private float _moveSpeedMin;
+    [SerializeField] private float _moveSpeedMax;
+    private float[] _moveSpeed; // zoom 단계에 따라 조정된 moveSpeed 저장하는 배열
+
+    // 카메라 zoom 최대, 최소
+    [SerializeField] private int _zoomoutLimit;
+    [SerializeField] private int _zoominLimit;
+
+    [SerializeField] private float _moveTime; // 카메라의 각종 값들이 새 값(_newPosition, _newZoom)으로 변경되는 시간 (클수록 더 빨리 변경됨)
+    [SerializeField] private int _zoomAmount; // 한 번의 스크롤 입력에 zoom되는 양
+    [SerializeField] private float _borderThickness; // 화면 이동을 위해 필요한(마우스 위치 - 스크린 모서리 위치) 값
 
     // 카메라 위치 제한값들
     [SerializeField, ReadOnly] private float _posLimitXmin;
@@ -34,12 +32,6 @@ public class AreaCameraController : MonoBehaviour
     [SerializeField, ReadOnly] private float _posLimitZmax;
     private float _bossZ; // 카메라 Z 제한 값 설정에 필요
     private float _startZ; // 카메라 Z 제한 값 설정에 필요
-
-    // 카메라 zoom 최대, 최소
-    [SerializeField]
-    private int _zoomoutLimit;
-    [SerializeField]
-    private int _zoominLimit;
 
     // 카메라의 다음 위치
     [SerializeField, ReadOnly] private Vector3 _newPosition;
@@ -52,7 +44,7 @@ public class AreaCameraController : MonoBehaviour
     private Plane _plane;
     private float _entry;
 
-    // 줌 단계에 따라 카메라 이동속도 조정
+    // 현재 줌 단계. 이에 따라 카메라 이동속도 조정
     private int _zoomLevel;
 
     private const float TILE_PREFAB_THICKNESS = 1.0f;

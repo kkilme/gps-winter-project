@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2009543534564417766}
   m_Layer: 12
-  m_Name: grid_hex
+  m_Name: FogOfWar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,12 +25,12 @@ Transform:
   m_GameObject: {fileID: 2009543534564417760}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.085, y: 1.085, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6116175017620853580}
   - {fileID: 2966904238760825267}
-  - {fileID: 7463434524336961389}
+  - {fileID: 1785020087042170017}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -109,7 +109,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: e98a8bc495553654998446fb7d927d4a, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.019607844}
+  m_Color: {r: 0.2981131, g: 0.2981131, b: 0.2981131, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -241,7 +241,7 @@ PolygonCollider2D:
       - {x: 0.95178574, y: -1.5839286}
       - {x: 0.99107146, y: -1.5160714}
       - {x: 1.0196428, y: -1.4660715}
---- !u!1 &6009311960471220079
+--- !u!1 &5690953125574516678
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,9 +249,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7463434524336961389}
-  - component: {fileID: 8249068047173539599}
-  - component: {fileID: 3392299897924144736}
+  - component: {fileID: 1785020087042170017}
+  - component: {fileID: 5867708040350483995}
+  - component: {fileID: 8928696731973595479}
   m_Layer: 12
   m_Name: collider
   m_TagString: Untagged
@@ -259,28 +259,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7463434524336961389
+--- !u!4 &1785020087042170017
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6009311960471220079}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 5690953125574516678}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9090909, y: 1, z: 0.90909094}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2009543534564417766}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &8249068047173539599
+--- !u!64 &5867708040350483995
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6009311960471220079}
+  m_GameObject: {fileID: 5690953125574516678}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -288,13 +288,13 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!33 &3392299897924144736
+--- !u!33 &8928696731973595479
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6009311960471220079}
+  m_GameObject: {fileID: 5690953125574516678}
   m_Mesh: {fileID: 0}
 --- !u!1 &8274249720829079194
 GameObject:
@@ -370,7 +370,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 7c7bc644a87fc18439988fc920cb96a1, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.13725491}
+  m_Color: {r: 0.29411766, g: 0.29411766, b: 0.29411766, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

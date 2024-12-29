@@ -199,12 +199,11 @@ public class AreaMap
         {   
             var oldTile = EventTileMap[z, x];
             oldTile.Destroy();
-            tile = TileFactory.CreateTile(worldPosition, tileType, oldTile.TileObject);
+            
         }
-        else
-        {
-            tile = TileFactory.CreateTile(worldPosition, tileType);
-        }
+     
+        tile = TileFactory.CreateTile(worldPosition, tileType);
+        
 
         EventTileMap[z, x] = tile;
         TileTypeMap[z, x] = tileType;

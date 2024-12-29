@@ -124,7 +124,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                     Vector3 worldPos = _map.GridToWorldPosition(x, z);
 
                     // 랜덤한 타일 선택해서 가져옴; 타일 별로 배치된 장식물이 다름
-                    AreaBaseTileData tileData = subTileGroupData.SelectRandomTile();
+                    AreaSubTileData tileData = subTileGroupData.SelectRandomTile();
 
                     // 타일 배치
                     AreaBaseTile tile = Instantiate(tileData.Tile, worldPos, Quaternion.identity, tileGroupParent).GetComponent<AreaBaseTile>();

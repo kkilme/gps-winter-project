@@ -221,13 +221,16 @@ public static class Define
     public enum AreaName
     {
         Forest,
-        Snowfield
+        Desert,
     }
-    
+
+    public const string BATTLE_SCENE_NAME = "BattleScene";
+    public const string AREA_SCENE_NAME = "AreaScene";
+
     #endregion
-    
+
     #region DataId
-    
+
     public const int HERO_KNIGHT_ID = 101000;
     public const int HERO_WIZARD_ID = 101001;
 

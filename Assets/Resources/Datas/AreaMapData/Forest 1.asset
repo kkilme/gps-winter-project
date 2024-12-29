@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Forest 1
   m_EditorClassIdentifier: 
   OriginPosition: {x: 0, y: 0, z: 0}
-  MapWidth: 20
+  MapWidth: 21
   MapHeight: 20
-  PlayableFieldWidth: 10
+  PlayableFieldWidth: 11
   PlayableFieldHeight: 15
-  UnplayableFieldDecorationProportion: 0.401
+  UnplayableFieldDecorationProportion: 0.857
   PlayableFieldDecorationProportion: 0.299
   BattleTileNum: 10
   EncounterTileNum: 5
@@ -25,16 +25,16 @@ MonoBehaviour:
     Tiles:
     - Tile: {fileID: 435858176134575976, guid: 4c882cdd48295aa42a9e9bc133eb1d2f, type: 3}
       HasGlobalLimit: 0
-      HasLocalLimit: 0
       GlobalLimitCount: 0
-      LocalLimitCount: 0
     - Tile: {fileID: 435858176134575976, guid: 3a70696b2ecbe6447926b3636b128d93, type: 3}
+      HasGlobalLimit: 1
+      GlobalLimitCount: 10
+    - Tile: {fileID: 435858176134575976, guid: dc6ee0607a318544b82b4dc67396c4c6, type: 3}
       HasGlobalLimit: 0
-      HasLocalLimit: 0
       GlobalLimitCount: 0
-      LocalLimitCount: 0
   SubTileGroupData:
-  - Tiles:
+  - Proportion: 0.25
+    Tiles:
     - Tile: {fileID: 435858176134575976, guid: b3b0b0bcd82a99f40a683b6690dccc9b, type: 3}
       HasGlobalLimit: 0
       HasLocalLimit: 0
@@ -45,6 +45,10 @@ MonoBehaviour:
       HasLocalLimit: 0
       GlobalLimitCount: 0
       LocalLimitCount: 0
-    Proportion: 0.25
+    - Tile: {fileID: 435858176134575976, guid: 668badd932718c5438d3052319394975, type: 3}
+      HasGlobalLimit: 0
+      HasLocalLimit: 0
+      GlobalLimitCount: 0
+      LocalLimitCount: 0
     MinLength: 3
     MaxLength: 6

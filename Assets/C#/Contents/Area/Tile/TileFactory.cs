@@ -3,28 +3,31 @@ using UnityEngine;
 using static Define;
 public static class TileFactory
 {
-    private const string GRID_TILE_PATH = "Area/grid_hex";
+    private const string NORMAL_TILE_PATH = "Area/Tiles/NormalTile";
+    private const string BATTLE_TILE_PATH = "Area/Tiles/BattleTile";
+    private const string ENCOUNTER_TILE_PATH = "Area/Tiles/EncounterTile";
+    private const string BOSS_TILE_PATH = "Area/Tiles/BossTile";
+    private const string DESTROYED_TILE_PATH = "Area/Tiles/DestroyedTile";
 
-    public static AreaEventTile CreateTile(Vector3 position, AreaTileType type, GameObject tileObject = null)
+    public static AreaEventTile CreateTile(Vector3 position, AreaTileType type)
     {
-        bool isRecycle = tileObject != null;
+        Transform tileParent = GameObject.Find("@EventTiles").transform;
 
-        if (!isRecycle)
+        GameObject tile = type switch
         {
-            Transform tileParent = GameObject.Find("@EventTiles").transform;
-            tileObject = Managers.ResourceMng.Instantiate(GRID_TILE_PATH, tileParent);
-            tileObject.transform.position = position;
-        }
-
-        AreaEventTile tile = type switch
-        {
-            AreaTileType.Normal => new NormalTile(position, tileObject, isRecycle),
-            AreaTileType.Battle => new BattleTile(position, tileObject, isRecycle),
-            AreaTileType.Encounter => new EncounterTile(position, tileObject, isRecycle),
-            AreaTileType.Boss => new BossTile(position, tileObject, isRecycle),
-            AreaTileType.Destroyed => new DestroyedTile(position, tileObject, isRecycle),
-            _ => new NormalTile(position, tileObject, isRecycle),
+            AreaTileType.Normal => Managers.ResourceMng.Instantiate(NORMAL_TILE_PATH, tileParent),
+            AreaTileType.Battle => Managers.ResourceMng.Instantiate(BATTLE_TILE_PATH, tileParent),
+            AreaTileType.Encounter => Managers.ResourceMng.Instantiate(ENCOUNTER_TILE_PATH, tileParent),
+            AreaTileType.Boss => Managers.ResourceMng.Instantiate(BOSS_TILE_PATH, tileParent),
+            AreaTileType.Destroyed => Managers.ResourceMng.Instantiate(DESTROYED_TILE_PATH, tileParent),
+            _ => Managers.ResourceMng.Instantiate(NORMAL_TILE_PATH, tileParent),
         };
-        return tile;
+
+        tile.transform.position = position;
+
+        AreaEventTile areaEventTile = tile.GetComponent<AreaEventTile>();
+        areaEventTile.Init();
+
+        return areaEventTile;
     }
 }

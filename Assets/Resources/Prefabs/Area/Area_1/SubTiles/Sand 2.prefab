@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 778299623658637887}
   - component: {fileID: -7917660903375191600}
   m_Layer: 0
-  m_Name: RockBase 2
+  m_Name: Sand 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

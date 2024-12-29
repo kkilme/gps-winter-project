@@ -135,11 +135,18 @@ public abstract class Creature : MonoBehaviour
     {
         CreatureStat.OnHeal(heal);
     }
-    
+
     #endregion
 
-    IEnumerator CoLerpToCell(BattleGridCell cell)
+    #region Animation
+
+    public void PlayMoveAnimation()
     {
-        yield return null;
+        Animator.Play("Move");
     }
+    public void StopAnimation()
+    {
+        Animator.Play("Idle");
+    }
+    #endregion
 }

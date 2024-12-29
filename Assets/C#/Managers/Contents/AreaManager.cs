@@ -27,14 +27,14 @@ public class AreaManager
     }
 
     private AreaMap _map;
+    private AreaCameraController _cameraController;
+    private HeroParty _party => Managers.ObjectMng.HeroParty;
 
+    private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
     private GameObject _mouseoverIndicator; // 마우스 오버 위치의 타일 강조하는 게임오브젝트
-    private GameObject _player;
     private Vector3 _currentPlayerPosition; // 현재 플레이어 WorldPosition
     private Vector3 _currentMouseoverPosition; // 현재 마우스 오버 위치의 WorldPosition
-    private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
 
-    private AreaCameraController _cameraController;
     private GameObject _light;
 
     private int _turnCount = 0;
@@ -55,32 +55,22 @@ public class AreaManager
     public void Init(AreaMap map, bool isTest=false)
     {
         _map = map;
+        _currentPlayerPosition = _map.GetPlayerStartPosition();
+        _currentTile = _map.GetEventTile(_currentPlayerPosition);
+        _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
+        _mouseoverIndicator.transform.position = _currentPlayerPosition;
+        AreaState = Define.AreaState.Idle;
+        _light = GameObject.FindGameObjectWithTag("AreaLight");
 
         if (isTest)
         {
-            SpawnPlayersOnTest();
+            SpawnHeroesOnTest();
         }
-
-        SpawnPlayer();
+        _party.InitOnArea(_currentPlayerPosition);
         InitCamera();
 
         Managers.InputMng.MouseAction -= HandleMouseInput;
         Managers.InputMng.MouseAction += HandleMouseInput;
-
-        AreaState = Define.AreaState.Idle;
-        _light = GameObject.FindGameObjectWithTag("AreaLight");
-        _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
-        _mouseoverIndicator.transform.position = _map.GetPlayerStartPosition();
-    }
-
-    private void SpawnPlayer()
-    {
-        Vector3 spawnOriginPos = _map.GetPlayerStartPosition();
-        _currentPlayerPosition = spawnOriginPos;
-        _currentTile = _map.GetEventTile(_currentPlayerPosition);
-
-        _player = Managers.ObjectMng.Heroes.Values.ToList()[0].gameObject;
-        _player.transform.position = spawnOriginPos;
     }
 
     private void InitCamera()
@@ -130,33 +120,37 @@ public class AreaManager
 
         destination = _map.GetTileCenterPosition(destination);
 
-        Sequence moveSequence = DOTween.Sequence();
-
-    
-        _player.transform.LookAt(destination);
-        moveSequence.Join(_player.transform.DOMove(destination, 0.7f));
+        Sequence moveSequence = _party.MoveTo(destination);
         
+        _party.PlayMoveAnimation();
         moveSequence.Play().OnComplete(() =>
-        {
+        {   
+            _party.StopAnimation();
             _currentPlayerPosition = destination;
             _currentTile = _map.GetEventTile(destination);
             _currentTile.OnTileEnter();
         });
     }
 
-    // 전투씬 전환 흐름: 카메라 정지 -> 로딩화면 Fade in 완료 -> Area의 빛, 카메라 비활성화 -> 배틀 씬 로딩 시작 및 완료 -> 로딩화면 Fade out
+    // 전투씬 전환 흐름: 카메라 정지 -> 로딩화면 Fade in 완료 ->  배틀 씬 로딩 시작 및 완료 -> Area의 빛, 카메라 비활성화 -> 로딩화면 Fade out
+    public void OnBattleSceneLoadStart()
+    {
+        AreaState = Define.AreaState.Battle;
+        _cameraController.Freeze = true;
+    }
+
+    public void OnBattleSceneLoadFinish()
+    {
+        _light.SetActive(false);
+        _cameraController.gameObject.SetActive(false);
+    }
     public IEnumerator LoadBattleScene()
     {
-        var sceneName = "TestBattleScene"; // TODO - Test Code
-
-        _cameraController.GetComponent<AreaCameraController>().Freeze = true; // 카메라 정지
+        var sceneName = Define.BATTLE_SCENE_NAME;
 
         UI_Loading loadingScreen = Managers.UIMng.ShowSceneUI<UI_Loading>();
 
         yield return loadingScreen.Fade(true); // fade in
-
-        _light.SetActive(false);
-        _cameraController.gameObject.SetActive(false);
 
         var battleScene = SceneManager.GetSceneByName(sceneName);
         if (!battleScene.isLoaded)
@@ -177,18 +171,18 @@ public class AreaManager
         _cameraController.gameObject.SetActive(true);
         _cameraController.GetComponent<AreaCameraController>().Freeze = false;
         _light.SetActive(true);
-        
         OnTileEventFinish();
+        AreaState = Define.AreaState.Idle;
     }
 
     public void OnTileEventFinish()
     {
+        _currentTile.OnTileEventFinish();
         switch (_currentTile.TileType)
         {
             case Define.AreaTileType.Normal:
                 break;
             case Define.AreaTileType.Battle:
-                _currentTile.OnTileEventFinish();
                 _map.CreateEventTile(_currentPlayerPosition, Define.AreaTileType.Normal, true);
                 break;
         }
@@ -206,21 +200,11 @@ public class AreaManager
     }
     #endregion
 
-    private void SpawnPlayersOnTest()
+    private void SpawnHeroesOnTest()
     {
-        List<GameObject> heroes = new List<GameObject>
-        {
-            Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID).gameObject,
-            Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID).gameObject,
-            Managers.ObjectMng.SpawnHero(Define.HERO_WIZARD_ID).gameObject,
-            Managers.ObjectMng.SpawnHero(Define.HERO_WIZARD_ID).gameObject
-        };
-
-        for (int i = 1; i < heroes.Count; i++)
-        {
-            heroes[i].transform.position = _map.GridToWorldPosition(0, 0, 1.04f);
-            heroes[i].SetLayerRecursively(LayerMask.NameToLayer("AreaInvisiblePlayer"));
-        }
-
+        Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID);
+        Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID);
+        Managers.ObjectMng.SpawnHero(Define.HERO_WIZARD_ID);
+        Managers.ObjectMng.SpawnHero(Define.HERO_WIZARD_ID);
     }
 }

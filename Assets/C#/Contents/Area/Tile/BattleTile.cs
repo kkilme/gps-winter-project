@@ -1,32 +1,10 @@
-using DG.Tweening;
 using UnityEngine;
-using static Define;
 
 public sealed class BattleTile : AreaEventTile
 {
-    private const string _iconPath = "Area/icon_battle";
-
-
-    public BattleTile(Vector3 position, GameObject tileObject = null, bool isRecycle = false) : base(position, tileObject, isRecycle)
-    {
-        TileType = AreaTileType.Battle;
-        _indicatorColor = new Color(255f / 255f, 20f / 255f, 20f / 255f, 200f / 255f);
-        _fillColor = new Color(255f / 255f, 0f / 255f, 0f / 255f, 50f / 255f);
-        _indicatorHighlightColor = new Color(255f / 255f, 20f / 255f, 20f / 255f, 255f / 255f);
-        _fillHighlightColor = new Color(255f / 255f, 0f / 255f, 0f / 255f, 170f / 255f);
-        Init();
-    }
-
-    public override void Init()
-    {   
-       ChangeColor(TileColorChangeType.Reset);
-
-       Icon = Managers.ResourceMng.Instantiate(_iconPath, TileObject.transform, "icon");
-    }
-
     public override void OnTileEnter()
-    {
-        Managers.AreaMng.AreaState = AreaState.Battle;
+    {   
+        // Monobehaviour가 아니기 때문에 이곳에서 직접 코루틴을 시작할 수 없음
         Managers.SceneMng.GetCurrentScene<AreaScene>().LoadBattleScene();
     }
 

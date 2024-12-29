@@ -6,6 +6,7 @@ using Object = UnityEngine.Object;
 public class ObjectManager
 {
 	public Dictionary<ulong, Hero> Heroes { get; protected set; }
+	public HeroParty HeroParty { get; protected set; }
     public Dictionary<ulong, Monster> Monsters { get; protected set; }
     
     public ulong NextHeroId;
@@ -68,11 +69,15 @@ public class ObjectManager
 			Debug.LogError($"No hero data exists with heroDataId: {heroDataId}");
             return null;
         }
+
+        HeroParty ??= new HeroParty();
+
 	    string className = Managers.DataMng.HeroDataDict[heroDataId].Name;
 	    GameObject go = Managers.ResourceMng.Instantiate($"{Define.HERO_PATH}/{className}");
 	    Hero hero = go.GetComponent<Hero>();
-		
-	    hero.SetInfo(heroDataId);
+		HeroParty.AddHero(hero);
+
+        hero.SetInfo(heroDataId);
 	    go.transform.position = Vector3.zero;
 	    hero.transform.parent = HeroRoot;
 	    hero.Id = NextHeroId;

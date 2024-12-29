@@ -91,18 +91,18 @@ public class AreaMapGenerationData : ScriptableObject
 public class AreaTileGroupData
 {
     public AreaBaseTileData[] Tiles;
-    protected List<AreaBaseTileData> _globalAvailableTiles;
+    private List<AreaBaseTileData> _globalAvailableTiles;
     protected Dictionary<string, int> _globalCount = new();
 
 
-    public virtual void Init()
+    public void Init()
     {
         _globalCount = new();
         _globalAvailableTiles = Tiles.ToList();
     }
 
     // 타일 목록 중 랜덤으로 1개 타일 선택. 땅 종류는 같지만 땅 위에 배치되어있는 장식물이 다름.
-    public virtual AreaBaseTileData SelectRandomTile()
+    public AreaBaseTileData SelectRandomTile()
     {
         if (_globalAvailableTiles.Count == 0)
         {
@@ -124,22 +124,27 @@ public class AreaTileGroupData
 }
 
 [Serializable]
-public class AreaSubTileGroupData : AreaTileGroupData
+public class AreaSubTileGroupData
 {
     [Range(0, 1), Tooltip("이 SubTile이 전체 맵에서 차지할 비율")]
     public float Proportion;
 
+    public AreaSubTileData[] Tiles;
+    private List<AreaSubTileData> _globalAvailableTiles;
+    protected Dictionary<string, int> _globalCount = new();
+
     // 한 타일 그룹의 최소, 최대 크기
     public int MinLength;
     public int MaxLength;
+
     // 한 타일 그룹 내에서의 사용 가능한 타일들
-    private List<AreaBaseTileData> _localAvailableTiles;
+    private List<AreaSubTileData> _localAvailableTiles;
     private Dictionary<string, int> _localCount = new();
 
-    public override void Init()
+    public void Init()
     {
-        base.Init();
-
+        _globalCount = new();
+        _globalAvailableTiles = Tiles.ToList();
         _localCount = new();
         _localAvailableTiles = Tiles.ToList();
     }
@@ -147,17 +152,17 @@ public class AreaSubTileGroupData : AreaTileGroupData
     public void OnNextTilegroupStart()
     {
         _localCount = new();
-        _localAvailableTiles = new List<AreaBaseTileData>(_globalAvailableTiles);
+        _localAvailableTiles = new List<AreaSubTileData>(_globalAvailableTiles);
     }
 
-    public override AreaBaseTileData SelectRandomTile()
+    public AreaSubTileData SelectRandomTile()
     {
         if (_localAvailableTiles.Count == 0)
         {
             Debug.LogError("No more selectable tile left!");
         }
 
-        AreaBaseTileData tileData = _localAvailableTiles[Random.Range(0, _localAvailableTiles.Count)];
+        AreaSubTileData tileData = _localAvailableTiles[Random.Range(0, _localAvailableTiles.Count)];
 
         Util.IncreaseDictCount(_globalCount, tileData.Name);
         Util.IncreaseDictCount(_localCount, tileData.Name);
@@ -184,8 +189,18 @@ public class AreaBaseTileData
     public GameObject Tile;
     public string Name => Tile.name;
     public bool HasGlobalLimit;
-    public bool HasLocalLimit;
+    [Header("Only applied when HasLimit is True")]
+    [Tooltip("전체 맵에서 이 타일이 생성될 수 있는 최대 개수")]
+    public int GlobalLimitCount;
+}
 
+[Serializable]
+public class AreaSubTileData
+{
+    public GameObject Tile;
+    public string Name => Tile.name;
+    public bool HasGlobalLimit;
+    public bool HasLocalLimit;
     [Header("Only applied when HasLimit is True")]
     [Tooltip("전체 맵에서 이 타일이 생성될 수 있는 최대 개수")]
     public int GlobalLimitCount;

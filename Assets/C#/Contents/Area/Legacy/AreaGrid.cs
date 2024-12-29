@@ -222,7 +222,7 @@ public class AreaGrid
         AreaEventTile oldTile = GetTile(x, z);
         oldTile.Destroy();
 
-        AreaEventTile newTile = TileFactory.CreateTile(tileWorldPosition, newType, oldTile.TileObject);
+        AreaEventTile newTile = TileFactory.CreateTile(tileWorldPosition, newType);
 
         SetTile(x, z, newTile);
         SetTileType(x, z, newType);

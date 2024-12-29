@@ -24,7 +24,7 @@ public class TownScene : BaseScene
     {
         if (_startHeroIds.Length > 4)
         {
-            Debug.LogError("Too many hero Ids! Max is 4.");
+            Debug.LogError("Max number of heroes is 4!");
             return;
         }
         foreach (int id in _startHeroIds)
