@@ -9,234 +9,234 @@ using static Define;
 
 // XZ를 축으로 하는 육각형 그리드
 // 육각형은 평평한 부분이 위 (flat-top)
-public class AreaGrid
-{
-    private int _width;
+//public class AreaGrid
+//{
+//    private int _width;
 
-    public int Width
-    {
-        get => _width;
-    }
+//    public int Width
+//    {
+//        get => _width;
+//    }
 
-    private int _height;
-    public int Height
-    {
-        get => _height;
-    }
-    private float _tilewidth;
-    private float _tileheight;
-    private Vector3 _originPosition;
+//    private int _height;
+//    public int Height
+//    {
+//        get => _height;
+//    }
+//    private float _tilewidth;
+//    private float _tileheight;
+//    private Vector3 _originPosition;
 
-    private AreaTileType[,] _typeArray;
-    private AreaEventTile[,] _tileArray;
-    //private bool[,] _isValid;
+//    private AreaTileType[,] _typeArray;
+//    private AreaEventTile[,] _tileArray;
+//    //private bool[,] _isValid;
 
-    private GameObject _mouseoverIndicator;
+//    private GameObject _mouseoverIndicator;
 
-    public AreaGrid(int width, int height, Vector3 originposition, float tilewidth = 4, float tileheight = 3.5f)
-    {
-        if (width % 2 == 0)
-        {
-            Debug.LogError("Grid width must be odd number!");
-            return;
-        }
-        if (height < width / 2 + 1)
-        {
-            Debug.LogError($"Grid height is too small! Must be equal or larger than {width / 2 + 1}!");
-            return;
-        }
-        _width = width;
-        _height = height;
-        _tilewidth = tilewidth;
-        _tileheight = tileheight;
-        _originPosition = originposition;
-        _tileArray = new AreaEventTile[height, width];
-        _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
-        _mouseoverIndicator.transform.position = GetWorldPosition(width / 2, 0, 1.04f);
+//    public AreaGrid(int width, int height, Vector3 originposition, float tilewidth = 4, float tileheight = 3.5f)
+//    {
+//        if (width % 2 == 0)
+//        {
+//            Debug.LogError("Grid width must be odd number!");
+//            return;
+//        }
+//        if (height < width / 2 + 1)
+//        {
+//            Debug.LogError($"Grid height is too small! Must be equal or larger than {width / 2 + 1}!");
+//            return;
+//        }
+//        _width = width;
+//        _height = height;
+//        _tilewidth = tilewidth;
+//        _tileheight = tileheight;
+//        _originPosition = originposition;
+//        _tileArray = new AreaEventTile[height, width];
+//        _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
+//        _mouseoverIndicator.transform.position = GetWorldPosition(width / 2, 0, 1.04f);
 
-    }
+//    }
 
-    public void InitializeTileTypeArray(int[,] source)
-    {
-        _typeArray = new AreaTileType[_height, _width];
-        for (int z = 0; z < _height; z++)
-        {
-            for (int x = 0; x < _width; x++)
-            {
-                switch (source[z, x])
-                {
-                    case -1:
-                        _typeArray[z, x] = AreaTileType.OutOfField;
-                        break;
-                    case 0:
-                        _typeArray[z, x] = AreaTileType.Obstacle;
-                        break;
-                    case 1:
-                        _typeArray[z, x] = AreaTileType.Empty;
-                        break;
-                    case 2:
-                        _typeArray[z, x] = AreaTileType.Start;
-                        break;
-                    case 3:
-                        _typeArray[z, x] = AreaTileType.Boss;
-                        break;
-                }
-            }
-        }
-    }
+//    public void InitializeTileTypeArray(int[,] source)
+//    {
+//        _typeArray = new AreaTileType[_height, _width];
+//        for (int z = 0; z < _height; z++)
+//        {
+//            for (int x = 0; x < _width; x++)
+//            {
+//                switch (source[z, x])
+//                {
+//                    case -1:
+//                        _typeArray[z, x] = AreaTileType.OutOfField;
+//                        break;
+//                    case 0:
+//                        _typeArray[z, x] = AreaTileType.Obstacle;
+//                        break;
+//                    case 1:
+//                        _typeArray[z, x] = AreaTileType.Empty;
+//                        break;
+//                    case 2:
+//                        _typeArray[z, x] = AreaTileType.Start;
+//                        break;
+//                    case 3:
+//                        _typeArray[z, x] = AreaTileType.Boss;
+//                        break;
+//                }
+//            }
+//        }
+//    }
 
-    // 그리드 좌표를 월드 좌표로 변환
-    public Vector3 GetWorldPosition(int x, int z, float y = 0)
-    {
-        if (x % 2 == 1) return new Vector3(x * _tilewidth * 0.75f, y, (z + 0.5f) * _tileheight) + _originPosition;
-        else return new Vector3(x * _tilewidth * 0.75f, y, z * _tileheight) + _originPosition;
-    }
+//    // 그리드 좌표를 월드 좌표로 변환
+//    public Vector3 GetWorldPosition(int x, int z, float y = 0)
+//    {
+//        if (x % 2 == 1) return new Vector3(x * _tilewidth * 0.75f, y, (z + 0.5f) * _tileheight) + _originPosition;
+//        else return new Vector3(x * _tilewidth * 0.75f, y, z * _tileheight) + _originPosition;
+//    }
 
-    // 월드 좌표를 그리드 좌표로 변환
-    public void GetGridPosition(Vector3 worldPosition, out int x, out int z)
-    {
+//    // 월드 좌표를 그리드 좌표로 변환
+//    public void GetGridPosition(Vector3 worldPosition, out int x, out int z)
+//    {
 
-        x = Mathf.RoundToInt((worldPosition.x - (int)_originPosition.x) / (_tilewidth * 0.75f));
-        float tempz = (worldPosition.z - (int)_originPosition.z) / _tileheight;
+//        x = Mathf.RoundToInt((worldPosition.x - (int)_originPosition.x) / (_tilewidth * 0.75f));
+//        float tempz = (worldPosition.z - (int)_originPosition.z) / _tileheight;
 
-        if (x % 2 == 1)
-        {
-            z = Mathf.RoundToInt(tempz - 0.5f);
-        }
-        else
-        {
-            z = Mathf.RoundToInt(tempz);
-        }
-    }
+//        if (x % 2 == 1)
+//        {
+//            z = Mathf.RoundToInt(tempz - 0.5f);
+//        }
+//        else
+//        {
+//            z = Mathf.RoundToInt(tempz);
+//        }
+//    }
 
-    public void SetTile(int x, int z, AreaEventTile gridObject)
-    {
-        _tileArray[z, x] = gridObject;
-    }
+//    public void SetTile(int x, int z, AreaEventTile gridObject)
+//    {
+//        _tileArray[z, x] = gridObject;
+//    }
 
-    public void SetTileType(int x, int z, AreaTileType tileType)
-    {
-        _typeArray[z, x] = tileType;
-    }
+//    public void SetTileType(int x, int z, AreaTileType tileType)
+//    {
+//        _typeArray[z, x] = tileType;
+//    }
 
-    public AreaEventTile GetTile(int x, int z)
-    {
-        return _tileArray[z, x];
-    }
+//    public AreaEventTile GetTile(int x, int z)
+//    {
+//        return _tileArray[z, x];
+//    }
 
-    public AreaEventTile GetTile(Vector3 worldPosition)
-    {
-        GetGridPosition(worldPosition, out int x, out int z);
-        return GetTile(x, z);
-    }
+//    public AreaEventTile GetTile(Vector3 worldPosition)
+//    {
+//        GetGridPosition(worldPosition, out int x, out int z);
+//        return GetTile(x, z);
+//    }
 
-    public bool IsTileEmpty(int x, int z)
-    {
-        return _typeArray[z, x] == AreaTileType.Empty;
-    }
+//    public bool IsTileEmpty(int x, int z)
+//    {
+//        return _typeArray[z, x] == AreaTileType.Empty;
+//    }
 
-    // 해당 셀의 이웃 6개 타일을 보며 tileType인 타일이 하나라도 있다면 true, 하나도 없다면 false 반환
-    public bool CheckNeighborType(int x, int z, AreaTileType tileType)
-    {
-        List<Vector2Int> neighbors = GetAllNeighbors(x, z);
-        foreach (var neighbor in neighbors)
-        {
-            if (_typeArray[neighbor.y, neighbor.x] == tileType) return true;
-        }
+//    // 해당 셀의 이웃 6개 타일을 보며 tileType인 타일이 하나라도 있다면 true, 하나도 없다면 false 반환
+//    public bool CheckNeighborType(int x, int z, AreaTileType tileType)
+//    {
+//        List<Vector2Int> neighbors = GetAllNeighbors(x, z);
+//        foreach (var neighbor in neighbors)
+//        {
+//            if (_typeArray[neighbor.y, neighbor.x] == tileType) return true;
+//        }
 
-        return false;
-    }
+//        return false;
+//    }
 
-    private bool IsPositionValid(int x, int z)
-    {
-        return x >= 0 && x < _width && z >= 0 && z < _height;
-    }
+//    private bool IsPositionValid(int x, int z)
+//    {
+//        return x >= 0 && x < _width && z >= 0 && z < _height;
+//    }
 
-    private bool IsPositionMoveable(int x, int z)
-    {
-        if (!IsPositionValid(x, z)) return false;
-        return _typeArray[z, x] != AreaTileType.Obstacle && _typeArray[z, x] != AreaTileType.OutOfField;
-    }
+//    private bool IsPositionMoveable(int x, int z)
+//    {
+//        if (!IsPositionValid(x, z)) return false;
+//        return _typeArray[z, x] != AreaTileType.Obstacle && _typeArray[z, x] != AreaTileType.OutOfField;
+//    }
 
-    private bool IsNeighbor(int originx, int originz, int targetx, int targetz)
-    {
-        List<Vector2Int> neighbors = GetAllNeighbors(originx, originz);
-        foreach (var neighbor in neighbors)
-        {
-            if (neighbor.x == targetx && neighbor.y == targetz) return true;
-        }
-        return false;
-    }
+//    private bool IsNeighbor(int originx, int originz, int targetx, int targetz)
+//    {
+//        List<Vector2Int> neighbors = GetAllNeighbors(originx, originz);
+//        foreach (var neighbor in neighbors)
+//        {
+//            if (neighbor.x == targetx && neighbor.y == targetz) return true;
+//        }
+//        return false;
+//    }
 
 
-    public bool IsNeighbor(Vector3 origin, Vector3 target)
-    {
-        GetGridPosition(origin, out int x1, out int z1);
-        GetGridPosition(target, out int x2, out int z2);
-        return IsNeighbor(x1, z1, x2, z2);
-    }
+//    public bool IsNeighbor(Vector3 origin, Vector3 target)
+//    {
+//        GetGridPosition(origin, out int x1, out int z1);
+//        GetGridPosition(target, out int x2, out int z2);
+//        return IsNeighbor(x1, z1, x2, z2);
+//    }
 
-    private List<Vector2Int> GetAllNeighbors(int x, int z)
-    {
-        int[,] dir;
-        List<Vector2Int> neighbors = new List<Vector2Int>();
-        if (x % 2 == 0) dir = new[,] { { 0, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, -1 }, { -1, 0 } };
-        else dir = new[,] { { 0, 1 }, { 1, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, 1 } };
+//    private List<Vector2Int> GetAllNeighbors(int x, int z)
+//    {
+//        int[,] dir;
+//        List<Vector2Int> neighbors = new List<Vector2Int>();
+//        if (x % 2 == 0) dir = new[,] { { 0, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, -1 }, { -1, 0 } };
+//        else dir = new[,] { { 0, 1 }, { 1, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, 1 } };
 
-        for (int i = 0; i < 6; i++)
-        {
-            int newx = x + dir[i, 0];
-            int newz = z + dir[i, 1];
-            if (IsPositionValid(newx, newz))
-            {
-                neighbors.Add(new Vector2Int(newx, newz));
-            }
-        }
+//        for (int i = 0; i < 6; i++)
+//        {
+//            int newx = x + dir[i, 0];
+//            int newz = z + dir[i, 1];
+//            if (IsPositionValid(newx, newz))
+//            {
+//                neighbors.Add(new Vector2Int(newx, newz));
+//            }
+//        }
 
-        return neighbors;
-    }
+//        return neighbors;
+//    }
 
-    public void HandleMouseHover(Vector3 worldPosition)
-    {
-        GetGridPosition(worldPosition, out int x, out int z);
-        if (IsPositionMoveable(x, z)) _mouseoverIndicator.transform.position = GetWorldPosition(x, z, 1.07f);
-    }
+//    public void HandleMouseHover(Vector3 worldPosition)
+//    {
+//        GetGridPosition(worldPosition, out int x, out int z);
+//        if (IsPositionMoveable(x, z)) _mouseoverIndicator.transform.position = GetWorldPosition(x, z, 1.07f);
+//    }
 
-    public void ChangeNeighborTilesColor(Vector3 worldPosition, TileColorChangeType colorChangeType)
-    {
-        GetGridPosition(worldPosition, out int x, out int z);
-        List<Vector2Int> neighbors = GetAllNeighbors(x, z);
+//    public void ChangeNeighborTilesColor(Vector3 worldPosition, TileColorChangeType colorChangeType)
+//    {
+//        GetGridPosition(worldPosition, out int x, out int z);
+//        List<Vector2Int> neighbors = GetAllNeighbors(x, z);
 
-        foreach (Vector2Int neighbor in neighbors)
-        {
-            if (IsPositionMoveable(neighbor.x, neighbor.y))
-            {
-                _tileArray[neighbor.y, neighbor.x].ChangeColor(colorChangeType);
-            }
-        }
-    }
+//        foreach (Vector2Int neighbor in neighbors)
+//        {
+//            if (IsPositionMoveable(neighbor.x, neighbor.y))
+//            {
+//                _tileArray[neighbor.y, neighbor.x].ChangeColor(colorChangeType);
+//            }
+//        }
+//    }
 
-    public void ChangeTile(Vector3 tileWorldPosition, AreaTileType newType)
-    {
-        GetGridPosition(tileWorldPosition, out int x, out int z);
-        AreaEventTile oldTile = GetTile(x, z);
-        oldTile.Destroy();
+//    public void ChangeTile(Vector3 tileWorldPosition, AreaTileType newType)
+//    {
+//        GetGridPosition(tileWorldPosition, out int x, out int z);
+//        AreaEventTile oldTile = GetTile(x, z);
+//        oldTile.Destroy();
 
-        AreaEventTile newTile = TileFactory.CreateTile(tileWorldPosition, newType);
+//        AreaEventTile newTile = TileFactory.CreateTile(tileWorldPosition, newType);
 
-        SetTile(x, z, newTile);
-        SetTileType(x, z, newType);
-    }
+//        SetTile(x, z, newTile);
+//        SetTileType(x, z, newType);
+//    }
 
-    public void HandleSuddendeath(int z)
-    {
-        for (int x = 0; x < _width; x++)
-        {
-            if (IsPositionMoveable(x, z)) ChangeTile(GetWorldPosition(x, z), AreaTileType.Destroyed);
-            // TODO: 플레이어가 서든데스로 파괴된 타일에 있을 시 효과 발동
-        }
-    }
-}
+//    public void HandleSuddendeath(int z)
+//    {
+//        for (int x = 0; x < _width; x++)
+//        {
+//            if (IsPositionMoveable(x, z)) ChangeTile(GetWorldPosition(x, z), AreaTileType.Destroyed);
+//            // TODO: 플레이어가 서든데스로 파괴된 타일에 있을 시 효과 발동
+//        }
+//    }
+//}
 
 #endregion
 #region legacy: 플레이 가능한 필드를 나타내는 2차원 bool _isValid 초기화.

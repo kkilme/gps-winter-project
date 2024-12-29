@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 // 맵 생성에 필요한 각종 헬퍼 메소드 및 디버그용 메소드 보유
 public partial class AreaMapGenerator
@@ -25,6 +24,7 @@ public partial class AreaMapGenerator
         UnplayableFieldObstacleGenerate,
         PlayableFieldObstacleGenerate,
         EventTileGenerate,
+        FogOfWarGenerate,
     }
 
 
@@ -240,6 +240,36 @@ public partial class AreaMapGenerator
         {
             Vector3 position = _map.GridToWorldPosition(pos.x, pos.y, 1.07f);
             Instantiate(_pathIndicator, position, Quaternion.Euler(90, 0, 0), _debugObjectParent);
+        }
+    }
+
+    public void ShowFogOfWar()
+    {
+        for (int z = 0; z < _data.MapHeight; z++)
+        {
+            for (int x = 0; x < _data.MapWidth; x++)
+            {
+                if (_map.FogOfWarMap[z, x] != null)
+                {
+                    _map.FogOfWarMap[z, x].Show();
+                    _map.BaseTileMap[z, x].DisableDecoration();
+                }
+            }
+        }
+    }
+
+    public void HideFogOfWar()
+    {
+        for (int z = 0; z < _data.MapHeight; z++)
+        {
+            for (int x = 0; x < _data.MapWidth; x++)
+            {
+                if (_map.FogOfWarMap[z, x] != null)
+                {
+                    _map.FogOfWarMap[z, x].Hide();
+                }
+                _map.BaseTileMap[z, x].EnableDecoration();
+            }
         }
     }
 

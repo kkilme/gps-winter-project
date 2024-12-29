@@ -25,11 +25,14 @@ public class AreaMapGeneratorEditor : Editor
         DrawGenerateUnplayableFieldDecorationButton();
         DrawGeneratePlayableFieldDecorationButton();
         DrawGenerateEventTilesButton();
+        DrawGenerateFogOfWarButton();
 
-        EditorGUILayout.LabelField("Info Text");
+        EditorGUILayout.LabelField("Debug");
         DrawGridPositionTextButton();
         DrawTileTypeTextButton();
         DrawPathToBossButton();
+        DrawHideFogOfWarButton();
+        DrawShowFogOfWarButton();
         DrawClearDebugObjects();
     }
 
@@ -171,6 +174,34 @@ public class AreaMapGeneratorEditor : Editor
         EditorGUILayout.EndHorizontal();
     }
 
+    private void DrawGenerateFogOfWarButton()
+    {
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Generate Fog Of War"))
+        {
+            if (_generator.CurrentGeneratePhase == AreaMapGenerator.MapGeneratePhase.EventTileGenerate)
+            {
+                _generator.GenerateFogOfWar();
+            }
+            else
+            {
+                if (_generator.Init())
+                {
+                    _generator.GenerateSubtiles();
+                    _generator.GenerateMainTile();
+                    _generator.SetupPlayableField(out var playableFieldPos, out var unplayableFieldPos);
+                    _playableFieldPos = playableFieldPos;
+                    _unplayableFieldPos = unplayableFieldPos;
+                    _generator.GenerateUnplayableFieldObstacles(unplayableFieldPos);
+                    _generator.GeneratePlayableFieldObstacles(playableFieldPos);
+                    _generator.GenerateEventTiles();
+                    _generator.GenerateFogOfWar();
+                }
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
 
     private void DrawGridPositionTextButton()
     {
@@ -197,6 +228,26 @@ public class AreaMapGeneratorEditor : Editor
         if (GUILayout.Button("Show path to boss"))
         {
             _generator.ShowPathToBoss();
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
+    private void DrawHideFogOfWarButton()
+    {
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Hide Fog of War"))
+        {
+            _generator.HideFogOfWar();
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
+    private void DrawShowFogOfWarButton()
+    {
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Show Fog of War"))
+        {
+            _generator.ShowFogOfWar();
         }
         EditorGUILayout.EndHorizontal();
     }

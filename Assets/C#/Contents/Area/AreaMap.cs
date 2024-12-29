@@ -9,6 +9,7 @@ public class AreaMap
     public Define.AreaTileType[,] TileTypeMap { get; }
     public AreaEventTile[,] EventTileMap { get; }
     public AreaBaseTile[,] BaseTileMap { get; }
+    public FogOfWar[,] FogOfWarMap { get; }
 
     public Vector2Int PlayableFieldStart; // 플레이 영역이 시작되는 Grid 좌표 (x, z)
     public Vector2Int PlayerStartPosition; // 플레이어 시작 지점의 Grid 좌표
@@ -23,6 +24,8 @@ public class AreaMap
     private const float TILE_PREFAB_WIDTH = 4;
     private const float TILE_PREFAB_HEIGHT = 3.5f;
 
+    private Transform _eventTileParent;
+
     public AreaMap(int width, int height, int playableFieldWidth, int playableFieldHeight, Vector3 originPosition)
     {
         _width = width;
@@ -33,6 +36,8 @@ public class AreaMap
         TileTypeMap = new Define.AreaTileType[height, width];
         EventTileMap = new AreaEventTile[height, width];
         BaseTileMap = new AreaBaseTile[height, width];
+        FogOfWarMap = new FogOfWar[height, width];
+        _eventTileParent = GameObject.Find("@EventTiles").transform;
 
         for (int z = 0; z < height; z++)
         {
@@ -202,9 +207,8 @@ public class AreaMap
             
         }
      
-        tile = TileFactory.CreateTile(worldPosition, tileType);
+        tile = TileFactory.CreateTile(worldPosition, tileType, _eventTileParent);
         
-
         EventTileMap[z, x] = tile;
         TileTypeMap[z, x] = tileType;
     }
@@ -215,12 +219,50 @@ public class AreaMap
         CreateEventTile(x, z, tileType, isReplace);
     }
 
-    public void OnSuddendeath(int z)
+    // z행의 타일들을 DestroyedTile로 교체
+    public void DestroyTiles(int z)
     {
         for (int x = PlayableFieldStart.x; x < PlayableFieldStart.x + _playableFieldWidth; x++)
         {
             if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), Define.AreaTileType.Destroyed, true);
             // TODO: 플레이어가 서든데스로 파괴된 타일에 있을 시 효과 발동
+        }
+    }
+
+    // 현재 플레이어 위치를 기준으로 근처 전장의 안개 제거
+    public void DestroyFogOfWar(Vector3 currentPosition, int visionRange = 2)
+    {   
+        List<Vector2Int> fogOfWarsToDestroy = new();
+        WorldToGridPosition(currentPosition, out int currentX, out int currentZ);
+
+        void FindFogOfWarToDestroy(int x, int z, int currentDistance)
+        {
+            fogOfWarsToDestroy.Add(new Vector2Int(x, z));
+
+            if(currentDistance >= visionRange) return;
+
+            foreach (var neighbor in GetNeighbors(x, z))
+            {
+                if (BaseTileMap[neighbor.y, neighbor.x].IsDecorationEnabled) FindFogOfWarToDestroy(neighbor.x, neighbor.y, currentDistance + 2);
+                else FindFogOfWarToDestroy(neighbor.x, neighbor.y, currentDistance + 1);
+            }
+
+        }
+
+        FindFogOfWarToDestroy(currentX, currentZ, 0);
+
+        foreach (var pos in fogOfWarsToDestroy)
+        {
+            var posx = pos.x;
+            var posz = pos.y;
+
+            if (FogOfWarMap[posz, posx] != null)
+            {
+                FogOfWarMap[posz, posx].Destroy();
+                FogOfWarMap[posz, posx] = null;
+            }
+
+            if (BaseTileMap[posz, posx].IsDecorationEnabled) BaseTileMap[posz, posx].EnableDecoration();
         }
     }
 

@@ -19,6 +19,7 @@ public partial class AreaMapGenerator : MonoBehaviour
     private Transform _subtileParent;
     private Transform _maintileParent;
     private Transform _debugObjectParent;
+    private Transform _fogOfWarParent;
     private Light _light;
 
     [Header("Debug")]
@@ -44,13 +45,14 @@ public partial class AreaMapGenerator : MonoBehaviour
             return false;
         }
 
-        _map = new AreaMap(_data.MapWidth, _data.MapHeight, _data.PlayableFieldWidth, _data.PlayableFieldHeight, _data.OriginPosition);
-
         if(!GameObject.Find("@Map")) Managers.ResourceMng.Instantiate("Area/@Map");
         _debugObjectParent = GameObject.Find("@Debug").transform;
         _subtileParent = GameObject.Find("@SubTiles").transform;
         _maintileParent = GameObject.Find("@MainTiles").transform;
+        _fogOfWarParent = GameObject.Find("@FogOfWar").transform;
         _light = GameObject.FindGameObjectWithTag("AreaLight").GetComponent<Light>();
+
+        _map = new AreaMap(_data.MapWidth, _data.MapHeight, _data.PlayableFieldWidth, _data.PlayableFieldHeight, _data.OriginPosition);
 
         return true;
     }
@@ -63,6 +65,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         GenerateUnplayableFieldObstacles(unplayableField);
         GeneratePlayableFieldObstacles(playableField);
         GenerateEventTiles();
+        GenerateFogOfWar();
 
         return _map;
     }
@@ -206,7 +209,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         CurrentGeneratePhase = MapGeneratePhase.PlayableFieldSetup;
         _light.cullingMask = LayerMask.GetMask(_lightCullingMask);
   
-        var tempPlayablePos = new List<Vector2Int>();
+        playableField = new List<Vector2Int>();
         unplayableField = new List<Vector2Int>();
         
         int xStart = _data.MapWidth / 2;
@@ -220,8 +223,8 @@ public partial class AreaMapGenerator : MonoBehaviour
                  z++)
             {   
                 // 타일을 플레이 가능 필드로 설정. 해당 타일의 AreaTileType은 다시 Empty가 됨.
-                SetPlayableTile(xStart + xOffset, z);
-                if(xOffset != 0) SetPlayableTile(xStart - xOffset, z);
+                SetAsPlayableFieldTile(playableField, xStart + xOffset, z);
+                if(xOffset != 0) SetAsPlayableFieldTile(playableField, xStart - xOffset, z);
             }
 
             if ((xStart % 2 == 0 && xOffset % 2 == 0) || (xStart % 2 == 1 && xOffset % 2 == 1))
@@ -266,14 +269,13 @@ public partial class AreaMapGenerator : MonoBehaviour
             _map.TileTypeMap[pos.y, pos.x] = Define.AreaTileType.ForceEmpty;
         }
 
-        playableField = tempPlayablePos;
         return;
 
-        void SetPlayableTile(int x, int z)
+        void SetAsPlayableFieldTile(List<Vector2Int> field, int x, int z)
         {   
             _map.BaseTileMap[z, x].EnableLight();
             _map.TileTypeMap[z, x] = Define.AreaTileType.Empty;
-            tempPlayablePos.Add(new Vector2Int(x, z));
+            field.Add(new Vector2Int(x, z));
         }
     }
 
@@ -330,8 +332,8 @@ public partial class AreaMapGenerator : MonoBehaviour
         {
             Vector2Int pos = field[Random.Range(0, field.Count)];
             if (_map.TileTypeMap[pos.y, pos.x] == Define.AreaTileType.ForceEmpty) continue;
-            _map.BaseTileMap[pos.y, pos.x].EnableDecoration();
-            _map.TileTypeMap[pos.y, pos.x] = Define.AreaTileType.Obstacle;
+            _map.BaseTileMap[pos.y, pos.x].SetDecorationEnabled();
+            if (_map.TileTypeMap[pos.y, pos.x] != Define.AreaTileType.OutOfField) _map.TileTypeMap[pos.y, pos.x] = Define.AreaTileType.Obstacle;
             totalGenerated++;
             field.Remove(pos);
         }
@@ -449,5 +451,24 @@ public partial class AreaMapGenerator : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void GenerateFogOfWar()
+    {
+        CurrentGeneratePhase = MapGeneratePhase.FogOfWarGenerate;
+
+        for (int z = 0; z < _data.MapHeight; z++)
+        {
+            for(int x = 0; x < _data.MapWidth; x++)
+            {
+                if (_map.TileTypeMap[z, x] == Define.AreaTileType.Boss) continue;
+      
+                FogOfWar fog = TileFactory.CreateFogOfWar(_map.GridToWorldPosition(x, z, 1.06f),
+                    _map.TileTypeMap[z, x] == Define.AreaTileType.OutOfField,
+                    _fogOfWarParent);
+                _map.FogOfWarMap[z, x] = fog;
+                _map.BaseTileMap[z, x].DisableDecoration();
+            }
+        }
     }
 }

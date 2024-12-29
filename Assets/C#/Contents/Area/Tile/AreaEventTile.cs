@@ -75,7 +75,7 @@ public abstract class AreaEventTile: MonoBehaviour
     public void Destroy()
     {
         if (_icon != null)
-            _icon.GetComponent<SpriteRenderer>().DOFade(0, 0.5f).OnComplete(() => { GameObject.Destroy(_icon); });
+            _icon.GetComponent<SpriteRenderer>().DOFade(0, 0.5f).OnComplete(() => { GameObject.Destroy(gameObject); });
     }
 
     public abstract void OnTileEnter();

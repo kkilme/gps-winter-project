@@ -44,7 +44,7 @@ public class AreaManager
         set
         {
             _turnCount = value;
-            if (TurnCount != 0 && TurnCount % _suddendeathTimer == 0) HandleSuddendeath();
+            if (TurnCount != 0 && TurnCount % _suddendeathTimer == 0) ProgressSuddendeath();
             else AreaState = Define.AreaState.Idle;
         }
     }
@@ -68,7 +68,7 @@ public class AreaManager
         }
         _party.InitOnArea(_currentPlayerPosition);
         InitCamera();
-
+        _map.DestroyFogOfWar(_currentPlayerPosition, 3);
         Managers.InputMng.MouseAction -= HandleMouseInput;
         Managers.InputMng.MouseAction += HandleMouseInput;
     }
@@ -107,7 +107,7 @@ public class AreaManager
         }
     }
 
-    #region Explore
+
     private void MovePlayers(Vector3 destination)
     {   
         // 이동 가능한 타일인지 확인
@@ -128,6 +128,7 @@ public class AreaManager
             _party.StopAnimation();
             _currentPlayerPosition = destination;
             _currentTile = _map.GetEventTile(destination);
+            _map.DestroyFogOfWar(_currentPlayerPosition);
             _currentTile.OnTileEnter();
         });
     }
@@ -143,24 +144,6 @@ public class AreaManager
     {
         _light.SetActive(false);
         _cameraController.gameObject.SetActive(false);
-    }
-    public IEnumerator LoadBattleScene()
-    {
-        var sceneName = Define.BATTLE_SCENE_NAME;
-
-        UI_Loading loadingScreen = Managers.UIMng.ShowSceneUI<UI_Loading>();
-
-        yield return loadingScreen.Fade(true); // fade in
-
-        var battleScene = SceneManager.GetSceneByName(sceneName);
-        if (!battleScene.isLoaded)
-        {
-            yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        }
-
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
-
-        yield return loadingScreen.Fade(false); // fade out, LoadingUI 삭제
     }
 
     public void OnBattleSceneUnloadFinish()
@@ -189,16 +172,20 @@ public class AreaManager
         Managers.AreaMng.TurnCount++;
     }
 
-    private void HandleSuddendeath()
+    private void ProgressSuddendeath()
     {
         // 보스 위치 기준 최대 2칸 아래까지만 파괴됨
-        if (_suddendeathCount == _map.BossPosition.y - _map.PlayerStartPosition.y - 2) return;
+        if (_suddendeathCount == _map.BossPosition.y - _map.PlayerStartPosition.y - 2)
+        {
+            AreaState = Define.AreaState.Idle;
+            return;
+        }
 
-        _map.OnSuddendeath(_suddendeathCount);
+        _map.DestroyTiles(_suddendeathCount);
         _suddendeathCount++;
         AreaState = Define.AreaState.Idle;
     }
-    #endregion
+
 
     private void SpawnHeroesOnTest()
     {

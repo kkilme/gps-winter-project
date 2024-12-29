@@ -11,6 +11,7 @@ public class AreaBaseTile : MonoBehaviour
     private GameObject _tile;
     // 타일 위의 장식물 오브젝트
     private GameObject _decoration;
+    public bool IsDecorationEnabled;
 
     public void Init()
     {
@@ -25,9 +26,16 @@ public class AreaBaseTile : MonoBehaviour
         _tile.SetLayerRecursively(LayerMask.NameToLayer("AreaLightTarget"));
     }
 
+    public void SetDecorationEnabled()
+    {
+        IsDecorationEnabled = true;
+        _decoration.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // 장식물 각도를 랜덤으로 하여 랜덤성 부여
+        EnableDecoration();
+    }
+
     public void EnableDecoration()
     {
-        _decoration.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360),0); // 장식물 각도를 랜덤으로 하여 랜덤성 부여
+        if (!IsDecorationEnabled) return;
         _decoration.SetActive(true);
     }
 
