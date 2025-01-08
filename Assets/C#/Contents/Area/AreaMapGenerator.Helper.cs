@@ -86,7 +86,7 @@ public partial class AreaMapGenerator
                     closestNode = node;
                 }
             }
-            // 가장 짧은 거리의 노드가 여러 개인 경우 랜덤으로 선택: 굳이 필요해보이진 않음
+            // legacy: 가장 짧은 거리의 노드가 여러 개인 경우 랜덤으로 선택: 굳이 필요해보이진 않음
             //List<Vector2Int> closestNodes = new() {closestNode};
             //foreach (Vector2Int node in queue)
             //{

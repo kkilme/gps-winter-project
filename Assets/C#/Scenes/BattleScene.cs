@@ -4,19 +4,12 @@ using Unity.Netcode;
 using UnityEngine;
 
 public class BattleScene : BaseScene
-{
+{   
     protected override void Init()
     {
         base.Init();
-        
+      
         SceneType = Define.SceneType.BattleScene;
-
-        TestSpawnHeroes();
-        
-        Managers.UIMng.ShowSceneUI<UI_BattleScene>();
-        Managers.BattleMng.InitBattle(Define.MONSTERSQUAD_SQUAD1_ID);
-        // TODO - TEST CODE
-        Managers.ResourceMng.Instantiate("UI/SceneUI/UI_PlayerProfileGroup");
     }
 
     public override void Clear()
@@ -24,22 +17,29 @@ public class BattleScene : BaseScene
         Debug.Log("BattleScene Clear!");
     }
 
-    // TODO - TEST CODE
-    public void TestSpawnHeroes()
+    public void InitBattle(int squadId)
     {
-        Hero hero1 = Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID);
-        Weapon weapon1 = new SampleSingleSword();
-        weapon1.SetInfo(Define.WEAPON_SAMPLESINGLESWORD_ID);
-        hero1.EquipWeapon(weapon1);
-        
-        // Hero hero2 = Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID);
-        // Weapon weapon2 = new SampleSingleSword();
-        // weapon2.SetInfo(Define.WEAPON_SAMPLESINGLESWORD_ID);
-        // hero2.EquipWeapon(weapon2);
-        
-        // Hero hero3 = Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID);
-        // Weapon weapon3 = new SampleSingleSword();
-        // weapon3.SetInfo(Define.WEAPON_SAMPLESINGLESWORD_ID);
-        // hero3.EquipWeapon(weapon3);
+        Managers.BattleMng.Init(squadId);
+        Managers.UIMng.ShowSceneUI<UI_BattleScene>();
+        Managers.UIMng.ShowPlayerProfileGroupUI(true);
+    }
+
+    //// TODO - TEST CODE
+    //public void TestSpawnHeroes()
+    //{
+    //    Hero hero1 = Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID);
+    //    Weapon weapon1 = new SampleSingleSword();
+    //    weapon1.SetInfo(Define.WEAPON_SAMPLESINGLESWORD_ID);
+    //    hero1.EquipWeapon(weapon1);
+    //}
+
+    private void Start()
+    {
+        // TODO: BattleScene에서 시작하여 플레이 테스트 시에만 실행
+        if (Managers.SceneMng.FirstScene != null && Managers.SceneMng.FirstScene is BattleScene)
+        {   
+            Managers.ObjectMng.SpawnHeroesOnTest();
+            InitBattle(Define.MONSTERSQUAD_SQUAD1_ID);
+        }
     }
 }

@@ -12,7 +12,6 @@ public class AreaManager
     public Define.AreaName AreaName { get; set; }
 
     private Define.AreaState _areaState;
-
     public Define.AreaState AreaState
     {
         get => _areaState;
@@ -29,6 +28,7 @@ public class AreaManager
     private AreaMap _map;
     private AreaCameraController _cameraController;
     private HeroParty _party => Managers.ObjectMng.HeroParty;
+
 
     private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
     private GameObject _mouseoverIndicator; // 마우스 오버 위치의 타일 강조하는 게임오브젝트
@@ -52,7 +52,7 @@ public class AreaManager
     private int _suddendeathCount = 0;
     
     #region Init
-    public void Init(AreaMap map, bool isTest=false)
+    public void Init(AreaMap map)
     {
         _map = map;
         _currentPlayerPosition = _map.GetPlayerStartPosition();
@@ -62,13 +62,10 @@ public class AreaManager
         AreaState = Define.AreaState.Idle;
         _light = GameObject.FindGameObjectWithTag("AreaLight");
 
-        if (isTest)
-        {
-            SpawnHeroesOnTest();
-        }
         _party.InitOnArea(_currentPlayerPosition);
         InitCamera();
-        _map.DestroyFogOfWar(_currentPlayerPosition, 3);
+        _map.RevealFogOfWar(_currentPlayerPosition, 3); // 시작 지점에서 범위 3 반경의 전장의 안개 제거
+
         Managers.InputMng.MouseAction -= HandleMouseInput;
         Managers.InputMng.MouseAction += HandleMouseInput;
     }
@@ -107,7 +104,6 @@ public class AreaManager
         }
     }
 
-
     private void MovePlayers(Vector3 destination)
     {   
         // 이동 가능한 타일인지 확인
@@ -128,7 +124,7 @@ public class AreaManager
             _party.StopAnimation();
             _currentPlayerPosition = destination;
             _currentTile = _map.GetEventTile(destination);
-            _map.DestroyFogOfWar(_currentPlayerPosition);
+            _map.RevealFogOfWar(_currentPlayerPosition);
             _currentTile.OnTileEnter();
         });
     }
@@ -138,6 +134,7 @@ public class AreaManager
     {
         AreaState = Define.AreaState.Battle;
         _cameraController.Freeze = true;
+        Managers.InputMng.MouseAction -= HandleMouseInput;
     }
 
     public void OnBattleSceneLoadFinish()
@@ -156,6 +153,7 @@ public class AreaManager
         _light.SetActive(true);
         OnTileEventFinish();
         AreaState = Define.AreaState.Idle;
+        Managers.InputMng.MouseAction += HandleMouseInput;
     }
 
     public void OnTileEventFinish()
@@ -184,14 +182,5 @@ public class AreaManager
         _map.DestroyTiles(_suddendeathCount);
         _suddendeathCount++;
         AreaState = Define.AreaState.Idle;
-    }
-
-
-    private void SpawnHeroesOnTest()
-    {
-        Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID);
-        Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID);
-        Managers.ObjectMng.SpawnHero(Define.HERO_WIZARD_ID);
-        Managers.ObjectMng.SpawnHero(Define.HERO_WIZARD_ID);
     }
 }

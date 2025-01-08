@@ -4,10 +4,11 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 
 public class ObjectManager
-{
-	public Dictionary<ulong, Hero> Heroes { get; protected set; }
-	public HeroParty HeroParty { get; protected set; }
+{   
+    public bool Initialized { get; protected set; }
+    public Dictionary<ulong, Hero> Heroes { get; protected set; }
     public Dictionary<ulong, Monster> Monsters { get; protected set; }
+	public HeroParty HeroParty { get; protected set; }
     
     public ulong NextHeroId;
     public ulong NextMonsterId;
@@ -28,6 +29,8 @@ public class ObjectManager
 
 		Object.DontDestroyOnLoad(HeroRoot.gameObject);
 	    BindActions();
+
+        Initialized = true;
     }
 
     public Transform GetRootTransform(string name)
@@ -84,7 +87,15 @@ public class ObjectManager
 	    Heroes[NextHeroId++] = hero;
 	    return hero;
     }
-    
+
+    public void SpawnHeroesOnTest()
+    {
+        SpawnHero(Define.HERO_KNIGHT_ID);
+        SpawnHero(Define.HERO_KNIGHT_ID);
+        SpawnHero(Define.HERO_WIZARD_ID);
+        SpawnHero(Define.HERO_WIZARD_ID);
+    }
+
     public Monster SpawnMonster(int monsterDataId)
     {
 	    string className = Managers.DataMng.MonsterDataDict[monsterDataId].Name;

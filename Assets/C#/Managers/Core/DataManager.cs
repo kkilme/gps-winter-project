@@ -25,7 +25,7 @@ public class DataManager
     {
         HeroDataDict = LoadJson<Data.HeroDataLoader, int, Data.HeroData>("HeroData").MakeDict();
         MonsterDataDict = LoadJson<Data.MonsterDataLoader, int, Data.MonsterData>("MonsterData").MakeDict();
-      MonsterSquadDataDict = LoadJson<Data.MonsterSquadDataLoader, int, Data.MonsterSquadData>("MonsterSquadData").MakeDict();
+        MonsterSquadDataDict = LoadJson<Data.MonsterSquadDataLoader, int, Data.MonsterSquadData>("MonsterSquadData").MakeDict();
         ItemDataDict = LoadJson<Data.ItemDataLoader, int, Data.ItemData>("ItemData").MakeDict();
         WeaponDataDict = LoadJson<Data.WeaponDataLoader, int, Data.WeaponData>("WeaponData").MakeDict();
         ArmorDataDict = LoadJson<Data.ArmorDataLoader, int, Data.ArmorData>("ArmorData").MakeDict();

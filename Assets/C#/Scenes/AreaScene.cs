@@ -33,7 +33,6 @@ public class AreaScene : BaseScene
     {
         base.Init();
         SceneType = Define.SceneType.AreaScene;
-        //Init(AreaName.Forest); // TODO: Test code. AreaScene에서 직접 테스트 및 작업 시 필요
 
         OnBattleSceneUnloadFinish -= AreaManager.OnBattleSceneUnloadFinish;
         OnBattleSceneUnloadFinish += AreaManager.OnBattleSceneUnloadFinish;
@@ -68,7 +67,6 @@ public class AreaScene : BaseScene
     }
 
     #region Test
-    // AreaScene에서 직접 실행 시 테스트용 코드
     private void TestInit()
     {
         Quest testQuest = new Quest(Managers.DataMng.QuestDataDict.Values.ToList()[0]);
@@ -77,17 +75,14 @@ public class AreaScene : BaseScene
             areaName = Define.AreaName.Forest;
         }
 
-        AreaName = areaName;
-        Quest = testQuest;
-
-        _areaMapGenerator.Init(areaName);
-        AreaMap map = _areaMapGenerator.GenerateMap();
-        AreaManager.Init(map, true);
+        Managers.ObjectMng.SpawnHeroesOnTest();
+        InitArea(areaName, testQuest);
     }
 
     private void Start()
     {
-        if (Managers.SceneMng.CurrentScene is AreaScene)
+        // TODO: AreaScene에서 시작하여 플레이 테스트 시에만 실행
+        if (Managers.SceneMng.FirstScene != null && Managers.SceneMng.FirstScene is AreaScene)
         {
             TestInit();
         }

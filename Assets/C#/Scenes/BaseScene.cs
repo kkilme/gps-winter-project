@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
@@ -23,19 +22,17 @@ public abstract class BaseScene : MonoBehaviour
 
     protected virtual void Init()
     {
-        // TODO - 나중엔 최초 Scene에서만 실행
-        if (!Managers.BattleMng.Initialized)
+        // TODO- 최초 Scene에서만 실행
+        if (!Managers.ObjectMng.Initialized)
         {
             Managers.Init();
             Managers.InputMng.Init();
+            Managers.SceneMng.Init();
             Managers.DataMng.Init();
             Managers.SoundMng.Init();
             Managers.PoolMng.Init();
             Managers.UIMng.Init();
             Managers.ObjectMng.Init();
-            Managers.BattleMng.Init();
-            
-            Managers.BattleMng.Initialized = true;
         }
         
         Object obj = FindObjectOfType(typeof(EventSystem));

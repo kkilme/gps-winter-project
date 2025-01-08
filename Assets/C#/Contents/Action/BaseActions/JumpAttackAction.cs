@@ -9,7 +9,7 @@ public abstract class JumpAttackAction : BaseAction
     {
         if (Owner.CreatureType == Define.CreatureType.Hero && TargetCell.GridSide == Define.GridSide.HeroSide)
             return false;
-        if (Owner.CreatureType == Define.CreatureType.Monster && TargetCell.GridSide == Define.GridSide.MonsterSide)
+        if (Owner.CreatureType == Define.CreatureType.Monster && TargetCell.GridSide == Define.GridSide.EnemySide)
             return false;
 
         return true;
@@ -22,10 +22,10 @@ public abstract class JumpAttackAction : BaseAction
 
     public override void OnHandleAction()
     {
-        if (TargetCell.CellCreature == null)
+        if (TargetCell.PlacedCreature == null)
             return;
         
-        Creature targetCreature = TargetCell.CellCreature;
+        Creature targetCreature = TargetCell.PlacedCreature;
         targetCreature.OnDamage(Owner.CreatureStat.Attack * CoinHeadNum / CoinNum, 1);
     }
     

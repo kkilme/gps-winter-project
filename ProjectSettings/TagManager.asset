@@ -5,10 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Monster
-  - EnemyGrid
-  - PlayerGrid
   - AreaLight
   - TownHeroSpawnPoint
+  - HeroGrid
+  - EnemyGrid
   layers:
   - Default
   - TransparentFX

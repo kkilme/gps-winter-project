@@ -19,21 +19,6 @@ public class Hero : Creature
     public Define.WeaponType WeaponType => Weapon.WeaponType;
     public Dictionary<Define.ArmorType, Armor> Armors { get; protected set; }
     
-    private BattleGridCell _currentMouseOverCell;
-    public BattleGridCell CurrentMouseOverCell
-    {
-        get => _currentMouseOverCell;
-        protected set
-        {
-            if (_currentMouseOverCell == value)
-                return;
-            
-            _currentMouseOverCell?.MouseExit();
-            _currentMouseOverCell = value;
-            _currentMouseOverCell?.MouseEnter();
-        }
-    }
-    
     #endregion
     
     protected override void Init()
@@ -59,69 +44,15 @@ public class Hero : Creature
         CreatureData = Managers.DataMng.HeroDataDict[templateId];
         base.SetInfo(templateId);
     }
-    
-    #region Input
-    
-    private void HandleMouseInput(Define.MouseEvent mouseEvent)
-    {
-        if (CreatureBattleState == Define.CreatureBattleState.PrepareAction && CurrentAction != null) 
-        {
-            switch (mouseEvent)
-            {
-                case Define.MouseEvent.Hover:
-                    OnMouseOverCell();
-                    break;
-                case Define.MouseEvent.PointerDown:
-                    OnClickGridCell();
-                    break;
-            }
-        }
-    }
-
-    private void OnMouseOverCell()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: LayerMask.GetMask("BattleGridCell")))
-        {
-            BattleGridCell gridCell = rayHit.transform.gameObject.GetComponent<BattleGridCell>();
-            CurrentMouseOverCell = gridCell;
-            return;
-        }
-        
-        CurrentMouseOverCell = null;
-    }
-    
-    public void OnClickGridCell()
-    {
-        if (CurrentMouseOverCell == null)
-            return;
-        
-        CurrentAction.Equip(this);
-        TargetCell = CurrentMouseOverCell;
-        
-        if (!CurrentAction.CanStartAction())
-        {
-            CurrentAction.UnEquip();
-            TargetCell = null;
-            return;
-        }
-
-        CreatureBattleState = Define.CreatureBattleState.ActionProceed;
-
-        CurrentMouseOverCell.RevertColor();
-    }
-    
-    #endregion
 
     #region Battle
     
     public override void DoPrepareAction()
     {
-        ((UI_BattleScene)Managers.UIMng.SceneUI).BattleOrderUI.InitTurn();
+        //((UI_BattleScene)Managers.UIMng.SceneUI).BattleOrderUI.InitTurn();
         
-        Managers.InputMng.MouseAction -= HandleMouseInput;
-        Managers.InputMng.MouseAction += HandleMouseInput;
+        //Managers.InputMng.MouseAction -= HandleMouseInput;
+        //Managers.InputMng.MouseAction += HandleMouseInput;
     }
     
     public override void DoAction()
@@ -131,7 +62,7 @@ public class Hero : Creature
 
     public override void DoEndTurn()
     {
-        Managers.InputMng.MouseAction -= HandleMouseInput;
+        //Managers.InputMng.MouseAction -= HandleMouseInput;
         
         ((UI_BattleScene)Managers.UIMng.SceneUI).BattleOrderUI.EndTurn();
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.EndTurn();
@@ -144,7 +75,7 @@ public class Hero : Creature
 
     #endregion
 
-    // Prototype버전에선 Weapon, Armor 변경 X
+    // Prototype버전에선 Weapon, Armor 구현 X
     // TODO - Data Id로 무기 및 아머를 장착하도록 구현
     #region Weapon
 

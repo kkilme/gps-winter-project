@@ -107,7 +107,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                 // 행/열 합하여 가장 적은 수의 타일이 생성된 위치를 가져옴
                 Util.FindMinIndex(numOfSubtiles, out int x, out int z);
                 
-                // 낮은 확률로 위에서 가져온 위치가 이미 비어있지 않을 수 있음. 그럴 시 빈 타일 중 랜덤 선택.
+                // 위에서 가져온 위치에 이미 타일을 생성했을 수 있음. 그럴 시 빈 타일 중 랜덤 선택.
                 if (_map.TileTypeMap[z, x] != Define.AreaTileType.Empty)
                 {
                     List<Vector2Int> emptyPositions = GetEmptyPositions();
@@ -118,6 +118,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                     tilePosition = new Vector2Int(x, z);
                 }
 
+                // 하나의 타일 그룹에 속하는 타일들의 부모 오브젝트 생성
                 Transform tileGroupParent = MakeTileGroupParent(x, z);
 
                 for (int i = 0; i < length; i++)
@@ -129,7 +130,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                     // 랜덤한 타일 선택해서 가져옴; 타일 별로 배치된 장식물이 다름
                     AreaSubTileData tileData = subTileGroupData.SelectRandomTile();
 
-                    // 타일 배치
+                    // 타일 생성 및 배치
                     AreaBaseTile tile = Instantiate(tileData.Tile, worldPos, Quaternion.identity, tileGroupParent).GetComponent<AreaBaseTile>();
                     _map.BaseTileMap[z, x] = tile;
                     _map.TileTypeMap[z,x] = Define.AreaTileType.SubTile;

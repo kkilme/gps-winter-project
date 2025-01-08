@@ -32,7 +32,6 @@ namespace Data
     {
         public List<HeroData> heroes = new List<HeroData>();
 
-        // List형태의 Data를 Dictionary형태로 변환 후 반환
         public Dictionary<int, HeroData> MakeDict()
         {
             Dictionary<int, HeroData> dic = new Dictionary<int, HeroData>();
@@ -60,7 +59,6 @@ namespace Data
     {
         public List<MonsterData> monsters = new List<MonsterData>();
 
-        // List형태의 Data를 Dictionary형태로 변환 후 반환
         public Dictionary<int, MonsterData> MakeDict()
         {
             Dictionary<int, MonsterData> dic = new Dictionary<int, MonsterData>();
@@ -78,9 +76,14 @@ namespace Data
     {
         public int DataId;
         public string Name;
-        public int Level;
-        public List<int> Line1 = new List<int>();
-        public List<int> Line2 = new List<int>();
+        public List<MonsterSquad_MonsterData> Monsters;
+    }
+
+    public class MonsterSquad_MonsterData
+    {
+        public int DataId;
+        public int x;
+        public int y;
     }
 
     [Serializable]
@@ -88,7 +91,6 @@ namespace Data
     {
         public List<MonsterSquadData> monsterSquads = new List<MonsterSquadData>();
 
-        // List형태의 Data를 Dictionary형태로 변환 후 반환
         public Dictionary<int, MonsterSquadData> MakeDict()
         {
             Dictionary<int, MonsterSquadData> dic = new Dictionary<int, MonsterSquadData>();
@@ -227,12 +229,7 @@ namespace Data
     public class AreaData
     {
         public string Name; // AreaName enum의 값과 같아야 함
-        public string Basemap;
-        public int Width;
-        public int Height;
-        public int BattleTileNum;
-        public int EncounterTileNum;
-        public string MapPrefabPath;
+        public string BattleFieldName; // 전투 필드의 프리팹 이름
     }
 
     [Serializable]

@@ -71,12 +71,6 @@ public static class Define
         Destroyed
     }
 
-    public enum AreaBaseTileType
-    {
-        MainTile,
-        SubTile
-    }
-
     public enum QuestRewardType
     {
         Money,
@@ -131,7 +125,7 @@ public static class Define
     public enum GridSide
     {
         HeroSide,
-        MonsterSide,
+        EnemySide,
     }
     #endregion
 
@@ -255,6 +249,8 @@ public static class Define
     #region Value
     
     public const float MOVE_SPEED = 5f;
+    public const float BATTLEFIELD_POS_X = -1000f;
+    public const float BATTLEFIELD_POS_Z = -1000f;
 
     // Animation Name
     public static readonly int ANIMATION_DEFEND = UnityEngine.Animator.StringToHash("Defend");

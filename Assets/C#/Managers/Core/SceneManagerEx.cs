@@ -6,12 +6,17 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEx
 {
+    public BaseScene FirstScene;
     public BaseScene CurrentScene => GameObject.FindObjectOfType<BaseScene>();
 
+    public void Init()
+    {
+        FirstScene = CurrentScene;
+    }
     // type의 이름을 string으로 반환
     private string GetSceneName(Define.SceneType type)
     {
-        return System.Enum.GetName(typeof(Define.SceneType), type);
+        return Enum.GetName(typeof(Define.SceneType), type);
     }
 
     // 현재 씬을 T 타입으로 반환
@@ -35,12 +40,13 @@ public class SceneManagerEx
 
     // 전투씬 전환 흐름: 카메라 정지 -> 로딩화면 Fade in 완료 ->  배틀 씬 로딩 시작 및 완료 -> Area의 빛, 카메라 비활성화 -> 로딩화면 Fade out
     public IEnumerator LoadBattleScene()
-    {
+    {   
+        Debug.Log("Battle Scene Load Start");
         var sceneName = Define.BATTLE_SCENE_NAME;
 
-        Managers.AreaMng.OnBattleSceneLoadStart();
+        Managers.AreaMng.OnBattleSceneLoadStart(); // 카메라 정지
 
-        UI_Loading loadingScreen = Managers.UIMng.ShowSceneUI<UI_Loading>();
+        UI_Loading loadingScreen = Managers.UIMng.ShowSceneUI<UI_Loading>(); // 로딩화면
         yield return loadingScreen.Fade(false); // fade out
 
         var battleScene = SceneManager.GetSceneByName(sceneName);
@@ -48,11 +54,12 @@ public class SceneManagerEx
         {
             yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         }
-        Managers.AreaMng.OnBattleSceneLoadFinish();
+        Managers.AreaMng.OnBattleSceneLoadFinish(); // Area의 빛, 카메라 비활성화
 
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
 
         yield return loadingScreen.Fade(true); // fade in, LoadingUI 삭제
+        Debug.Log("Battle Scene Load Finish");
     }
 
     public IEnumerator UnloadBattleScene()

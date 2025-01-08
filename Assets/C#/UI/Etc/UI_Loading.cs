@@ -27,7 +27,7 @@ public class UI_Loading : UI_Scene
             _canvasGroup.alpha = 1;
             Tween tween = _canvasGroup.DOFade(0f, 1f);
             yield return tween.WaitForCompletion();
-            Destroy(gameObject);
+            Destroy(gameObject); // 로딩 UI 삭제
         }
     }
 }

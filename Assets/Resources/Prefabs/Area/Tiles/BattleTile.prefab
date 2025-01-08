@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2009543534564417766}
-  - component: {fileID: -199214197617050644}
+  - component: {fileID: -4639374714324252083}
   m_Layer: 12
   m_Name: BattleTile
   m_TagString: Untagged
@@ -36,7 +36,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &-199214197617050644
+--- !u!114 &-4639374714324252083
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2009543534564417760}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19c8e777cb52d444b964f2eb1c5d63cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c66ff510c6cf104499f8dd11cc1db0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TileType: 8

@@ -2,69 +2,34 @@ using UnityEngine;
 
 public class BattleManager
 {
-    public bool Initialized = false; // TODO - 임시 코드
-    
     #region Field
     
-    public TurnSystem TurnSystem { get; protected set; }
-    
+    public TurnSystem TurnSystem { get; private set; }
+    public BattleGridSystem BattleGridSystem { get; private set; }
+    private HeroParty _party => Managers.ObjectMng.HeroParty;
     public Creature CurrentTurnCreature => TurnSystem.CurrentTurnCreature();
-
-    public BattleGridCell[,] HeroGrid { get; protected set; } = new BattleGridCell[2, 3];
-    public BattleGridCell[,] MonsterGrid { get; protected set; } = new BattleGridCell[2, 3];
 
     #endregion
     
-    public void Init()
+    public void Init(int squadId)
     {
         TurnSystem = new TurnSystem();
-    }
-    
-    #region InitBattle
-    
-    public void InitBattle(int monsterSquadDataId)
-    {
-        GameObject battleGrid = Managers.ResourceMng.Instantiate("Battle/BattleGrid", null, "@BattleGrid");
-        battleGrid.transform.position = Vector3.zero;
-        GameObject heroSide = Util.FindChild(battleGrid, "HeroSide");
-        GameObject monsterSide = Util.FindChild(battleGrid, "MonsterSide");
+        BattleGridSystem = new BattleGridSystem();
 
-        for (int row = 0; row < 2; row++)
-        {
-            for (int col = 0; col < 3; col++)
-            {
-                HeroGrid[row, col] = Util.FindChild<BattleGridCell>(heroSide, $"BattleGridCell ({row}, {col})");
-                HeroGrid[row, col].SetRowCol(row, col, Define.GridSide.HeroSide);
-                MonsterGrid[row, col] = Util.FindChild<BattleGridCell>(monsterSide, $"BattleGridCell ({row}, {col})");
-                MonsterGrid[row, col].SetRowCol(row, col, Define.GridSide.MonsterSide);
-            }
-        }
+        string battleFieldname = Managers.DataMng.AreaDataDict[Managers.AreaMng.AreaName].BattleFieldName;
+        GameObject battleField = Managers.ResourceMng.Instantiate($"Battle/Field/{battleFieldname}");
+        battleField.transform.position = new Vector3(Define.BATTLEFIELD_POS_X, 0, Define.BATTLEFIELD_POS_Z);
 
-        PlaceAllCreatures(monsterSquadDataId);
-        
+        BattleGridSystem.Init();
+        BattleGridSystem.PlaceHero();
+        BattleGridSystem.PlaceEnemy(squadId);
+
         SetBattleTurns();
         NextTurn(true);
     }
     
-    private void PlaceAllCreatures(int monsterSquadDataId)
-    {
-        // TODO - TEST CODE
-        PlaceHero(10000, HeroGrid[0, 0]);
-        //PlaceHero(10001, HeroGrid[0, 1]);
-        //PlaceHero(10002, HeroGrid[1, 2]);
-        
-        Data.MonsterSquadData monsterSquadData = Managers.DataMng.MonsterSquadDataDict[monsterSquadDataId];
-        int line1Col = 0;
-        int line2Col = 0;
-        foreach (int monsterId in monsterSquadData.Line1)
-        {
-            SpawnAndPlaceMonster(monsterId, MonsterGrid[0, line1Col++]);
-        }
-        foreach (int monsterId in monsterSquadData.Line2)
-        {
-            SpawnAndPlaceMonster(monsterId, MonsterGrid[1, line2Col++]);
-        }
-    }
+    #region InitBattle
+
     
     public Hero PlaceHero(ulong heroId, BattleGridCell targetCell)
     {
@@ -110,9 +75,9 @@ public class BattleManager
     public void MoveCreature(Creature creature, BattleGridCell targetCell, bool isInit = false)
     {
         if (creature.Cell != null)
-            creature.Cell.CellCreature = null;
+            creature.Cell.PlacedCreature = null;
         
-        targetCell.CellCreature = creature;
+        targetCell.PlacedCreature = creature;
         creature.Cell = targetCell;
 
         if (isInit)

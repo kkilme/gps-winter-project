@@ -11,12 +11,12 @@ public class MoveAction : BaseAction
     
     public override bool CanStartAction()
     {
-        if (Owner.CreatureType == Define.CreatureType.Hero && TargetCell.GridSide == Define.GridSide.MonsterSide)
+        if (Owner.CreatureType == Define.CreatureType.Hero && TargetCell.GridSide == Define.GridSide.EnemySide)
             return false;
         if (Owner.CreatureType == Define.CreatureType.Monster && TargetCell.GridSide == Define.GridSide.HeroSide)
             return false;
 
-        if (TargetCell.CellCreature != null)
+        if (TargetCell.PlacedCreature != null)
             return false;
         
         return true;

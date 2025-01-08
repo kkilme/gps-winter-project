@@ -73,6 +73,15 @@ public class UIManager
         
         return popupUI;
     }
+
+    public UI_PlayerProfileGroup ShowPlayerProfileGroupUI(bool isVertical = false)
+    {
+        string name = isVertical ? "UI_PlayerProfileGroup_Vertical" : "UI_PlayerProfileGroup_Horizontal";
+        GameObject go = Managers.ResourceMng.Instantiate($"UI/SceneUI/{name}");
+        go.transform.SetParent(Root.transform);
+
+        return go.GetComponentInChildren<UI_PlayerProfileGroup>();
+    }
     
     // T 타입의 UI 컴포넌트를 반환
     public T GetUIComponent<T>() where T: UI_Base

@@ -193,21 +193,18 @@ public class AreaMap
         }
     }
 
-    // 맵 첫 생성 시 뿐 아니라 서든데스 등 게임 진행 도중 타일 타입 바꾸는데에도 필요
+    // 맵 첫 생성 시뿐만 아니라 게임 진행 도중에 타일 타입을 바꾸는데에도 필요
     public void CreateEventTile(int x, int z, Define.AreaTileType tileType, bool isReplace = false)
     {
         Vector3 worldPosition = GridToWorldPosition(x, z, 1.02f);
-
-        AreaEventTile tile;
 
         if (isReplace)
         {   
             var oldTile = EventTileMap[z, x];
             oldTile.Destroy();
-            
         }
-     
-        tile = TileFactory.CreateTile(worldPosition, tileType, _eventTileParent);
+
+        AreaEventTile tile = TileFactory.CreateTile(worldPosition, tileType, _eventTileParent);
         
         EventTileMap[z, x] = tile;
         TileTypeMap[z, x] = tileType;
@@ -229,12 +226,14 @@ public class AreaMap
         }
     }
 
-    // 현재 플레이어 위치를 기준으로 근처 전장의 안개 제거
-    public void DestroyFogOfWar(Vector3 currentPosition, int visionRange = 2)
+    // 특정 위치를 기준으로 전장의 안개 제거
+    // 기본 시야 거리: 2
+    public void RevealFogOfWar(Vector3 currentPosition, int visionRange = 2)
     {   
         List<Vector2Int> fogOfWarsToDestroy = new();
         WorldToGridPosition(currentPosition, out int currentX, out int currentZ);
 
+        // 재귀로 제거할 안개 탐색
         void FindFogOfWarToDestroy(int x, int z, int currentDistance)
         {
             fogOfWarsToDestroy.Add(new Vector2Int(x, z));
@@ -243,8 +242,8 @@ public class AreaMap
 
             foreach (var neighbor in GetNeighbors(x, z))
             {
-                if (BaseTileMap[neighbor.y, neighbor.x].IsDecorationEnabled) FindFogOfWarToDestroy(neighbor.x, neighbor.y, currentDistance + 2);
-                else FindFogOfWarToDestroy(neighbor.x, neighbor.y, currentDistance + 1);
+                if (BaseTileMap[neighbor.y, neighbor.x].IsDecorationEnabled) FindFogOfWarToDestroy(neighbor.x, neighbor.y, currentDistance + 2); // 장애물 타일: 거리 2
+                else FindFogOfWarToDestroy(neighbor.x, neighbor.y, currentDistance + 1); // 일반 타일: 거리 1
             }
 
         }
@@ -256,12 +255,14 @@ public class AreaMap
             var posx = pos.x;
             var posz = pos.y;
 
+            // 안개 제거
             if (FogOfWarMap[posz, posx] != null)
             {
                 FogOfWarMap[posz, posx].Destroy();
                 FogOfWarMap[posz, posx] = null;
             }
 
+            // 장애물 활성화
             if (BaseTileMap[posz, posx].IsDecorationEnabled) BaseTileMap[posz, posx].EnableDecoration();
         }
     }

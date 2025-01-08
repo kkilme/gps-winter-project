@@ -1,4 +1,4 @@
-﻿{
+{
   "monsters": [
     {
       "DataId": 102000,
@@ -7,7 +7,7 @@
       "Attack": 5,
       "Defense": 0,
       "Stat": 60,
-      "Speed": 8,
+      "Speed": 80,
       "Actions": [
         403000,
         403000

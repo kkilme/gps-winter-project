@@ -22,10 +22,10 @@ public class HealPotion : BaseItem
 
     public override void OnHandleAction()
     {
-        if (TargetCell.CellCreature == null)
+        if (TargetCell.PlacedCreature == null)
             return;
         
-        Creature targetCreature = TargetCell.CellCreature;
+        Creature targetCreature = TargetCell.PlacedCreature;
         targetCreature.OnHeal(ItemData.Heal);
         
         base.OnHandleAction();
