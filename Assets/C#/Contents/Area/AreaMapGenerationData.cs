@@ -1,15 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 [CreateAssetMenu(fileName = "Area Map Data", menuName = "Scriptable Object/Area Map Data")]
 public class AreaMapGenerationData : ScriptableObject
-{   
+{
     // 맵 원점
     public Vector3 OriginPosition;
     // 전체 맵 크기
@@ -112,7 +109,7 @@ public class AreaTileGroupData
         AreaBaseTileData tileData = _globalAvailableTiles[Random.Range(0, _globalAvailableTiles.Count)];
 
         Util.IncreaseDictCount(_globalCount, tileData.Name);
-        
+
         // GlobalLimit에 도달 시
         if (tileData.HasGlobalLimit && _globalCount[tileData.Name] == tileData.GlobalLimitCount)
         {

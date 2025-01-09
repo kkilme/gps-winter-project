@@ -25,7 +25,7 @@ public abstract class BaseAction
         DataId = templateId;
         ActionData = Managers.DataMng.ActionDataDict[templateId];
         
-        CoinNum = ActionData.CoinNum;
+        CoinNum = ActionData.CoinCount;
     }
 
     public void Equip(Creature owner)

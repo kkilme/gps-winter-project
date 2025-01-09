@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using DG.Tweening;
+using UnityEngine;
 
 public class BattleGridCell : MonoBehaviour
 {
@@ -10,14 +7,14 @@ public class BattleGridCell : MonoBehaviour
     public Define.GridSide GridSide { get; protected set; }
     public int Row { get; protected set; }
     public int Col { get; protected set; }
-    
+
     private SpriteRenderer _indicator;
     private Color _originalColor;
 
     private Tweener _colorTween;
-    
+
     private void Start()
-    {   
+    {
         _indicator = GetComponent<SpriteRenderer>();
         _originalColor = _indicator.color;
         transform.position += new Vector3(0f, 0.03f, 0f);

@@ -1,14 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 public class AreaManager
-{   
+{
     public Define.AreaName AreaName { get; set; }
 
     private Define.AreaState _areaState;
@@ -50,7 +44,7 @@ public class AreaManager
     }
     private int _suddendeathTimer = 4; // timer번의 이동마다 맨 밑 타일 파괴됨. Area별로 다르게 할 수도?
     private int _suddendeathCount = 0;
-    
+
     #region Init
     public void Init(AreaMap map)
     {
@@ -84,7 +78,7 @@ public class AreaManager
     #endregion
 
     private void HandleMouseInput(Define.MouseEvent mouseEvent)
-    {   
+    {
         if (AreaState != Define.AreaState.Idle)
         {
             return;
@@ -94,7 +88,8 @@ public class AreaManager
         {
             _mouseoverIndicator.transform.position = _map.GetTileCenterPosition(mouseOverPosition);
             _currentMouseoverPosition = mouseOverPosition;
-        } else return;
+        }
+        else return;
 
         switch (mouseEvent)
         {
@@ -105,7 +100,7 @@ public class AreaManager
     }
 
     private void MovePlayers(Vector3 destination)
-    {   
+    {
         // 이동 가능한 타일인지 확인
         if (_map.IsPositionMoveable(_currentPlayerPosition, _currentMouseoverPosition))
         {
@@ -117,10 +112,10 @@ public class AreaManager
         destination = _map.GetTileCenterPosition(destination);
 
         Sequence moveSequence = _party.MoveTo(destination);
-        
+
         _party.PlayMoveAnimation();
         moveSequence.Play().OnComplete(() =>
-        {   
+        {
             _party.StopAnimation();
             _currentPlayerPosition = destination;
             _currentTile = _map.GetEventTile(destination);
@@ -144,7 +139,7 @@ public class AreaManager
     }
 
     public void OnBattleSceneUnloadFinish()
-    {   
+    {
         // TODO - 배틀 씬에서 에어리어 씬으로 넘어올 시 배틀 씬 UI 삭제하는 코드. 구조적으로 더 좋은 코드가 가능해 보임.
         GameObject.Destroy(GameObject.FindObjectOfType<UI_BattleScene>().gameObject);
 

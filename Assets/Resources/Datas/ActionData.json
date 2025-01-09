@@ -1,44 +1,40 @@
-﻿{
+{
   "actions": [
-    {
+    {   
       "DataId": 401000,
+      "Type": "ActionData",
       "Name": "MoveAction",
-      "Description": "",
-      "CoinNum": 0,
+      "Description": "Move to other position",
+      "CoinCount": 0,
       "UsingStat": "None",
-      "IsAttack": false,
-      "IncreaseValue": 0,
-      "ReduceStat": 0
     },
     {
       "DataId": 401001,
+      "Type": "ActionData",
       "Name": "FleeAction",
-      "Description": "Perfect = Flee",
-      "CoinNum": 2,
+      "Description": "Run away from the battle. Requires perfect coin toss.",
+      "CoinCount": 2,
       "UsingStat": "Dexterity",
-      "IsAttack": false,
-      "IncreaseValue": 0,
-      "ReduceStat": 0
     },
     {
       "DataId": 402000,
+      "Type": "AttackActionData",
       "Name": "Strike",
       "Description": "",
-      "CoinNum": 3,
+      "CoinCount": 3,
       "UsingStat": "Strength",
-      "IsAttack": true,
-      "IncreaseValue": 0,
-      "ReduceStat": 0
+      "AttackType": "Physical",
+      "DamagePerCoin": 2,
     },
     {
       "DataId": 403000,
+      "Type": "AttackActionData",
       "Name": "Bite",
       "Description": "",
-      "CoinNum": 2,
+      "CoinCount": 2,
       "UsingStat": "Strength",
-      "IsAttack": true,
-      "IncreaseValue": 0,
-      "ReduceStat": 0
+      "AttackType": "Physical",
+      "DamagePerCoin": 2,
     }
   ]
 }

@@ -1,9 +1,8 @@
-using System.Collections;
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
-public class HeroParty 
+public class HeroParty
 {
     public List<Hero> Heroes { get; set; }
     public List<GameObject> HeroObjects { get; set; }
@@ -47,7 +46,7 @@ public class HeroParty
 
     // Area에서 시작 지점에 히어로 배치
     public void InitOnArea(Vector3 startPosition)
-    {   
+    {
         for (int i = 0; i < HeroObjects.Count; i++)
         {
             HeroObjects[i].transform.LookAt(Vector3.forward);

@@ -1,5 +1,3 @@
-using Palmmedia.ReportGenerator.Core;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -41,7 +39,7 @@ public class AreaMapGeneratorEditor : Editor
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Generate Subtile"))
         {
-            if(_generator.Init()) _generator.GenerateSubtiles();
+            if (_generator.Init()) _generator.GenerateSubtiles();
         }
         EditorGUILayout.EndHorizontal();
     }
@@ -123,7 +121,7 @@ public class AreaMapGeneratorEditor : Editor
     {
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Generate Playable Field Decoration"))
-        {   
+        {
             if (_generator.CurrentGeneratePhase == AreaMapGenerator.MapGeneratePhase.UnplayableFieldObstacleGenerate)
             {
                 _generator.GeneratePlayableFieldObstacles(_playableFieldPos);

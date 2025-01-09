@@ -1,7 +1,7 @@
 public static class Define
 {
     #region Type
-    
+
     public enum CreatureType
     {
         None,
@@ -46,7 +46,7 @@ public static class Define
         Debuff,
         Recover,
     }
-    
+
     public enum ActionTargetType
     {
         Single,
@@ -89,7 +89,7 @@ public static class Define
         Pass,
         Dispose
     }
-    
+
     public enum SceneType
     {
         UnknownScene,
@@ -107,11 +107,29 @@ public static class Define
         Effect,
         MaxCount,
     }
-    
+
+    public enum ActionDataType
+    {
+        ActionData,
+        AttackActionData,
+    }
+    public enum ActionType
+    {
+        Move,
+        Flee,
+        Attack,
+        Buff,
+    }
+
+    public enum AttackType
+    {
+        Physical,
+        Magical,
+    }
     #endregion
 
     #region Attribute
-    
+
     public enum Stat
     {
         None,
@@ -130,6 +148,14 @@ public static class Define
     #endregion
 
     #region State
+    public enum BattleState
+    {   
+        Starting,
+        Idle,
+        ActionTargetSelecting,
+        ActionProcessing,
+        Ending,
+    }
     public enum CreatureBattleState
     {
         Wait,
@@ -160,11 +186,11 @@ public static class Define
         Encounter,
         Boss,
     }
-    
+
     #endregion
 
     #region Event
-    
+
     public enum UIEvent
     {
         Click,
@@ -183,11 +209,11 @@ public static class Define
         Click,
         Hover,
     }
-    
+
     #endregion
 
     #region NonContent
-    
+
     public enum Layer
     {
         Ground = 6,
@@ -200,18 +226,18 @@ public static class Define
     {
         QuarterView,
     }
-    
+
     #endregion
 
     #region Path
-    
+
     public const string HERO_PATH = "Heroes";
     public const string MONSTER_PATH = "Monsters";
-    
+
     #endregion
-    
+
     #region Name
-    
+
     public enum AreaName
     {
         Forest,
@@ -243,11 +269,11 @@ public static class Define
     public const int ACTION_BITE_ID = 403000;
 
     public const int MONSTERSQUAD_SQUAD1_ID = 501000;
-    
+
     #endregion
 
     #region Value
-    
+
     public const float MOVE_SPEED = 5f;
     public const float BATTLEFIELD_POS_X = -1000f;
     public const float BATTLEFIELD_POS_Z = -1000f;
@@ -261,12 +287,12 @@ public static class Define
     public static readonly int ANIMATION_MOVE = UnityEngine.Animator.StringToHash("Move");
     public static readonly int ANIMATION_MOVEAPPROACH = UnityEngine.Animator.StringToHash("MoveApproach");
     public static readonly int ANIMATION_VICTORY = UnityEngine.Animator.StringToHash("Victory");
-    
+
     // Animation Parameter
     public static readonly int PARAMETER_ATTACK_FINISHED = UnityEngine.Animator.StringToHash("AttackFinished");
     public static readonly int PARAMETER_APPROACH_FINISHED = UnityEngine.Animator.StringToHash("ApproachFinished");
     public static readonly int PARAMETER_NEEDS_JUMP = UnityEngine.Animator.StringToHash("NeedsJump");
     public static readonly int PARAMETER_NEEDS_MOVE = UnityEngine.Animator.StringToHash("NeedsMove");
-   
+
     #endregion
 }

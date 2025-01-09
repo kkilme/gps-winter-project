@@ -1,11 +1,8 @@
-using System;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_BattleOrder : UI_Base
+public class UI_BattleActionPanel : UI_Base
 {
     enum Buttons
     {
@@ -26,26 +23,26 @@ public class UI_BattleOrder : UI_Base
         Text_SlotPercentage,
         Text_SlotPercentageWord
     }
-    
+
     public Hero CurrentTurnHero { get; protected set; }
-    
+
     public override void Init()
     {
         Bind<Button>(typeof(Buttons));
         Bind<TextMeshProUGUI>(typeof(Texts));
-        
-        GetButton(Buttons.Skill1).GetOrAddComponent<UI_ActionButton>().UIBattleOrder = this;
-        GetButton(Buttons.Skill2).GetOrAddComponent<UI_ActionButton>().UIBattleOrder = this;
-        GetButton(Buttons.Skill3).GetOrAddComponent<UI_ActionButton>().UIBattleOrder = this;
-        GetButton(Buttons.Move).GetOrAddComponent<UI_ActionButton>().UIBattleOrder = this;
-        GetButton(Buttons.Flee).GetOrAddComponent<UI_ActionButton>().UIBattleOrder = this;
+
+        GetButton(Buttons.Skill1).GetOrAddComponent<UI_ActionButton>().BattleActionPanel = this;
+        GetButton(Buttons.Skill2).GetOrAddComponent<UI_ActionButton>().BattleActionPanel = this;
+        GetButton(Buttons.Skill3).GetOrAddComponent<UI_ActionButton>().BattleActionPanel = this;
+        GetButton(Buttons.Move).GetOrAddComponent<UI_ActionButton>().BattleActionPanel = this;
+        GetButton(Buttons.Flee).GetOrAddComponent<UI_ActionButton>().BattleActionPanel = this;
     }
 
     public void InitTurn()
     {
         gameObject.SetActive(true);
         CurrentTurnHero = Managers.BattleMng.CurrentTurnCreature as Hero;
-        
+
         SetButtons();
     }
 
@@ -54,7 +51,7 @@ public class UI_BattleOrder : UI_Base
         gameObject.SetActive(false);
         CurrentTurnHero = null;
     }
-    
+
     protected void SetButtons()
     {
         GetButton(Buttons.Skill1).GetOrAddComponent<UI_ActionButton>().Action = CurrentTurnHero.Weapon.Skill1;
@@ -71,7 +68,7 @@ public class UI_BattleOrder : UI_Base
         GetText(Texts.Text_ActionName).text = action.ActionData.Name;
         GetText(Texts.Text_ActionDescription).text = action.ActionData.Description;
 
-        if (action.ActionData.IsAttack)
+        if (action.ActionData is Data.AttackActionData)
         {
             GetText(Texts.Text_DamageWord).text = "DAMAGE";
             GetText(Texts.Text_DamageNumber).text = CurrentTurnHero.HeroStat.Attack.ToString();
@@ -82,7 +79,7 @@ public class UI_BattleOrder : UI_Base
             GetText(Texts.Text_SlotPercentageWord).text = "Percentage\nPer Slot";
             GetText(Texts.Text_SlotPercentage).text = CurrentTurnHero.HeroStat.GetStatByDefine(action.UsingStat).ToString();
         }
-        
+
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinNum(action);
     }
 

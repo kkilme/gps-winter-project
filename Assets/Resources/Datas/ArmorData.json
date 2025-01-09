@@ -1,15 +1,17 @@
-﻿{
+{
   "armors": [
     {
       "DataId": 202000,
       "Name": "SampleBody1",
-      "Defense": 2,
+      "PhysicalDefense": 2,
+      "MagicDefense": 1,
       "ArmorIndex": 5
     },
     {
       "DataId": 202001,
       "Name": "SampleBody2",
       "Defense": 1,
+      "MagicDefense": 1,
       "Dexterity": 1,
       "ArmorIndex": 6
     }

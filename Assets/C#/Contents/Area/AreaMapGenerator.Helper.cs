@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 // 맵 생성에 필요한 각종 헬퍼 메소드 및 디버그용 메소드 보유
@@ -16,7 +13,7 @@ public partial class AreaMapGenerator
     private string[] _lightCullingMask = new[] { "Player", "AreaLightTarget" };
 
     public enum MapGeneratePhase
-    {   
+    {
         NotStarted,
         SubtileGenerate,
         Maintilegenerate,
@@ -31,7 +28,7 @@ public partial class AreaMapGenerator
     // 시작 위치부터 특정 위치까지 길찾기 (다익스트라)
     // 타일 종류별로 거리에 가중치를 부여하거나 맵 생성 시 보스 타일까지의 거리의 범위를 정하는 등 확장 가능해보임.
     private bool FindPath(Vector2Int destination, out List<Vector2Int> path)
-    {   
+    {
         // 타일별 최단거리
         Dictionary<Vector2Int, int> distances = new()
         {
@@ -39,7 +36,7 @@ public partial class AreaMapGenerator
         };
         Dictionary<Vector2Int, Vector2Int> previous = new(); // 타일의 이전 타일 저장 (경로 추적용)
         path = new List<Vector2Int>(); // 최단 경로 저장할 리스트
-        List<Vector2Int> queue = new(){_playerStartPosition};
+        List<Vector2Int> queue = new() { _playerStartPosition };
 
         while (queue.Count > 0)
         {
@@ -100,14 +97,14 @@ public partial class AreaMapGenerator
             return closestNode;
         }
     }
-    
+
     // AreaBaseTile Init. AreaBaseTile의 Start 메소드에서 할 시 제대로 적용이 안 됨.
     private void InitBaseTiles()
     {
         for (int z = 0; z < _map.BaseTileMap.GetLength(0); z++)
         {
             for (int x = 0; x < _map.BaseTileMap.GetLength(1); x++)
-            {   
+            {
                 _map.BaseTileMap[z, x].Init();
             }
         }
@@ -137,8 +134,8 @@ public partial class AreaMapGenerator
         GameObject[] parents = new GameObject[4] { GameObject.Find("@Debug"), GameObject.Find("@SubTiles"), GameObject.Find("@MainTiles"), GameObject.Find("@EventTiles") };
 
         foreach (var p in parents)
-        {   
-            if(p == null) continue;
+        {
+            if (p == null) continue;
             var pt = p.transform;
             for (int i = pt.childCount - 1; i >= 0; i--)
             {
@@ -162,7 +159,7 @@ public partial class AreaMapGenerator
     }
 
     public void ShowTileTypeText()
-    {   
+    {
         if (CurrentGeneratePhase != MapGeneratePhase.EventTileGenerate)
         {
             Debug.LogWarning("Map must be generated first!");
@@ -197,7 +194,7 @@ public partial class AreaMapGenerator
                         text.color = Color.cyan;
                         break;
                     case Define.AreaTileType.Normal:
-                        text.color = new Color(1,1,1,0.5f);
+                        text.color = new Color(1, 1, 1, 0.5f);
                         break;
                 }
             }
@@ -284,7 +281,7 @@ public partial class AreaMapGenerator
         if (Managers.SceneMng.CurrentScene is AreaScene)
         {
             _isTestMode = true;
-            
+
         }
     }
 

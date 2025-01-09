@@ -59,7 +59,7 @@ public class UI_PlayerProfile : UI_Base
         Get<Slider>(Sliders.Slider_HP).value = (float)heroStat.Hp / heroStat.MaxHp;
         GetText(Text.Text_HP).text = $"{heroStat.Hp}/{heroStat.MaxHp}";
         GetText(Text.Text_Attack).text = heroStat.Attack.ToString();
-        GetText(Text.Text_Defense).text = heroStat.Defense.ToString();
+        GetText(Text.Text_Defense).text = heroStat.PhysicalDefense.ToString();
 
         GetText(Text.Text_Strength).text = heroStat.Strength.ToString();
         GetText(Text.Text_Vitality).text = heroStat.Vitality.ToString();

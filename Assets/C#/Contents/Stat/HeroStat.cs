@@ -48,7 +48,8 @@ public class HeroStat : CreatureStat
         Hp += equipmentData.Hp;
         MaxHp += equipmentData.Hp;
         Attack += equipmentData.Attack;
-        Defense += equipmentData.Defense;
+        PhysicalDefense += equipmentData.PhysicalDefense;
+        MagicDefense += equipmentData.MagicDefense;
         Strength += equipmentData.Strength;
         Vitality += equipmentData.Vitality;
         Intelligence += equipmentData.Intelligence;
@@ -60,7 +61,8 @@ public class HeroStat : CreatureStat
         Hp -= equipmentData.Hp;
         MaxHp -= equipmentData.Hp;
         Attack -= equipmentData.Attack;
-        Defense -= equipmentData.Defense;
+        PhysicalDefense -= equipmentData.PhysicalDefense;
+        MagicDefense -= equipmentData.MagicDefense;
         Strength -= equipmentData.Strength;
         Vitality -= equipmentData.Vitality;
         Intelligence -= equipmentData.Intelligence;

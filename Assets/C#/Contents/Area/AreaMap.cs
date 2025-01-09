@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -111,7 +110,7 @@ public class AreaMap
         return TileTypeMap[z, x] != Define.AreaTileType.Obstacle && TileTypeMap[z, x] != Define.AreaTileType.OutOfField;
     }
     public bool IsPositionStandable(Vector3 worldPosition)
-    {   
+    {
         WorldToGridPosition(worldPosition, out int x, out int z);
         return IsPositionStandable(x, z);
     }
@@ -199,13 +198,13 @@ public class AreaMap
         Vector3 worldPosition = GridToWorldPosition(x, z, 1.02f);
 
         if (isReplace)
-        {   
+        {
             var oldTile = EventTileMap[z, x];
             oldTile.Destroy();
         }
 
         AreaEventTile tile = TileFactory.CreateTile(worldPosition, tileType, _eventTileParent);
-        
+
         EventTileMap[z, x] = tile;
         TileTypeMap[z, x] = tileType;
     }
@@ -229,7 +228,7 @@ public class AreaMap
     // 특정 위치를 기준으로 전장의 안개 제거
     // 기본 시야 거리: 2
     public void RevealFogOfWar(Vector3 currentPosition, int visionRange = 2)
-    {   
+    {
         List<Vector2Int> fogOfWarsToDestroy = new();
         WorldToGridPosition(currentPosition, out int currentX, out int currentZ);
 
@@ -238,7 +237,7 @@ public class AreaMap
         {
             fogOfWarsToDestroy.Add(new Vector2Int(x, z));
 
-            if(currentDistance >= visionRange) return;
+            if (currentDistance >= visionRange) return;
 
             foreach (var neighbor in GetNeighbors(x, z))
             {

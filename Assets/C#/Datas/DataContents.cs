@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,10 +13,11 @@ namespace Data
         public string Name;
         public int Hp;
         public int Attack;
-        public int Defense;
+        public int PhysicalDefense;
+        public int MagicDefense;
     }
     #endregion
-    
+
     #region HeroData
 
     [Serializable]
@@ -119,7 +121,7 @@ namespace Data
         public List<ItemData> items = new List<ItemData>();
 
         public Dictionary<int, ItemData> MakeDict()
-        {   
+        {
             var dic = new Dictionary<int, ItemData>();
             foreach (ItemData item in items)
                 dic.Add(item.DataId, item);
@@ -128,7 +130,7 @@ namespace Data
         }
     }
     #endregion
-    
+
     #region EquipmentData
     [Serializable]
     public class EquipmentData
@@ -137,14 +139,15 @@ namespace Data
         public string Name;
         public int Hp;
         public int Attack;
-        public int Defense;
+        public int PhysicalDefense;
+        public int MagicDefense;
         public int Dexterity;
         public int Strength;
         public int Vitality;
         public int Intelligence;
     }
     #endregion
-    
+
     #region WeaponData
     [Serializable]
     public class WeaponData : EquipmentData
@@ -161,7 +164,7 @@ namespace Data
         public List<WeaponData> weapons = new List<WeaponData>();
 
         public Dictionary<int, WeaponData> MakeDict()
-        {   
+        {
             var dic = new Dictionary<int, WeaponData>();
             foreach (var weapon in weapons)
                 dic.Add(weapon.DataId, weapon);
@@ -170,7 +173,7 @@ namespace Data
         }
     }
     #endregion
-    
+
     #region ArmorData
     [Serializable]
     public class ArmorData : EquipmentData
@@ -184,7 +187,7 @@ namespace Data
         public List<ArmorData> armors = new List<ArmorData>();
 
         public Dictionary<int, ArmorData> MakeDict()
-        {   
+        {
             var dic = new Dictionary<int, ArmorData>();
             foreach (var armor in armors)
                 dic.Add(armor.DataId, armor);
@@ -199,13 +202,18 @@ namespace Data
     public class ActionData
     {
         public int DataId;
+        public Define.ActionDataType Type; // ActionData 또는 이를 상속받는 클래스명
         public string Name;
         public string Description;
-        public int CoinNum;
+        public int CoinCount;
         public Define.Stat UsingStat;
-        public bool IsAttack;
-        public int IncreaseValue;
-        public int ReduceStat;
+    }
+
+    [Serializable]
+    public class AttackActionData : ActionData
+    {
+        public Define.AttackType AttackType;
+        public int DamagePerCoin;
     }
 
     [Serializable]
@@ -214,16 +222,26 @@ namespace Data
         public List<ActionData> actions = new List<ActionData>();
 
         public Dictionary<int, ActionData> MakeDict()
-        {   
+        {
             var dic = new Dictionary<int, ActionData>();
             foreach (var action in actions)
-                dic.Add(action.DataId, action);
+            {
+                Type actionType = Type.GetType("Data."+ action.Type.ToString());
+                if (actionType == null)
+                {
+                    Debug.LogError($"Failed to get type: " + action.Type);
+                    return null;
+                }
+                string json = JsonConvert.SerializeObject(action);
+                ActionData actionData = JsonConvert.DeserializeObject(json, actionType) as ActionData; // DeserializeObject는 object타입을 반환하기 때문에 ActionData로 캐스팅
+                dic.Add(action.DataId, actionData);
+            }
 
             return dic;
         }
     }
     #endregion
-    
+
     #region AreaData
     [Serializable]
     public class AreaData
@@ -238,12 +256,12 @@ namespace Data
         public List<AreaData> areadatas = new();
 
         public Dictionary<Define.AreaName, AreaData> MakeDict()
-        {   
+        {
             var dic = new Dictionary<Define.AreaName, AreaData>();
             foreach (AreaData areadata in areadatas)
-            {   
+            {
                 if (Enum.TryParse(areadata.Name, out Define.AreaName areaName))
-                {   
+                {
                     dic.Add(areaName, areadata);
                 }
                 else
@@ -251,7 +269,7 @@ namespace Data
                     Debug.LogError($"{areadata.Name} - AreaName is invalid!");
                 }
             }
-            return dic; 
+            return dic;
         }
     }
     #endregion

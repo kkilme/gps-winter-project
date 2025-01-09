@@ -54,7 +54,7 @@ public class UI_EnemyStat : UI_Base
         Get<Slider>(Sliders.Slider_HP).value = monsterStat.Hp / monsterStat.MaxHp;
         GetText(Text.Text_HP).text = $"{monsterStat.Hp}/{monsterStat.MaxHp}";
         GetText(Text.Text_Attack).text = monsterStat.Attack.ToString();
-        GetText(Text.Text_Defense).text = monsterStat.Defense.ToString();
+        GetText(Text.Text_Defense).text = monsterStat.PhysicalDefense.ToString();
 
         //Get<Image>(Images.UserPicture).sprite = monsterStat.Texture;
     }

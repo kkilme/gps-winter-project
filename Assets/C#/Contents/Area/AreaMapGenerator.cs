@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
+using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
 using System.Linq;
-using AYellowpaper.SerializedCollections;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -31,10 +28,10 @@ public partial class AreaMapGenerator : MonoBehaviour
     private bool _isTestMode = false; // AreaScene에서 직접 실행 시 true
 
     public bool Init(Define.AreaName area = Define.AreaName.Forest)
-    {   
+    {
         ClearMap();
         // 에디터상에서 디버그용
-        if(_isTestMode) area = _testAreaName;
+        if (_isTestMode) area = _testAreaName;
 
         _data = _dataset[area];
 
@@ -45,7 +42,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             return false;
         }
 
-        if(!GameObject.Find("@Map")) Managers.ResourceMng.Instantiate("Area/@Map");
+        if (!GameObject.Find("@Map")) Managers.ResourceMng.Instantiate("Area/@Map");
         _debugObjectParent = GameObject.Find("@Debug").transform;
         _subtileParent = GameObject.Find("@SubTiles").transform;
         _maintileParent = GameObject.Find("@MainTiles").transform;
@@ -88,7 +85,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         // 타일이 맵에 최대한 골고루 퍼지도록 하기 위해 사용되는 배열: 각 행/열 별로 생성된 타일 수의 합
         // numOfsubtiles[i,j]: i행에 생성된 subtile 수 + j열에 생성된 subtile수
         int[,] numOfSubtiles = new int[_data.MapHeight, _data.MapWidth];
-        
+
 
         // Subtile은 여러개일 수 있음
         foreach (AreaSubTileGroupData subTileGroupData in subTileGroupDatas)
@@ -106,7 +103,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                 Vector2Int tilePosition;
                 // 행/열 합하여 가장 적은 수의 타일이 생성된 위치를 가져옴
                 Util.FindMinIndex(numOfSubtiles, out int x, out int z);
-                
+
                 // 위에서 가져온 위치에 이미 타일을 생성했을 수 있음. 그럴 시 빈 타일 중 랜덤 선택.
                 if (_map.TileTypeMap[z, x] != Define.AreaTileType.Empty)
                 {
@@ -133,7 +130,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                     // 타일 생성 및 배치
                     AreaBaseTile tile = Instantiate(tileData.Tile, worldPos, Quaternion.identity, tileGroupParent).GetComponent<AreaBaseTile>();
                     _map.BaseTileMap[z, x] = tile;
-                    _map.TileTypeMap[z,x] = Define.AreaTileType.SubTile;
+                    _map.TileTypeMap[z, x] = Define.AreaTileType.SubTile;
                     totalGenerated++;
                     IncreaseNumOfSubtiles(x, z);
 
@@ -209,10 +206,10 @@ public partial class AreaMapGenerator : MonoBehaviour
 
         CurrentGeneratePhase = MapGeneratePhase.PlayableFieldSetup;
         _light.cullingMask = LayerMask.GetMask(_lightCullingMask);
-  
+
         playableField = new List<Vector2Int>();
         unplayableField = new List<Vector2Int>();
-        
+
         int xStart = _data.MapWidth / 2;
         int zStartOffset = 0, zEndOffset = 0;
 
@@ -222,10 +219,10 @@ public partial class AreaMapGenerator : MonoBehaviour
             for (int z = _playableFieldZStart + zStartOffset;
                  z < _playableFieldZStart + _data.PlayableFieldHeight - zEndOffset;
                  z++)
-            {   
+            {
                 // 타일을 플레이 가능 필드로 설정. 해당 타일의 AreaTileType은 다시 Empty가 됨.
                 SetAsPlayableFieldTile(playableField, xStart + xOffset, z);
-                if(xOffset != 0) SetAsPlayableFieldTile(playableField, xStart - xOffset, z);
+                if (xOffset != 0) SetAsPlayableFieldTile(playableField, xStart - xOffset, z);
             }
 
             if ((xStart % 2 == 0 && xOffset % 2 == 0) || (xStart % 2 == 1 && xOffset % 2 == 1))
@@ -242,7 +239,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         for (int z = 0; z < _data.MapHeight; z++)
         {
             for (int x = 0; x < _data.MapWidth; x++)
-            {   
+            {
                 // 이 시점에서 타일의 tileType이 Empty라면 플레이 가능 필드라는 의미
                 if (_map.TileTypeMap[z, x] == Define.AreaTileType.Empty)
                     continue;
@@ -253,7 +250,7 @@ public partial class AreaMapGenerator : MonoBehaviour
 
         // 시작 타일 및 보스 타일과 그 이웃 타일들은 ForceEmpty타입으로 설정하여 장애물을 배치하지 않도록 함
         List<Vector2Int> forceEmptyTilePositions = new() { _playerStartPosition, _bossPosition };
-        foreach (var tilePos in new List<Vector2Int>{_playerStartPosition, _bossPosition})
+        foreach (var tilePos in new List<Vector2Int> { _playerStartPosition, _bossPosition })
         {
             var neighbors = _map.GetNeighbors(tilePos);
             foreach (var pos in neighbors)
@@ -273,7 +270,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         return;
 
         void SetAsPlayableFieldTile(List<Vector2Int> field, int x, int z)
-        {   
+        {
             _map.BaseTileMap[z, x].EnableLight();
             _map.TileTypeMap[z, x] = Define.AreaTileType.Empty;
             field.Add(new Vector2Int(x, z));
@@ -300,7 +297,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         // 보스에게 가는 경로가 존재할 때까지 장애물 생성과 리셋 반복
         // 100회 실패할 때마다 맵에서 장애물 비율을 강제로 0.05씩 감소시킴
         do
-        {   
+        {
             Reset();
             GenerateObstacles(field, proportion);
             trycount++;
@@ -365,7 +362,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                 }
             }
         }
-        
+
     }
 
     // Window를 사용하여 이벤트 타일 생성. 랜덤성을 높이고자 한 시도
@@ -394,9 +391,9 @@ public partial class AreaMapGenerator : MonoBehaviour
                 // x 좌표는 단순히 플레이 영역 width 범위에서 랜덤
                 x = Random.Range(_playableFieldXStart, _playableFieldXStart + _data.PlayableFieldWidth);
                 // 빈 타일이어야 하며, 인접한 이웃에 같은 종류 타일이 없어야 하며, 경로가 있어야 함
-                if (_map.TileTypeMap[z, x] == Define.AreaTileType.Empty 
+                if (_map.TileTypeMap[z, x] == Define.AreaTileType.Empty
                     && !_map.HasNeighborOfType(x, z, tileType)
-                    && FindPath(new Vector2Int(x,z), out var path)) break;
+                    && FindPath(new Vector2Int(x, z), out var path)) break;
                 if (trycnt == 100)
                 {
                     // 100번 시도했으나 생성 실패 -> all random 시도
@@ -445,7 +442,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             if (_map.TileTypeMap[z, x] == Define.AreaTileType.Empty
                 && FindPath(new Vector2Int(x, z), out var path)) break;
             if (trycnt == 100)
-            {   
+            {
                 // 타일 생성 실패
                 return false;
             }
@@ -460,10 +457,10 @@ public partial class AreaMapGenerator : MonoBehaviour
 
         for (int z = 0; z < _data.MapHeight; z++)
         {
-            for(int x = 0; x < _data.MapWidth; x++)
+            for (int x = 0; x < _data.MapWidth; x++)
             {
                 if (_map.TileTypeMap[z, x] == Define.AreaTileType.Boss) continue;
-      
+
                 FogOfWar fog = TileFactory.CreateFogOfWar(_map.GridToWorldPosition(x, z, 1.06f),
                     _map.TileTypeMap[z, x] == Define.AreaTileType.OutOfField,
                     _fogOfWarParent);

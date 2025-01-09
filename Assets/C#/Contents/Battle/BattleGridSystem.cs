@@ -1,6 +1,3 @@
-using Data;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleGridSystem
@@ -24,6 +21,7 @@ public class BattleGridSystem
     }
 
     private Camera _camera;
+    private BattleManager _battleManager => Managers.BattleMng;
 
     public void Init()
     {
@@ -65,7 +63,7 @@ public class BattleGridSystem
             return;
         }
 
-        foreach(MonsterSquad_MonsterData monsterData in squadData.Monsters)
+        foreach (Data.MonsterSquad_MonsterData monsterData in squadData.Monsters)
         {
             Monster monster = Managers.ObjectMng.SpawnMonster(monsterData.DataId);
             Vector2Int pos = new Vector2Int(monsterData.x, monsterData.y);
@@ -84,7 +82,7 @@ public class BattleGridSystem
                 OnClickGridCell();
                 break;
         }
-        
+
     }
 
     private void OnMouseOverCell()
@@ -100,7 +98,7 @@ public class BattleGridSystem
 
     private void OnClickGridCell()
     {
-        if (CurrentMouseOverCell == null)
+        if (CurrentMouseOverCell == null || _battleManager.BattleState != Define.BattleState.ActionTargetSelecting)
             return;
 
         //CurrentAction.Equip(this);

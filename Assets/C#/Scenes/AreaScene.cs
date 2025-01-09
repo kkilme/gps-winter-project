@@ -70,7 +70,7 @@ public class AreaScene : BaseScene
     private void TestInit()
     {
         Quest testQuest = new Quest(Managers.DataMng.QuestDataDict.Values.ToList()[0]);
-        if(!Enum.TryParse(testQuest.QuestData.AreaName, out Define.AreaName areaName))
+        if (!Enum.TryParse(testQuest.QuestData.AreaName, out Define.AreaName areaName))
         {
             areaName = Define.AreaName.Forest;
         }
