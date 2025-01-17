@@ -4,9 +4,9 @@ public class FleeAction : BaseAction
 {
     public int CoinNum { get; set; }
     
-    public override void SetInfo(int templateId)
+    public override void SetInfo(int dataId)
     {
-        base.SetInfo(templateId);
+        base.SetInfo(dataId);
             
         ActionTargetType = Define.ActionTargetType.Single;
     }

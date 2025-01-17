@@ -1,4 +1,4 @@
-﻿using DG.Tweening;
+using DG.Tweening;
 using UnityEngine;
 
 public abstract class BaseAction
@@ -20,10 +20,10 @@ public abstract class BaseAction
 
     #endregion
     
-    public virtual void SetInfo(int templateId)
+    public virtual void SetInfo(int dataId)
     {
-        DataId = templateId;
-        ActionData = Managers.DataMng.ActionDataDict[templateId];
+        DataId = dataId;
+        ActionData = Managers.DataMng.ActionDataDict[dataId];
         
         CoinNum = ActionData.CoinCount;
     }

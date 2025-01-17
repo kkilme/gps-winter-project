@@ -1144,7 +1144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7786279499422684638, guid: 16146b30501bcf14bb3af1a4f0171a61, type: 3}
       propertyPath: m_Name
-      value: UI_BattleOrder
+      value: UI_BattleActionPanel
       objectReference: {fileID: 0}
     - target: {fileID: 7786279499422684639, guid: 16146b30501bcf14bb3af1a4f0171a61, type: 3}
       propertyPath: m_Pivot.x

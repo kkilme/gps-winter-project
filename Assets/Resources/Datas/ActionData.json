@@ -7,6 +7,7 @@
       "Description": "Move to other position",
       "CoinCount": 0,
       "UsingStat": "None",
+      "IconName": "Icon_Move"
     },
     {
       "DataId": 401001,
@@ -15,16 +16,29 @@
       "Description": "Run away from the battle. Requires perfect coin toss.",
       "CoinCount": 2,
       "UsingStat": "Dexterity",
+      "IconName": "Icon_Run"
     },
     {
       "DataId": 402000,
       "Type": "AttackActionData",
       "Name": "Strike",
-      "Description": "",
+      "Description": "Strikes an enemy",
       "CoinCount": 3,
       "UsingStat": "Strength",
       "AttackType": "Physical",
       "DamagePerCoin": 2,
+      "IconName": "Icon_Sword"
+    },
+    {
+      "DataId": 402001,
+      "Type": "AttackActionData",
+      "Name": "ThunderBolt",
+      "Description": "Attacks an enemy with thunder bolt",
+      "CoinCount": 4,
+      "UsingStat": "Intelligence",
+      "AttackType": "Magical",
+      "DamagePerCoin": 2,
+      "IconName": "Icon_Thunder"
     },
     {
       "DataId": 403000,
@@ -35,6 +49,7 @@
       "UsingStat": "Strength",
       "AttackType": "Physical",
       "DamagePerCoin": 2,
+      "IconName": "Icon_Sword"
     }
   ]
 }

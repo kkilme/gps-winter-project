@@ -3,7 +3,7 @@ using UnityEngine;
 public class BattleGridSystem
 {
     public BattleGridCell[,] HeroGrid { get; protected set; } = new BattleGridCell[2, 3];
-    public BattleGridCell[,] MonsterGrid { get; protected set; } = new BattleGridCell[2, 3];
+    public BattleGridCell[,] EnemyGrid { get; protected set; } = new BattleGridCell[2, 3];
 
     private BattleGridCell _currentMouseOverCell;
     public BattleGridCell CurrentMouseOverCell
@@ -34,8 +34,8 @@ public class BattleGridSystem
             {
                 HeroGrid[row, col] = Util.FindChild<BattleGridCell>(heroGrid, $"BattleGridCell ({row}, {col})");
                 HeroGrid[row, col].Init(row, col, Define.GridSide.HeroSide);
-                MonsterGrid[row, col] = Util.FindChild<BattleGridCell>(enemyGrid, $"BattleGridCell ({row}, {col})");
-                MonsterGrid[row, col].Init(row, col, Define.GridSide.EnemySide);
+                EnemyGrid[row, col] = Util.FindChild<BattleGridCell>(enemyGrid, $"BattleGridCell ({row}, {col})");
+                EnemyGrid[row, col].Init(row, col, Define.GridSide.EnemySide);
             }
         }
 
@@ -51,6 +51,7 @@ public class BattleGridSystem
         {
             Vector2Int pos = Managers.ObjectMng.HeroParty.BattlePositions[hero];
             HeroGrid[pos.y, pos.x].PlaceCreature(hero);
+            hero.transform.LookAt(EnemyGrid[pos.y, 2 - pos.x].transform.position);
         }
     }
 
@@ -67,7 +68,8 @@ public class BattleGridSystem
         {
             Monster monster = Managers.ObjectMng.SpawnMonster(monsterData.DataId);
             Vector2Int pos = new Vector2Int(monsterData.x, monsterData.y);
-            MonsterGrid[pos.y, pos.x].PlaceCreature(monster);
+            EnemyGrid[pos.y, pos.x].PlaceCreature(monster);
+            monster.transform.LookAt(HeroGrid[pos.y, 2 - pos.x].transform.position);
         }
     }
 

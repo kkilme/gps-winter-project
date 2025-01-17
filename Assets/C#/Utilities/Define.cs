@@ -149,7 +149,7 @@ public static class Define
 
     #region State
     public enum BattleState
-    {   
+    {
         Starting,
         Idle,
         ActionTargetSelecting,
@@ -256,7 +256,8 @@ public static class Define
 
     public const int MONSTER_BAT_ID = 102000;
 
-    public const int WEAPON_SAMPLESINGLESWORD_ID = 201000;
+    public const int KNIGHT_START_WEAPON_ID = 201000;
+    public const int WIZARD_START_WEAPON_ID = 201002;
 
     public const int ARMOR_SAMPLEBODY1_ID = 202000;
     public const int ARMOR_SAMPLEBODY2_ID = 202001;

@@ -1,14 +1,13 @@
-﻿{
+{
   "weapons": [
     {
       "DataId": 201000,
-      "Name": "SampleSingleSword",
-      "Attack": 10,
+      "Name": "Tree branch",
+      "Attack": 5,
       "RightIndex": 1,
+      "WeaponType": "SingleSword",
       "Actions": [
         402000,
-        402000,
-        402000
       ]
     },
     {
@@ -17,11 +16,20 @@
       "Attack": 9,
       "LeftIndex" : 17,
       "RightIndex": 3,
+      "WeaponType": "SwordAndShield",
       "Actions": [
         402000,
-        402000,
-        402000
       ]
+    },
+    {
+       "DataId": 201002,
+       "Name": "Basic Wand",
+       "Attack": 5,
+       "RightIndex": 24,
+       "WeaponType": "Wand",
+	   "Actions": [
+		 402001,
+	   ]
     }
   ]
 }

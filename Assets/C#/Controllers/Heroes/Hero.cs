@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class Hero : Creature
 {
@@ -49,7 +50,7 @@ public class Hero : Creature
     
     public override void DoPrepareAction()
     {
-        //((UI_BattleScene)Managers.UIMng.SceneUI).BattleOrderUI.InitTurn();
+        //((UI_BattleScene)Managers.UIMng.SceneUI).BattleActionPanel.InitTurn();
         
         //Managers.InputMng.MouseAction -= HandleMouseInput;
         //Managers.InputMng.MouseAction += HandleMouseInput;
@@ -64,7 +65,7 @@ public class Hero : Creature
     {
         //Managers.InputMng.MouseAction -= HandleMouseInput;
         
-        ((UI_BattleScene)Managers.UIMng.SceneUI).BattleOrderUI.EndTurn();
+        //((UI_BattleScene)Managers.UIMng.SceneUI).BattleActionPanel.EndTurn();
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.EndTurn();
         
         CreatureBattleState = Define.CreatureBattleState.Wait;
@@ -83,6 +84,13 @@ public class Hero : Creature
     {
         string path = "Animators/Players/" + WeaponType;
         Animator.runtimeAnimatorController = Managers.ResourceMng.Load<RuntimeAnimatorController>(path);
+    }
+
+    public void EquipWeapon(int weaponDataId)
+    {
+        Weapon weapon = new Weapon();
+        weapon.SetInfo(weaponDataId);
+        EquipWeapon(weapon);
     }
     
     public void EquipWeapon(Weapon equippingWeapon)

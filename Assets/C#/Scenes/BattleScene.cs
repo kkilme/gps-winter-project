@@ -20,18 +20,7 @@ public class BattleScene : BaseScene
     public void InitBattle(int squadId)
     {
         Managers.BattleMng.Init(squadId);
-        Managers.UIMng.ShowSceneUI<UI_BattleScene>();
-        Managers.UIMng.ShowPlayerProfileGroupUI(true);
     }
-
-    //// TODO - TEST CODE
-    //public void TestSpawnHeroes()
-    //{
-    //    Hero hero1 = Managers.ObjectMng.SpawnHero(Define.HERO_KNIGHT_ID);
-    //    Weapon weapon1 = new SampleSingleSword();
-    //    weapon1.SetInfo(Define.WEAPON_SAMPLESINGLESWORD_ID);
-    //    hero1.EquipWeapon(weapon1);
-    //}
 
     private void Start()
     {

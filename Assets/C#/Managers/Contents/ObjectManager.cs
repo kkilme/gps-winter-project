@@ -55,7 +55,8 @@ public class ObjectManager
                 return;
             }
 
-            BaseAction action = (BaseAction)(Activator.CreateInstance(actionType));
+            var action = Activator.CreateInstance(actionType) as BaseAction;
+
             action.SetInfo(actionData.Key);
 
             Actions[actionData.Key] = action;
@@ -89,11 +90,18 @@ public class ObjectManager
     }
 
     public void SpawnHeroesOnTest()
-    {
-        SpawnHero(Define.HERO_KNIGHT_ID);
-        SpawnHero(Define.HERO_KNIGHT_ID);
-        SpawnHero(Define.HERO_WIZARD_ID);
-        SpawnHero(Define.HERO_WIZARD_ID);
+    {   
+        for(int i = 0; i < 2; i++)
+        {
+            var hero = SpawnHero(Define.HERO_KNIGHT_ID);
+            hero.EquipWeapon(Define.KNIGHT_START_WEAPON_ID);
+        }
+
+        for (int i = 0; i < 2; i++)
+        {
+            var hero = SpawnHero(Define.HERO_WIZARD_ID);
+            hero.EquipWeapon(Define.WIZARD_START_WEAPON_ID);
+        }
     }
 
     public Monster SpawnMonster(int monsterDataId)

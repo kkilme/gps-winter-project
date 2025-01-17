@@ -29,7 +29,7 @@ public class Test : MonoBehaviour
     //    else if (Input.GetKeyDown(KeyCode.Alpha3))
     //    {
     //        Weapon weapon = new SampleSingleSword();
-    //        weapon.SetInfo(Define.WEAPON_SAMPLESINGLESWORD_ID);
+    //        weapon.SetInfo(Define.KNIGHT_START_WEAPON_ID);
     //        hero.EquipWeapon(weapon);
     //    }
     //    else if (Input.GetKeyDown(KeyCode.Alpha5))

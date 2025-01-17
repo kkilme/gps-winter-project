@@ -1,20 +1,26 @@
-public abstract class Weapon: Equipment
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Weapon: Equipment
 {
     public Data.WeaponData WeaponData => EquipmentData as Data.WeaponData;
     public Define.WeaponType WeaponType { get; protected set; }
-
-    public BaseAction Skill1;
-    public BaseAction Skill2;
-    public BaseAction Skill3;
+    public List<BaseAction> Actions { get; protected set; } = new();
     
-    public override void SetInfo(int templateId)
+    public override void SetInfo(int dataId)
     {
         EquipmentType = Define.EquipmentType.Weapon;
-        
-        base.SetInfo(templateId);
-        
-        Skill1 = Managers.ObjectMng.Actions[WeaponData.Actions[0]];
-        Skill2 = Managers.ObjectMng.Actions[WeaponData.Actions[1]];
-        Skill3 = Managers.ObjectMng.Actions[WeaponData.Actions[2]];
+        EquipmentData = Managers.DataMng.WeaponDataDict[dataId];
+        WeaponType = Managers.DataMng.WeaponDataDict[dataId].WeaponType;
+
+        base.SetInfo(dataId);
+
+        foreach (int actionId in WeaponData.Actions)
+        {
+            Actions.Add(Managers.ObjectMng.Actions[actionId]);
+        }
+
+        Actions.Add(Managers.ObjectMng.Actions[Define.ACTION_MOVE_ID]);
+        Actions.Add(Managers.ObjectMng.Actions[Define.ACTION_FLEE_ID]);
     }
 }

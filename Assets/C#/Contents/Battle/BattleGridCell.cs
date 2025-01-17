@@ -32,7 +32,6 @@ public class BattleGridCell : MonoBehaviour
         PlacedCreature = creature;
         creature.Cell = this;
         creature.gameObject.transform.position = transform.position;
-        creature.gameObject.transform.DORotate(transform.right, 0.5f); // transform.right: 정면
     }
 
     private void ChangeColor(Color color, float duration = 0.3f)

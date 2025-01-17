@@ -5,10 +5,11 @@ public class BattleManager
     #region Field
 
     public Define.BattleState BattleState { get; private set; }
+    public UI_BattleScene BattleSceneUI { get; private set; }
     public TurnSystem TurnSystem { get; private set; }
     public BattleGridSystem BattleGridSystem { get; private set; }
-    private HeroParty _party => Managers.ObjectMng.HeroParty;
     public Creature CurrentTurnCreature => TurnSystem.CurrentTurnCreature();
+    private HeroParty _party => Managers.ObjectMng.HeroParty;
 
     #endregion
 
@@ -17,6 +18,7 @@ public class BattleManager
         BattleState = Define.BattleState.Starting;
         TurnSystem = new TurnSystem();
         BattleGridSystem = new BattleGridSystem();
+        BattleSceneUI = Managers.UIMng.ShowSceneUI<UI_BattleScene>();
 
         string battleFieldname = Managers.DataMng.AreaDataDict[Managers.AreaMng.AreaName].BattleFieldName;
         GameObject battleField = Managers.ResourceMng.Instantiate($"Battle/Field/{battleFieldname}");
@@ -29,31 +31,6 @@ public class BattleManager
         SetBattleTurns();
         NextTurn(true);
         BattleState = Define.BattleState.Idle;
-    }
-
-    #region InitBattle
-
-
-    public Hero PlaceHero(ulong heroId, BattleGridCell targetCell)
-    {
-        Hero hero = Managers.ObjectMng.Heroes[heroId];
-
-        MoveCreature(hero, targetCell, true);
-
-        return hero;
-    }
-
-    public Monster SpawnAndPlaceMonster(int monsterDataId, BattleGridCell targetCell)
-    {
-        Monster monster = Managers.ObjectMng.SpawnMonster(monsterDataId);
-
-        Vector3 currentRotation = monster.transform.rotation.eulerAngles;
-        currentRotation.y += 180f;
-        monster.transform.rotation = Quaternion.Euler(currentRotation);
-
-        MoveCreature(monster, targetCell, true);
-
-        return monster;
     }
 
     private void SetBattleTurns()
@@ -70,8 +47,6 @@ public class BattleManager
 
         Debug.Log("Current Turn: " + turns[turnNum]); // TODO - 디버깅 코드
     }
-
-    #endregion
 
     #region Battle
 
@@ -107,11 +82,12 @@ public class BattleManager
         }
 
         CurrentTurnCreature.CreatureBattleState = Define.CreatureBattleState.PrepareAction;
+        BattleSceneUI.OnTurnStart();
     }
 
     public void EndBattle(Define.BattleResultType battleResult)
     {
-        ((UI_BattleScene)Managers.UIMng.SceneUI).EndBattle(battleResult);
+        ((UI_BattleScene)Managers.UIMng.SceneUI).OnBattleEnd(battleResult);
     }
 
     #endregion

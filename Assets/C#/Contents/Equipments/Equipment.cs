@@ -1,4 +1,4 @@
-public abstract class Equipment
+public class Equipment
 {
     public int DataId { get; protected set; }
     public Define.EquipmentType EquipmentType { get; protected set; }
@@ -6,14 +6,9 @@ public abstract class Equipment
     public Hero Owner { get; protected set; }
     
     // 수동 실행
-    public virtual void SetInfo(int templateId)
+    public virtual void SetInfo(int dataId)
     {
-        DataId = templateId;
-        
-        if (EquipmentType == Define.EquipmentType.Weapon)
-            EquipmentData = Managers.DataMng.WeaponDataDict[templateId];
-        else
-            EquipmentData = Managers.DataMng.ArmorDataDict[templateId];
+        DataId = dataId;
     }
 
     public void Equip(Hero hero)

@@ -8,13 +8,13 @@ public class UI_BattleScene : UI_Scene
 {
 	enum SubItemUI
 	{
-		UI_BattleOrder,
+		UI_BattleActionPanel,
 		UI_CoinToss,
 		UI_TurnState,
         UI_BattleVictory
 	}
 
-	public UI_BattleActionPanel BattleOrderUI { get; protected set; }
+	public UI_BattleActionPanel BattleActionPanel { get; protected set; }
 	public UI_CoinToss CoinTossUI { get; protected set; }
 	
     public override void Init()
@@ -22,18 +22,18 @@ public class UI_BattleScene : UI_Scene
         base.Init();
 
 		Bind<UI_Base>(typeof(SubItemUI));
-
-		BattleOrderUI = Get<UI_Base>(SubItemUI.UI_BattleOrder).GetOrAddComponent<UI_BattleActionPanel>();
-		BattleOrderUI.gameObject.SetActive(false);
+        Managers.UIMng.ShowPlayerProfileGroupUI(true);
+        BattleActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
+		BattleActionPanel.gameObject.SetActive(false);
 		CoinTossUI = Get<UI_Base>(SubItemUI.UI_CoinToss).GetOrAddComponent<UI_CoinToss>();
     }
 
-    public void EndBattle(Define.BattleResultType battleResult)
+    public void OnBattleEnd(Define.BattleResultType battleResult)
     {
         switch (battleResult)
         {
             case Define.BattleResultType.Victory:
-                Get<UI_Base>(SubItemUI.UI_BattleOrder).gameObject.SetActive(false);
+                Get<UI_Base>(SubItemUI.UI_BattleActionPanel).gameObject.SetActive(false);
                 Get<UI_Base>(SubItemUI.UI_CoinToss).gameObject.SetActive(false);
 
                 // Turn 상태바 움직임을 통해 자연스럽게 숨기기
@@ -49,5 +49,15 @@ public class UI_BattleScene : UI_Scene
             case Define.BattleResultType.Flee:
                 break;
         }
+    }
+
+    public void OnTurnStart()
+    {
+        BattleActionPanel.InitTurn();
+    }
+
+    public void OnTurnEnd()
+    {
+
     }
 }

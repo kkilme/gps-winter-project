@@ -154,6 +154,7 @@ namespace Data
     {
         public int LeftIndex;
         public int RightIndex;
+        public Define.WeaponType WeaponType;
         public List<int> Actions;
     }
 
@@ -207,6 +208,7 @@ namespace Data
         public string Description;
         public int CoinCount;
         public Define.Stat UsingStat;
+        public string IconName;
     }
 
     [Serializable]
