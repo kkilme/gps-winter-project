@@ -1,8 +1,10 @@
 using System;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_PlayerProfile : UI_Base
+public class UI_HeroProfile : UI_Base
 {
     private event Action OnClaer;
 
@@ -26,16 +28,16 @@ public class UI_PlayerProfile : UI_Base
         Slider_HP,
     }
 
-    enum Image
+    enum Images
     {
-        UserPicture,
+        Creature_Image,
     }
 
     public override void Init()
     {
         Bind<TextMeshProUGUI>(typeof(Text));
-        Bind<UnityEngine.UI.Slider>(typeof(Sliders));
-        Bind<UnityEngine.UI.Image>(typeof(Image));
+        Bind<Slider>(typeof(Sliders));
+        Bind<Image>(typeof(Images));
     }
 
     public void BindPlayerStat(HeroStat stat)
@@ -65,8 +67,8 @@ public class UI_PlayerProfile : UI_Base
         GetText(Text.Text_Vitality).text = heroStat.Vitality.ToString();
         GetText(Text.Text_Intelligence).text = heroStat.Intelligence.ToString();
         GetText(Text.Text_Dexterity).text = heroStat.Dexterity.ToString();
-        //GetText(Texts.Text_Gold).text = heroStat.Gold.ToString();
-        //Get<Image>(Images.UserPicture).sprite = heroStat.Texture;
+
+        Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{heroStat.Name}_Front");
     }
 
     private void OnDestroy()

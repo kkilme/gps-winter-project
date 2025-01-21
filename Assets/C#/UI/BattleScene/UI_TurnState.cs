@@ -20,7 +20,7 @@ public class UI_TurnState : UI_Base
     {
         Bind<GameObject>(typeof(Objects));
         _iconImages = GetGameObject(Objects.IconGroup).GetComponentsInChildren<Image>();
-        ActivateCreatureUisByCount(0);
+        ActivateCreatureUisByCount(5);
     }
     
     // 전체 크리처 턴만 띄우고 다 하면 다시 재구성 리스트형태로 매개변수 받아오기

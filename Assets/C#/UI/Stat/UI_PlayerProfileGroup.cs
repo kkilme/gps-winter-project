@@ -31,7 +31,7 @@ public class UI_PlayerProfileGroup : UI_Base
         foreach (var hero in Managers.ObjectMng.Heroes.Values)
         {
             var go = GetGameObject((PlayerProfileUI)index++);
-            go.GetOrAddComponent<UI_PlayerProfile>().BindPlayerStat(hero.HeroStat);
+            go.GetOrAddComponent<UI_HeroProfile>().BindPlayerStat(hero.HeroStat);
             go.SetActive(true);
             
             //go.transform.Find("Bag").GetOrAddComponent<UI_Bag>().BindBag(hero.Bag);

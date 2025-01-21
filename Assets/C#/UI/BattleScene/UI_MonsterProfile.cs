@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_EnemyStat : UI_Base
+public class UI_MonsterProfile : UI_Base
 {
     private event Action OnClaer;
 
