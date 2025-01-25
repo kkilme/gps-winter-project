@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleManager
@@ -8,7 +9,18 @@ public class BattleManager
     public UI_BattleScene BattleSceneUI { get; private set; }
     public TurnSystem TurnSystem { get; private set; }
     public BattleGridSystem BattleGridSystem { get; private set; }
-    public Creature CurrentTurnCreature => TurnSystem.CurrentTurnCreature();
+    public Creature CurrentTurnCreature => TurnSystem.Turns[0];
+    public List<Creature> Creatures
+    {
+        get
+        {
+            List<Creature> creatures = new List<Creature>(Heroes);
+            creatures.AddRange(Monsters);
+            return creatures;
+        }
+    }
+    public List<Hero> Heroes => _party.Heroes;
+    public List<Monster> Monsters;
     private HeroParty _party => Managers.ObjectMng.HeroParty;
 
     #endregion
@@ -19,6 +31,7 @@ public class BattleManager
         TurnSystem = new TurnSystem();
         BattleGridSystem = new BattleGridSystem();
         BattleSceneUI = Managers.UIMng.ShowSceneUI<UI_BattleScene>();
+        Monsters = new();
 
         string battleFieldname = Managers.DataMng.AreaDataDict[Managers.AreaMng.AreaName].BattleFieldName;
         GameObject battleField = Managers.ResourceMng.Instantiate($"Battle/Field/{battleFieldname}");
@@ -28,24 +41,10 @@ public class BattleManager
         BattleGridSystem.PlaceHero();
         BattleGridSystem.PlaceEnemy(squadId);
 
-        SetBattleTurns();
+        TurnSystem.Init();
+        BattleSceneUI.TurnstateUI.Setup();
         NextTurn(true);
         BattleState = Define.BattleState.Idle;
-    }
-
-    private void SetBattleTurns()
-    {
-        // TODO - 속도에 따른 코드로 수정 예정
-        ulong[] turns = new ulong[100];
-        int turnNum = 0;
-        foreach (ulong id in Managers.ObjectMng.Heroes.Keys)
-            turns[turnNum++] = id;
-        foreach (ulong id in Managers.ObjectMng.Monsters.Keys)
-            turns[turnNum++] = id;
-
-        TurnSystem.Init(turns, turnNum);
-
-        Debug.Log("Current Turn: " + turns[turnNum]); // TODO - 디버깅 코드
     }
 
     #region Battle
@@ -79,9 +78,10 @@ public class BattleManager
             }
 
             TurnSystem.NextTurn();
+            BattleSceneUI.TurnstateUI.MoveTurnFrames();
         }
 
-        CurrentTurnCreature.CreatureBattleState = Define.CreatureBattleState.PrepareAction;
+        //CurrentTurnCreature.CreatureBattleState = Define.CreatureBattleState.PrepareAction;
         BattleSceneUI.OnTurnStart();
     }
 

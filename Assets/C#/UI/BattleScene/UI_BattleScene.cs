@@ -16,7 +16,8 @@ public class UI_BattleScene : UI_Scene
 
 	public UI_BattleActionPanel BattleActionPanel { get; protected set; }
 	public UI_CoinToss CoinTossUI { get; protected set; }
-	
+    public UI_TurnState TurnstateUI { get; protected set; }
+
     public override void Init()
     {
         base.Init();
@@ -26,6 +27,7 @@ public class UI_BattleScene : UI_Scene
         BattleActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
 		BattleActionPanel.gameObject.SetActive(false);
 		CoinTossUI = Get<UI_Base>(SubItemUI.UI_CoinToss).GetOrAddComponent<UI_CoinToss>();
+        TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
     }
 
     public void OnBattleEnd(Define.BattleResultType battleResult)
@@ -37,10 +39,10 @@ public class UI_BattleScene : UI_Scene
                 Get<UI_Base>(SubItemUI.UI_CoinToss).gameObject.SetActive(false);
 
                 // Turn 상태바 움직임을 통해 자연스럽게 숨기기
-                Transform turnStateUI = Get<UI_Base>(SubItemUI.UI_TurnState).gameObject.transform;
-                turnStateUI.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, 90), 1f).OnComplete(() =>
+                // TODO: TurnStateUI로 기능 이동
+                TurnstateUI.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, 90), 1f).OnComplete(() =>
                 {
-                    turnStateUI.gameObject.SetActive(false);
+                    TurnstateUI.gameObject.SetActive(false);
                     Get<UI_Base>(SubItemUI.UI_BattleVictory).gameObject.SetActive(true);
                 });
                 break;
@@ -53,7 +55,7 @@ public class UI_BattleScene : UI_Scene
 
     public void OnTurnStart()
     {
-        BattleActionPanel.InitTurn();
+        if(Managers.BattleMng.CurrentTurnCreature is Hero) BattleActionPanel.InitTurn();
     }
 
     public void OnTurnEnd()

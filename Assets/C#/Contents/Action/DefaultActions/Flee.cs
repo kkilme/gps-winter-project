@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FleeAction : BaseAction
+public class Flee : BaseAction
 {
     public int CoinNum { get; set; }
     

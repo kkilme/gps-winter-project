@@ -20,7 +20,6 @@ public class UI_BattleActionPanel : UI_Base
         Text_SlotPercentageWord
     }
 
-    public Action<BaseAction> OnMouseActionIconEntered { get; set; }
     private Hero _hero;
     private Transform _actionButtonParent;
 
@@ -33,11 +32,11 @@ public class UI_BattleActionPanel : UI_Base
     }
 
     public void InitTurn()
-    {
+    {   
         gameObject.SetActive(true);
         _hero = Managers.BattleMng.CurrentTurnCreature as Hero;
 
-        AddActionButtons();
+        SetupActionButtons();
     }
 
     public void EndTurn()
@@ -46,8 +45,9 @@ public class UI_BattleActionPanel : UI_Base
         _hero = null;
     }
 
-    protected void AddActionButtons()
-    {   
+    private void SetupActionButtons()
+    {
+        ClearActionButtons();
         foreach (BaseAction action in _hero.Weapon.Actions)
         {
             var actionButton = Managers.ResourceMng.Instantiate("UI/SubItemUI/UI_ActionButton", _actionButtonParent).GetComponent<UI_ActionButton>();
@@ -56,10 +56,12 @@ public class UI_BattleActionPanel : UI_Base
             var image = actionButton.GetComponent<Image>();
             image.sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Icons/{action.ActionData.IconName}");
         }
+        ShowActionInfo(_hero.Weapon.Actions[0]);
     }
 
     public void ShowActionInfo(BaseAction action)
-    {
+    {   
+        Debug.Log(action.ActionData.Name);
         ClearActionInfo();
         GetText(Texts.Text_ActionName).text = action.ActionData.Name;
         GetText(Texts.Text_ActionDescription).text = action.ActionData.Description;
@@ -87,5 +89,11 @@ public class UI_BattleActionPanel : UI_Base
         GetText(Texts.Text_AmountNumber).text = null;
         GetText(Texts.Text_SlotPercentageWord).text = null;
         GetText(Texts.Text_SlotPercentage).text = null;
+    }
+
+    private void ClearActionButtons()
+    {
+        foreach (Transform child in _actionButtonParent)
+            Destroy(child.gameObject);
     }
 }

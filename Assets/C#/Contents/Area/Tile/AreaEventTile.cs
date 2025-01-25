@@ -28,7 +28,7 @@ public abstract class AreaEventTile: MonoBehaviour
     [SerializeField]
     private Color _fillHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 fill 색
 
-    private Tweener _outlineColorTween; // DoTween을 통해 TileObject의 스프라이트 색을 바꾸는데, Tweener는 이 작업을 의미함. 작업 도중에 취소 시 사용
+    private Tweener _outlineColorTween; // DoTween을 통해 TileObject의 스프라이트 색을 바꾸는데, Tweener는 이 작업을 의미함. 작업 도중에 취소 시 사용.
     private Tweener _fillColorTween;
 
     public void Init()

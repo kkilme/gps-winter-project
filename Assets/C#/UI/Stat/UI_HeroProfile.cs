@@ -54,7 +54,7 @@ public class UI_HeroProfile : UI_Base
 
     private void ChangePlayerStatUI(CreatureStat creatureStat)
     {
-        HeroStat heroStat = (HeroStat)creatureStat;
+        HeroStat heroStat = creatureStat as HeroStat;
         
         GetText(Text.Text_Name).text = heroStat.Name;
 

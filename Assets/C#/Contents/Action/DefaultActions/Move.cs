@@ -1,6 +1,6 @@
-﻿using DG.Tweening;
+using DG.Tweening;
 
-public class MoveAction : BaseAction
+public class Move : BaseAction
 {
     public override void SetInfo(int templateId)
     {

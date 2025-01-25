@@ -24,7 +24,7 @@ public class UI_ActionButton : MonoBehaviour
     }
 
     protected void OnEnterActionButton(PointerEventData data)
-    {
-        _actionPanel.OnMouseActionIconEntered?.Invoke(_action);
+    {   
+        _actionPanel.ShowActionInfo(_action);
     }
 }

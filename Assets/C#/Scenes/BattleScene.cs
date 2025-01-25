@@ -31,4 +31,12 @@ public class BattleScene : BaseScene
             InitBattle(Define.MONSTERSQUAD_SQUAD1_ID);
         }
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Managers.BattleMng.NextTurn();
+        }
+    }
 }

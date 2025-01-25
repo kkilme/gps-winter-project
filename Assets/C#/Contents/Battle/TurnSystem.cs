@@ -1,34 +1,25 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TurnSystem
 {
-    public ulong[] Turns { get; protected set; }
+    public List<Creature> Turns { get; protected set; }
     public int CurrentTurn { get; protected set; }
-    public int CreatureCount { get; protected set; }
 
-    public void Init(ulong[] turns, int count)
+    public void Init()
     {
-        Turns = turns;
         CurrentTurn = 0;
-        CreatureCount = count;
+        var rawCreatures = Managers.BattleMng.Creatures;
+        Turns = new List<Creature>(rawCreatures);
+        Turns.Sort((a, b) => a.CreatureStat.Speed.CompareTo(b.CreatureStat.Speed));
     }
 
     public void NextTurn()
     {
         CurrentTurn++;
-        if (Turns[CurrentTurn] == 0)
-            CurrentTurn = 0;
-    }
-
-    public Creature CurrentTurnCreature()
-    {
-        if (Managers.ObjectMng.Heroes.TryGetValue(Turns[CurrentTurn], out Hero hero))
-            return hero;
-        if (Managers.ObjectMng.Monsters.TryGetValue(Turns[CurrentTurn], out Monster monster))
-            return monster;
-        
-        Debug.Log("Failed to get CurrentTurnCreature");
-        return null;
+        var current = Turns[0];
+        Turns.RemoveAt(0);
+        Turns.Add(current);
     }
 }

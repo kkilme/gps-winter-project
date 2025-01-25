@@ -27,19 +27,14 @@ public class HeroStat : CreatureStat
 
     public int GetStatByDefine(Define.Stat stat)
     {
-        switch (stat)
+        return stat switch
         {
-            case Define.Stat.Strength:
-                return Strength;
-            case Define.Stat.Vitality:
-                return Vitality;
-            case Define.Stat.Intelligence:
-                return Intelligence;
-            case Define.Stat.Dexterity:
-                return Dexterity;
-        }
-
-        return -1;
+            Define.Stat.Strength => Strength,
+            Define.Stat.Vitality => Vitality,
+            Define.Stat.Intelligence => Intelligence,
+            Define.Stat.Dexterity => Dexterity,
+            _ => -1,
+        };
     }
     
     #region Equipment

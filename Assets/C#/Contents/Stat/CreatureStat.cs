@@ -17,6 +17,7 @@ public class CreatureStat : MonoBehaviour
     public int Attack { get => _attack; set { _attack = value; StatChangeAction?.Invoke(this); } }
     public int PhysicalDefense { get => _physicalDefense; set { _physicalDefense = value; StatChangeAction?.Invoke(this); } }
     public int MagicDefense { get => _magicDefense; set { _magicDefense = value; StatChangeAction?.Invoke(this); } }
+    public int Speed { get => _speed; set { _speed = value; StatChangeAction?.Invoke(this); } }
 
     public Action<CreatureStat> StatChangeAction;
 

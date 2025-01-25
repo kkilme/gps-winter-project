@@ -70,6 +70,7 @@ public class BattleGridSystem
             Vector2Int pos = new Vector2Int(monsterData.x, monsterData.y);
             EnemyGrid[pos.y, pos.x].PlaceCreature(monster);
             monster.transform.LookAt(HeroGrid[pos.y, 2 - pos.x].transform.position);
+            _battleManager.Monsters.Add(monster);
         }
     }
 
