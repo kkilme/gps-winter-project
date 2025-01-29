@@ -28,7 +28,6 @@ public class InputManager
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-        
         if (KeyAction != null && Input.anyKey)
         {
             KeyAction.Invoke();

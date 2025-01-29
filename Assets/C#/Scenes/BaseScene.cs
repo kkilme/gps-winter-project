@@ -15,7 +15,7 @@ public abstract class BaseScene : MonoBehaviour
         Init();
     }
 
-    private void Update()
+    protected void Update()
     {
         Managers.InputMng.OnUpdate();
     }

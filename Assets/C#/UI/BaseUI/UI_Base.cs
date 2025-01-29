@@ -18,6 +18,16 @@ public abstract class UI_Base : MonoBehaviour
         Init();
     }
 
+    public virtual void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public virtual void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
     // T컴포넌트를 가지고 있는 모든 자식 GameObject를 검색해 _objectDic에 Add
     protected void Bind<T>(Type type) where T : UnityEngine.Object
     {

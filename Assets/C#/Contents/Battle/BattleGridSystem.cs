@@ -14,14 +14,16 @@ public class BattleGridSystem
             if (_currentMouseOverCell == value)
                 return;
 
-            if (_currentMouseOverCell != null) _currentMouseOverCell.OnMouseExited();
+            if (_currentMouseOverCell != null) _currentMouseOverCell.OnMouseOut();
             _currentMouseOverCell = value;
-            if (_currentMouseOverCell != null) _currentMouseOverCell.OnMouseEntered();
+            if (_currentMouseOverCell != null) _currentMouseOverCell.OnMouseIn();
         }
     }
 
     private Camera _camera;
     private BattleManager _battleManager => Managers.BattleMng;
+    private Creature _draggingCreature;
+    private BattleGridCell _dragStartCell;
 
     public void Init()
     {
@@ -38,9 +40,6 @@ public class BattleGridSystem
                 EnemyGrid[row, col].Init(row, col, Define.GridSide.EnemySide);
             }
         }
-
-        Managers.InputMng.MouseAction -= HandleMouseInput;
-        Managers.InputMng.MouseAction += HandleMouseInput;
 
         _camera = Camera.main;
     }
@@ -74,8 +73,15 @@ public class BattleGridSystem
         }
     }
 
-    private void HandleMouseInput(Define.MouseEvent mouseEvent)
+    public void MoveCreature(Creature creature, BattleGridCell targetCell)
     {
+        if(creature.Cell.PlacedCreature == creature) creature.Cell.PlacedCreature = null;
+        targetCell.PlaceCreature(creature);
+        //creature.transform.LookAt(HeroGrid[targetCell.Row, 2 - targetCell.Col].transform.position);
+    }
+
+    public void HandleMouseInputOnBattlePhase(Define.MouseEvent mouseEvent)
+    {   
         switch (mouseEvent)
         {
             case Define.MouseEvent.Hover:
@@ -85,7 +91,64 @@ public class BattleGridSystem
                 OnClickGridCell();
                 break;
         }
+    }
 
+    public void HandleMouseInputOnPlacementPhase(Define.MouseEvent mouseEvent) 
+    {
+        switch (mouseEvent)
+        {
+            case Define.MouseEvent.Hover:
+                OnMouseOverCell();
+                break;
+            case Define.MouseEvent.PointerDown:
+                OnDragStart();
+                break;
+            case Define.MouseEvent.Press:
+                OnDragging();
+                break;
+            case Define.MouseEvent.PointerUp:
+                OnDragEnd();
+                break;
+        }
+    }
+
+    private void OnDragStart()
+    {
+        if (_battleManager.BattleState != Define.BattleState.HeroPlacement || CurrentMouseOverCell?.PlacedCreature == null) return;
+
+        _draggingCreature = CurrentMouseOverCell.PlacedCreature;
+        _dragStartCell = CurrentMouseOverCell;
+    }
+
+    private void OnDragging()
+    {
+        if (_draggingCreature == null) return;
+        Vector3 mouseWorldPos = GetMouseWorldPosition();
+        _draggingCreature.transform.position = mouseWorldPos;
+    }
+
+    private void OnDragEnd()
+    {
+        if (_draggingCreature == null) return;
+        if (CurrentMouseOverCell != null && CurrentMouseOverCell.GridSide == Define.GridSide.HeroSide)
+        {
+            if (CurrentMouseOverCell.PlacedCreature == null)
+            {   
+                MoveCreature(_draggingCreature, CurrentMouseOverCell);
+            }
+            else
+            {
+                Creature creature = CurrentMouseOverCell.PlacedCreature;
+                MoveCreature(creature, _dragStartCell);
+                MoveCreature(_draggingCreature, CurrentMouseOverCell);
+            }
+        }
+        else
+        {
+            MoveCreature(_draggingCreature, _dragStartCell);
+        }
+        _draggingCreature = null;
+        _dragStartCell = null;
     }
 
     private void OnMouseOverCell()
@@ -117,5 +180,15 @@ public class BattleGridSystem
         //CreatureBattleState = Define.CreatureBattleState.ActionProceed;
 
         CurrentMouseOverCell.RevertColor();
+    }
+
+    private Vector3 GetMouseWorldPosition()
+    {
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: LayerMask.GetMask("BattleGround")))
+        {
+            return rayHit.point;
+        }
+        return new Vector3(Define.BATTLEFIELD_POS_X, 0f, Define.BATTLEFIELD_POS_Z);
     }
 }

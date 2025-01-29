@@ -37,6 +37,7 @@ public class UI_TurnState : UI_Base
         MoveTurnFrames();
     }
 
+    // 턴 프레임들을 턴 순서에 맞게 배치
     public void MoveTurnFrames()
     {
         int index = 0;
@@ -46,6 +47,7 @@ public class UI_TurnState : UI_Base
             bool isCurrentTurn = creature == Managers.BattleMng.CurrentTurnCreature;
             float x;
 
+            // 현재 턴일 시 프레임 크기를 크게 하고 깜빡임 효과
             if (isCurrentTurn)
             {
                 x = BORDER_SIZE;
@@ -62,6 +64,8 @@ public class UI_TurnState : UI_Base
             creatureTurnFrame.Move(x);
         }
     }
+
+    // Creature 수에 맞게 배경 프레임 크기 조절
     private void ResizeBGFrame()
     {
         Vector2 sizeDelta = _rectTransform.sizeDelta;

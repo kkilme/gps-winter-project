@@ -11,12 +11,14 @@ public class UI_BattleScene : UI_Scene
 		UI_BattleActionPanel,
 		UI_CoinToss,
 		UI_TurnState,
-        UI_BattleVictory
-	}
+        UI_BattleVictory,
+        UI_PlacementPhase
+    }
 
 	public UI_BattleActionPanel BattleActionPanel { get; protected set; }
 	public UI_CoinToss CoinTossUI { get; protected set; }
     public UI_TurnState TurnstateUI { get; protected set; }
+    public UI_PlacementPhase PlacementPhaseUI { get; protected set; }
 
     public override void Init()
     {
@@ -25,11 +27,23 @@ public class UI_BattleScene : UI_Scene
 		Bind<UI_Base>(typeof(SubItemUI));
         Managers.UIMng.ShowPlayerProfileGroupUI(true);
         BattleActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
-		BattleActionPanel.gameObject.SetActive(false);
-		CoinTossUI = Get<UI_Base>(SubItemUI.UI_CoinToss).GetOrAddComponent<UI_CoinToss>();
+		BattleActionPanel.Hide();
+        CoinTossUI = Get<UI_Base>(SubItemUI.UI_CoinToss).GetOrAddComponent<UI_CoinToss>();
         TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
+        PlacementPhaseUI = Get<UI_Base>(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
     }
 
+    public void OnPlacementPhaseStart()
+    {
+        BattleActionPanel.Hide();
+        CoinTossUI.Hide();
+        TurnstateUI.Setup();
+    }
+
+    public void OnBattlePhaseStart()
+    {
+        PlacementPhaseUI.Hide();
+    }
     public void OnBattleEnd(Define.BattleResultType battleResult)
     {
         switch (battleResult)

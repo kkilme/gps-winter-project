@@ -32,8 +32,9 @@ public class BattleScene : BaseScene
         }
     }
 
-    private void Update()
+    protected void Update()
     {
+        base.Update();
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Managers.BattleMng.NextTurn();

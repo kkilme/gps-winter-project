@@ -151,6 +151,7 @@ public static class Define
     public enum BattleState
     {
         Starting,
+        HeroPlacement,
         Idle,
         ActionTargetSelecting,
         ActionProcessing,

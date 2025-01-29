@@ -36,7 +36,6 @@ public class Move : BaseAction
     
     public override void OnHandleAction()
     {
-        Managers.BattleMng.MoveCreature(Owner, TargetCell, false);
         
         OnActionEnd();
     }

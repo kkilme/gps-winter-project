@@ -61,7 +61,6 @@ public class UI_BattleActionPanel : UI_Base
 
     public void ShowActionInfo(BaseAction action)
     {   
-        Debug.Log(action.ActionData.Name);
         ClearActionInfo();
         GetText(Texts.Text_ActionName).text = action.ActionData.Name;
         GetText(Texts.Text_ActionDescription).text = action.ActionData.Description;

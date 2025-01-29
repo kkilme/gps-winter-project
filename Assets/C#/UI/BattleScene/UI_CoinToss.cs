@@ -17,6 +17,7 @@ public class UI_CoinToss : UI_Base
     public override void Init()
     {
         Bind<GameObject>(typeof(Coins));
+        gameObject.SetActive(false);
     }
     
     public void InitTurn()

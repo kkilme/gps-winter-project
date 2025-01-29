@@ -52,7 +52,7 @@ public class BattleGridCell : MonoBehaviour
     }
 
     //기본 Unity 메소드 OnMouseEnter & OnMouseExit 사용 시, Hero 및 Enemy 오브젝트에 의해 MouseOver가 가로막힘
-    public void OnMouseEntered()
+    public void OnMouseIn()
     {
         if (GridSide == Define.GridSide.HeroSide)
         {
@@ -64,7 +64,7 @@ public class BattleGridCell : MonoBehaviour
         }
     }
 
-    public void OnMouseExited()
+    public void OnMouseOut()
     {
         ChangeColor(_originalColor);
     }
