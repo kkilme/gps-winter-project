@@ -35,9 +35,9 @@ public class BattleGridSystem
             for (int col = 0; col < 3; col++)
             {
                 HeroGrid[row, col] = Util.FindChild<BattleGridCell>(heroGrid, $"BattleGridCell ({row}, {col})");
-                HeroGrid[row, col].Init(row, col, Define.GridSide.HeroSide);
+                HeroGrid[row, col].Init(row, col, GlobalEnums.GridSide.HeroSide);
                 EnemyGrid[row, col] = Util.FindChild<BattleGridCell>(enemyGrid, $"BattleGridCell ({row}, {col})");
-                EnemyGrid[row, col].Init(row, col, Define.GridSide.EnemySide);
+                EnemyGrid[row, col].Init(row, col, GlobalEnums.GridSide.EnemySide);
             }
         }
 
@@ -75,46 +75,48 @@ public class BattleGridSystem
 
     public void MoveCreature(Creature creature, BattleGridCell targetCell)
     {
-        if(creature.Cell.PlacedCreature == creature) creature.Cell.PlacedCreature = null;
+        // 셀에서 Creature 배치 해제. 서로의 위치 교환을 위해 if문 조건 필요.
+        // 조건이 없을 시, A를 B의 위치로 옮긴 후 B를 A의 위치로 옮길 때 문제가 생김.
+        if(creature.CurrentCell.PlacedCreature == creature) creature.CurrentCell.PlacedCreature = null;
         targetCell.PlaceCreature(creature);
         //creature.transform.LookAt(HeroGrid[targetCell.Row, 2 - targetCell.Col].transform.position);
     }
 
-    public void HandleMouseInputOnBattlePhase(Define.MouseEvent mouseEvent)
+    public void HandleMouseInputOnPlacementPhase(GlobalEnums.MouseEvent mouseEvent) 
+    {
+        switch (mouseEvent)
+        {
+            case GlobalEnums.MouseEvent.Hover:
+                OnMouseOverCell();
+                break;
+            case GlobalEnums.MouseEvent.PointerDown:
+                OnDragStart();
+                break;
+            case GlobalEnums.MouseEvent.Press:
+                OnDragging();
+                break;
+            case GlobalEnums.MouseEvent.PointerUp:
+                OnDragEnd();
+                break;
+        }
+    }
+    public void HandleMouseInputOnBattlePhase(GlobalEnums.MouseEvent mouseEvent)
     {   
         switch (mouseEvent)
         {
-            case Define.MouseEvent.Hover:
+            case GlobalEnums.MouseEvent.Hover:
                 OnMouseOverCell();
                 break;
-            case Define.MouseEvent.PointerDown:
+            case GlobalEnums.MouseEvent.PointerDown:
                 OnClickGridCell();
                 break;
         }
     }
 
-    public void HandleMouseInputOnPlacementPhase(Define.MouseEvent mouseEvent) 
-    {
-        switch (mouseEvent)
-        {
-            case Define.MouseEvent.Hover:
-                OnMouseOverCell();
-                break;
-            case Define.MouseEvent.PointerDown:
-                OnDragStart();
-                break;
-            case Define.MouseEvent.Press:
-                OnDragging();
-                break;
-            case Define.MouseEvent.PointerUp:
-                OnDragEnd();
-                break;
-        }
-    }
-
+    // Drag 관련은 Hero 배치 단계에서만 사용됨
     private void OnDragStart()
     {
-        if (_battleManager.BattleState != Define.BattleState.HeroPlacement || CurrentMouseOverCell?.PlacedCreature == null) return;
+        if (CurrentMouseOverCell?.PlacedCreature == null) return;
 
         _draggingCreature = CurrentMouseOverCell.PlacedCreature;
         _dragStartCell = CurrentMouseOverCell;
@@ -130,21 +132,23 @@ public class BattleGridSystem
     private void OnDragEnd()
     {
         if (_draggingCreature == null) return;
-        if (CurrentMouseOverCell != null && CurrentMouseOverCell.GridSide == Define.GridSide.HeroSide)
+        if (CurrentMouseOverCell != null && CurrentMouseOverCell.GridSide == GlobalEnums.GridSide.HeroSide)
         {
             if (CurrentMouseOverCell.PlacedCreature == null)
             {   
+                // 빈 셀일 시 이동
                 MoveCreature(_draggingCreature, CurrentMouseOverCell);
             }
             else
-            {
-                Creature creature = CurrentMouseOverCell.PlacedCreature;
-                MoveCreature(creature, _dragStartCell);
+            {   
+                // 셀에 다른 Creature가 존재하면 위치를 교환
+                MoveCreature(CurrentMouseOverCell.PlacedCreature, _dragStartCell);
                 MoveCreature(_draggingCreature, CurrentMouseOverCell);
             }
         }
         else
-        {
+        {   
+            // 예외 시 기존 위치로 복귀
             MoveCreature(_draggingCreature, _dragStartCell);
         }
         _draggingCreature = null;
@@ -164,7 +168,7 @@ public class BattleGridSystem
 
     private void OnClickGridCell()
     {
-        if (CurrentMouseOverCell == null || _battleManager.BattleState != Define.BattleState.ActionTargetSelecting)
+        if (CurrentMouseOverCell == null || _battleManager.BattleState != GlobalEnums.BattleState.ActionTargetSelecting)
             return;
 
         //CurrentAction.Equip(this);
@@ -177,7 +181,7 @@ public class BattleGridSystem
         //    return;
         //}
 
-        //CreatureBattleState = Define.CreatureBattleState.ActionProceed;
+        //CreatureBattleState = GlobalEnums.CreatureBattleState.ActionProceed;
 
         CurrentMouseOverCell.RevertColor();
     }
@@ -189,6 +193,6 @@ public class BattleGridSystem
         {
             return rayHit.point;
         }
-        return new Vector3(Define.BATTLEFIELD_POS_X, 0f, Define.BATTLEFIELD_POS_Z);
+        return new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0f, GlobalValues.BATTLEFIELD_POS_Z);
     }
 }

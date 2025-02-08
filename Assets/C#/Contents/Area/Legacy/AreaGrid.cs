@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
-using static Define;
+using static GlobalEnums;
 
 
 #region legacy: 동적으로 맵을 생성하기 이전에 사용하던 AreaGrid 클래스

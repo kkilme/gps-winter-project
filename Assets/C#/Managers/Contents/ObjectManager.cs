@@ -77,7 +77,7 @@ public class ObjectManager
         HeroParty ??= new HeroParty();
 
         string className = Managers.DataMng.HeroDataDict[heroDataId].Name;
-        GameObject go = Managers.ResourceMng.Instantiate($"{Define.HERO_PATH}/{className}");
+        GameObject go = Managers.ResourceMng.Instantiate($"{GlobalValues.HERO_PATH}/{className}");
         Hero hero = go.GetComponent<Hero>();
         HeroParty.AddHero(hero);
 
@@ -93,21 +93,21 @@ public class ObjectManager
     {   
         for(int i = 0; i < 2; i++)
         {
-            var hero = SpawnHero(Define.HERO_KNIGHT_ID);
-            hero.EquipWeapon(Define.KNIGHT_START_WEAPON_ID);
+            var hero = SpawnHero(GlobalValues.HERO_KNIGHT_ID);
+            hero.EquipWeapon(GlobalValues.KNIGHT_START_WEAPON_ID);
         }
 
         for (int i = 0; i < 2; i++)
         {
-            var hero = SpawnHero(Define.HERO_WIZARD_ID);
-            hero.EquipWeapon(Define.WIZARD_START_WEAPON_ID);
+            var hero = SpawnHero(GlobalValues.HERO_WIZARD_ID);
+            hero.EquipWeapon(GlobalValues.WIZARD_START_WEAPON_ID);
         }
     }
 
     public Monster SpawnMonster(int monsterDataId)
     {
         string className = Managers.DataMng.MonsterDataDict[monsterDataId].Name;
-        GameObject go = Managers.ResourceMng.Instantiate($"{Define.MONSTER_PATH}/{className}");
+        GameObject go = Managers.ResourceMng.Instantiate($"{GlobalValues.MONSTER_PATH}/{className}");
         Monster monster = go.GetComponent<Monster>();
 
         monster.SetInfo(monsterDataId);
@@ -119,16 +119,16 @@ public class ObjectManager
         return monster;
     }
 
-    public void Despawn(Define.CreatureType creatureType, ulong id)
+    public void Despawn(GlobalEnums.CreatureType creatureType, ulong id)
     {
         Creature creature = null;
         switch (creatureType)
         {
-            case Define.CreatureType.Hero:
+            case GlobalEnums.CreatureType.Hero:
                 creature = Heroes[id];
                 Heroes.Remove(id);
                 break;
-            case Define.CreatureType.Monster:
+            case GlobalEnums.CreatureType.Monster:
                 creature = Monsters[id];
                 Monsters.Remove(id);
                 break;

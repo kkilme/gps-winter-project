@@ -14,16 +14,16 @@ public class UI_ActionButton : MonoBehaviour
         _actionPanel = Managers.BattleMng.BattleSceneUI.BattleActionPanel;
         _action = action;
 
-        Button.onClick.AddListener(OnClickActionButton);
-        gameObject.BindEvent(OnEnterActionButton, Define.UIEvent.Enter);
+        Button.onClick.AddListener(OnClick);
+        gameObject.BindEvent(OnMouseEnterEvent, GlobalEnums.UIEvent.Enter);
     }
 
-    protected void OnClickActionButton()
+    protected void OnClick()
     {
-        Managers.BattleMng.CurrentTurnCreature.CurrentAction = _action;
+        Managers.BattleMng.SetAction(_action);
     }
 
-    protected void OnEnterActionButton(PointerEventData data)
+    protected void OnMouseEnterEvent(PointerEventData data)
     {   
         _actionPanel.ShowActionInfo(_action);
     }

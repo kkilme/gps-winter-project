@@ -10,11 +10,11 @@ public abstract class Creature : MonoBehaviour
 
     public ulong Id { get; set; }
     public int DataId { get; protected set; }
-    public Define.CreatureType CreatureType { get; protected set; }
+    public GlobalEnums.CreatureType CreatureType { get; protected set; }
     public Data.CreatureData CreatureData { get; protected set; }
     
-    private Define.CreatureBattleState _creatureBattleState;
-    public Define.CreatureBattleState CreatureBattleState
+    private GlobalEnums.CreatureBattleState _creatureBattleState;
+    public GlobalEnums.CreatureBattleState CreatureBattleState
     {
         get => _creatureBattleState;
         set
@@ -25,21 +25,21 @@ public abstract class Creature : MonoBehaviour
             _creatureBattleState = value;
             switch (value)
             {
-                case Define.CreatureBattleState.Wait:
+                case GlobalEnums.CreatureBattleState.Wait:
                     break;
-                case Define.CreatureBattleState.PrepareAction:
+                case GlobalEnums.CreatureBattleState.PrepareAction:
                     DoPrepareAction();
                     break;
-                case Define.CreatureBattleState.ActionProceed:
+                case GlobalEnums.CreatureBattleState.ActionProceed:
                     DoAction();
                     break;
-                case Define.CreatureBattleState.Dead:
+                case GlobalEnums.CreatureBattleState.Dead:
                     break;
             }
         }
     }
     
-    public BattleGridCell Cell { get; set; }
+    public BattleGridCell CurrentCell { get; set; }
 
     public BaseAction CurrentAction { get; set; }
     public BattleGridCell TargetCell { get; protected set; }
@@ -66,7 +66,7 @@ public abstract class Creature : MonoBehaviour
         gameObject.name = $"{CreatureData.DataId}_{CreatureData.Name}";
         
         CreatureStat.SetStat(CreatureData);
-        CreatureBattleState = Define.CreatureBattleState.Wait;
+        CreatureBattleState = GlobalEnums.CreatureBattleState.Wait;
 
         CoinHeadNum = 0;
     }
@@ -126,7 +126,7 @@ public abstract class Creature : MonoBehaviour
     
     public void OnDead()
     {
-        CreatureBattleState = Define.CreatureBattleState.Dead;
+        CreatureBattleState = GlobalEnums.CreatureBattleState.Dead;
         
         Managers.ObjectMng.Despawn(CreatureType, Id);
     }
@@ -136,17 +136,5 @@ public abstract class Creature : MonoBehaviour
         CreatureStat.OnHeal(heal);
     }
 
-    #endregion
-
-    #region Animation
-
-    public void PlayMoveAnimation()
-    {
-        Animator.Play("Move");
-    }
-    public void StopAnimation()
-    {
-        Animator.Play("Idle");
-    }
     #endregion
 }

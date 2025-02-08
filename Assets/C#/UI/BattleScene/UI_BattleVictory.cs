@@ -83,13 +83,13 @@ public class UI_BattleVictory : UI_Base
 
         Debug.Log($"Current reward: {rewardId}");
 
-        void OnRewardAction(Define.RewardActionType action)
+        void OnRewardAction(GlobalEnums.RewardActionType action)
         {   
             Managers.UIMng.ClosePopupUI(rewardUI);
             switch (action)
             {
-                case Define.RewardActionType.Take:
-                case Define.RewardActionType.Dispose:
+                case GlobalEnums.RewardActionType.Take:
+                case GlobalEnums.RewardActionType.Dispose:
                     if (testrewards.Count == 0)
                     {
                         // TODO: BattleScene 언로딩 (AreaScene 복귀)
@@ -99,7 +99,7 @@ public class UI_BattleVictory : UI_Base
                         ShowReward(rewardId);
                     }
                     break;
-                case Define.RewardActionType.Pass:
+                case GlobalEnums.RewardActionType.Pass:
                     testrewards.Add(rewardId, rewardQuantity);
                     ShowReward(rewardId);
                     break;

@@ -7,9 +7,9 @@ public abstract class JumpAttackAction : BaseAction
 
     public override bool CanStartAction()
     {
-        if (Owner.CreatureType == Define.CreatureType.Hero && TargetCell.GridSide == Define.GridSide.HeroSide)
+        if (Owner.CreatureType == GlobalEnums.CreatureType.Hero && TargetCell.GridSide == GlobalEnums.GridSide.HeroSide)
             return false;
-        if (Owner.CreatureType == Define.CreatureType.Monster && TargetCell.GridSide == Define.GridSide.EnemySide)
+        if (Owner.CreatureType == GlobalEnums.CreatureType.Monster && TargetCell.GridSide == GlobalEnums.GridSide.EnemySide)
             return false;
 
         return true;
@@ -46,7 +46,7 @@ public abstract class JumpAttackAction : BaseAction
     
     public override void OnJumpBWDStart()
     {
-        Owner.transform.DOMove(Owner.Cell.transform.position, 0.433f).OnComplete(OnActionEnd);
+        Owner.transform.DOMove(Owner.CurrentCell.transform.position, 0.433f).OnComplete(OnActionEnd);
     }
     
 }

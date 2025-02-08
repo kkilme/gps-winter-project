@@ -12,8 +12,8 @@ public abstract class BaseAction
     public Animator Animator => Owner.Animator;
     public BattleGridCell TargetCell => Owner.TargetCell;
     
-    public Define.ActionTargetType ActionTargetType { get; protected set; }
-    public Define.Stat UsingStat { get; protected set; } = Define.Stat.Strength;
+    public GlobalEnums.ActionTargetType ActionTargetType { get; protected set; }
+    public GlobalEnums.Stat UsingStat { get; protected set; } = GlobalEnums.Stat.Strength;
 
     public int CoinNum { get; protected set; }
     public int CoinHeadNum { get; protected set; }
@@ -41,11 +41,11 @@ public abstract class BaseAction
 
     public int CoinToss()
     {
-        if (ActionData.UsingStat == Define.Stat.None)
+        if (ActionData.UsingStat == GlobalEnums.Stat.None)
             return -1;
 
         int coinHeadNum = 0;
-        if (Owner.CreatureType == Define.CreatureType.Hero)
+        if (Owner.CreatureType == GlobalEnums.CreatureType.Hero)
         {
             for (int i = 0; i < CoinNum; i++)
             {
@@ -115,7 +115,7 @@ public abstract class BaseAction
         Animator.Play("Idle");
         
         Vector3 front;
-        if (Owner.CreatureType == Define.CreatureType.Hero)
+        if (Owner.CreatureType == GlobalEnums.CreatureType.Hero)
             front = new Vector3(0, 0, 1);
         else
             front = new Vector3(0, 0, -1);

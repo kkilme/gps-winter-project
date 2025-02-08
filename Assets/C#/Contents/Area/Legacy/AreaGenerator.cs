@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using static Define;
+using static GlobalEnums;
 
 // legacy: 동적으로 맵을 생성하기 이전에 json파일을 읽어 맵을 생성하던 AreaGenerator 클래스
 

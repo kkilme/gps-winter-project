@@ -25,14 +25,14 @@ public class HeroStat : CreatureStat
         _dexterity = heroData.Dexterity;
     }
 
-    public int GetStatByDefine(Define.Stat stat)
+    public int GetStatByDefine(GlobalEnums.Stat stat)
     {
         return stat switch
         {
-            Define.Stat.Strength => Strength,
-            Define.Stat.Vitality => Vitality,
-            Define.Stat.Intelligence => Intelligence,
-            Define.Stat.Dexterity => Dexterity,
+            GlobalEnums.Stat.Strength => Strength,
+            GlobalEnums.Stat.Vitality => Vitality,
+            GlobalEnums.Stat.Intelligence => Intelligence,
+            GlobalEnums.Stat.Dexterity => Dexterity,
             _ => -1,
         };
     }

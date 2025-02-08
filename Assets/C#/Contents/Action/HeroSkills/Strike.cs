@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class Strike : JumpAttackAction
+public class Strike : MoveAttackAction
 {
     public override void SetInfo(int dataId)
     {
-        ActionTargetType = Define.ActionTargetType.Single;
+        ActionTargetType = GlobalEnums.ActionTargetType.Single;
         
         base.SetInfo(dataId);
     }

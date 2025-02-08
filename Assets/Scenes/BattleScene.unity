@@ -202,6 +202,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3073106488816916776, guid: 38f935fa1b1a30542b3d56754fa00646, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3594318837193983566, guid: 38f935fa1b1a30542b3d56754fa00646, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -463,7 +467,7 @@ GameObject:
   - component: {fileID: 1195530312}
   - component: {fileID: 1195530311}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: BattleScene Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -490,7 +494,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.6
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2

@@ -1,7 +1,7 @@
 public class Equipment
 {
     public int DataId { get; protected set; }
-    public Define.EquipmentType EquipmentType { get; protected set; }
+    public GlobalEnums.EquipmentType EquipmentType { get; protected set; }
     public Data.EquipmentData EquipmentData { get; protected set; }
     public Hero Owner { get; protected set; }
     

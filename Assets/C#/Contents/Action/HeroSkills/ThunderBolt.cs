@@ -1,8 +1,8 @@
-public class ThunderBolt : JumpAttackAction
+public class ThunderBolt : StandAction
 {
     public override void SetInfo(int dataId)
     {
-        ActionTargetType = Define.ActionTargetType.Single;
+        ActionTargetType = GlobalEnums.ActionTargetType.Single;
         
         base.SetInfo(dataId);
     }

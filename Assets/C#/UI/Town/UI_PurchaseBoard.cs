@@ -70,12 +70,12 @@ public class UI_PurchaseBoard : UI_Base
                 itemContent.gameObject.BindEvent((PointerEventData) =>
                 {
                     itemInfo.RectTransform.position = Input.mousePosition;
-                }, Define.UIEvent.Stay);
-                itemContent.gameObject.BindEvent((PointerEventData) => Managers.UIMng.ClosePopupUI(itemInfo), Define.UIEvent.Exit);
+                }, GlobalEnums.UIEvent.Stay);
+                itemContent.gameObject.BindEvent((PointerEventData) => Managers.UIMng.ClosePopupUI(itemInfo), GlobalEnums.UIEvent.Exit);
             }
 
-            itemContent.gameObject.BindEvent(PurchaseItem, Define.UIEvent.DoubleClick);
-            itemContent.gameObject.BindEvent(ShowItemInfo, Define.UIEvent.Enter);
+            itemContent.gameObject.BindEvent(PurchaseItem, GlobalEnums.UIEvent.DoubleClick);
+            itemContent.gameObject.BindEvent(ShowItemInfo, GlobalEnums.UIEvent.Enter);
         }
     }
 

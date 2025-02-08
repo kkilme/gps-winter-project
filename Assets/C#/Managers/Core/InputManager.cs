@@ -9,7 +9,7 @@ using UnityEngine.PlayerLoop;
 public class InputManager
 {
     public Action KeyAction;
-    public Action<Define.MouseEvent> MouseAction;
+    public Action<GlobalEnums.MouseEvent> MouseAction;
 
     private bool _pressed;
     private float _pressedTime;
@@ -35,16 +35,16 @@ public class InputManager
 
         if (MouseAction != null)
         {   
-            MouseAction.Invoke(Define.MouseEvent.Hover);
+            MouseAction.Invoke(GlobalEnums.MouseEvent.Hover);
             if (Input.GetMouseButton(0))
             {
                 if (!_pressed)
                 {
-                    MouseAction.Invoke(Define.MouseEvent.PointerDown);
+                    MouseAction.Invoke(GlobalEnums.MouseEvent.PointerDown);
                     _pressedTime = Time.time;
                 }
 
-                MouseAction.Invoke(Define.MouseEvent.Press);
+                MouseAction.Invoke(GlobalEnums.MouseEvent.Press);
                 _pressed = true;
             }
             else
@@ -52,8 +52,8 @@ public class InputManager
                 if (_pressed)
                 {
                     if (Time.time < _pressedTime + 0.2f)
-                        MouseAction.Invoke(Define.MouseEvent.Click);
-                    MouseAction.Invoke(Define.MouseEvent.PointerUp);
+                        MouseAction.Invoke(GlobalEnums.MouseEvent.Click);
+                    MouseAction.Invoke(GlobalEnums.MouseEvent.PointerUp);
 
                 }
                 

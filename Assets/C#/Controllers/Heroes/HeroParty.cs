@@ -64,22 +64,23 @@ public class HeroParty
             HeroObjects[i].transform.LookAt(adjustedDestination);
             sequence.Join(HeroObjects[i].transform.DOMove(adjustedDestination, 0.7f));
         }
+
         return sequence;
     }
 
-    public void PlayMoveAnimation()
+    public void PlayMoving()
     {
         foreach (var hero in Heroes)
         {
-            hero.PlayMoveAnimation();
+            hero.Animator.SetBool("Moving", true);
         }
     }
 
-    public void StopAnimation()
+    public void StopMoving()
     {
         foreach (var hero in Heroes)
         {
-            hero.StopAnimation();
+            hero.Animator.SetBool("Moving", false);
         }
     }
 }

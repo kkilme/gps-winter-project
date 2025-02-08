@@ -56,14 +56,14 @@ public class UI_QuestBoard : UI_Base
             }
             else
             {
-                GetButton(Buttons.StartButton).gameObject.BindEvent(OnStartButtonClicked, Define.UIEvent.Click);
+                GetButton(Buttons.StartButton).gameObject.BindEvent(OnStartButtonClicked, GlobalEnums.UIEvent.Click);
             }
         }
 
         // 퀘스트 시작 버튼 누를 시 AreaScene 전환
         void OnStartButtonClicked(PointerEventData eventData)
         {
-            Enum.TryParse(_quest.QuestData.AreaName, out Define.AreaName areaName);
+            Enum.TryParse(_quest.QuestData.AreaName, out GlobalEnums.AreaName areaName);
             Managers.Instance.StartCoroutine((Managers.SceneMng.LoadAreaScene(areaName, _quest)));
             this.gameObject.SetActive(false);
         }
@@ -91,7 +91,7 @@ public class UI_QuestBoard : UI_Base
             Bind<Button>(typeof(Buttons));
             Bind<TextMeshProUGUI>(typeof(Texts));
 
-            GetButton(Buttons.CancelButton).gameObject.BindEvent(OnClickedCancelButton, Define.UIEvent.Click);
+            GetButton(Buttons.CancelButton).gameObject.BindEvent(OnClickedCancelButton, GlobalEnums.UIEvent.Click);
         }
 
         // 퀘스트 설명 및 보상 표시
@@ -104,12 +104,12 @@ public class UI_QuestBoard : UI_Base
 
             void OnClickedAccpetButton(PointerEventData eventData)
             {   
-                Enum.TryParse(_quest.QuestData.AreaName, out Define.AreaName areaName);
+                Enum.TryParse(_quest.QuestData.AreaName, out GlobalEnums.AreaName areaName);
                 Managers.Instance.StartCoroutine((Managers.SceneMng.LoadAreaScene(areaName, _quest)));
                 this.gameObject.SetActive(false);
             }
 
-            GetButton(Buttons.AcceptButton).gameObject.BindEvent(OnClickedAccpetButton, Define.UIEvent.Click);
+            GetButton(Buttons.AcceptButton).gameObject.BindEvent(OnClickedAccpetButton, GlobalEnums.UIEvent.Click);
         }
 
         private void OnClickedCancelButton(PointerEventData eventData)
@@ -158,7 +158,7 @@ public class UI_QuestBoard : UI_Base
 
             //if (questData.IsUnlocked)
             //{
-            //    questBoard_Quest.gameObject.BindEvent(OnClicked, Define.UIEvent.Click);
+            //    questBoard_Quest.gameObject.BindEvent(OnClicked, GlobalEnums.UIEvent.Click);
             //}
             #endregion
 

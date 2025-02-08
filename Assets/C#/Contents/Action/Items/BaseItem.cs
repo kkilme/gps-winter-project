@@ -2,7 +2,7 @@ public abstract class BaseItem : BaseAction
 {
     public int DataId { get; protected set; }
     public Data.ItemData ItemData { get; protected set; }
-    public Define.ItemType ItemType { get; protected set; }
+    public GlobalEnums.ItemType ItemType { get; protected set; }
     
     public Bag Bag { get; set; }
     public int Idx { get; set; }

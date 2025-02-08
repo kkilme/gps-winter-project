@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static Define;
+using static GlobalEnums;
 
 public class Hero : Creature
 {
@@ -17,8 +17,8 @@ public class Hero : Creature
     public Bag Bag { get; protected set; }
     
     public Weapon Weapon { get; protected set; }
-    public Define.WeaponType WeaponType => Weapon.WeaponType;
-    public Dictionary<Define.ArmorType, Armor> Armors { get; protected set; }
+    public GlobalEnums.WeaponType WeaponType => Weapon.WeaponType;
+    public Dictionary<GlobalEnums.ArmorType, Armor> Armors { get; protected set; }
     
     #endregion
     
@@ -34,14 +34,14 @@ public class Hero : Creature
         Bag.SetInfo();
         Bag.Owner = this;
 
-        Armors = new Dictionary<Define.ArmorType, Armor>();
-        foreach (Define.ArmorType type in (Define.ArmorType[])Enum.GetValues(typeof(Define.ArmorType)))
+        Armors = new Dictionary<GlobalEnums.ArmorType, Armor>();
+        foreach (GlobalEnums.ArmorType type in (GlobalEnums.ArmorType[])Enum.GetValues(typeof(GlobalEnums.ArmorType)))
             Armors.TryAdd(type, null);
     }
     
     public override void SetInfo(int templateId)
     {
-        CreatureType = Define.CreatureType.Hero;
+        CreatureType = GlobalEnums.CreatureType.Hero;
         CreatureData = Managers.DataMng.HeroDataDict[templateId];
         base.SetInfo(templateId);
     }
@@ -50,7 +50,7 @@ public class Hero : Creature
     
     public override void DoPrepareAction()
     {
-        //((UI_BattleScene)Managers.UIMng.SceneUI).BattleActionPanel.InitTurn();
+        //((UI_BattleScene)Managers.UIMng.SceneUI).BattleActionPanel.Show();
         
         //Managers.InputMng.MouseAction -= HandleMouseInputOnBattlePhase;
         //Managers.InputMng.MouseAction += HandleMouseInputOnBattlePhase;
@@ -68,7 +68,7 @@ public class Hero : Creature
         //((UI_BattleScene)Managers.UIMng.SceneUI).BattleActionPanel.EndTurn();
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.EndTurn();
         
-        CreatureBattleState = Define.CreatureBattleState.Wait;
+        CreatureBattleState = GlobalEnums.CreatureBattleState.Wait;
         CurrentAction.UnEquip();
         TargetCell = null;
         Managers.BattleMng.NextTurn();
@@ -141,7 +141,7 @@ public class Hero : Creature
 
     public void EquipArmor(Armor equippingArmor)
     {
-        Define.ArmorType armorType = equippingArmor.ArmorType;
+        GlobalEnums.ArmorType armorType = equippingArmor.ArmorType;
         if (Armors[armorType] != null)
         {
             if (Armors[armorType].ArmorData.DataId == equippingArmor.ArmorData.DataId)
@@ -155,7 +155,7 @@ public class Hero : Creature
         ChangeArmorVisibility(armorType ,true);
     }
 
-    public void UnEquipArmor(Define.ArmorType armorType)
+    public void UnEquipArmor(GlobalEnums.ArmorType armorType)
     {
         if (Armors[armorType] == null)
             return;
@@ -166,21 +166,21 @@ public class Hero : Creature
         Armors[armorType] = null;
     }
 
-    public void ChangeArmorVisibility(Define.ArmorType armorType, bool isActive)
+    public void ChangeArmorVisibility(GlobalEnums.ArmorType armorType, bool isActive)
     {
         int idx = Armors[armorType].ArmorData.ArmorIndex;
         switch (armorType)
         {
-             case Define.ArmorType.Body: 
+             case GlobalEnums.ArmorType.Body: 
                  transform.GetChild(idx - 1).gameObject.SetActive(isActive);
                  break; 
-             case Define.ArmorType.Cloak:
+             case GlobalEnums.ArmorType.Cloak:
                  transform.GetChild(idx + 19).gameObject.SetActive(isActive);
                  break;
-             case Define.ArmorType.HeadAccessory:
+             case GlobalEnums.ArmorType.HeadAccessory:
                  Head.transform.GetChild(idx - 1).gameObject.SetActive(isActive);
                  break;
-             case Define.ArmorType.Helmet:
+             case GlobalEnums.ArmorType.Helmet:
                  Head.transform.GetChild(idx + 96).gameObject.SetActive(isActive);
                  break;
         }

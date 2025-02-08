@@ -68,10 +68,10 @@ public class UI_TownScene : UI_Scene
             _currentPage.gameObject.SetActive(true);
         }
 
-        GetButton(Buttons.Button_Quest).gameObject.BindEvent(OnClickedQuestButton, Define.UIEvent.Click);
-        GetButton(Buttons.Button_ExitAtQuest).gameObject.BindEvent(OnClickedExitButton, Define.UIEvent.Click);
-        GetButton(Buttons.Button_Store).gameObject.BindEvent(OnClickedStoreButton, Define.UIEvent.Click);
-        GetButton(Buttons.Button_ExitAtStore).gameObject.BindEvent(OnClickedExitButton, Define.UIEvent.Click);
+        GetButton(Buttons.Button_Quest).gameObject.BindEvent(OnClickedQuestButton, GlobalEnums.UIEvent.Click);
+        GetButton(Buttons.Button_ExitAtQuest).gameObject.BindEvent(OnClickedExitButton, GlobalEnums.UIEvent.Click);
+        GetButton(Buttons.Button_Store).gameObject.BindEvent(OnClickedStoreButton, GlobalEnums.UIEvent.Click);
+        GetButton(Buttons.Button_ExitAtStore).gameObject.BindEvent(OnClickedExitButton, GlobalEnums.UIEvent.Click);
 
         Get<UI_Page>(Pages.UI_Page_Town_Main).gameObject.SetActive(true);
     }

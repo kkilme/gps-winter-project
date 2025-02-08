@@ -13,9 +13,9 @@ public class SceneManagerEx
         FirstScene = CurrentScene;
     }
     // type의 이름을 string으로 반환
-    private string GetSceneName(Define.SceneType type)
+    private string GetSceneName(GlobalEnums.SceneType type)
     {
-        return Enum.GetName(typeof(Define.SceneType), type);
+        return Enum.GetName(typeof(GlobalEnums.SceneType), type);
     }
 
     // 현재 씬을 T 타입으로 반환
@@ -25,7 +25,7 @@ public class SceneManagerEx
     }
 
     // type에 해당하는 Scene을 로드
-    public void LoadScene(Define.SceneType type)
+    public void LoadScene(GlobalEnums.SceneType type)
     {
         Managers.Clear();
 
@@ -41,7 +41,7 @@ public class SceneManagerEx
     public IEnumerator LoadBattleScene()
     {
         Debug.Log("Battle Scene Load Start");
-        var sceneName = Define.BATTLE_SCENE_NAME;
+        var sceneName = GlobalValues.BATTLE_SCENE_NAME;
 
         Managers.AreaMng.OnBattleSceneLoadStart(); // 카메라 정지
 
@@ -57,7 +57,7 @@ public class SceneManagerEx
 
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
 
-        yield return loadingScreen.Fade(true); // fade in, LoadingUI 삭제
+        //yield return loadingScreen.Fade(true); // fade in, LoadingUI 삭제
         Debug.Log("Battle Scene Load Finish");
     }
 
@@ -82,9 +82,9 @@ public class SceneManagerEx
         yield return loadingScreen.Fade(true); // fade in, LoadingUI 삭제
     }
 
-    public IEnumerator LoadAreaScene(Define.AreaName areaName, Quest quest)
+    public IEnumerator LoadAreaScene(GlobalEnums.AreaName areaName, Quest quest)
     {
-        yield return SceneManager.LoadSceneAsync(GetSceneName(Define.SceneType.AreaScene));
+        yield return SceneManager.LoadSceneAsync(GetSceneName(GlobalEnums.SceneType.AreaScene));
         GetCurrentScene<AreaScene>().InitArea(areaName, quest);
     }
 }

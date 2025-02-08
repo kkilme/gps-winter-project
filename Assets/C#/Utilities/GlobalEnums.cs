@@ -1,4 +1,4 @@
-public static class Define
+public static class GlobalEnums
 {
     #region Type
 
@@ -230,13 +230,6 @@ public static class Define
 
     #endregion
 
-    #region Path
-
-    public const string HERO_PATH = "Heroes";
-    public const string MONSTER_PATH = "Monsters";
-
-    #endregion
-
     #region Name
 
     public enum AreaName
@@ -244,57 +237,5 @@ public static class Define
         Forest,
         Desert,
     }
-
-    public const string BATTLE_SCENE_NAME = "BattleScene";
-    public const string AREA_SCENE_NAME = "AreaScene";
-
-    #endregion
-
-    #region DataId
-
-    public const int HERO_KNIGHT_ID = 101000;
-    public const int HERO_WIZARD_ID = 101001;
-
-    public const int MONSTER_BAT_ID = 102000;
-
-    public const int KNIGHT_START_WEAPON_ID = 201000;
-    public const int WIZARD_START_WEAPON_ID = 201002;
-
-    public const int ARMOR_SAMPLEBODY1_ID = 202000;
-    public const int ARMOR_SAMPLEBODY2_ID = 202001;
-
-    public const int ITEM_HEALPOTION_ID = 301000;
-
-    public const int ACTION_MOVE_ID = 401000;
-    public const int ACTION_FLEE_ID = 401001;
-    public const int ACTION_STRIKE_ID = 402000;
-    public const int ACTION_BITE_ID = 403000;
-
-    public const int MONSTERSQUAD_SQUAD1_ID = 501000;
-
-    #endregion
-
-    #region Value
-
-    public const float MOVE_SPEED = 5f;
-    public const float BATTLEFIELD_POS_X = -1000f;
-    public const float BATTLEFIELD_POS_Z = -1000f;
-
-    // Animation Name
-    public static readonly int ANIMATION_DEFEND = UnityEngine.Animator.StringToHash("Defend");
-    public static readonly int ANIMATION_DEFEND_HIT = UnityEngine.Animator.StringToHash("DefendHit");
-    public static readonly int ANIMATION_DIZZY = UnityEngine.Animator.StringToHash("Dizzy");
-    public static readonly int ANIMATION_IDLE = UnityEngine.Animator.StringToHash("Idle");
-    public static readonly int ANIMATION_JUMP = UnityEngine.Animator.StringToHash("Jump");
-    public static readonly int ANIMATION_MOVE = UnityEngine.Animator.StringToHash("Move");
-    public static readonly int ANIMATION_MOVEAPPROACH = UnityEngine.Animator.StringToHash("MoveApproach");
-    public static readonly int ANIMATION_VICTORY = UnityEngine.Animator.StringToHash("Victory");
-
-    // Animation Parameter
-    public static readonly int PARAMETER_ATTACK_FINISHED = UnityEngine.Animator.StringToHash("AttackFinished");
-    public static readonly int PARAMETER_APPROACH_FINISHED = UnityEngine.Animator.StringToHash("ApproachFinished");
-    public static readonly int PARAMETER_NEEDS_JUMP = UnityEngine.Animator.StringToHash("NeedsJump");
-    public static readonly int PARAMETER_NEEDS_MOVE = UnityEngine.Animator.StringToHash("NeedsMove");
-
     #endregion
 }

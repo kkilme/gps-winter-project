@@ -3,9 +3,11 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEngine;
+using DG.Tweening;
 
 public class UI_BattleActionPanel : UI_Base
-{   
+{
+    private RectTransform _rect;
     enum GameObjects
     {
         ActionButtons
@@ -24,25 +26,21 @@ public class UI_BattleActionPanel : UI_Base
     private Transform _actionButtonParent;
 
     public override void Init()
-    {   
+    {
         Bind<GameObject>(typeof(GameObjects));
         Bind<TextMeshProUGUI>(typeof(Texts));
 
         _actionButtonParent = GetGameObject(GameObjects.ActionButtons).transform;
+        _rect = GetComponent<RectTransform>();
     }
 
-    public void InitTurn()
+    public override void Show()
     {   
         gameObject.SetActive(true);
+        _rect.DOAnchorPosY(-400f, 1f).From(true).SetEase(Ease.OutCirc);
         _hero = Managers.BattleMng.CurrentTurnCreature as Hero;
 
         SetupActionButtons();
-    }
-
-    public void EndTurn()
-    {
-        gameObject.SetActive(false);
-        _hero = null;
     }
 
     private void SetupActionButtons()
@@ -71,7 +69,7 @@ public class UI_BattleActionPanel : UI_Base
             GetText(Texts.Text_AmountNumber).text = _hero.HeroStat.Attack.ToString();
         }
 
-        if (action.ActionData.UsingStat != Define.Stat.None)
+        if (action.ActionData.UsingStat != GlobalEnums.Stat.None)
         {
             GetText(Texts.Text_SlotPercentageWord).text = "Percentage\nPer Slot";
             GetText(Texts.Text_SlotPercentage).text = _hero.HeroStat.GetStatByDefine(action.UsingStat).ToString();

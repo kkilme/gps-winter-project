@@ -1,4 +1,4 @@
-﻿using DG.Tweening;
+using DG.Tweening;
 using UnityEngine;
 
 public abstract class MoveAttackAction : BaseAction
@@ -7,9 +7,9 @@ public abstract class MoveAttackAction : BaseAction
 
     public override bool CanStartAction()
     {
-        if (Owner.CreatureType == Define.CreatureType.Hero && TargetCell.GridSide == Define.GridSide.HeroSide)
+        if (Owner.CreatureType == GlobalEnums.CreatureType.Hero && TargetCell.GridSide == GlobalEnums.GridSide.HeroSide)
             return false;
-        if (Owner.CreatureType == Define.CreatureType.Monster && TargetCell.GridSide == Define.GridSide.EnemySide)
+        if (Owner.CreatureType == GlobalEnums.CreatureType.Monster && TargetCell.GridSide == GlobalEnums.GridSide.EnemySide)
             return false;
 
         return true;
@@ -17,7 +17,7 @@ public abstract class MoveAttackAction : BaseAction
     
     public override void OnStartAction()
     {
-        Animator.Play("MoveFWD");
+        Animator.Play("Move");
         OnMoveStart();
     }
     
@@ -48,6 +48,6 @@ public abstract class MoveAttackAction : BaseAction
     
     public override void OnMoveBWDStart()
     {
-        Owner.transform.DOMove(Owner.Cell.transform.position, 0.8f).OnComplete(OnActionEnd);
+        Owner.transform.DOMove(Owner.CurrentCell.transform.position, 0.8f).OnComplete(OnActionEnd);
     }
 }

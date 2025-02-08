@@ -13,7 +13,7 @@ public enum TileColorChangeType
 // Note: 플레이어가 밟고 서있는 육각형 블록은 AreaBaseTile
 public abstract class AreaEventTile: MonoBehaviour
 {
-    public Define.AreaTileType TileType;
+    public GlobalEnums.AreaTileType TileType;
     [SerializeField]
     private SpriteRenderer _outline;  // 셀 모서리 스프라이트
     [SerializeField]

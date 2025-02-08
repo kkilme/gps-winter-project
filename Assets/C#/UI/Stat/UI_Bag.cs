@@ -40,8 +40,8 @@ public class UI_Bag : UI_Base
                 itemIcon.enabled = true;
                 
                 itemDetail.SetInfo(currentItem);
-                item.BindEvent(itemDetail.OnMouseEnter, Define.UIEvent.Enter);
-                item.BindEvent(itemDetail.OnMouseExit, Define.UIEvent.Exit);
+                item.BindEvent(itemDetail.OnMouseEnter, GlobalEnums.UIEvent.Enter);
+                item.BindEvent(itemDetail.OnMouseExit, GlobalEnums.UIEvent.Exit);
             }
             else
             {

@@ -12,7 +12,7 @@ public abstract class Monster : Creature
 
     public override void SetInfo(int templateId)
     {
-        CreatureType = Define.CreatureType.Monster;
+        CreatureType = GlobalEnums.CreatureType.Monster;
         CreatureData = Managers.DataMng.MonsterDataDict[templateId];
         base.SetInfo(templateId);
     }
@@ -31,7 +31,7 @@ public abstract class Monster : Creature
             DoPrepareAction();
         }
         
-        CreatureBattleState = Define.CreatureBattleState.ActionProceed;
+        CreatureBattleState = GlobalEnums.CreatureBattleState.ActionProceed;
     }
 
     public override void DoAction()
@@ -47,7 +47,7 @@ public abstract class Monster : Creature
     {
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.EndTurn();
         
-        CreatureBattleState = Define.CreatureBattleState.Wait;
+        CreatureBattleState = GlobalEnums.CreatureBattleState.Wait;
         CurrentAction.UnEquip();
         TargetCell = null;
         Managers.BattleMng.NextTurn();
@@ -70,6 +70,6 @@ public abstract class Monster : Creature
         List<ulong> keysList = new List<ulong>(Managers.ObjectMng.Heroes.Keys);
         ulong randomKey = keysList[Random.Range(0, keysList.Count)];
 
-        return Managers.ObjectMng.Heroes[randomKey].Cell;
+        return Managers.ObjectMng.Heroes[randomKey].CurrentCell;
     }
 }

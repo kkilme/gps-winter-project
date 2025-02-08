@@ -56,8 +56,8 @@ public partial class AreaMapGenerator
 
             foreach (Vector2Int neighbor in _map.GetNeighbors(currentNode))
             {
-                if (_map.TileTypeMap[neighbor.y, neighbor.x] == Define.AreaTileType.OutOfField ||
-                    _map.TileTypeMap[neighbor.y, neighbor.x] == Define.AreaTileType.Obstacle) continue;
+                if (_map.TileTypeMap[neighbor.y, neighbor.x] == GlobalEnums.AreaTileType.OutOfField ||
+                    _map.TileTypeMap[neighbor.y, neighbor.x] == GlobalEnums.AreaTileType.Obstacle) continue;
 
                 int distanceToNeighbor = distances[currentNode] + 1;
                 if (!distances.ContainsKey(neighbor) || distanceToNeighbor < distances[neighbor])
@@ -83,16 +83,6 @@ public partial class AreaMapGenerator
                     closestNode = node;
                 }
             }
-            // legacy: 가장 짧은 거리의 노드가 여러 개인 경우 랜덤으로 선택: 굳이 필요해보이진 않음
-            //List<Vector2Int> closestNodes = new() {closestNode};
-            //foreach (Vector2Int node in queue)
-            //{
-            //    if (distances[closestNode] == distances[node])
-            //    {
-            //        closestNodes.Add(node);
-            //    }
-            //}
-            //Vector2Int selected = closestNodes[Random.Range(0, closestNodes.Count)];
             queue.Remove(closestNode);
             return closestNode;
         }
@@ -118,7 +108,7 @@ public partial class AreaMapGenerator
         {
             for (int x = 0; x < _data.MapWidth; x++)
             {
-                if (_map.TileTypeMap[z, x] == Define.AreaTileType.Empty)
+                if (_map.TileTypeMap[z, x] == GlobalEnums.AreaTileType.Empty)
                 {
                     emptyPositions.Add(new Vector2Int(x, z));
                 }
@@ -178,22 +168,22 @@ public partial class AreaMapGenerator
                 text.SetText(_map.TileTypeMap[z, x].ToString());
                 switch (_map.TileTypeMap[z, x])
                 {
-                    case Define.AreaTileType.Battle:
+                    case GlobalEnums.AreaTileType.Battle:
                         text.color = Color.red;
                         break;
-                    case Define.AreaTileType.Encounter:
+                    case GlobalEnums.AreaTileType.Encounter:
                         text.color = Color.yellow;
                         break;
-                    case Define.AreaTileType.OutOfField:
+                    case GlobalEnums.AreaTileType.OutOfField:
                         text.color = new Color(0.5f, 0.5f, 0.5f, 0.7f);
                         break;
-                    case Define.AreaTileType.Boss:
+                    case GlobalEnums.AreaTileType.Boss:
                         text.color = new Color(0.5f, 0.1f, 0.5f);
                         break;
-                    case Define.AreaTileType.Start:
+                    case GlobalEnums.AreaTileType.Start:
                         text.color = Color.cyan;
                         break;
-                    case Define.AreaTileType.Normal:
+                    case GlobalEnums.AreaTileType.Normal:
                         text.color = new Color(1, 1, 1, 0.5f);
                         break;
                 }

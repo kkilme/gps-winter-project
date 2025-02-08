@@ -16,7 +16,7 @@ public class Test : MonoBehaviour
 
     //    if (Input.GetKeyDown(KeyCode.Alpha1))
     //    {
-    //        BaseItem item = hero.Bag.StoreItem(Define.ITEM_HEALPOTION_ID);
+    //        BaseItem item = hero.Bag.StoreItem(GlobalEnums.ITEM_HEALPOTION_ID);
     //        Debug.Log($"{item.ItemData.Name}: {item.Count}");
     //    }
     //    else if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -29,19 +29,19 @@ public class Test : MonoBehaviour
     //    else if (Input.GetKeyDown(KeyCode.Alpha3))
     //    {
     //        Weapon weapon = new SampleSingleSword();
-    //        weapon.SetInfo(Define.KNIGHT_START_WEAPON_ID);
+    //        weapon.SetInfo(GlobalEnums.KNIGHT_START_WEAPON_ID);
     //        hero.EquipWeapon(weapon);
     //    }
     //    else if (Input.GetKeyDown(KeyCode.Alpha5))
     //    {
     //        Armor body = new SampleBody1();
-    //        body.SetInfo(Define.ARMOR_SAMPLEBODY1_ID);
+    //        body.SetInfo(GlobalEnums.ARMOR_SAMPLEBODY1_ID);
     //        hero.EquipArmor(body);
     //    }
     //    else if (Input.GetKeyDown(KeyCode.Alpha6))
     //    {
     //        Armor body = new SampleBody2();
-    //        body.SetInfo(Define.ARMOR_SAMPLEBODY2_ID);
+    //        body.SetInfo(GlobalEnums.ARMOR_SAMPLEBODY2_ID);
     //        hero.EquipArmor(body);
     //    }
     //}

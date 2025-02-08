@@ -10,7 +10,7 @@ public class TownScene : BaseScene
     {
         base.Init();
 
-        SceneType = Define.SceneType.TownScene;
+        SceneType = GlobalEnums.SceneType.TownScene;
     }
 
     private void Start()

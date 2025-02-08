@@ -9,7 +9,7 @@ public class BattleScene : BaseScene
     {
         base.Init();
       
-        SceneType = Define.SceneType.BattleScene;
+        SceneType = GlobalEnums.SceneType.BattleScene;
     }
 
     public override void Clear()
@@ -24,14 +24,20 @@ public class BattleScene : BaseScene
 
     private void Start()
     {
-        // TODO: BattleScene에서 시작하여 플레이 테스트 시에만 실행
+        
         if (Managers.SceneMng.FirstScene != null && Managers.SceneMng.FirstScene is BattleScene)
-        {   
+        {
+            // TODO: for test
+            // BattleScene에서 시작하여 플레이 테스트 시에만 실행
             Managers.ObjectMng.SpawnHeroesOnTest();
-            InitBattle(Define.MONSTERSQUAD_SQUAD1_ID);
+            InitBattle(GlobalValues.MONSTERSQUAD_SQUAD1_ID);
+        } else
+        {
+            InitBattle(GlobalValues.MONSTERSQUAD_SQUAD1_ID);
         }
     }
 
+    // TOOD: for test
     protected void Update()
     {
         base.Update();

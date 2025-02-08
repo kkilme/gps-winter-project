@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 // 모든 Scene의 조상 클래스
 public abstract class BaseScene : MonoBehaviour
 { 
-    public Define.SceneType SceneType { get; protected set; } = Define.SceneType.UnknownScene;
+    public GlobalEnums.SceneType SceneType { get; protected set; } = GlobalEnums.SceneType.UnknownScene;
 
     private void Awake()
     {

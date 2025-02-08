@@ -12,13 +12,15 @@ public class UI_BattleScene : UI_Scene
 		UI_CoinToss,
 		UI_TurnState,
         UI_BattleVictory,
-        UI_PlacementPhase
+        UI_PlacementPhase,
+        UI_ChooseTarget
     }
 
 	public UI_BattleActionPanel BattleActionPanel { get; protected set; }
 	public UI_CoinToss CoinTossUI { get; protected set; }
     public UI_TurnState TurnstateUI { get; protected set; }
     public UI_PlacementPhase PlacementPhaseUI { get; protected set; }
+    public UI_ChooseTarget ChooseTargetUI { get; protected set; }
 
     public override void Init()
     {
@@ -27,16 +29,17 @@ public class UI_BattleScene : UI_Scene
 		Bind<UI_Base>(typeof(SubItemUI));
         Managers.UIMng.ShowPlayerProfileGroupUI(true);
         BattleActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
-		BattleActionPanel.Hide();
         CoinTossUI = Get<UI_Base>(SubItemUI.UI_CoinToss).GetOrAddComponent<UI_CoinToss>();
         TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
         PlacementPhaseUI = Get<UI_Base>(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
+        ChooseTargetUI = Get<UI_Base>(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget>();
     }
 
     public void OnPlacementPhaseStart()
     {
         BattleActionPanel.Hide();
         CoinTossUI.Hide();
+        ChooseTargetUI.Hide();
         TurnstateUI.Setup();
     }
 
@@ -44,11 +47,12 @@ public class UI_BattleScene : UI_Scene
     {
         PlacementPhaseUI.Hide();
     }
-    public void OnBattleEnd(Define.BattleResultType battleResult)
+
+    public void OnBattleEnd(GlobalEnums.BattleResultType battleResult)
     {
         switch (battleResult)
         {
-            case Define.BattleResultType.Victory:
+            case GlobalEnums.BattleResultType.Victory:
                 Get<UI_Base>(SubItemUI.UI_BattleActionPanel).gameObject.SetActive(false);
                 Get<UI_Base>(SubItemUI.UI_CoinToss).gameObject.SetActive(false);
 
@@ -60,16 +64,16 @@ public class UI_BattleScene : UI_Scene
                     Get<UI_Base>(SubItemUI.UI_BattleVictory).gameObject.SetActive(true);
                 });
                 break;
-            case Define.BattleResultType.Defeat:
+            case GlobalEnums.BattleResultType.Defeat:
                 break;
-            case Define.BattleResultType.Flee:
+            case GlobalEnums.BattleResultType.Flee:
                 break;
         }
     }
 
     public void OnTurnStart()
     {
-        if(Managers.BattleMng.CurrentTurnCreature is Hero) BattleActionPanel.InitTurn();
+        if(Managers.BattleMng.CurrentTurnCreature is Hero) BattleActionPanel.Show();
     }
 
     public void OnTurnEnd()

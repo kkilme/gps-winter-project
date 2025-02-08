@@ -1,0 +1,53 @@
+using DG.Tweening;
+using UnityEngine;
+
+public abstract class StandAction : BaseAction
+{
+    protected Vector3 _meleeAttackRange;
+
+    public override bool CanStartAction()
+    {
+        if (Owner.CreatureType == GlobalEnums.CreatureType.Hero && TargetCell.GridSide == GlobalEnums.GridSide.HeroSide)
+            return false;
+        if (Owner.CreatureType == GlobalEnums.CreatureType.Monster && TargetCell.GridSide == GlobalEnums.GridSide.EnemySide)
+            return false;
+
+        return true;
+    }
+    
+    public override void OnStartAction()
+    {
+        Animator.Play("MoveFWD");
+        OnMoveStart();
+    }
+    
+    public override void OnHandleAction()
+    {
+        if (TargetCell.PlacedCreature == null)
+            return;
+        
+        Creature targetCreature = TargetCell.PlacedCreature;
+        targetCreature.OnDamage(Owner.CreatureStat.Attack * (CoinHeadNum / CoinNum), 1);
+    }
+    
+    public override void OnMoveStart()
+    {
+        Owner.transform.DOMove(TargetCell.transform.position + _meleeAttackRange, 0.8f).OnComplete(OnMoveFWDEnd);
+    }
+    
+    public override void OnMoveFWDEnd()
+    {
+        Animator.Play("Attack1");
+    }
+
+    public override void OnAttackEnd()
+    {
+        Animator.Play("MoveBWD");
+        OnMoveBWDStart();
+    }
+    
+    public override void OnMoveBWDStart()
+    {
+        Owner.transform.DOMove(Owner.CurrentCell.transform.position, 0.8f).OnComplete(OnActionEnd);
+    }
+}

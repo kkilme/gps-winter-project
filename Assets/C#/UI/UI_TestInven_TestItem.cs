@@ -20,7 +20,7 @@ public class UI_TestInven_TestItem : UI_Base
         Bind<GameObject>(typeof(GameObjects));
         GetGameObject(GameObjects.ItemNameText).GetComponent<TextMeshProUGUI>().text = _itemName;
         
-        GetGameObject(GameObjects.ItemIcon).gameObject.BindEvent(OnButtonClicked, Define.UIEvent.Click);
+        GetGameObject(GameObjects.ItemIcon).gameObject.BindEvent(OnButtonClicked, GlobalEnums.UIEvent.Click);
     }
 
     public void SetInfo(string itemName)

@@ -25,6 +25,7 @@ public class UI_PlacementPhase : UI_Base
         _rect.DOAnchorPosY(-500, 0.7f).SetEase(Ease.InBack).OnComplete(() =>
         {
             gameObject.SetActive(false);
+            Managers.BattleMng.BattleSceneUI.OnTurnStart();
         });
     }
 }

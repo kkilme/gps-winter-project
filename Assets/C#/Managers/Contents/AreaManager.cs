@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class AreaManager
 {
-    public Define.AreaName AreaName { get; set; }
+    public GlobalEnums.AreaName AreaName { get; set; }
 
-    private Define.AreaState _areaState;
-    public Define.AreaState AreaState
+    private GlobalEnums.AreaState _areaState;
+    public GlobalEnums.AreaState AreaState
     {
         get => _areaState;
         set
         {
             _areaState = value;
-            if (value == Define.AreaState.Idle)
+            if (value == GlobalEnums.AreaState.Idle)
             {
                 _map.ChangeNeighborTilesColor(_currentPlayerPosition, TileColorChangeType.Highlight);
             }
@@ -39,7 +39,7 @@ public class AreaManager
         {
             _turnCount = value;
             if (TurnCount != 0 && TurnCount % _suddendeathTimer == 0) ProgressSuddendeath();
-            else AreaState = Define.AreaState.Idle;
+            else AreaState = GlobalEnums.AreaState.Idle;
         }
     }
     private int _suddendeathTimer = 4; // timer번의 이동마다 맨 밑 타일 파괴됨. Area별로 다르게 할 수도?
@@ -53,7 +53,7 @@ public class AreaManager
         _currentTile = _map.GetEventTile(_currentPlayerPosition);
         _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
         _mouseoverIndicator.transform.position = _currentPlayerPosition;
-        AreaState = Define.AreaState.Idle;
+        AreaState = GlobalEnums.AreaState.Idle;
         _light = GameObject.FindGameObjectWithTag("AreaLight");
 
         _party.InitOnArea(_currentPlayerPosition);
@@ -77,9 +77,9 @@ public class AreaManager
     }
     #endregion
 
-    private void HandleMouseInput(Define.MouseEvent mouseEvent)
+    private void HandleMouseInput(GlobalEnums.MouseEvent mouseEvent)
     {
-        if (AreaState != Define.AreaState.Idle)
+        if (AreaState != GlobalEnums.AreaState.Idle)
         {
             return;
         }
@@ -93,7 +93,7 @@ public class AreaManager
 
         switch (mouseEvent)
         {
-            case Define.MouseEvent.PointerUp:
+            case GlobalEnums.MouseEvent.PointerUp:
                 MovePlayers(_currentMouseoverPosition);
                 break;
         }
@@ -104,7 +104,7 @@ public class AreaManager
         // 이동 가능한 타일인지 확인
         if (_map.IsPositionMoveable(_currentPlayerPosition, _currentMouseoverPosition))
         {
-            AreaState = Define.AreaState.Moving;
+            AreaState = GlobalEnums.AreaState.Moving;
             _map.ChangeNeighborTilesColor(_currentPlayerPosition, TileColorChangeType.Reset);
         }
         else return;
@@ -113,10 +113,10 @@ public class AreaManager
 
         Sequence moveSequence = _party.MoveTo(destination);
 
-        _party.PlayMoveAnimation();
+        _party.PlayMoving();
         moveSequence.Play().OnComplete(() =>
         {
-            _party.StopAnimation();
+            _party.StopMoving();
             _currentPlayerPosition = destination;
             _currentTile = _map.GetEventTile(destination);
             _map.RevealFogOfWar(_currentPlayerPosition);
@@ -127,7 +127,7 @@ public class AreaManager
     // 전투씬 전환 흐름: 카메라 정지 -> 로딩화면 Fade in 완료 ->  배틀 씬 로딩 시작 및 완료 -> Area의 빛, 카메라 비활성화 -> 로딩화면 Fade out
     public void OnBattleSceneLoadStart()
     {
-        AreaState = Define.AreaState.Battle;
+        AreaState = GlobalEnums.AreaState.Battle;
         _cameraController.Freeze = true;
         Managers.InputMng.MouseAction -= HandleMouseInput;
     }
@@ -147,7 +147,7 @@ public class AreaManager
         _cameraController.GetComponent<AreaCameraController>().Freeze = false;
         _light.SetActive(true);
         OnTileEventFinish();
-        AreaState = Define.AreaState.Idle;
+        AreaState = GlobalEnums.AreaState.Idle;
         Managers.InputMng.MouseAction += HandleMouseInput;
     }
 
@@ -156,10 +156,10 @@ public class AreaManager
         _currentTile.OnTileEventFinish();
         switch (_currentTile.TileType)
         {
-            case Define.AreaTileType.Normal:
+            case GlobalEnums.AreaTileType.Normal:
                 break;
-            case Define.AreaTileType.Battle:
-                _map.CreateEventTile(_currentPlayerPosition, Define.AreaTileType.Normal, true);
+            case GlobalEnums.AreaTileType.Battle:
+                _map.CreateEventTile(_currentPlayerPosition, GlobalEnums.AreaTileType.Normal, true);
                 break;
         }
         Managers.AreaMng.TurnCount++;
@@ -170,12 +170,12 @@ public class AreaManager
         // 보스 위치 기준 최대 2칸 아래까지만 파괴됨
         if (_suddendeathCount == _map.BossPosition.y - _map.PlayerStartPosition.y - 2)
         {
-            AreaState = Define.AreaState.Idle;
+            AreaState = GlobalEnums.AreaState.Idle;
             return;
         }
 
         _map.DestroyTiles(_suddendeathCount);
         _suddendeathCount++;
-        AreaState = Define.AreaState.Idle;
+        AreaState = GlobalEnums.AreaState.Idle;
     }
 }

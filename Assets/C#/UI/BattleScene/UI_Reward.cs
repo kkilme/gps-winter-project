@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class UI_Reward : UI_Popup
 {
-    public Action<Define.RewardActionType> OnRewardAction;
+    public Action<GlobalEnums.RewardActionType> OnRewardAction;
 
     private RectTransform _actionRect;
     private RectTransform _infoRect;
@@ -57,11 +57,11 @@ public class UI_Reward : UI_Popup
         GetButton(Buttons.Button_Take).onClick.AddListener(TakeReward);
         GetButton(Buttons.Button_Pass).onClick.AddListener( () =>
         {
-            OnRewardAction.Invoke(Define.RewardActionType.Pass);
+            OnRewardAction.Invoke(GlobalEnums.RewardActionType.Pass);
         });
         GetButton(Buttons.Button_Dispose).onClick.AddListener(() =>
         {
-            OnRewardAction.Invoke(Define.RewardActionType.Dispose);
+            OnRewardAction.Invoke(GlobalEnums.RewardActionType.Dispose);
         });
 
 
@@ -89,7 +89,7 @@ public class UI_Reward : UI_Popup
     {
         // TODO: 현재 행동한 플레이어에게 아이템 지급
 
-        OnRewardAction.Invoke(Define.RewardActionType.Take);
+        OnRewardAction.Invoke(GlobalEnums.RewardActionType.Take);
     }
     
     private IEnumerator UIAnimation()

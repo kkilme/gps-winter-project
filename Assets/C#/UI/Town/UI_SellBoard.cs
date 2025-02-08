@@ -49,12 +49,12 @@ public class UI_SellBoard : UI_Base
                 itemContent.gameObject.BindEvent((PointerEventData) =>
                 {
                     itemInfo.RectTransform.position = Input.mousePosition;
-                }, Define.UIEvent.Stay);
-                itemContent.gameObject.BindEvent((PointerEventData) => Managers.UIMng.ClosePopupUI(itemInfo), Define.UIEvent.Exit);
+                }, GlobalEnums.UIEvent.Stay);
+                itemContent.gameObject.BindEvent((PointerEventData) => Managers.UIMng.ClosePopupUI(itemInfo), GlobalEnums.UIEvent.Exit);
             }
 
-            itemContent.gameObject.BindEvent(SellItem, Define.UIEvent.DoubleClick);
-            itemContent.gameObject.BindEvent(ShowItemInfo, Define.UIEvent.Enter);
+            itemContent.gameObject.BindEvent(SellItem, GlobalEnums.UIEvent.DoubleClick);
+            itemContent.gameObject.BindEvent(ShowItemInfo, GlobalEnums.UIEvent.Enter);
         }
     }
 

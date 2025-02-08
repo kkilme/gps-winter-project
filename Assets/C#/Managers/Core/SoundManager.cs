@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SoundManager
 {
-    private AudioSource[] _audioSources = new AudioSource[(int)Define.SoundType.MaxCount];
+    private AudioSource[] _audioSources = new AudioSource[(int)GlobalEnums.SoundType.MaxCount];
     private Dictionary<string, AudioClip> _audioClipDic = new Dictionary<string, AudioClip>();
 
     public void Init()
@@ -15,7 +15,7 @@ public class SoundManager
             root = new GameObject { name = "@Sound" };
             Object.DontDestroyOnLoad(root);
 
-            string[] soundNames = System.Enum.GetNames(typeof(Define.SoundType));
+            string[] soundNames = System.Enum.GetNames(typeof(GlobalEnums.SoundType));
             for (int i = 0; i < soundNames.Length - 1; i++)
             {
                 GameObject go = new GameObject { name = soundNames[i] };
@@ -23,24 +23,24 @@ public class SoundManager
                 go.transform.parent = root.transform;
             }
 
-            _audioSources[(int)Define.SoundType.Bgm].loop = true;
+            _audioSources[(int)GlobalEnums.SoundType.Bgm].loop = true;
         }
     }
 
     // path 위치의 음원 재생
-    public void Play(string path, Define.SoundType type = Define.SoundType.Effect, float pitch = 1.0f)
+    public void Play(string path, GlobalEnums.SoundType type = GlobalEnums.SoundType.Effect, float pitch = 1.0f)
     {
         AudioClip audioClip = GetOrAddAudioClip(path, type);
         Play(audioClip, type, pitch);
     }
 
     // 재생 타입은 type, 재생 속도는 pitch로 설정하여 audioClip 재생
-    public void Play(AudioClip audioClip, Define.SoundType type = Define.SoundType.Effect, float pitch = 1.0f)
+    public void Play(AudioClip audioClip, GlobalEnums.SoundType type = GlobalEnums.SoundType.Effect, float pitch = 1.0f)
     {
         if (audioClip == null)
             return;
 
-        if (type == Define.SoundType.Bgm)
+        if (type == GlobalEnums.SoundType.Bgm)
         {
             AudioSource audioSource = _audioSources[(int)type];
             if (audioSource.isPlaying)
@@ -52,21 +52,21 @@ public class SoundManager
         }
         else
         {
-            AudioSource audioSource = _audioSources[(int)Define.SoundType.Effect];
+            AudioSource audioSource = _audioSources[(int)GlobalEnums.SoundType.Effect];
             audioSource.pitch = pitch;
             audioSource.PlayOneShot(audioClip);
         }
     }
 
     // path 위치의 음원파일 로드 후 반환
-    private AudioClip GetOrAddAudioClip(string path, Define.SoundType type = Define.SoundType.Effect)
+    private AudioClip GetOrAddAudioClip(string path, GlobalEnums.SoundType type = GlobalEnums.SoundType.Effect)
     {
         if (path.Contains("Sounds/") == false)
             path = $"Sounds/{path}";
 
         AudioClip audioClip;
 
-        if (type == Define.SoundType.Bgm)
+        if (type == GlobalEnums.SoundType.Bgm)
         {
             audioClip = Managers.ResourceMng.Load<AudioClip>(path);
         }

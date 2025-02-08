@@ -4,7 +4,7 @@ using UnityEngine;
 public class BattleGridCell : MonoBehaviour
 {
     public Creature PlacedCreature { get; set; }
-    public Define.GridSide GridSide { get; protected set; }
+    public GlobalEnums.GridSide GridSide { get; protected set; }
     public int Row { get; protected set; }
     public int Col { get; protected set; }
 
@@ -20,7 +20,7 @@ public class BattleGridCell : MonoBehaviour
         transform.position += new Vector3(0f, 0.03f, 0f);
     }
 
-    public void Init(int row, int col, Define.GridSide gridSide)
+    public void Init(int row, int col, GlobalEnums.GridSide gridSide)
     {
         Row = row;
         Col = col;
@@ -30,8 +30,13 @@ public class BattleGridCell : MonoBehaviour
     public void PlaceCreature(Creature creature)
     {
         PlacedCreature = creature;
-        creature.Cell = this;
+        creature.CurrentCell = this;
         creature.gameObject.transform.position = transform.position;
+    }
+
+    public bool IsEmpty()
+    {
+        return PlacedCreature == null;
     }
 
     private void ChangeColor(Color color, float duration = 0.3f)
@@ -39,6 +44,12 @@ public class BattleGridCell : MonoBehaviour
         KillColorTween();
         _colorTween = _indicator.DOColor(color, duration).OnComplete(() => { _colorTween = null; });
     }
+
+    public void RevertColor()
+    {
+        ChangeColor(_originalColor);
+    }
+
     // 진행중인 colorTween을 중지, 삭제
     private void KillColorTween()
     {
@@ -46,19 +57,14 @@ public class BattleGridCell : MonoBehaviour
         _colorTween = null;
     }
 
-    public void RevertColor()
-    {
-        ChangeColor(_originalColor);
-    }
-
-    //기본 Unity 메소드 OnMouseEnter & OnMouseExit 사용 시, Hero 및 Enemy 오브젝트에 의해 MouseOver가 가로막힘
+    //기본 Unity 메소드 OnMouseEnterEvent & OnMouseExit 사용 시, Hero 및 Enemy 오브젝트에 의해 MouseOver가 가로막힘
     public void OnMouseIn()
     {
-        if (GridSide == Define.GridSide.HeroSide)
+        if (GridSide == GlobalEnums.GridSide.HeroSide)
         {
             ChangeColor(Color.green);
         }
-        else if (GridSide == Define.GridSide.EnemySide)
+        else if (GridSide == GlobalEnums.GridSide.EnemySide)
         {
             ChangeColor(Color.red);
         }
@@ -67,10 +73,5 @@ public class BattleGridCell : MonoBehaviour
     public void OnMouseOut()
     {
         ChangeColor(_originalColor);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Debug.DrawRay(gameObject.transform.position, transform.right, Color.red);
     }
 }

@@ -6,14 +6,14 @@ public class Move : BaseAction
     {
         base.SetInfo(templateId);
         
-        ActionTargetType = Define.ActionTargetType.Single;
+        ActionTargetType = GlobalEnums.ActionTargetType.Single;
     }
     
     public override bool CanStartAction()
     {
-        if (Owner.CreatureType == Define.CreatureType.Hero && TargetCell.GridSide == Define.GridSide.EnemySide)
+        if (Owner.CreatureType == GlobalEnums.CreatureType.Hero && TargetCell.GridSide == GlobalEnums.GridSide.EnemySide)
             return false;
-        if (Owner.CreatureType == Define.CreatureType.Monster && TargetCell.GridSide == Define.GridSide.HeroSide)
+        if (Owner.CreatureType == GlobalEnums.CreatureType.Monster && TargetCell.GridSide == GlobalEnums.GridSide.HeroSide)
             return false;
 
         if (TargetCell.PlacedCreature != null)
