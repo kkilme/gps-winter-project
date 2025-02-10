@@ -58,20 +58,26 @@ public class BattleGridCell : MonoBehaviour
     }
 
     //기본 Unity 메소드 OnMouseEnterEvent & OnMouseExit 사용 시, Hero 및 Enemy 오브젝트에 의해 MouseOver가 가로막힘
-    public void OnMouseIn()
+    public void Highlight()
     {
         if (GridSide == GlobalEnums.GridSide.HeroSide)
         {
-            ChangeColor(Color.green);
+            ChangeColor(GlobalValues.HEROGRID_HIGHLIGHT_COLOR);
         }
         else if (GridSide == GlobalEnums.GridSide.EnemySide)
         {
-            ChangeColor(Color.red);
+            ChangeColor(GlobalValues.ENEMYGRID_HIGHLIGHT_COLOR);
         }
     }
-
-    public void OnMouseOut()
+    public void HighlightHarder()
     {
-        ChangeColor(_originalColor);
+        if (GridSide == GlobalEnums.GridSide.HeroSide)
+        {
+            ChangeColor(GlobalValues.HEROGRID_HARD_HIGHLIGHT_COLOR);
+        }
+        else if (GridSide == GlobalEnums.GridSide.EnemySide)
+        {
+            ChangeColor(GlobalValues.ENEMYGRID_HARD_HIGHLIGHT_COLOR);
+        }
     }
 }

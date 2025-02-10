@@ -1,23 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveTargetSelector : IActionTargetSelector
+public class MoveTargetSelector : ActionTargetSelector
 {
-    private BattleGridCell _cell => Managers.BattleMng.CurrentTurnCreature.CurrentCell;
-    private BattleGridCell[,] _grid => _gridSide == GlobalEnums.GridSide.HeroSide ? Managers.BattleMng.BattleGridSystem.HeroGrid : Managers.BattleMng.BattleGridSystem.EnemyGrid;
-    private GlobalEnums.GridSide _gridSide;
-
-
-    public MoveTargetSelector(GlobalEnums.GridSide gridSide)
-    {
-        _gridSide = gridSide;
-    }
-
-    public List<BattleGridCell> GetValidTargets()
+    public override void CalculateValidTargets()
     {
         List<BattleGridCell> targets = new List<BattleGridCell>();
-        int row = _cell.Row;
-        int col = _cell.Col;
+        int row = _currentcell.Row;
+        int col = _currentcell.Col;
 
         for(int i = 0; i<4; i++)
         {
@@ -30,6 +20,6 @@ public class MoveTargetSelector : IActionTargetSelector
             }
         }
 
-        return targets;
+        TargettableCells = targets;
     }
 }

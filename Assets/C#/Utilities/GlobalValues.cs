@@ -63,4 +63,20 @@ public static class GlobalValues
     public const int MONSTERSQUAD_SQUAD1_ID = 501000;
 
     #endregion
+
+    #region Color
+
+    public static readonly Color HEROGRID_HIGHLIGHT_COLOR = Color.green;
+    public static readonly Color HEROGRID_HARD_HIGHLIGHT_COLOR = new Color(0.4f, 1, 0.4f);
+    public static readonly Color ENEMYGRID_HIGHLIGHT_COLOR = Color.red;
+    public static readonly Color ENEMYGRID_HARD_HIGHLIGHT_COLOR = new Color(1, 0.4f, 0.4f);
+
+    #endregion
+
+    #region layermask
+
+    public static readonly LayerMask LAYERMASK_BATTLEGROUND = LayerMask.GetMask("BattleGround");
+    public static readonly LayerMask LAYERMASK_BATTLEGRIDCELL = LayerMask.GetMask("BattleGridCell");
+
+    #endregion
 }

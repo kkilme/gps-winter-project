@@ -7,6 +7,7 @@ public class Move : BaseAction
         base.SetInfo(templateId);
         
         ActionTargetType = GlobalEnums.ActionTargetType.Single;
+        TargetSelector = new MoveTargetSelector();
     }
     
     public override bool CanStartAction()

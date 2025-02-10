@@ -10,13 +10,14 @@ public class BattleManager
     public UI_BattleScene BattleSceneUI { get; private set; }
     public TurnSystem TurnSystem { get; private set; }
     public BattleGridSystem BattleGridSystem { get; private set; }
+    public BattleMouseInputHandler MouseInputHandler { get; private set; }
+    public BaseAction CurrentAction { get; private set; }
     public Creature CurrentTurnCreature => TurnSystem.Turns[0];
-    public BaseAction CurrentAction;
     public List<Creature> Creatures
     {
         get
         {
-            List<Creature> creatures = new List<Creature>(Heroes);
+            List<Creature> creatures = new(Heroes);
             creatures.AddRange(Monsters);
             return creatures;
         }
@@ -32,6 +33,7 @@ public class BattleManager
         BattleState = GlobalEnums.BattleState.Starting;
         TurnSystem = new TurnSystem();
         BattleGridSystem = new BattleGridSystem();
+        MouseInputHandler = new BattleMouseInputHandler();
         BattleSceneUI = Managers.UIMng.ShowSceneUI<UI_BattleScene>();
         Monsters = new();
 
@@ -39,6 +41,9 @@ public class BattleManager
         string battleFieldname = Managers.DataMng.AreaDataDict[Managers.AreaMng.AreaName].BattleFieldName;
         GameObject battleField = Managers.ResourceMng.Instantiate($"Battle/Field/{battleFieldname}");
         battleField.transform.position = new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0, GlobalValues.BATTLEFIELD_POS_Z);
+
+        // MouseInputHandler 초기화 - 반드시 배틀 필드 생성 이후에 해야함.
+        MouseInputHandler.Init();
 
         // Creature 배치
         BattleGridSystem.Init();
@@ -58,8 +63,8 @@ public class BattleManager
             return;
 
         BattleState = GlobalEnums.BattleState.HeroPlacement;
-        Managers.InputMng.MouseAction -= BattleGridSystem.HandleMouseInputOnPlacementPhase;
-        Managers.InputMng.MouseAction += BattleGridSystem.HandleMouseInputOnPlacementPhase;
+        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
+        Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnPlacementPhase;
         BattleSceneUI.OnPlacementPhaseStart();
     }
 
@@ -70,21 +75,19 @@ public class BattleManager
             return;
 
         BattleState = GlobalEnums.BattleState.Idle;
-        Managers.InputMng.MouseAction -= BattleGridSystem.HandleMouseInputOnPlacementPhase;
-        Managers.InputMng.MouseAction -= BattleGridSystem.HandleMouseInputOnBattlePhase;
-        Managers.InputMng.MouseAction += BattleGridSystem.HandleMouseInputOnBattlePhase;
+        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
+        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
+        Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
         BattleSceneUI.OnBattlePhaseStart();
     }
 
     public void SetAction(BaseAction action)
-    {   
+    {
+        if (action == null) return;
         CurrentAction = action;
-        if (action != null)
-        {
-
-            BattleSceneUI.BattleActionPanel.Hide();
-            BattleSceneUI.ChooseTargetUI.Show();
-        }
+        CurrentAction.OnSet();
+        BattleSceneUI.BattleActionPanel.Hide();
+        BattleSceneUI.ChooseTargetUI.Show();
     }
 
     public void UnsetAction()

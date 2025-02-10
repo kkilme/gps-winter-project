@@ -52,8 +52,8 @@ public class Hero : Creature
     {
         //((UI_BattleScene)Managers.UIMng.SceneUI).BattleActionPanel.Show();
         
-        //Managers.InputMng.MouseAction -= HandleMouseInputOnBattlePhase;
-        //Managers.InputMng.MouseAction += HandleMouseInputOnBattlePhase;
+        //Managers.InputMng.MouseAction -= HandleMouseOnBattlePhase;
+        //Managers.InputMng.MouseAction += HandleMouseOnBattlePhase;
     }
     
     public override void DoAction()
@@ -63,7 +63,7 @@ public class Hero : Creature
 
     public override void DoEndTurn()
     {
-        //Managers.InputMng.MouseAction -= HandleMouseInputOnBattlePhase;
+        //Managers.InputMng.MouseAction -= HandleMouseOnBattlePhase;
         
         //((UI_BattleScene)Managers.UIMng.SceneUI).BattleActionPanel.EndTurn();
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.EndTurn();

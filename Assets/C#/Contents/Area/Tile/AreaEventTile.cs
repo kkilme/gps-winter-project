@@ -14,19 +14,14 @@ public enum TileColorChangeType
 public abstract class AreaEventTile: MonoBehaviour
 {
     public GlobalEnums.AreaTileType TileType;
-    [SerializeField]
-    private SpriteRenderer _outline;  // 셀 모서리 스프라이트
-    [SerializeField]
-    private SpriteRenderer _fill;     // 셀 내부 스프라이트
-    [SerializeField]
-    private GameObject _icon;           // 아이콘 오브젝트
+    [SerializeField] private SpriteRenderer _outline;  // 셀 모서리 스프라이트
+    [SerializeField] private SpriteRenderer _fill;     // 셀 내부 스프라이트
+    [SerializeField] private GameObject _icon;           // 아이콘 오브젝트
 
     private Color _outlineColor;      // 모서리 스프라이트 색
     private Color _fillColor;         // 내부 스프라이트 색
-    [SerializeField]
-    private Color _outlineHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 indicator 색
-    [SerializeField]
-    private Color _fillHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 fill 색
+    [SerializeField] private Color _outlineHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 indicator 색
+    [SerializeField] private Color _fillHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 fill 색
 
     private Tweener _outlineColorTween; // DoTween을 통해 TileObject의 스프라이트 색을 바꾸는데, Tweener는 이 작업을 의미함. 작업 도중에 취소 시 사용.
     private Tweener _fillColorTween;

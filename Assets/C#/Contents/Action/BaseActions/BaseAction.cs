@@ -11,6 +11,7 @@ public abstract class BaseAction
     public Creature Owner { get; set; }
     public Animator Animator => Owner.Animator;
     public BattleGridCell TargetCell => Owner.TargetCell;
+    public ActionTargetSelector TargetSelector { get; protected set; }
     
     public GlobalEnums.ActionTargetType ActionTargetType { get; protected set; }
     public GlobalEnums.Stat UsingStat { get; protected set; } = GlobalEnums.Stat.Strength;
@@ -26,6 +27,11 @@ public abstract class BaseAction
         ActionData = Managers.DataMng.ActionDataDict[dataId];
         
         CoinNum = ActionData.CoinCount;
+    }
+
+    public void OnSet()
+    {
+        TargetSelector.CalculateValidTargets();
     }
 
     public void Equip(Creature owner)

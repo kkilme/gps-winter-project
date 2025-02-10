@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(AreaMapGenerator))]
-public class AreaMapGeneratorEditor : Editor
+public class AreaMapGeneratorCustomEditor : Editor
 {
     private AreaMapGenerator _generator;
 
