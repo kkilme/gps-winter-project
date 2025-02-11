@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class AreaScene : BaseScene
 {
-    private GlobalEnums.AreaName _areaName;
+    private AreaName _areaName;
 
-    public GlobalEnums.AreaName AreaName
+    public AreaName AreaName
     {
         get => _areaName;
         set
@@ -21,7 +21,7 @@ public class AreaScene : BaseScene
     private AreaManager AreaManager => Managers.AreaMng;
     private AreaMapGenerator _areaMapGenerator;
 
-    public GlobalEnums.AreaState AreaState
+    public AreaState AreaState
     {
         get => AreaManager.AreaState;
         set => AreaManager.AreaState = value;
@@ -32,7 +32,7 @@ public class AreaScene : BaseScene
     protected override void Init()
     {
         base.Init();
-        SceneType = GlobalEnums.SceneType.AreaScene;
+        SceneType = SceneType.AreaScene;
 
         OnBattleSceneUnloadFinish -= AreaManager.OnBattleSceneUnloadFinish;
         OnBattleSceneUnloadFinish += AreaManager.OnBattleSceneUnloadFinish;
@@ -40,7 +40,7 @@ public class AreaScene : BaseScene
         _areaMapGenerator = GetComponent<AreaMapGenerator>();
     }
 
-    public void InitArea(GlobalEnums.AreaName areaName, Quest quest)
+    public void InitArea(AreaName areaName, Quest quest)
     {
         AreaName = areaName;
         Quest = quest;
@@ -70,9 +70,9 @@ public class AreaScene : BaseScene
     private void TestInit()
     {
         Quest testQuest = new Quest(Managers.DataMng.QuestDataDict.Values.ToList()[0]);
-        if (!Enum.TryParse(testQuest.QuestData.AreaName, out GlobalEnums.AreaName areaName))
+        if (!Enum.TryParse(testQuest.QuestData.AreaName, out AreaName areaName))
         {
-            areaName = GlobalEnums.AreaName.Forest;
+            areaName = AreaName.Forest;
         }
 
         Managers.ObjectMng.SpawnHeroesOnTest();

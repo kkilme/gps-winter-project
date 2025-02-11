@@ -16,7 +16,7 @@ public class CursorController : MonoBehaviour
 
     private CursorType _cursorType = CursorType.None;
     
-    private int _layerMask = (1 << (int)GlobalEnums.Layer.Ground) | (1 << (int)GlobalEnums.Layer.Monster);
+    private int _layerMask = (1 << (int)Layer.Ground) | (1 << (int)Layer.Monster);
     
     void Start()
     {
@@ -34,7 +34,7 @@ public class CursorController : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, _layerMask))
         {
-            if (hit.collider.gameObject.layer == (int)GlobalEnums.Layer.Monster)
+            if (hit.collider.gameObject.layer == (int)Layer.Monster)
             {
                 if (_cursorType == CursorType.Attack)
                     return;

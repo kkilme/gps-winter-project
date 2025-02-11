@@ -34,9 +34,9 @@ public class BattleGridSystem
             for (int col = 0; col < 3; col++)
             {
                 HeroGrid[row, col] = Util.FindChild<BattleGridCell>(heroGrid, $"BattleGridCell ({row}, {col})");
-                HeroGrid[row, col].Init(row, col, GlobalEnums.GridSide.HeroSide);
+                HeroGrid[row, col].Init(row, col, GridSide.HeroSide);
                 EnemyGrid[row, col] = Util.FindChild<BattleGridCell>(enemyGrid, $"BattleGridCell ({row}, {col})");
-                EnemyGrid[row, col].Init(row, col, GlobalEnums.GridSide.EnemySide);
+                EnemyGrid[row, col].Init(row, col, GridSide.EnemySide);
             }
         }
         _battleManager = Managers.BattleMng;

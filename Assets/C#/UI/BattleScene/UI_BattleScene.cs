@@ -48,11 +48,11 @@ public class UI_BattleScene : UI_Scene
         PlacementPhaseUI.Hide();
     }
 
-    public void OnBattleEnd(GlobalEnums.BattleResultType battleResult)
+    public void OnBattleEnd(BattleResultType battleResult)
     {
         switch (battleResult)
         {
-            case GlobalEnums.BattleResultType.Victory:
+            case BattleResultType.Victory:
                 Get<UI_Base>(SubItemUI.UI_BattleActionPanel).gameObject.SetActive(false);
                 Get<UI_Base>(SubItemUI.UI_CoinToss).gameObject.SetActive(false);
 
@@ -64,9 +64,9 @@ public class UI_BattleScene : UI_Scene
                     Get<UI_Base>(SubItemUI.UI_BattleVictory).gameObject.SetActive(true);
                 });
                 break;
-            case GlobalEnums.BattleResultType.Defeat:
+            case BattleResultType.Defeat:
                 break;
-            case GlobalEnums.BattleResultType.Flee:
+            case BattleResultType.Flee:
                 break;
         }
     }

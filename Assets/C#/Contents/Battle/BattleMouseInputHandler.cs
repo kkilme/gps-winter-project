@@ -13,30 +13,30 @@ public class BattleMouseInputHandler
         _battleGridSystem = Managers.BattleMng.BattleGridSystem;
     }
 
-    public void HandleMouseOnPlacementPhase(GlobalEnums.MouseEvent mouseEvent)
+    public void HandleMouseOnPlacementPhase(MouseEvent mouseEvent)
     {
         switch (mouseEvent)
         {
-            case GlobalEnums.MouseEvent.Hover:
+            case MouseEvent.Hover:
                 OnMouseOverCell();
                 break;
-            case GlobalEnums.MouseEvent.PointerDown:
+            case MouseEvent.PointerDown:
                 OnDragStart();
                 break;
-            case GlobalEnums.MouseEvent.Press:
+            case MouseEvent.Press:
                 OnDragging();
                 break;
-            case GlobalEnums.MouseEvent.PointerUp:
+            case MouseEvent.PointerUp:
                 OnDragEnd();
                 break;
         }
     }
 
-    public void HandleMouseOnBattlePhase(GlobalEnums.MouseEvent mouseEvent)
+    public void HandleMouseOnBattlePhase(MouseEvent mouseEvent)
     {
         switch (mouseEvent)
         {
-            case GlobalEnums.MouseEvent.Hover:
+            case MouseEvent.Hover:
                 OnMouseOverCell();
                 break;
         }
@@ -83,7 +83,7 @@ public class BattleMouseInputHandler
     private void OnDragEnd()
     {
         if (_draggingCreature == null) return;
-        if (_battleGridSystem.CurrentMouseOverCell != null && _battleGridSystem.CurrentMouseOverCell.GridSide == GlobalEnums.GridSide.HeroSide)
+        if (_battleGridSystem.CurrentMouseOverCell != null && _battleGridSystem.CurrentMouseOverCell.GridSide == GridSide.HeroSide)
         {
             if (_battleGridSystem.CurrentMouseOverCell.PlacedCreature == null)
             {
@@ -105,7 +105,7 @@ public class BattleMouseInputHandler
 
     private void OnClickGridCell()
     {
-        if (_battleGridSystem.CurrentMouseOverCell == null || Managers.BattleMng.BattleState != GlobalEnums.BattleState.ActionTargetSelecting)
+        if (_battleGridSystem.CurrentMouseOverCell == null || Managers.BattleMng.BattleState != BattleState.ActionTargetSelecting)
             return;
 
         //CurrentAction.Equip(this);
@@ -118,7 +118,7 @@ public class BattleMouseInputHandler
         //    return;
         //}
 
-        //CreatureBattleState = GlobalEnums.CreatureBattleState.ActionProceed;
+        //CreatureBattleState = CreatureBattleState.ActionProceed;
 
         _battleGridSystem.CurrentMouseOverCell.RevertColor();
     }

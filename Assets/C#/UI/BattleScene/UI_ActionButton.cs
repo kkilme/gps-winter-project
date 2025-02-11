@@ -15,7 +15,7 @@ public class UI_ActionButton : MonoBehaviour
         _action = action;
 
         Button.onClick.AddListener(OnClick);
-        gameObject.BindEvent(OnMouseEnterEvent, GlobalEnums.UIEvent.Enter);
+        gameObject.BindEvent(OnMouseEnterEvent, UIEvent.Enter);
     }
 
     protected void OnClick()

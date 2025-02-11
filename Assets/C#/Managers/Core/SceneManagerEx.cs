@@ -13,9 +13,9 @@ public class SceneManagerEx
         FirstScene = CurrentScene;
     }
     // type의 이름을 string으로 반환
-    private string GetSceneName(GlobalEnums.SceneType type)
+    private string GetSceneName(SceneType type)
     {
-        return Enum.GetName(typeof(GlobalEnums.SceneType), type);
+        return Enum.GetName(typeof(SceneType), type);
     }
 
     // 현재 씬을 T 타입으로 반환
@@ -25,7 +25,7 @@ public class SceneManagerEx
     }
 
     // type에 해당하는 Scene을 로드
-    public void LoadScene(GlobalEnums.SceneType type)
+    public void LoadScene(SceneType type)
     {
         Managers.Clear();
 
@@ -82,9 +82,9 @@ public class SceneManagerEx
         yield return loadingScreen.Fade(true); // fade in, LoadingUI 삭제
     }
 
-    public IEnumerator LoadAreaScene(GlobalEnums.AreaName areaName, Quest quest)
+    public IEnumerator LoadAreaScene(AreaName areaName, Quest quest)
     {
-        yield return SceneManager.LoadSceneAsync(GetSceneName(GlobalEnums.SceneType.AreaScene));
+        yield return SceneManager.LoadSceneAsync(GetSceneName(SceneType.AreaScene));
         GetCurrentScene<AreaScene>().InitArea(areaName, quest);
     }
 }

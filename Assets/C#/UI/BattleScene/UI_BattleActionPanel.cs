@@ -69,7 +69,7 @@ public class UI_BattleActionPanel : UI_Base
             GetText(Texts.Text_AmountNumber).text = _hero.HeroStat.Attack.ToString();
         }
 
-        if (action.ActionData.UsingStat != GlobalEnums.Stat.None)
+        if (action.ActionData.UsingStat != Stat.None)
         {
             GetText(Texts.Text_SlotPercentageWord).text = "Percentage\nPer Slot";
             GetText(Texts.Text_SlotPercentage).text = _hero.HeroStat.GetStatByDefine(action.UsingStat).ToString();

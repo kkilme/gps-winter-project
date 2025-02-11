@@ -7,9 +7,9 @@ public abstract class StandAction : BaseAction
 
     public override bool CanStartAction()
     {
-        if (Owner.CreatureType == GlobalEnums.CreatureType.Hero && TargetCell.GridSide == GlobalEnums.GridSide.HeroSide)
+        if (Owner.CreatureType == CreatureType.Hero && TargetCell.GridSide == GridSide.HeroSide)
             return false;
-        if (Owner.CreatureType == GlobalEnums.CreatureType.Monster && TargetCell.GridSide == GlobalEnums.GridSide.EnemySide)
+        if (Owner.CreatureType == CreatureType.Monster && TargetCell.GridSide == GridSide.EnemySide)
             return false;
 
         return true;

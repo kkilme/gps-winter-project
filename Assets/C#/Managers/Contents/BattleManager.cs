@@ -6,7 +6,7 @@ public class BattleManager
 {
     #region Field
 
-    public GlobalEnums.BattleState BattleState { get; private set; }
+    public BattleState BattleState { get; private set; }
     public UI_BattleScene BattleSceneUI { get; private set; }
     public TurnSystem TurnSystem { get; private set; }
     public BattleGridSystem BattleGridSystem { get; private set; }
@@ -30,7 +30,7 @@ public class BattleManager
 
     public void Init(int squadId)
     {
-        BattleState = GlobalEnums.BattleState.Starting;
+        BattleState = BattleState.Starting;
         TurnSystem = new TurnSystem();
         BattleGridSystem = new BattleGridSystem();
         MouseInputHandler = new BattleMouseInputHandler();
@@ -59,10 +59,10 @@ public class BattleManager
     // 히어로 배치 단계
     private void StartPlacementPhase()
     {   
-        if(BattleState != GlobalEnums.BattleState.Starting)
+        if(BattleState != BattleState.Starting)
             return;
 
-        BattleState = GlobalEnums.BattleState.HeroPlacement;
+        BattleState = BattleState.HeroPlacement;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
         Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnPlacementPhase;
         BattleSceneUI.OnPlacementPhaseStart();
@@ -71,10 +71,10 @@ public class BattleManager
     // 전투 시작
     public void StartBattlePhase()
     {   
-        if(BattleState != GlobalEnums.BattleState.HeroPlacement)
+        if(BattleState != BattleState.HeroPlacement)
             return;
 
-        BattleState = GlobalEnums.BattleState.Idle;
+        BattleState = BattleState.Idle;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
         Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
@@ -101,13 +101,13 @@ public class BattleManager
     {
         if (Managers.ObjectMng.Monsters.Count <= 0)
         {
-            EndBattle(GlobalEnums.BattleResultType.Victory);
+            EndBattle(BattleResultType.Victory);
             return;
         }
 
         if (Managers.ObjectMng.Heroes.Count <= 0)
         {
-            EndBattle(GlobalEnums.BattleResultType.Defeat);
+            EndBattle(BattleResultType.Defeat);
             return;
         }
 
@@ -115,11 +115,11 @@ public class BattleManager
         BattleSceneUI.TurnstateUI.MoveTurnFrames();
         
 
-        //CurrentTurnCreature.CreatureBattleState = GlobalEnums.CreatureBattleState.PrepareAction;
+        //CurrentTurnCreature.CreatureBattleState = CreatureBattleState.PrepareAction;
         //BattleSceneUI.OnTurnStart();
     }
 
-    public void EndBattle(GlobalEnums.BattleResultType battleResult)
+    public void EndBattle(BattleResultType battleResult)
     {
         ((UI_BattleScene)Managers.UIMng.SceneUI).OnBattleEnd(battleResult);
     }

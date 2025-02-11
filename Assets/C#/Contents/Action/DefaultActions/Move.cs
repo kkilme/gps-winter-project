@@ -6,15 +6,15 @@ public class Move : BaseAction
     {
         base.SetInfo(templateId);
         
-        ActionTargetType = GlobalEnums.ActionTargetType.Single;
+        ActionTargetType = ActionTargetType.Single;
         TargetSelector = new MoveTargetSelector();
     }
     
     public override bool CanStartAction()
     {
-        if (Owner.CreatureType == GlobalEnums.CreatureType.Hero && TargetCell.GridSide == GlobalEnums.GridSide.EnemySide)
+        if (Owner.CreatureType == CreatureType.Hero && TargetCell.GridSide == GridSide.EnemySide)
             return false;
-        if (Owner.CreatureType == GlobalEnums.CreatureType.Monster && TargetCell.GridSide == GlobalEnums.GridSide.HeroSide)
+        if (Owner.CreatureType == CreatureType.Monster && TargetCell.GridSide == GridSide.HeroSide)
             return false;
 
         if (TargetCell.PlacedCreature != null)

@@ -4,12 +4,12 @@ using UnityEngine;
 public class Weapon: Equipment
 {
     public Data.WeaponData WeaponData => EquipmentData as Data.WeaponData;
-    public GlobalEnums.WeaponType WeaponType { get; protected set; }
+    public WeaponType WeaponType { get; protected set; }
     public List<BaseAction> Actions { get; protected set; } = new();
     
     public override void SetInfo(int dataId)
     {
-        EquipmentType = GlobalEnums.EquipmentType.Weapon;
+        EquipmentType = EquipmentType.Weapon;
         EquipmentData = Managers.DataMng.WeaponDataDict[dataId];
         WeaponType = Managers.DataMng.WeaponDataDict[dataId].WeaponType;
 

@@ -56,8 +56,8 @@ public partial class AreaMapGenerator
 
             foreach (Vector2Int neighbor in _map.GetNeighbors(currentNode))
             {
-                if (_map.TileTypeMap[neighbor.y, neighbor.x] == GlobalEnums.AreaTileType.OutOfField ||
-                    _map.TileTypeMap[neighbor.y, neighbor.x] == GlobalEnums.AreaTileType.Obstacle) continue;
+                if (_map.TileTypeMap[neighbor.y, neighbor.x] == AreaTileType.OutOfField ||
+                    _map.TileTypeMap[neighbor.y, neighbor.x] == AreaTileType.Obstacle) continue;
 
                 int distanceToNeighbor = distances[currentNode] + 1;
                 if (!distances.ContainsKey(neighbor) || distanceToNeighbor < distances[neighbor])
@@ -108,7 +108,7 @@ public partial class AreaMapGenerator
         {
             for (int x = 0; x < _data.MapWidth; x++)
             {
-                if (_map.TileTypeMap[z, x] == GlobalEnums.AreaTileType.Empty)
+                if (_map.TileTypeMap[z, x] == AreaTileType.Empty)
                 {
                     emptyPositions.Add(new Vector2Int(x, z));
                 }
@@ -168,22 +168,22 @@ public partial class AreaMapGenerator
                 text.SetText(_map.TileTypeMap[z, x].ToString());
                 switch (_map.TileTypeMap[z, x])
                 {
-                    case GlobalEnums.AreaTileType.Battle:
+                    case AreaTileType.Battle:
                         text.color = Color.red;
                         break;
-                    case GlobalEnums.AreaTileType.Encounter:
+                    case AreaTileType.Encounter:
                         text.color = Color.yellow;
                         break;
-                    case GlobalEnums.AreaTileType.OutOfField:
+                    case AreaTileType.OutOfField:
                         text.color = new Color(0.5f, 0.5f, 0.5f, 0.7f);
                         break;
-                    case GlobalEnums.AreaTileType.Boss:
+                    case AreaTileType.Boss:
                         text.color = new Color(0.5f, 0.1f, 0.5f);
                         break;
-                    case GlobalEnums.AreaTileType.Start:
+                    case AreaTileType.Start:
                         text.color = Color.cyan;
                         break;
-                    case GlobalEnums.AreaTileType.Normal:
+                    case AreaTileType.Normal:
                         text.color = new Color(1, 1, 1, 0.5f);
                         break;
                 }

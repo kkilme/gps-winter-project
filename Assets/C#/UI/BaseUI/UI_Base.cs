@@ -76,33 +76,33 @@ public abstract class UI_Base : MonoBehaviour
 
     // go가 이벤트 콜백(입력)을 받아 이벤트 함수를 실행할 수 있게 만든다.
     public static void BindEvent(GameObject go, Action<PointerEventData> action,
-        GlobalEnums.UIEvent type = GlobalEnums.UIEvent.Click)
+        UIEvent type = UIEvent.Click)
     {
         UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
 
         switch (type)
         {
-            case GlobalEnums.UIEvent.Click:
+            case UIEvent.Click:
                 evt.OnClickHandler -= action;
                 evt.OnClickHandler += action;
                 break;
-            case GlobalEnums.UIEvent.Drag:
+            case UIEvent.Drag:
                 evt.OnDragHandler -= action;
                 evt.OnDragHandler += action;
                 break;
-            case GlobalEnums.UIEvent.Enter:
+            case UIEvent.Enter:
                 evt.OnEnterHandler -= action;
                 evt.OnEnterHandler += action;
                 break;
-            case GlobalEnums.UIEvent.Exit:
+            case UIEvent.Exit:
                 evt.OnExitHandler -= action;
                 evt.OnExitHandler += action;
                 break;
-            case GlobalEnums.UIEvent.Stay:
+            case UIEvent.Stay:
                 evt.OnStayHandler -= action;
                 evt.OnStayHandler += action;
                 break;
-            case GlobalEnums.UIEvent.DoubleClick:
+            case UIEvent.DoubleClick:
                 evt.OnDoubleClickHandler -= action;
                 evt.OnDoubleClickHandler += action;
                 break;

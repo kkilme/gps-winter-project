@@ -154,7 +154,7 @@ namespace Data
     {
         public int LeftIndex;
         public int RightIndex;
-        public GlobalEnums.WeaponType WeaponType;
+        public WeaponType WeaponType;
         public List<int> Actions;
     }
 
@@ -203,18 +203,18 @@ namespace Data
     public class ActionData
     {
         public int DataId;
-        public GlobalEnums.ActionDataType Type; // ActionData 또는 이를 상속받는 클래스명
+        public ActionDataType Type; // ActionData 또는 이를 상속받는 클래스명
         public string Name;
         public string Description;
         public int CoinCount;
-        public GlobalEnums.Stat UsingStat;
+        public Stat UsingStat;
         public string IconName;
     }
 
     [Serializable]
     public class AttackActionData : ActionData
     {
-        public GlobalEnums.AttackType AttackType;
+        public AttackType AttackType;
         public int DamagePerCoin;
     }
 
@@ -253,16 +253,16 @@ namespace Data
     }
 
     [Serializable]
-    public class AreaDataSet : ILoader<GlobalEnums.AreaName, AreaData>
+    public class AreaDataSet : ILoader<AreaName, AreaData>
     {
         public List<AreaData> areadatas = new();
 
-        public Dictionary<GlobalEnums.AreaName, AreaData> MakeDict()
+        public Dictionary<AreaName, AreaData> MakeDict()
         {
-            var dic = new Dictionary<GlobalEnums.AreaName, AreaData>();
+            var dic = new Dictionary<AreaName, AreaData>();
             foreach (AreaData areadata in areadatas)
             {
-                if (Enum.TryParse(areadata.Name, out GlobalEnums.AreaName areaName))
+                if (Enum.TryParse(areadata.Name, out AreaName areaName))
                 {
                     dic.Add(areaName, areadata);
                 }
@@ -311,7 +311,7 @@ namespace Data
             var dic = new Dictionary<int, QuestData>();
             foreach (QuestData quest in quests)
             {
-                if (!Enum.TryParse(quest.AreaName, out GlobalEnums.AreaName areaName))
+                if (!Enum.TryParse(quest.AreaName, out AreaName areaName))
                 {
                     Debug.LogError($"Quest {quest.DataId} - AreaName is invalid!");
                     continue;

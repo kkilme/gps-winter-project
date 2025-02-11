@@ -2,7 +2,7 @@
 {
     public override void SetInfo(int templateId)
     {
-        ActionTargetType = GlobalEnums.ActionTargetType.Single;
+        ActionTargetType = ActionTargetType.Single;
         
         base.SetInfo(templateId);
     }

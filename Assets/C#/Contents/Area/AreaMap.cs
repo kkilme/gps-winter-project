@@ -6,7 +6,7 @@ using UnityEngine;
 public class AreaMap
 {
     // 맵은 2차원 배열로 표현되며, 좌측 최하단이 (0, 0) 위치임.
-    public GlobalEnums.AreaTileType[,] TileTypeMap { get; }
+    public AreaTileType[,] TileTypeMap { get; }
     public AreaEventTile[,] EventTileMap { get; }
     public AreaBaseTile[,] BaseTileMap { get; }
     public FogOfWar[,] FogOfWarMap { get; }
@@ -33,7 +33,7 @@ public class AreaMap
         _playableFieldWidth = playableFieldWidth;
         _playableFieldHeight = playableFieldHeight;
         _originPosition = originPosition;
-        TileTypeMap = new GlobalEnums.AreaTileType[height, width];
+        TileTypeMap = new AreaTileType[height, width];
         EventTileMap = new AreaEventTile[height, width];
         BaseTileMap = new AreaBaseTile[height, width];
         FogOfWarMap = new FogOfWar[height, width];
@@ -43,7 +43,7 @@ public class AreaMap
         {
             for (int x = 0; x < width; x++)
             {
-                TileTypeMap[z, x] = GlobalEnums.AreaTileType.Empty;
+                TileTypeMap[z, x] = AreaTileType.Empty;
             }
         }
 
@@ -91,7 +91,7 @@ public class AreaMap
         return EventTileMap[z, x];
     }
 
-    public GlobalEnums.AreaTileType GetTileType(Vector3 worldPosition)
+    public AreaTileType GetTileType(Vector3 worldPosition)
     {
         WorldToGridPosition(worldPosition, out int x, out int z);
         return TileTypeMap[z, x];
@@ -108,7 +108,7 @@ public class AreaMap
     public bool IsPositionStandable(int x, int z)
     {
         if (!IsPositionValid(x, z)) return false;
-        return TileTypeMap[z, x] != GlobalEnums.AreaTileType.Obstacle && TileTypeMap[z, x] != GlobalEnums.AreaTileType.OutOfField;
+        return TileTypeMap[z, x] != AreaTileType.Obstacle && TileTypeMap[z, x] != AreaTileType.OutOfField;
     }
     public bool IsPositionStandable(Vector3 worldPosition)
     {
@@ -167,7 +167,7 @@ public class AreaMap
     }
 
     // 해당 셀의 이웃 중 tileType인 타일이 하나라도 있다면 true, 하나도 없다면 false 반환
-    public bool HasNeighborOfType(int x, int z, GlobalEnums.AreaTileType tileType)
+    public bool HasNeighborOfType(int x, int z, AreaTileType tileType)
     {
         List<Vector2Int> neighbors = GetNeighbors(x, z);
         foreach (var neighbor in neighbors)
@@ -194,7 +194,7 @@ public class AreaMap
     }
 
     // 맵 첫 생성 시뿐만 아니라 게임 진행 도중에 타일 타입을 바꾸는데에도 필요
-    public void CreateEventTile(int x, int z, GlobalEnums.AreaTileType tileType, bool isReplace = false)
+    public void CreateEventTile(int x, int z, AreaTileType tileType, bool isReplace = false)
     {
         Vector3 worldPosition = GridToWorldPosition(x, z, 1.02f);
 
@@ -210,7 +210,7 @@ public class AreaMap
         TileTypeMap[z, x] = tileType;
     }
 
-    public void CreateEventTile(Vector3 worldPosition, GlobalEnums.AreaTileType tileType, bool isReplace = false)
+    public void CreateEventTile(Vector3 worldPosition, AreaTileType tileType, bool isReplace = false)
     {
         WorldToGridPosition(worldPosition, out int x, out int z);
         CreateEventTile(x, z, tileType, isReplace);
@@ -221,7 +221,7 @@ public class AreaMap
     {
         for (int x = PlayableFieldStart.x; x < PlayableFieldStart.x + _playableFieldWidth; x++)
         {
-            if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), GlobalEnums.AreaTileType.Destroyed, true);
+            if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), AreaTileType.Destroyed, true);
             // TODO: 플레이어가 서든데스로 파괴된 타일에 있을 시 효과 발동
         }
     }

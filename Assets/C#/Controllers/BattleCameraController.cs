@@ -5,7 +5,7 @@ using UnityEngine;
 public class BattleCameraController : MonoBehaviour
 {
     [SerializeField]
-    private GlobalEnums.CameraMode _mode = GlobalEnums.CameraMode.QuarterView;
+    private CameraMode _mode = CameraMode.QuarterView;
 
     [SerializeField]
     private Vector3 _delta = new Vector3(0.0f, 6.0f, -5.0f);
@@ -24,11 +24,11 @@ public class BattleCameraController : MonoBehaviour
         if (_player.IsValid() == false)
             return;
         
-        if (_mode == GlobalEnums.CameraMode.QuarterView)
+        if (_mode == CameraMode.QuarterView)
         {
             RaycastHit hit;
             if (Physics.Raycast(_player.transform.position, _delta, out hit, _delta.magnitude, 
-                    1 << (int)GlobalEnums.Layer.Block))
+                    1 << (int)Layer.Block))
             {
                 float dist = (hit.point - _player.transform.position).magnitude * 0.8f;
                 transform.position = _player.transform.position + _delta.normalized * dist;
@@ -43,7 +43,7 @@ public class BattleCameraController : MonoBehaviour
 
     public void SetQuarterView(Vector3 delta)
     {
-        _mode = GlobalEnums.CameraMode.QuarterView;
+        _mode = CameraMode.QuarterView;
         _delta = delta;
     }
 }

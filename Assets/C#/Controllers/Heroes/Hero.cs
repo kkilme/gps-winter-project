@@ -17,8 +17,8 @@ public class Hero : Creature
     public Bag Bag { get; protected set; }
     
     public Weapon Weapon { get; protected set; }
-    public GlobalEnums.WeaponType WeaponType => Weapon.WeaponType;
-    public Dictionary<GlobalEnums.ArmorType, Armor> Armors { get; protected set; }
+    public WeaponType WeaponType => Weapon.WeaponType;
+    public Dictionary<ArmorType, Armor> Armors { get; protected set; }
     
     #endregion
     
@@ -34,14 +34,14 @@ public class Hero : Creature
         Bag.SetInfo();
         Bag.Owner = this;
 
-        Armors = new Dictionary<GlobalEnums.ArmorType, Armor>();
-        foreach (GlobalEnums.ArmorType type in (GlobalEnums.ArmorType[])Enum.GetValues(typeof(GlobalEnums.ArmorType)))
+        Armors = new Dictionary<ArmorType, Armor>();
+        foreach (ArmorType type in (ArmorType[])Enum.GetValues(typeof(ArmorType)))
             Armors.TryAdd(type, null);
     }
     
     public override void SetInfo(int templateId)
     {
-        CreatureType = GlobalEnums.CreatureType.Hero;
+        CreatureType = CreatureType.Hero;
         CreatureData = Managers.DataMng.HeroDataDict[templateId];
         base.SetInfo(templateId);
     }
@@ -68,7 +68,7 @@ public class Hero : Creature
         //((UI_BattleScene)Managers.UIMng.SceneUI).BattleActionPanel.EndTurn();
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.EndTurn();
         
-        CreatureBattleState = GlobalEnums.CreatureBattleState.Wait;
+        CreatureBattleState = CreatureBattleState.Wait;
         CurrentAction.UnEquip();
         TargetCell = null;
         Managers.BattleMng.NextTurn();
@@ -141,7 +141,7 @@ public class Hero : Creature
 
     public void EquipArmor(Armor equippingArmor)
     {
-        GlobalEnums.ArmorType armorType = equippingArmor.ArmorType;
+        ArmorType armorType = equippingArmor.ArmorType;
         if (Armors[armorType] != null)
         {
             if (Armors[armorType].ArmorData.DataId == equippingArmor.ArmorData.DataId)
@@ -155,7 +155,7 @@ public class Hero : Creature
         ChangeArmorVisibility(armorType ,true);
     }
 
-    public void UnEquipArmor(GlobalEnums.ArmorType armorType)
+    public void UnEquipArmor(ArmorType armorType)
     {
         if (Armors[armorType] == null)
             return;
@@ -166,21 +166,21 @@ public class Hero : Creature
         Armors[armorType] = null;
     }
 
-    public void ChangeArmorVisibility(GlobalEnums.ArmorType armorType, bool isActive)
+    public void ChangeArmorVisibility(ArmorType armorType, bool isActive)
     {
         int idx = Armors[armorType].ArmorData.ArmorIndex;
         switch (armorType)
         {
-             case GlobalEnums.ArmorType.Body: 
+             case ArmorType.Body: 
                  transform.GetChild(idx - 1).gameObject.SetActive(isActive);
                  break; 
-             case GlobalEnums.ArmorType.Cloak:
+             case ArmorType.Cloak:
                  transform.GetChild(idx + 19).gameObject.SetActive(isActive);
                  break;
-             case GlobalEnums.ArmorType.HeadAccessory:
+             case ArmorType.HeadAccessory:
                  Head.transform.GetChild(idx - 1).gameObject.SetActive(isActive);
                  break;
-             case GlobalEnums.ArmorType.Helmet:
+             case ArmorType.Helmet:
                  Head.transform.GetChild(idx + 96).gameObject.SetActive(isActive);
                  break;
         }

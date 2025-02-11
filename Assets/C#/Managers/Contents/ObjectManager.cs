@@ -119,16 +119,16 @@ public class ObjectManager
         return monster;
     }
 
-    public void Despawn(GlobalEnums.CreatureType creatureType, ulong id)
+    public void Despawn(CreatureType creatureType, ulong id)
     {
         Creature creature = null;
         switch (creatureType)
         {
-            case GlobalEnums.CreatureType.Hero:
+            case CreatureType.Hero:
                 creature = Heroes[id];
                 Heroes.Remove(id);
                 break;
-            case GlobalEnums.CreatureType.Monster:
+            case CreatureType.Monster:
                 creature = Monsters[id];
                 Monsters.Remove(id);
                 break;

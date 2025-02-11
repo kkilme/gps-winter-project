@@ -10,11 +10,11 @@ public abstract class Creature : MonoBehaviour
 
     public ulong Id { get; set; }
     public int DataId { get; protected set; }
-    public GlobalEnums.CreatureType CreatureType { get; protected set; }
+    public CreatureType CreatureType { get; protected set; }
     public Data.CreatureData CreatureData { get; protected set; }
     
-    private GlobalEnums.CreatureBattleState _creatureBattleState;
-    public GlobalEnums.CreatureBattleState CreatureBattleState
+    private CreatureBattleState _creatureBattleState;
+    public CreatureBattleState CreatureBattleState
     {
         get => _creatureBattleState;
         set
@@ -25,15 +25,15 @@ public abstract class Creature : MonoBehaviour
             _creatureBattleState = value;
             switch (value)
             {
-                case GlobalEnums.CreatureBattleState.Wait:
+                case CreatureBattleState.Wait:
                     break;
-                case GlobalEnums.CreatureBattleState.PrepareAction:
+                case CreatureBattleState.PrepareAction:
                     DoPrepareAction();
                     break;
-                case GlobalEnums.CreatureBattleState.ActionProceed:
+                case CreatureBattleState.ActionProceed:
                     DoAction();
                     break;
-                case GlobalEnums.CreatureBattleState.Dead:
+                case CreatureBattleState.Dead:
                     break;
             }
         }
@@ -66,7 +66,7 @@ public abstract class Creature : MonoBehaviour
         gameObject.name = $"{CreatureData.DataId}_{CreatureData.Name}";
         
         CreatureStat.SetStat(CreatureData);
-        CreatureBattleState = GlobalEnums.CreatureBattleState.Wait;
+        CreatureBattleState = CreatureBattleState.Wait;
 
         CoinHeadNum = 0;
     }
@@ -126,7 +126,7 @@ public abstract class Creature : MonoBehaviour
     
     public void OnDead()
     {
-        CreatureBattleState = GlobalEnums.CreatureBattleState.Dead;
+        CreatureBattleState = CreatureBattleState.Dead;
         
         Managers.ObjectMng.Despawn(CreatureType, Id);
     }

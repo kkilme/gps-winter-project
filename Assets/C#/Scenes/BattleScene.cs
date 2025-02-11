@@ -9,7 +9,7 @@ public class BattleScene : BaseScene
     {
         base.Init();
       
-        SceneType = GlobalEnums.SceneType.BattleScene;
+        SceneType = SceneType.BattleScene;
     }
 
     public override void Clear()

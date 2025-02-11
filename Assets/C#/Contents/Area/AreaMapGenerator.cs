@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public partial class AreaMapGenerator : MonoBehaviour
 {
     // 모든 구역의 맵 생성용 데이터셋 (key: 구역 이름, value: 구역 데이터)
-    [SerializeField] private SerializedDictionary<GlobalEnums.AreaName, AreaMapGenerationData> _dataset;
+    [SerializeField] private SerializedDictionary<AreaName, AreaMapGenerationData> _dataset;
     // 데이터셋 중 현재 생성할 구역의 데이터
     private AreaMapGenerationData _data;
 
@@ -20,14 +20,14 @@ public partial class AreaMapGenerator : MonoBehaviour
     private Light _light;
 
     [Header("Debug")]
-    [SerializeField, Tooltip("테스트 용으로 생성할 Area")] private GlobalEnums.AreaName _testAreaName;
+    [SerializeField, Tooltip("테스트 용으로 생성할 Area")] private AreaName _testAreaName;
     [SerializeField] private GameObject _infoText;
     [SerializeField] private GameObject _pathIndicator;
     [ReadOnly] public MapGeneratePhase CurrentGeneratePhase = MapGeneratePhase.NotStarted; // 에디터상에서 버튼으로 맵 생성을 테스트하는 데 사용
 
     private bool _isTestMode = false; // AreaScene에서 직접 실행 시 true
 
-    public bool Init(GlobalEnums.AreaName area = GlobalEnums.AreaName.Forest)
+    public bool Init(AreaName area = AreaName.Forest)
     {
         ClearMap();
         // 에디터상에서 디버그용
@@ -105,7 +105,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                 Util.FindMinIndex(numOfSubtiles, out int x, out int z);
 
                 // 위에서 가져온 위치에 이미 타일을 생성했을 수 있음. 그럴 시 빈 타일 중 랜덤 선택.
-                if (_map.TileTypeMap[z, x] != GlobalEnums.AreaTileType.Empty)
+                if (_map.TileTypeMap[z, x] != AreaTileType.Empty)
                 {
                     List<Vector2Int> emptyPositions = GetEmptyPositions();
                     tilePosition = emptyPositions[Random.Range(0, emptyPositions.Count)];
@@ -130,12 +130,12 @@ public partial class AreaMapGenerator : MonoBehaviour
                     // 타일 생성 및 배치
                     AreaBaseTile tile = Instantiate(tileData.Tile, worldPos, Quaternion.identity, tileGroupParent).GetComponent<AreaBaseTile>();
                     _map.BaseTileMap[z, x] = tile;
-                    _map.TileTypeMap[z, x] = GlobalEnums.AreaTileType.SubTile;
+                    _map.TileTypeMap[z, x] = AreaTileType.SubTile;
                     totalGenerated++;
                     IncreaseNumOfSubtiles(x, z);
 
                     Vector2Int[] emptyNeighbors =
-                        _map.GetNeighbors(x, z).Where(pos => _map.TileTypeMap[pos.y, pos.x] == GlobalEnums.AreaTileType.Empty).ToArray();
+                        _map.GetNeighbors(x, z).Where(pos => _map.TileTypeMap[pos.y, pos.x] == AreaTileType.Empty).ToArray();
 
                     if (emptyNeighbors.Length == 0)
                     {
@@ -195,7 +195,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             AreaBaseTile tile = Instantiate(tileData.Tile, worldPos, Quaternion.identity, _maintileParent).GetComponent<AreaBaseTile>();
 
             _map.BaseTileMap[z, x] = tile;
-            _map.TileTypeMap[z, x] = GlobalEnums.AreaTileType.MainTile;
+            _map.TileTypeMap[z, x] = AreaTileType.MainTile;
         }
     }
 
@@ -241,10 +241,10 @@ public partial class AreaMapGenerator : MonoBehaviour
             for (int x = 0; x < _data.MapWidth; x++)
             {
                 // 이 시점에서 타일의 tileType이 Empty라면 플레이 가능 필드라는 의미
-                if (_map.TileTypeMap[z, x] == GlobalEnums.AreaTileType.Empty)
+                if (_map.TileTypeMap[z, x] == AreaTileType.Empty)
                     continue;
                 unplayableField.Add(new Vector2Int(x, z));
-                _map.TileTypeMap[z, x] = GlobalEnums.AreaTileType.OutOfField;
+                _map.TileTypeMap[z, x] = AreaTileType.OutOfField;
             }
         }
 
@@ -255,7 +255,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             var neighbors = _map.GetNeighbors(tilePos);
             foreach (var pos in neighbors)
             {
-                if (_map.TileTypeMap[pos.y, pos.x] != GlobalEnums.AreaTileType.OutOfField)
+                if (_map.TileTypeMap[pos.y, pos.x] != AreaTileType.OutOfField)
                 {
                     forceEmptyTilePositions.Add(pos);
                 }
@@ -264,7 +264,7 @@ public partial class AreaMapGenerator : MonoBehaviour
 
         foreach (var pos in forceEmptyTilePositions)
         {
-            _map.TileTypeMap[pos.y, pos.x] = GlobalEnums.AreaTileType.ForceEmpty;
+            _map.TileTypeMap[pos.y, pos.x] = AreaTileType.ForceEmpty;
         }
 
         return;
@@ -272,7 +272,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         void SetAsPlayableFieldTile(List<Vector2Int> field, int x, int z)
         {
             _map.BaseTileMap[z, x].EnableLight();
-            _map.TileTypeMap[z, x] = GlobalEnums.AreaTileType.Empty;
+            _map.TileTypeMap[z, x] = AreaTileType.Empty;
             field.Add(new Vector2Int(x, z));
         }
     }
@@ -313,8 +313,8 @@ public partial class AreaMapGenerator : MonoBehaviour
             field = new List<Vector2Int>(playableField);
             foreach (var pos in field)
             {
-                if (_map.TileTypeMap[pos.y, pos.x] != GlobalEnums.AreaTileType.ForceEmpty)
-                    _map.TileTypeMap[pos.y, pos.x] = GlobalEnums.AreaTileType.Empty;
+                if (_map.TileTypeMap[pos.y, pos.x] != AreaTileType.ForceEmpty)
+                    _map.TileTypeMap[pos.y, pos.x] = AreaTileType.Empty;
                 _map.BaseTileMap[pos.y, pos.x].DisableDecoration();
             }
         }
@@ -329,9 +329,9 @@ public partial class AreaMapGenerator : MonoBehaviour
         while ((float)(totalGenerated) / totalPosCount < proportion)
         {
             Vector2Int pos = field[Random.Range(0, field.Count)];
-            if (_map.TileTypeMap[pos.y, pos.x] == GlobalEnums.AreaTileType.ForceEmpty) continue;
+            if (_map.TileTypeMap[pos.y, pos.x] == AreaTileType.ForceEmpty) continue;
             _map.BaseTileMap[pos.y, pos.x].SetDecorationEnabled();
-            if (_map.TileTypeMap[pos.y, pos.x] != GlobalEnums.AreaTileType.OutOfField) _map.TileTypeMap[pos.y, pos.x] = GlobalEnums.AreaTileType.Obstacle;
+            if (_map.TileTypeMap[pos.y, pos.x] != AreaTileType.OutOfField) _map.TileTypeMap[pos.y, pos.x] = AreaTileType.Obstacle;
             totalGenerated++;
             field.Remove(pos);
         }
@@ -343,22 +343,22 @@ public partial class AreaMapGenerator : MonoBehaviour
         CurrentGeneratePhase = MapGeneratePhase.EventTileGenerate;
 
         // 시작 지점
-        _map.CreateEventTile(_playerStartPosition.x, _playerStartPosition.y, GlobalEnums.AreaTileType.Start);
+        _map.CreateEventTile(_playerStartPosition.x, _playerStartPosition.y, AreaTileType.Start);
         // 보스 타일
-        _map.CreateEventTile(_bossPosition.x, _bossPosition.y, GlobalEnums.AreaTileType.Boss);
+        _map.CreateEventTile(_bossPosition.x, _bossPosition.y, AreaTileType.Boss);
         // 전투 타일
-        CreateTileWithWindow(3, _data.BattleTileNum, GlobalEnums.AreaTileType.Battle);
+        CreateTileWithWindow(3, _data.BattleTileNum, AreaTileType.Battle);
         // 인카운터 타일
-        CreateTileWithWindow(3, _data.EncounterTileNum, GlobalEnums.AreaTileType.Encounter);
+        CreateTileWithWindow(3, _data.EncounterTileNum, AreaTileType.Encounter);
         // 남은 빈 공간은 모두 일반 타일
         for (int z = _playableFieldZStart; z < _playableFieldZStart + _data.PlayableFieldHeight; z++)
         {
             for (int x = _playableFieldXStart; x < _playableFieldXStart + _data.PlayableFieldWidth; x++)
             {
                 var tileType = _map.TileTypeMap[z, x];
-                if (tileType is GlobalEnums.AreaTileType.Empty or GlobalEnums.AreaTileType.ForceEmpty)
+                if (tileType is AreaTileType.Empty or AreaTileType.ForceEmpty)
                 {
-                    _map.CreateEventTile(x, z, GlobalEnums.AreaTileType.Normal);
+                    _map.CreateEventTile(x, z, AreaTileType.Normal);
                 }
             }
         }
@@ -366,7 +366,7 @@ public partial class AreaMapGenerator : MonoBehaviour
     }
 
     // Window를 사용하여 이벤트 타일 생성. 랜덤성을 높이고자 한 시도
-    private void CreateTileWithWindow(int windowSize, int tilenum, GlobalEnums.AreaTileType tileType)
+    private void CreateTileWithWindow(int windowSize, int tilenum, AreaTileType tileType)
     {
         int[] zWindowStarts;
         ResetWindowStartsArray();
@@ -391,7 +391,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                 // x 좌표는 단순히 플레이 영역 width 범위에서 랜덤
                 x = Random.Range(_playableFieldXStart, _playableFieldXStart + _data.PlayableFieldWidth);
                 // 빈 타일이어야 하며, 인접한 이웃에 같은 종류 타일이 없어야 하며, 경로가 있어야 함
-                if (_map.TileTypeMap[z, x] == GlobalEnums.AreaTileType.Empty
+                if (_map.TileTypeMap[z, x] == AreaTileType.Empty
                     && !_map.HasNeighborOfType(x, z, tileType)
                     && FindPath(new Vector2Int(x, z), out var path)) break;
                 if (trycnt == 100)
@@ -429,7 +429,7 @@ public partial class AreaMapGenerator : MonoBehaviour
     }
 
     // 완전한 랜덤으로 이벤트 타일 생성 위치 선택 시도
-    private bool ChooseEventTilePositionWithAllRandom(GlobalEnums.AreaTileType tileType, out int x, out int z)
+    private bool ChooseEventTilePositionWithAllRandom(AreaTileType tileType, out int x, out int z)
     {
         int trycnt = 0;
         while (true)
@@ -439,7 +439,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             z = Random.Range(_playableFieldZStart + 2, _playableFieldZStart + _data.PlayableFieldHeight - 2);
             // x 좌표: width 범위에서 랜덤
             x = Random.Range(_playableFieldXStart, _playableFieldXStart + _data.PlayableFieldWidth);
-            if (_map.TileTypeMap[z, x] == GlobalEnums.AreaTileType.Empty
+            if (_map.TileTypeMap[z, x] == AreaTileType.Empty
                 && FindPath(new Vector2Int(x, z), out var path)) break;
             if (trycnt == 100)
             {
@@ -459,10 +459,10 @@ public partial class AreaMapGenerator : MonoBehaviour
         {
             for (int x = 0; x < _data.MapWidth; x++)
             {
-                if (_map.TileTypeMap[z, x] == GlobalEnums.AreaTileType.Boss) continue;
+                if (_map.TileTypeMap[z, x] == AreaTileType.Boss) continue;
 
                 FogOfWar fog = TileFactory.CreateFogOfWar(_map.GridToWorldPosition(x, z, 1.06f),
-                    _map.TileTypeMap[z, x] == GlobalEnums.AreaTileType.OutOfField,
+                    _map.TileTypeMap[z, x] == AreaTileType.OutOfField,
                     _fogOfWarParent);
                 _map.FogOfWarMap[z, x] = fog;
                 _map.BaseTileMap[z, x].DisableDecoration();

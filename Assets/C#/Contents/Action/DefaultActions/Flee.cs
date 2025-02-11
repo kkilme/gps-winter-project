@@ -8,7 +8,7 @@ public class Flee : BaseAction
     {
         base.SetInfo(dataId);
             
-        ActionTargetType = GlobalEnums.ActionTargetType.Single;
+        ActionTargetType = ActionTargetType.Single;
     }
 
     public override bool CanStartAction()

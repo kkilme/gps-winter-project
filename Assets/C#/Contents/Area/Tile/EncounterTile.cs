@@ -7,7 +7,7 @@ public sealed class EncounterTile : AreaEventTile
 {
     public override void OnTileEnter()
     {
-        Managers.SceneMng.GetCurrentScene<AreaScene>().AreaState = GlobalEnums.AreaState.Idle; // TODO - Encounter 구현 시 상태 수정
+        Managers.SceneMng.GetCurrentScene<AreaScene>().AreaState = AreaState.Idle; // TODO - Encounter 구현 시 상태 수정
     }
 
     public override void OnTileEventFinish()

@@ -13,7 +13,7 @@ public static class Extension
     }
 
     public static void BindEvent(this GameObject go, Action<PointerEventData> action,
-        GlobalEnums.UIEvent type = GlobalEnums.UIEvent.Click)
+        UIEvent type = UIEvent.Click)
     {
         UI_Base.BindEvent(go, action, type);
     }
