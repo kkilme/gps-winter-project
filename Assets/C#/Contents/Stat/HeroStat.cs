@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using Data;
 
 public class HeroStat : CreatureStat
 {
@@ -18,7 +17,7 @@ public class HeroStat : CreatureStat
     {
         base.SetStat(creatureData);
 
-        Data.HeroData heroData = (HeroData)creatureData;
+        Data.HeroData heroData = (Data.HeroData)creatureData;
         _strength = heroData.Strength;
         _vitality = heroData.Vitality;
         _intelligence = heroData.Intelligence;

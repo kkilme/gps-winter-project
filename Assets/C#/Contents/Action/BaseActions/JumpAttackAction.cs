@@ -9,7 +9,7 @@ public abstract class JumpAttackAction : BaseAction
     {
         if (Owner.CreatureType == CreatureType.Hero && TargetCell.GridSide == GridSide.HeroSide)
             return false;
-        if (Owner.CreatureType == CreatureType.Monster && TargetCell.GridSide == GridSide.EnemySide)
+        if (Owner.CreatureType == CreatureType.Monster && TargetCell.GridSide == GridSide.MonsterSide)
             return false;
 
         return true;

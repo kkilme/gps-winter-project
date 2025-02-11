@@ -141,7 +141,7 @@ public enum Stat
 public enum GridSide
 {
     HeroSide,
-    EnemySide,
+    MonsterSide,
 }
 #endregion
 

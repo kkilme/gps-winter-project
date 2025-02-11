@@ -1,5 +1,4 @@
 using UnityEngine;
-using static GlobalEnums;
 
 public sealed class BossTile : AreaEventTile
 {

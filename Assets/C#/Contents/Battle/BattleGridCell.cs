@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class BattleGridCell : MonoBehaviour
+public abstract class BattleGridCell : MonoBehaviour
 {
     public Creature PlacedCreature { get; set; }
     public GridSide GridSide { get; protected set; }
@@ -10,8 +10,8 @@ public class BattleGridCell : MonoBehaviour
 
     private SpriteRenderer _outline;
     private SpriteRenderer _fill;
-    private Color _originalColor;
-
+    private Color _outlineOriginalColor;
+    private Color _fillOriginalColor;
     private Tweener _outlineColorTween;
     private Tweener _fillColorTween;
 
@@ -19,8 +19,8 @@ public class BattleGridCell : MonoBehaviour
     {
         _outline = GetComponent<SpriteRenderer>();
         _fill = GetComponentInChildren<SpriteRenderer>();
-        _originalColor = _outline.color;
-        transform.position += new Vector3(0f, 0.03f, 0f);
+        _outlineOriginalColor = _outline.color;
+        _fillOriginalColor = _fill.color;
     }
 
     public void Init(int row, int col, GridSide gridSide)
@@ -42,45 +42,30 @@ public class BattleGridCell : MonoBehaviour
         return PlacedCreature == null;
     }
 
-    private void ChangeColor(Color color, float duration = 0.3f)
+    protected void ChangeOutlineColor(Color color, float duration = 0.3f)
     {
-        KillColorTween();
+        _outlineColorTween?.Kill();
         _outlineColorTween = _outline.DOColor(color, duration).OnComplete(() => { _outlineColorTween = null; });
     }
 
-    public void RevertColor()
+    public void RevertOutlineColor()
     {
-        ChangeColor(_originalColor);
+        ChangeOutlineColor(_outlineOriginalColor);
     }
 
-    // 진행중인 colorTween을 중지, 삭제
-    private void KillColorTween()
+    protected void ChangeFillColor(Color color, float duration = 0.3f)
     {
-        _outlineColorTween?.Kill();
-        _outlineColorTween = null;
+        _fillColorTween?.Kill();
+        _fillColorTween = _fill.DOColor(color, duration).OnComplete(() => { _fillColorTween = null; });
+    }
+
+    public void RevertFillColor()
+    {
+        ChangeFillColor(_fillOriginalColor);
     }
 
     //기본 Unity 메소드 OnMouseEnterEvent & OnMouseExit 사용 시, Hero 및 Enemy 오브젝트에 의해 MouseOver가 가로막힘
-    public void Highlight()
-    {
-        if (GridSide == GridSide.HeroSide)
-        {
-            ChangeColor(GlobalValues.HEROGRID_HIGHLIGHT_COLOR);
-        }
-        else if (GridSide == GridSide.EnemySide)
-        {
-            ChangeColor(GlobalValues.ENEMYGRID_HIGHLIGHT_COLOR);
-        }
-    }
-    public void HighlightHarder()
-    {
-        if (GridSide == GridSide.HeroSide)
-        {
-            ChangeColor(GlobalValues.HEROGRID_HARD_HIGHLIGHT_COLOR);
-        }
-        else if (GridSide == GridSide.EnemySide)
-        {
-            ChangeColor(GlobalValues.ENEMYGRID_HARD_HIGHLIGHT_COLOR);
-        }
-    }
+    public abstract void HighlightOutline();
+    public abstract void HighlightFill();
+
 }

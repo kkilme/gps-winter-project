@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using static GlobalEnums;
 
 // legacy: 동적으로 맵을 생성하기 이전에 json파일을 읽어 맵을 생성하던 AreaGenerator 클래스
 
@@ -15,19 +14,19 @@ using static GlobalEnums;
 //    private AreaName _areaName;
 //    private int Width
 //    {
-//        get => _grid.Width;
+//        get => _myGrid.Width;
 //    }
 //    private int Height
 //    {
-//        get => _grid.Height;
+//        get => _myGrid.Height;
 //    }
 //    private Vector3 _originPosition;
 
-//    private AreaGrid _grid;
+//    private AreaGrid _myGrid;
 
 //    public AreaGrid Grid
 //    {
-//        get => _grid;
+//        get => _myGrid;
 //    }
 
 //    private Transform _tileParent;
@@ -42,8 +41,8 @@ using static GlobalEnums;
 //    {
 //        _areaName = areaName;
 //        _originPosition = originPosition;
-//        _grid = new AreaGrid(Managers.DataMng.AreaDataDict[_areaName].Width, Managers.DataMng.AreaDataDict[_areaName].Height, originPosition);
-//        _grid.InitializeTileTypeArray(ParseBasemap(Managers.DataMng.AreaDataDict[_areaName].Basemap));
+//        _myGrid = new AreaGrid(Managers.DataMng.AreaDataDict[_areaName].Width, Managers.DataMng.AreaDataDict[_areaName].Height, originPosition);
+//        _myGrid.InitializeTileTypeArray(ParseBasemap(Managers.DataMng.AreaDataDict[_areaName].Basemap));
 //        //Debug.Log(_basemap);
 //        _battleTileNum = Managers.DataMng.AreaDataDict[_areaName].BattleTileNum;
 //        _encounterTileNum = Managers.DataMng.AreaDataDict[_areaName].EncounterTileNum;
@@ -69,7 +68,7 @@ using static GlobalEnums;
 //        {
 //            for (int x = 0; x < Width; x++)
 //            {
-//                if (_grid.IsTileEmpty(x, z))
+//                if (_myGrid.IsTileEmpty(x, z))
 //                {
 //                    CreateTile(x, z, AreaTileType.Normal);
 //                }
@@ -112,18 +111,18 @@ using static GlobalEnums;
 //    {
 //        GameObject canvas = Managers.ResourceMng.Instantiate(TEST_GRID_POSITION_TEXT_PATH, _tileParent);
 //        canvas.GetComponentInChildren<TextMeshProUGUI>().SetText($"{z}, {x}");
-//        canvas.transform.position = _grid.GetWorldPosition(x, z, 2);
+//        canvas.transform.position = _myGrid.GetWorldPosition(x, z, 2);
 //        canvas.transform.rotation = Quaternion.Euler(60, 0, 0);
 //    }
 
 //    private void CreateTile(int x, int z, AreaTileType tileType)
 //    {
-//        Vector3 worldPosition = _grid.GetWorldPosition(x, z, 1.02f);
+//        Vector3 worldPosition = _myGrid.GetWorldPosition(x, z, 1.02f);
 
 //        AreaEventTile tile = TileFactory.CreateTile(worldPosition, tileType);
 
-//        _grid.SetTile(x, z, tile);
-//        _grid.SetTileType(x, z, tileType);
+//        _myGrid.SetTile(x, z, tile);
+//        _myGrid.SetTileType(x, z, tileType);
 //        // for test  ////////
 //        //InstantiateGridPositionText(x, z);
 //        /////////////////////
@@ -161,7 +160,7 @@ using static GlobalEnums;
 //                // x 좌표는 그냥 width 범위에서 랜덤
 //                x = UnityEngine.Random.Range(0, Width);
 //                // 빈 타일이어야 하며, 근처 1칸 범위에 같은 종류 타일이 없어야 함
-//                if (_grid.IsTileEmpty(x, z) && !_grid.CheckNeighborType(x, z, tileType)) selected = true;
+//                if (_myGrid.IsTileEmpty(x, z) && !_myGrid.CheckNeighborType(x, z, tileType)) selected = true;
 //                if (trycnt == 100)
 //                {   
 //                    // 해당 z좌표에 더 생성할 수 없음 -> all random 시도
@@ -190,7 +189,7 @@ using static GlobalEnums;
 //            z = UnityEngine.Random.Range(2, Height - 2);
 //            // x 좌표: width 범위에서 랜덤
 //            x = UnityEngine.Random.Range(0, Width);
-//            if (_grid.IsTileEmpty(x, z) && !_grid.CheckNeighborType(x, z, tileType)) selected = true;
+//            if (_myGrid.IsTileEmpty(x, z) && !_myGrid.CheckNeighborType(x, z, tileType)) selected = true;
 //            if (trycnt == 100)
 //            {
 //                Debug.LogError("Could not select tile position with all random!");

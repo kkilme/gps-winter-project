@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
-using static GlobalEnums;
 
 
 #region legacy: 동적으로 맵을 생성하기 이전에 사용하던 AreaGrid 클래스
@@ -211,7 +210,7 @@ using static GlobalEnums;
 //        {
 //            if (IsPositionMoveable(neighbor.x, neighbor.y))
 //            {
-//                _tileArray[neighbor.y, neighbor.x].ChangeColor(colorChangeType);
+//                _tileArray[neighbor.y, neighbor.x].ChangeOutlineColor(colorChangeType);
 //            }
 //        }
 //    }

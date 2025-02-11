@@ -4,7 +4,7 @@ using UnityEngine;
 public class BattleGridSystem
 {
     public BattleGridCell[,] HeroGrid { get; protected set; } = new BattleGridCell[2, 3];
-    public BattleGridCell[,] EnemyGrid { get; protected set; } = new BattleGridCell[2, 3];
+    public BattleGridCell[,] MonsterGrid { get; protected set; } = new BattleGridCell[2, 3];
 
     private BattleGridCell _currentMouseOverCell;
     public BattleGridCell CurrentMouseOverCell
@@ -15,9 +15,9 @@ public class BattleGridSystem
             if (_currentMouseOverCell == value)
                 return;
 
-            if (_currentMouseOverCell != null) _currentMouseOverCell.RevertColor();
+            if (_currentMouseOverCell != null) _currentMouseOverCell.RevertOutlineColor();
             _currentMouseOverCell = value;
-            if (_currentMouseOverCell != null) _currentMouseOverCell.Highlight();
+            if (_currentMouseOverCell != null) _currentMouseOverCell.HighlightOutline();
         }
     }
 
@@ -27,16 +27,19 @@ public class BattleGridSystem
     public void Init()
     {
         GameObject heroGrid = GameObject.FindGameObjectWithTag("HeroGrid");
-        GameObject enemyGrid = GameObject.FindGameObjectWithTag("EnemyGrid");
+        GameObject monsterGrid = GameObject.FindGameObjectWithTag("MonsterGrid");
 
         for (int row = 0; row < 2; row++)
         {
             for (int col = 0; col < 3; col++)
             {
-                HeroGrid[row, col] = Util.FindChild<BattleGridCell>(heroGrid, $"BattleGridCell ({row}, {col})");
+                var herocell = Util.FindChild(heroGrid, $"BattleGridCell ({row}, {col})");
+                HeroGrid[row, col] = herocell.GetOrAddComponent<HeroBattleGridCell>();
                 HeroGrid[row, col].Init(row, col, GridSide.HeroSide);
-                EnemyGrid[row, col] = Util.FindChild<BattleGridCell>(enemyGrid, $"BattleGridCell ({row}, {col})");
-                EnemyGrid[row, col].Init(row, col, GridSide.EnemySide);
+
+                var monsterCell = Util.FindChild(monsterGrid, $"BattleGridCell ({row}, {col})");
+                MonsterGrid[row, col] = monsterCell.GetOrAddComponent<MonsterBattleGridCell>();
+                MonsterGrid[row, col].Init(row, col, GridSide.MonsterSide);
             }
         }
         _battleManager = Managers.BattleMng;
@@ -48,7 +51,7 @@ public class BattleGridSystem
         {
             Vector2Int pos = Managers.ObjectMng.HeroParty.BattlePositions[hero];
             HeroGrid[pos.y, pos.x].PlaceCreature(hero);
-            hero.transform.LookAt(EnemyGrid[pos.y, 2 - pos.x].transform.position);
+            hero.transform.LookAt(MonsterGrid[pos.y, 2 - pos.x].transform.position);
         }
     }
 
@@ -65,7 +68,7 @@ public class BattleGridSystem
         {
             Monster monster = Managers.ObjectMng.SpawnMonster(monsterData.DataId);
             Vector2Int pos = new Vector2Int(monsterData.x, monsterData.y);
-            EnemyGrid[pos.y, pos.x].PlaceCreature(monster);
+            MonsterGrid[pos.y, pos.x].PlaceCreature(monster);
             monster.transform.LookAt(HeroGrid[pos.y, 2 - pos.x].transform.position);
             _battleManager.Monsters.Add(monster);
         }
@@ -86,7 +89,7 @@ public class BattleGridSystem
 
         foreach (var targetable in targetables)
         {
-            targetable.HighlightHarder();
+            //targetable.HighlightHarder();
         }
     }
 }

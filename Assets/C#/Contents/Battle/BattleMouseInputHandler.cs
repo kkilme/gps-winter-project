@@ -120,6 +120,6 @@ public class BattleMouseInputHandler
 
         //CreatureBattleState = CreatureBattleState.ActionProceed;
 
-        _battleGridSystem.CurrentMouseOverCell.RevertColor();
+        _battleGridSystem.CurrentMouseOverCell.RevertOutlineColor();
     }
 }

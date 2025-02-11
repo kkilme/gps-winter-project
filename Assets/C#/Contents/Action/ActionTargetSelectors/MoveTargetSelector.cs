@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class MoveTargetSelector : ActionTargetSelector
 {
-    public override void CalculateValidTargets()
+    public override void SetTargettableCells()
     {
         List<BattleGridCell> targets = new List<BattleGridCell>();
+
         int row = _currentcell.Row;
         int col = _currentcell.Col;
 
@@ -16,7 +17,7 @@ public class MoveTargetSelector : ActionTargetSelector
 
             if (nr >= 0 && nr <= 1 && nc >= 0 && nc <= 2)
             {
-                targets.Add(_grid[nr, nc]);
+                targets.Add(_myGrid[nr, nc]);
             }
         }
 

@@ -31,7 +31,7 @@ public abstract class BaseAction
 
     public void OnSet()
     {
-        TargetSelector.CalculateValidTargets();
+        TargetSelector.SetTargettableCells();
     }
 
     public void Equip(Creature owner)

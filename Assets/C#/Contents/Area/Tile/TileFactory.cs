@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using static GlobalEnums;
 public static class TileFactory
 {
     private const string NORMAL_TILE_PATH = "Area/Tiles/NormalTile";
