@@ -4,11 +4,13 @@
       "DataId": 102000,
       "Name": "Bat",
       "Hp": 10,
-      "Attack": 5,
+      "BaseDamage": 5,
       "PhysicalDefense": 0,
       "MagicDefense": 0,
-      "Stat": 60,
-      "Speed": 80,
+      "Strength": 70,
+      "Vitality": 50,
+      "Dexterity": 60,
+      "Intelligence": 10,
       "Actions": [
         403000,
         403000

@@ -12,47 +12,34 @@ namespace Data
         public int DataId;
         public string Name;
         public int Hp;
-        public int Attack;
+        public int BaseDamage;
         public int PhysicalDefense;
         public int MagicDefense;
-    }
-    #endregion
-
-    #region HeroData
-
-    [Serializable]
-    public class HeroData : CreatureData
-    {
         public int Strength;
         public int Vitality;
         public int Intelligence;
         public int Dexterity;
     }
+    #endregion
 
     [Serializable]
-    public class HeroDataLoader : ILoader<int, HeroData>
+    public class HeroDataLoader : ILoader<int, CreatureData>
     {
-        public List<HeroData> heroes = new List<HeroData>();
+        public List<CreatureData> heroes = new List<CreatureData>();
 
-        public Dictionary<int, HeroData> MakeDict()
+        public Dictionary<int, CreatureData> MakeDict()
         {
-            Dictionary<int, HeroData> dic = new Dictionary<int, HeroData>();
-            foreach (HeroData hero in heroes)
+            Dictionary<int, CreatureData> dic = new Dictionary<int, CreatureData>();
+            foreach (CreatureData hero in heroes)
                 dic.Add(hero.DataId, hero);
 
             return dic;
         }
     }
 
-    #endregion
-
-    #region MonsterData
-
     [Serializable]
     public class MonsterData : CreatureData
     {
-        public int Stat;
-        public int Speed;
         public List<int> Actions = new List<int>();
     }
 
@@ -71,7 +58,6 @@ namespace Data
         }
     }
 
-    #endregion
 
     #region MonsterSquadData
     public class MonsterSquadData
@@ -207,7 +193,7 @@ namespace Data
         public string Name;
         public string Description;
         public int CoinCount;
-        public Stat UsingStat;
+        public StatName UsingStat;
         public string IconName;
     }
 

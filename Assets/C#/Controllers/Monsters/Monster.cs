@@ -6,7 +6,6 @@ public abstract class Monster : Creature
     #region Field
     
     public Data.MonsterData MonsterData => CreatureData as Data.MonsterData;
-    public MonsterStat MonsterStat => (MonsterStat)CreatureStat;
     
     #endregion
 
@@ -37,7 +36,6 @@ public abstract class Monster : Creature
     public override void DoAction()
     {
         CoinHeadNum = 0;
-        CoinHeadNum = CurrentAction.CoinToss();
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinToss(CurrentAction, CoinHeadNum);
         
         CurrentAction.DoAction();

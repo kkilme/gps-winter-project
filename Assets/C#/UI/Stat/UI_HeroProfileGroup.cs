@@ -3,19 +3,19 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class UI_PlayerProfileGroup : UI_Base
+public class UI_HeroProfileGroup : UI_Base
 {
-    enum PlayerProfileUI
+    enum HeroProfileUI
     {
-        UI_PlayerProfile_Player1,
-        UI_PlayerProfile_Player2,
-        UI_PlayerProfile_Player3,
-        UI_PlayerProfile_Player4
+        UI_HeroProfile_1,
+        UI_HeroProfile_2,
+        UI_HeroProfile_3,
+        UI_HeroProfile_4,
     }
 
     public override void Init()
     {
-        Bind<GameObject>(typeof(PlayerProfileUI));
+        Bind<GameObject>(typeof(HeroProfileUI));
         //DontDestroyOnLoad(transform.parent.gameObject);
     }
 
@@ -30,8 +30,8 @@ public class UI_PlayerProfileGroup : UI_Base
         int index = 0;
         foreach (var hero in Managers.ObjectMng.Heroes.Values)
         {
-            var go = GetGameObject((PlayerProfileUI)index++);
-            go.GetOrAddComponent<UI_HeroProfile>().BindPlayerStat(hero.HeroStat);
+            var go = GetGameObject((HeroProfileUI)index++);
+            go.GetOrAddComponent<UI_CreatureProfile>().BindStat(hero.CreatureStat);
             go.SetActive(true);
             
             //go.transform.Find("Bag").GetOrAddComponent<UI_Bag>().BindBag(hero.Bag);
@@ -40,7 +40,7 @@ public class UI_PlayerProfileGroup : UI_Base
 
     private void Clear()
     {
-        foreach (PlayerProfileUI playerUI in Enum.GetValues(typeof(PlayerProfileUI)))
+        foreach (HeroProfileUI playerUI in Enum.GetValues(typeof(HeroProfileUI)))
             GetGameObject(playerUI).SetActive(false);
     }
 }

@@ -128,7 +128,7 @@ public enum AttackType
 
 #region Attribute
 
-public enum Stat
+public enum StatName
 {
     None,
     Strength,

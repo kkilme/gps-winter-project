@@ -1,3 +1,4 @@
+using Data;
 using DG.Tweening;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ public abstract class BaseAction
     public ActionTargetSelector TargetSelector { get; protected set; }
     
     public ActionTargetType ActionTargetType { get; protected set; }
-    public Stat UsingStat { get; protected set; } = Stat.Strength;
+    public StatName UsingStat { get; protected set; } = StatName.Strength;
 
     public int CoinNum { get; protected set; }
     public int CoinHeadNum { get; protected set; }
@@ -30,7 +31,13 @@ public abstract class BaseAction
     }
 
     public void OnSet()
-    {
+    {   
+        if(TargetSelector == null)
+        {
+            Debug.LogError("Action doesn't have targetselector: " + GetType().Name);
+            return;
+        }
+
         TargetSelector.SetTargettableCells();
     }
 
@@ -44,42 +51,14 @@ public abstract class BaseAction
         Owner.CurrentAction = null;
         Owner = null;
     }
-
-    public int CoinToss()
-    {
-        if (ActionData.UsingStat == Stat.None)
-            return -1;
-
-        int coinHeadNum = 0;
-        if (Owner.CreatureType == CreatureType.Hero)
-        {
-            for (int i = 0; i < CoinNum; i++)
-            {
-                float value = Random.value;
-                if (value < ((Hero)Owner).HeroStat.GetStatByDefine(UsingStat) / 100f)
-                    coinHeadNum++;
-            }
-        }
-        else
-        {
-            for (int i = 0; i < CoinNum; i++)
-            {
-                float value = Random.value;
-                if (value < ((Monster)Owner).MonsterData.Stat / 100f)
-                    coinHeadNum++;
-            }
-        }
-
-        return coinHeadNum;
-    }
     public abstract bool CanStartAction();
     
     #region Action
 
     public void DoAction()
     {
-        CoinHeadNum = CoinToss();
-        ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinToss(this, CoinToss());
+        CoinHeadNum = CoinTossser.CoinToss(UsingStat, Owner.CreatureStat, ActionData);
+        ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinToss(this,CoinHeadNum);
 
         Owner.transform.DOLookAt(TargetCell.transform.position, 0.3f,  AxisConstraint.None, new Vector3(0, 1, 0)).OnComplete(OnStartAction);
     }

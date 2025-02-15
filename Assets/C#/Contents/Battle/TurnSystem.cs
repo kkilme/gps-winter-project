@@ -12,7 +12,7 @@ public class TurnSystem
         CurrentTurn = 0;
         var rawCreatures = Managers.BattleMng.Creatures;
         Turns = new List<Creature>(rawCreatures);
-        Turns.Sort((a, b) => a.CreatureStat.Speed.CompareTo(b.CreatureStat.Speed));
+        Turns.Sort((a, b) => a.CreatureStat.Dexterity.CompareTo(b.CreatureStat.Dexterity));
     }
 
     public void NextTurn()

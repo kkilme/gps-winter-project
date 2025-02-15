@@ -36,7 +36,7 @@ public class UI_MonsterProfile : UI_Base
         Bind<UnityEngine.UI.Image>(typeof(Image));
     }
 
-    public void ConnectPlayerStat(MonsterStat stat)
+    public void ConnectPlayerStat(CreatureStat stat)
     {
         stat.StatChangeAction += ChangeMonsterStatUI;
 
@@ -46,15 +46,13 @@ public class UI_MonsterProfile : UI_Base
     }
 
     private void ChangeMonsterStatUI(CreatureStat creatureStat)
-    {
-        MonsterStat monsterStat = (MonsterStat)creatureStat;
-        
-        GetText(Text.Text_Name).text = monsterStat.Name;
+    {       
+        GetText(Text.Text_Name).text = creatureStat.Name;
 
-        Get<Slider>(Sliders.Slider_HP).value = monsterStat.Hp / monsterStat.MaxHp;
-        GetText(Text.Text_HP).text = $"{monsterStat.Hp}/{monsterStat.MaxHp}";
-        GetText(Text.Text_Attack).text = monsterStat.Attack.ToString();
-        GetText(Text.Text_Defense).text = monsterStat.PhysicalDefense.ToString();
+        Get<Slider>(Sliders.Slider_HP).value = creatureStat.Hp / creatureStat.MaxHp;
+        GetText(Text.Text_HP).text = $"{creatureStat.Hp}/{creatureStat.MaxHp}";
+        GetText(Text.Text_Attack).text = creatureStat.BaseDamage.ToString();
+        GetText(Text.Text_Defense).text = creatureStat.PhysicalDefense.ToString();
 
         //Get<Image>(Images.UserPicture).sprite = monsterStat.Texture;
     }

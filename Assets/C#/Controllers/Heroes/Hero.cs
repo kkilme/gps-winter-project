@@ -5,9 +5,6 @@ using UnityEngine;
 public class Hero : Creature
 {
     #region Field
-    
-    public Data.HeroData HeroData => CreatureData as Data.HeroData;
-    public HeroStat HeroStat => (HeroStat)CreatureStat;
 
     public GameObject Head { get; protected set; }
     public GameObject LeftHand { get; protected set; }
@@ -102,7 +99,7 @@ public class Hero : Creature
         }
         
         Weapon = equippingWeapon;
-        HeroStat.AttachEquipment(Weapon.EquipmentData);
+        CreatureStat.AttachEquipment(Weapon.EquipmentData);
         Weapon.Equip(this);
         ChangeWeaponVisibility(true);
         ChangeAnimator();
@@ -113,7 +110,7 @@ public class Hero : Creature
         if (Weapon == null)
             return;
         
-        HeroStat.DetachEquipment(Weapon.EquipmentData);
+        CreatureStat.DetachEquipment(Weapon.EquipmentData);
         Weapon.UnEquip();
         ChangeWeaponVisibility(false);
         Weapon = null;
@@ -149,7 +146,7 @@ public class Hero : Creature
         }
         
         Armors[armorType] = equippingArmor;
-        HeroStat.AttachEquipment(Armors[armorType].EquipmentData);
+        CreatureStat.AttachEquipment(Armors[armorType].EquipmentData);
         Armors[armorType].Equip(this);
         ChangeArmorVisibility(armorType ,true);
     }
@@ -158,8 +155,8 @@ public class Hero : Creature
     {
         if (Armors[armorType] == null)
             return;
-        
-        HeroStat.DetachEquipment(Armors[armorType].EquipmentData);
+
+        CreatureStat.DetachEquipment(Armors[armorType].EquipmentData);
         Armors[armorType].UnEquip();
         ChangeArmorVisibility(armorType, false);
         Armors[armorType] = null;

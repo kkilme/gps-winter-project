@@ -34,12 +34,12 @@ public class UI_ItemDescription : UI_Base
         GetText(Texts.Description).text = item.ItemData.Description;
     }
 
-    public void OnMouseEnter(PointerEventData data)
+    public void OnMouseIn(PointerEventData data)
     {
         ChangeImageVisibility(true);
     }
 
-    public void OnMouseExit(PointerEventData data)
+    public void OnMouseOut(PointerEventData data)
     {
         ChangeImageVisibility(false);
     }

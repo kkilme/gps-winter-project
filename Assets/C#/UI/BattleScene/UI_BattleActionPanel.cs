@@ -66,13 +66,13 @@ public class UI_BattleActionPanel : UI_Base
         if (action.ActionData is Data.AttackActionData)
         {
             GetText(Texts.Text_AmountWord).text = "DAMAGE";
-            GetText(Texts.Text_AmountNumber).text = _hero.HeroStat.Attack.ToString();
+            GetText(Texts.Text_AmountNumber).text = _hero.CreatureStat.BaseDamage.ToString();
         }
 
-        if (action.ActionData.UsingStat != Stat.None)
+        if (action.ActionData.UsingStat != StatName.None)
         {
             GetText(Texts.Text_SlotPercentageWord).text = "Percentage\nPer Slot";
-            GetText(Texts.Text_SlotPercentage).text = _hero.HeroStat.GetStatByDefine(action.UsingStat).ToString();
+            GetText(Texts.Text_SlotPercentage).text = _hero.CreatureStat.NameToStat(action.UsingStat).ToString();
         }
 
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinNum(action);

@@ -1,6 +1,9 @@
 using DG.Tweening;
 using UnityEngine;
 
+/// <summary>
+/// 제자리에 서서 수행되는 액션
+/// </summary>
 public abstract class StandAction : BaseAction
 {
     protected Vector3 _meleeAttackRange;
@@ -27,7 +30,7 @@ public abstract class StandAction : BaseAction
             return;
         
         Creature targetCreature = TargetCell.PlacedCreature;
-        targetCreature.OnDamage(Owner.CreatureStat.Attack * (CoinHeadNum / CoinNum), 1);
+        targetCreature.OnDamage(Owner.CreatureStat.BaseDamage * (CoinHeadNum / CoinNum), 1);
     }
     
     public override void OnMoveStart()

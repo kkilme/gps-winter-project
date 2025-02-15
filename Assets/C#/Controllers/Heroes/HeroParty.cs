@@ -9,14 +9,6 @@ public class HeroParty
     public Dictionary<Hero, Vector2Int> BattlePositions { get; set; } // 전투 맵에서 배치되는 그리드 위치
     public int Gold { get; set; } // 골드는 파티가 공유
 
-    private int[][] HERO_TILE_POS_OFFSETS =
-    {
-        new [] { 0, 1 },
-        new [] { -1, 0 },
-        new [] { 1, 0 },
-        new [] { 0, -1 }
-    };
-
     private int _nextHeroPosX = 0;
     private int _nextHeroPosY = 0;
     public HeroParty()
@@ -50,7 +42,7 @@ public class HeroParty
         for (int i = 0; i < HeroObjects.Count; i++)
         {
             HeroObjects[i].transform.LookAt(Vector3.forward);
-            HeroObjects[i].transform.position = startPosition + new Vector3(HERO_TILE_POS_OFFSETS[i][0], 0, HERO_TILE_POS_OFFSETS[i][1]);
+            HeroObjects[i].transform.position = startPosition + new Vector3(GlobalValues.HERO_TILE_POS_OFFSET[i, 0], 0, GlobalValues.HERO_TILE_POS_OFFSET[i, 1]);
         }
     }
 
@@ -60,7 +52,7 @@ public class HeroParty
         for (int i = 0; i < HeroObjects.Count; i++)
         {
             Vector3 adjustedDestination =
-                destination + new Vector3(HERO_TILE_POS_OFFSETS[i][0], 0, HERO_TILE_POS_OFFSETS[i][1]);
+                destination + new Vector3(GlobalValues.HERO_TILE_POS_OFFSET[i, 0], 0, GlobalValues.HERO_TILE_POS_OFFSET[i, 1]);
             HeroObjects[i].transform.LookAt(adjustedDestination);
             sequence.Join(HeroObjects[i].transform.DOMove(adjustedDestination, 0.7f));
         }
