@@ -2,8 +2,12 @@ using UnityEngine;
 
 public class BattleMouseInputHandler
 {
-    private Camera _camera;
+    public BattleGridCell CurrentMouseOverCell { get; private set; }
     private BattleGridSystem _battleGridSystem;
+    private BaseAction _currentAction => Managers.BattleMng.CurrentAction;
+
+    private Camera _camera;
+
     private Creature _draggingCreature;
     private BattleGridCell _dragStartCell;
 
@@ -18,7 +22,7 @@ public class BattleMouseInputHandler
         switch (mouseEvent)
         {
             case MouseEvent.Hover:
-                OnMouseOverCell();
+                OnMouseHover_Default();
                 break;
             case MouseEvent.PointerDown:
                 OnDragStart();
@@ -37,23 +41,91 @@ public class BattleMouseInputHandler
         switch (mouseEvent)
         {
             case MouseEvent.Hover:
-                OnMouseOverCell();
+                OnMouseHover_Default();
                 break;
         }
     }
 
-    private void OnMouseOverCell()
+    public void HandleMouseOnTargetSelect(MouseEvent mouseEvent)
+    {
+        switch (mouseEvent)
+        {
+            case MouseEvent.Hover:
+                OnMouseHover_TargetSelect();
+                break;
+            case MouseEvent.PointerDown:
+                OnClickGridCell();
+                break;
+        }
+    }
+
+    private void OnMouseHover_Default()
     {
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: GlobalValues.LAYERMASK_BATTLEGRIDCELL))
         {
-            _battleGridSystem.CurrentMouseOverCell = rayHit.transform.gameObject.GetComponent<BattleGridCell>();
+            var cell = rayHit.transform.gameObject.GetComponent<BattleGridCell>();
+            if (CurrentMouseOverCell == cell)
+                return;
+
+            if (CurrentMouseOverCell != null) CurrentMouseOverCell.RevertOutlineColor();
+            CurrentMouseOverCell = cell;
+            CurrentMouseOverCell.HighlightOutline();
         }
         else
         {
-            _battleGridSystem.CurrentMouseOverCell = null;
+            if (CurrentMouseOverCell != null) CurrentMouseOverCell.RevertOutlineColor();
+            CurrentMouseOverCell = null;
         }
+    }
+
+    private void OnMouseHover_TargetSelect()
+    {
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: GlobalValues.LAYERMASK_BATTLEGRIDCELL))
+        {
+            var cell = rayHit.transform.gameObject.GetComponent<BattleGridCell>();
+
+            if (CurrentMouseOverCell == cell)
+                return;
+
+            if (CurrentMouseOverCell != null) CurrentMouseOverCell.RevertFillColor();
+            if (!_currentAction.TargetSelector.IsTargettable(cell))
+            {
+                CurrentMouseOverCell = null;
+                return;
+            }
+            
+            CurrentMouseOverCell = cell;
+            CurrentMouseOverCell.HighlightFill();
+        }
+        else
+        {
+            if (CurrentMouseOverCell != null) CurrentMouseOverCell.RevertFillColor();
+            CurrentMouseOverCell = null;
+        }
+    }
+
+    private void OnClickGridCell()
+    {
+        if (CurrentMouseOverCell == null || Managers.BattleMng.BattleState != BattleState.ActionTargetSelecting)
+            return;
+
+        //CurrentAction.Equip(this);
+        //TargetCell = CurrentMouseOverCell;
+
+        //if (!CurrentAction.IsExecutable())
+        //{
+        //    CurrentAction.UnEquip();
+        //    TargetCell = null;
+        //    return;
+        //}
+
+        //CreatureBattleState = CreatureBattleState.ActionProceed;
+
+        CurrentMouseOverCell.RevertOutlineColor();
     }
 
     private Vector3 GetMouseWorldPosition()
@@ -68,10 +140,10 @@ public class BattleMouseInputHandler
 
     private void OnDragStart()
     {
-        if (_battleGridSystem.CurrentMouseOverCell?.PlacedCreature == null) return;
+        if (CurrentMouseOverCell?.PlacedCreature == null) return;
 
-        _draggingCreature = _battleGridSystem.CurrentMouseOverCell.PlacedCreature;
-        _dragStartCell = _battleGridSystem.CurrentMouseOverCell;
+        _draggingCreature = CurrentMouseOverCell.PlacedCreature;
+        _dragStartCell =    CurrentMouseOverCell;
     }
 
     private void OnDragging()
@@ -83,16 +155,16 @@ public class BattleMouseInputHandler
     private void OnDragEnd()
     {
         if (_draggingCreature == null) return;
-        if (_battleGridSystem.CurrentMouseOverCell != null && _battleGridSystem.CurrentMouseOverCell.GridSide == GridSide.HeroSide)
+        if (CurrentMouseOverCell != null && CurrentMouseOverCell.GridSide == GridSide.HeroSide)
         {
-            if (_battleGridSystem.CurrentMouseOverCell.PlacedCreature == null)
+            if (CurrentMouseOverCell.PlacedCreature == null)
             {
-                _battleGridSystem.MoveCreature(_draggingCreature, _battleGridSystem.CurrentMouseOverCell);
+                _battleGridSystem.MoveCreature(_draggingCreature, CurrentMouseOverCell);
             }
             else
             {
-                _battleGridSystem.MoveCreature(_battleGridSystem.CurrentMouseOverCell.PlacedCreature, _dragStartCell);
-                _battleGridSystem.MoveCreature(_draggingCreature, _battleGridSystem.CurrentMouseOverCell);
+                _battleGridSystem.MoveCreature(CurrentMouseOverCell.PlacedCreature, _dragStartCell);
+                _battleGridSystem.MoveCreature(_draggingCreature, CurrentMouseOverCell);
             }
         }
         else
@@ -103,23 +175,6 @@ public class BattleMouseInputHandler
         _dragStartCell = null;
     }
 
-    private void OnClickGridCell()
-    {
-        if (_battleGridSystem.CurrentMouseOverCell == null || Managers.BattleMng.BattleState != BattleState.ActionTargetSelecting)
-            return;
+    
 
-        //CurrentAction.Equip(this);
-        //TargetCell = CurrentMouseOverCell;
-
-        //if (!CurrentAction.CanStartAction())
-        //{
-        //    CurrentAction.UnEquip();
-        //    TargetCell = null;
-        //    return;
-        //}
-
-        //CreatureBattleState = CreatureBattleState.ActionProceed;
-
-        _battleGridSystem.CurrentMouseOverCell.RevertOutlineColor();
-    }
 }

@@ -6,6 +6,10 @@ public abstract class ActionTargetSelector
     /// Action의 대상이 될 수 있는 모든 BattleGridCell
     /// </summary>
     public List<BattleGridCell> TargettableCells { get; protected set; } = new();
+    /// <summary>
+    /// 플레이어가 Action의 대상을 지정해 줄 필요가 있는지 여부
+    /// </summary>
+    public abstract bool NeedTargetSelection { get; protected set; }
     protected BattleGridCell _currentcell => Managers.BattleMng.CurrentTurnCreature.CurrentCell;
     protected BattleGridCell[,] _myGrid => _gridSide == GridSide.HeroSide ? Managers.BattleMng.BattleGridSystem.HeroGrid : Managers.BattleMng.BattleGridSystem.MonsterGrid;
     protected BattleGridCell[,] _opponentGrid => _gridSide == GridSide.HeroSide ? Managers.BattleMng.BattleGridSystem.MonsterGrid : Managers.BattleMng.BattleGridSystem.HeroGrid;
@@ -15,4 +19,9 @@ public abstract class ActionTargetSelector
     /// TargettableCells 설정
     /// </summary>
     public abstract void SetTargettableCells();
+
+    public bool IsTargettable(BattleGridCell cell)
+    {
+        return TargettableCells.Contains(cell);
+    }
 }

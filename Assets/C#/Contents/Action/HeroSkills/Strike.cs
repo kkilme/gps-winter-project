@@ -1,11 +1,6 @@
 using UnityEngine;
 
-public class Strike : MoveAttackAction
+public class Strike : MoveAttackSkill
 {
-    public override void SetInfo(int dataId)
-    {
-        ActionTargetType = ActionTargetType.Single;
-        
-        base.SetInfo(dataId);
-    }
+    public override ActionTargetSelector TargetSelector { get; protected set; } = new SingleOpponentSelector();
 }

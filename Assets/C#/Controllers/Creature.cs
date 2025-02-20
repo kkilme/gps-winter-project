@@ -1,5 +1,8 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using static UnityEditor.Recorder.OutputPath;
+using static UnityEngine.GraphicsBuffer;
 
 public abstract class Creature : MonoBehaviour
 {
@@ -78,32 +81,11 @@ public abstract class Creature : MonoBehaviour
     public abstract void DoAction();
 
     public abstract void DoEndTurn();
+    /// <summary>
+    /// 전투 씬에서 Creature가 정면을 바라보도록 함
+    /// </summary>
+    public abstract void LookOpponent(float duration = 0f);
     
-    #endregion
-
-    #region Action
-
-    protected void OnHandleAction() { CurrentAction.OnHandleAction(); }
-
-    protected virtual void OnJumpFWDStart()
-    {
-        CurrentAction.OnJumpFWDStart();
-    }
-
-    protected virtual void OnJumpFWDEnd() { CurrentAction.OnJumpFWDEnd(); }
-    
-    protected virtual void OnJumpBWDStart() { CurrentAction.OnJumpBWDStart(); }
-    
-    protected virtual void OnMoveFWDStart() { CurrentAction.OnMoveStart(); }
-    
-    protected virtual void OnMoveFWDEnd() { CurrentAction.OnMoveFWDEnd(); }
-    
-    protected virtual void OnMoveBWDStart() { CurrentAction.OnMoveBWDStart(); }
-    
-    protected virtual void OnAttackEnd() { CurrentAction.OnAttackEnd(); }
-    
-    protected void OnActionEnd() { CurrentAction.OnHandleAction(); }
-
     #endregion
     
     #region Event

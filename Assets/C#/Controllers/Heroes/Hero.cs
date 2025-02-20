@@ -1,6 +1,8 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class Hero : Creature
 {
@@ -54,7 +56,7 @@ public class Hero : Creature
     
     public override void DoAction()
     {
-        CurrentAction.DoAction();
+        CurrentAction.Execute();
     }
 
     public override void DoEndTurn()
@@ -68,6 +70,11 @@ public class Hero : Creature
         CurrentAction.UnEquip();
         TargetCell = null;
         Managers.BattleMng.NextTurn();
+    }
+
+    public override void LookOpponent(float duration = 0f)
+    {
+        transform.DOLookAt(Managers.BattleMng.BattleGridSystem.MonsterGrid[CurrentCell.Row, 2 - CurrentCell.Column].transform.position, duration);
     }
 
     #endregion

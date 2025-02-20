@@ -36,7 +36,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         _data = _dataset[area];
 
         // 데이터 오류 검증
-        if (!_data.Verify())
+        if (!_data.Validate())
         {
             Debug.LogError("There is a problem in Map Data! Please refer to the error message.");
             return false;

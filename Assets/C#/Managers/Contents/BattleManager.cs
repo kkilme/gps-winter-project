@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleManager
@@ -88,6 +89,13 @@ public class BattleManager
         CurrentAction.OnSet();
         BattleSceneUI.BattleActionPanel.Hide();
         BattleSceneUI.ChooseTargetUI.Show();
+
+        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
+        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
+        Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnTargetSelect;
+
+        BattleGridSystem.ResetCellColor();
+        BattleGridSystem.HighlightTargetableCells(action);
     }
 
     public void UnsetAction()
@@ -95,6 +103,12 @@ public class BattleManager
         CurrentAction = null;
         BattleSceneUI.ChooseTargetUI.Hide();
         BattleSceneUI.BattleActionPanel.Show();
+
+        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
+        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
+        Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
+
+        BattleGridSystem.ResetCellColor();
     }
 
     public void NextTurn()

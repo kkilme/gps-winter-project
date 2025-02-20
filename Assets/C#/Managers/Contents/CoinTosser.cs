@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class CoinTossser
 {
-    public static int CoinToss(StatName usingStat, CreatureStat stat, ActionData actionData)
+    public static int CoinToss(StatName usingStat, CreatureStat stat, SkillData actionData)
     {
         if (usingStat == StatName.None)
             return -1;

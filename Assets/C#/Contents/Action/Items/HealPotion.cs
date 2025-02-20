@@ -1,33 +1,13 @@
+using DG.Tweening;
+using System.Collections;
+using UnityEngine;
+
 public class HealPotion : BaseItem
 {
-    public Creature Target { get; protected set; }
-    
-    public override void SetInfo(int templateId, Creature owner, Bag bag, int idx, int addNum)
+    public override ActionTargetSelector TargetSelector { get; protected set; } = new SingleAllySelector();
+    public override IEnumerator Execute(int coinHeadCount = -1)
     {
-        ActionTargetType = ActionTargetType.Single;
-        
-        base.SetInfo(templateId, owner, bag, idx, addNum);
+        return base.Execute(coinHeadCount);
     }
 
-    public override bool CanStartAction()
-    {
-        // TODO
-        return false;
-    }
-
-    public override void OnStartAction()
-    {
-        // TODO
-    }
-
-    public override void OnHandleAction()
-    {
-        if (TargetCell.PlacedCreature == null)
-            return;
-        
-        Creature targetCreature = TargetCell.PlacedCreature;
-        targetCreature.OnHeal(ItemData.Heal);
-        
-        base.OnHandleAction();
-    }
 }

@@ -13,7 +13,7 @@ public class ObjectManager
     public ulong NextHeroId;
     public ulong NextMonsterId;
 
-    public Dictionary<int, BaseAction> Actions { get; protected set; }
+    public Dictionary<int, BaseSkill> Skills { get; protected set; }
 
     public Transform HeroRoot => GetRootTransform("@Heroes");
     public Transform MonsterRoot => GetRootTransform("@Monsters");
@@ -22,13 +22,13 @@ public class ObjectManager
     {
         Heroes = new Dictionary<ulong, Hero>();
         Monsters = new Dictionary<ulong, Monster>();
-        Actions = new Dictionary<int, BaseAction>();
+        Skills = new Dictionary<int, BaseSkill>();
 
         NextHeroId = 10000;
         NextMonsterId = 20000;
 
         Object.DontDestroyOnLoad(HeroRoot.gameObject);
-        BindActions();
+        BindSkills();
 
         Initialized = true;
     }
@@ -44,22 +44,21 @@ public class ObjectManager
 
     #region Bind
 
-    public void BindActions()
+    public void BindSkills()
     {
-        foreach (var actionData in Managers.DataMng.ActionDataDict)
+        foreach (var skillData in Managers.DataMng.SkillDataDict)
         {
-            Type actionType = Type.GetType(actionData.Value.Name);
-            if (actionType == null)
+            Type skillType = Type.GetType(skillData.Value.Name);
+            if (skillType == null)
             {
-                Debug.LogError("Failed to BindAction: " + actionData.Value.Name);
+                Debug.LogError("Failed to BindSkill: " + skillData.Value.Name);
                 return;
             }
 
-            var action = Activator.CreateInstance(actionType) as BaseAction;
+            var skill = Activator.CreateInstance(skillType) as BaseSkill;
 
-            action.SetInfo(actionData.Key);
-
-            Actions[actionData.Key] = action;
+            skill.SetInfo(skillData.Key);
+            Skills[skillData.Key] = skill;
         }
     }
 

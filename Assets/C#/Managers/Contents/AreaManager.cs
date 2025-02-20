@@ -111,12 +111,12 @@ public class AreaManager
 
         destination = _map.GetTileCenterPosition(destination);
 
-        Sequence moveSequence = _party.MoveTo(destination);
+        Sequence moveSequence = _party.MakeMoveToSequence(destination);
 
-        _party.PlayMoving();
+        _party.PlayMovingAnimation();
         moveSequence.Play().OnComplete(() =>
         {
-            _party.StopMoving();
+            _party.StopMovingAnimation();
             _currentPlayerPosition = destination;
             _currentTile = _map.GetEventTile(destination);
             _map.RevealFogOfWar(_currentPlayerPosition);

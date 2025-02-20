@@ -13,21 +13,7 @@ public static class GlobalValues
     public static readonly int[,] DIRECTION_6WAY_X_ODD = new int[6, 2] { { 0, 1 }, { 1, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, 1 } };
     public static readonly int[,] DIRECTION_6WAY_X_EVEN = new int[6, 2] { { 0, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, -1 }, { -1, 0 } };
 
-    // Animation Name
-    public static readonly int ANIMATION_DEFEND = Animator.StringToHash("Defend");
-    public static readonly int ANIMATION_DEFEND_HIT = Animator.StringToHash("DefendHit");
-    public static readonly int ANIMATION_DIZZY = Animator.StringToHash("Dizzy");
-    public static readonly int ANIMATION_IDLE = Animator.StringToHash("Idle");
-    public static readonly int ANIMATION_JUMP = Animator.StringToHash("Jump");
-    public static readonly int ANIMATION_MOVE = Animator.StringToHash("Move");
-    public static readonly int ANIMATION_MOVEAPPROACH = Animator.StringToHash("MoveApproach");
-    public static readonly int ANIMATION_VICTORY =  Animator.StringToHash("Victory");
-
-    // Animation Parameter
-    public static readonly int PARAMETER_ATTACK_FINISHED = Animator.StringToHash("AttackFinished");
-    public static readonly int PARAMETER_APPROACH_FINISHED = Animator.StringToHash("ApproachFinished");
-    public static readonly int PARAMETER_NEEDS_JUMP = Animator.StringToHash("NeedsJump");
-    public static readonly int PARAMETER_NEEDS_MOVE = Animator.StringToHash("NeedsMove");
+    public static readonly int ANIMATION_PARAM_MOVING = Animator.StringToHash("Moving");
 
     #endregion
 

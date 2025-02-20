@@ -27,7 +27,7 @@ public class AreaMapGenerationData : ScriptableObject
     public AreaSubTileGroupData[] SubTileGroupData;
 
     // 데이터 오류 검증
-    public bool Verify()
+    public bool Validate()
     {
         if (MainTileGroupData == null)
         {

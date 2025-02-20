@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public abstract class Monster : Creature
 {
@@ -23,7 +24,7 @@ public abstract class Monster : Creature
         EquipAction();
         TargetCell = ChooseTarget(); 
         
-        if (!CurrentAction.CanStartAction())
+        if (!CurrentAction.IsExecutable())
         {
             CurrentAction.UnEquip();
             TargetCell = null;
@@ -36,9 +37,9 @@ public abstract class Monster : Creature
     public override void DoAction()
     {
         CoinHeadNum = 0;
-        ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinToss(CurrentAction, CoinHeadNum);
+        //((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinToss(CurrentAction, CoinHeadNum);
         
-        CurrentAction.DoAction();
+        CurrentAction.Execute();
     }
 
     public override void DoEndTurn()
@@ -50,7 +51,12 @@ public abstract class Monster : Creature
         TargetCell = null;
         Managers.BattleMng.NextTurn();
     }
-    
+
+    public override void LookOpponent(float duration = 0f)
+    {
+        transform.DOLookAt(Managers.BattleMng.BattleGridSystem.HeroGrid[CurrentCell.Row, 2 - CurrentCell.Column].transform.position, duration);
+    }
+
     #endregion
 
     // TODO - Action 선택 알고리즘 구현
@@ -58,7 +64,7 @@ public abstract class Monster : Creature
     {
         int randomKey = MonsterData.Actions[Random.Range(0, MonsterData.Actions.Count)];
 
-        CurrentAction =  Managers.ObjectMng.Actions[randomKey];
+        CurrentAction =  Managers.ObjectMng.Skills[randomKey];
         CurrentAction.Equip(this);
     }
     

@@ -108,8 +108,8 @@ public enum SoundType
 
 public enum ActionDataType
 {
-    ActionData,
-    AttackActionData,
+    SkillData,
+    AttackSkillData,
 }
 public enum ActionType
 {

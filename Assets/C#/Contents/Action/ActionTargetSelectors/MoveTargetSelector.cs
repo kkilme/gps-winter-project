@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class MoveTargetSelector : ActionTargetSelector
 {
+    public override bool NeedTargetSelection { get; protected set; } = true;
     public override void SetTargettableCells()
     {
         List<BattleGridCell> targets = new List<BattleGridCell>();
 
         int row = _currentcell.Row;
-        int col = _currentcell.Col;
+        int col = _currentcell.Column;
 
         for(int i = 0; i<4; i++)
         {

@@ -1,5 +1,6 @@
 using Data;
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 
 public abstract class BaseAction
@@ -7,31 +8,23 @@ public abstract class BaseAction
     #region Field
 
     public int DataId { get; protected set; }
-    public Data.ActionData ActionData { get; protected set; }
-    
     public Creature Owner { get; set; }
-    public Animator Animator => Owner.Animator;
-    public BattleGridCell TargetCell => Owner.TargetCell;
-    public ActionTargetSelector TargetSelector { get; protected set; }
-    
-    public ActionTargetType ActionTargetType { get; protected set; }
-    public StatName UsingStat { get; protected set; } = StatName.Strength;
+    public BattleGridCell TargetCell { get; set; }
+    public abstract ActionTargetSelector TargetSelector { get; protected set; }
 
-    public int CoinNum { get; protected set; }
-    public int CoinHeadNum { get; protected set; }
+    protected Animator _animator => Owner.Animator;
+    protected int _coinHeadCount;
 
     #endregion
     
     public virtual void SetInfo(int dataId)
     {
         DataId = dataId;
-        ActionData = Managers.DataMng.ActionDataDict[dataId];
-        
-        CoinNum = ActionData.CoinCount;
     }
 
     public void OnSet()
-    {   
+    {
+        Owner = Managers.BattleMng.CurrentTurnCreature;
         if(TargetSelector == null)
         {
             Debug.LogError("Action doesn't have targetselector: " + GetType().Name);
@@ -51,53 +44,17 @@ public abstract class BaseAction
         Owner.CurrentAction = null;
         Owner = null;
     }
-    public abstract bool CanStartAction();
-    
-    #region Action
 
-    public void DoAction()
+    public virtual bool IsExecutable()
     {
-        CoinHeadNum = CoinTossser.CoinToss(UsingStat, Owner.CreatureStat, ActionData);
-        ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinToss(this,CoinHeadNum);
-
-        Owner.transform.DOLookAt(TargetCell.transform.position, 0.3f,  AxisConstraint.None, new Vector3(0, 1, 0)).OnComplete(OnStartAction);
-    }
-    
-    public abstract void OnStartAction();
-    
-    public abstract void OnHandleAction();
-
-    public virtual void OnJumpFWDStart()
-    {
+        return TargetSelector.IsTargettable(TargetCell);
     }
 
-    public virtual void OnJumpFWDEnd()
-    {
-    }
-    
-    public virtual void OnJumpBWDStart()
-    {
-    }
-    
-    public virtual void OnMoveStart()
-    {
-    }
-    
-    public virtual void OnMoveFWDEnd()
-    {
-    }
-    
-    public virtual void OnMoveBWDStart()
-    {
-    }
-    
-    public virtual void OnAttackEnd()
-    {
-    }
+    public abstract IEnumerator Execute(int coinHeadCount = -1);
     
     public void OnActionEnd()
     {
-        Animator.Play("Idle");
+        _animator.Play("Idle");
         
         Vector3 front;
         if (Owner.CreatureType == CreatureType.Hero)
@@ -107,7 +64,4 @@ public abstract class BaseAction
 
         Owner.transform.DOLookAt(front, 0.3f, AxisConstraint.None, new Vector3(0, 1, 0)).OnComplete(Owner.DoEndTurn);
     }
-
-    #endregion
-    
 }

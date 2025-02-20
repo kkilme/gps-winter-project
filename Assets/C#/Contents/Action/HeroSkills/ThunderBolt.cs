@@ -1,9 +1,5 @@
-public class ThunderBolt : StandAction
+public class ThunderBolt : StandSkill
 {
-    public override void SetInfo(int dataId)
-    {
-        ActionTargetType = ActionTargetType.Single;
-        
-        base.SetInfo(dataId);
-    }
+    public override ActionTargetSelector TargetSelector { get; protected set; } = new SingleOpponentSelector();
+
 }

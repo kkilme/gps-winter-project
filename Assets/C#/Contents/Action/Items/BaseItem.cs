@@ -1,17 +1,20 @@
+using System.Collections;
+using Data;
+
+// TODO: Item
 public abstract class BaseItem : BaseAction
 {
-    public int DataId { get; protected set; }
-    public Data.ItemData ItemData { get; protected set; }
+    public ItemData ItemData { get; protected set; }
     public ItemType ItemType { get; protected set; }
     
     public Bag Bag { get; set; }
     public int Idx { get; set; }
     public int Count { get; set; }
 
-    public virtual void SetInfo(int templateId, Creature owner, Bag bag, int idx, int addNum)
+    public virtual void SetInfo(int dataId, Creature owner, Bag bag, int idx, int addNum)
     {
-        DataId = templateId;
-        ItemData = Managers.DataMng.ItemDataDict[templateId];
+        DataId = dataId;
+        ItemData = Managers.DataMng.ItemDataDict[dataId];
         
         Owner = owner;
         Bag = bag;
@@ -19,10 +22,11 @@ public abstract class BaseItem : BaseAction
         Count += addNum;
     }
     
-    public override void OnHandleAction()
+    public override IEnumerator Execute(int coinHeadCount = -1)
     {
         Count--;
         if (Count <= 0)
             Bag.Items[Idx] = null;
+        yield return null;
     }
 }

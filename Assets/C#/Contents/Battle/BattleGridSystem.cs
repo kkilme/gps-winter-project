@@ -6,21 +6,6 @@ public class BattleGridSystem
     public BattleGridCell[,] HeroGrid { get; protected set; } = new BattleGridCell[2, 3];
     public BattleGridCell[,] MonsterGrid { get; protected set; } = new BattleGridCell[2, 3];
 
-    private BattleGridCell _currentMouseOverCell;
-    public BattleGridCell CurrentMouseOverCell
-    {
-        get => _currentMouseOverCell;
-        set
-        {
-            if (_currentMouseOverCell == value)
-                return;
-
-            if (_currentMouseOverCell != null) _currentMouseOverCell.RevertOutlineColor();
-            _currentMouseOverCell = value;
-            if (_currentMouseOverCell != null) _currentMouseOverCell.HighlightOutline();
-        }
-    }
-
     private BattleManager _battleManager;
 
 
@@ -51,7 +36,7 @@ public class BattleGridSystem
         {
             Vector2Int pos = Managers.ObjectMng.HeroParty.BattlePositions[hero];
             HeroGrid[pos.y, pos.x].PlaceCreature(hero);
-            hero.transform.LookAt(MonsterGrid[pos.y, 2 - pos.x].transform.position);
+            hero.LookOpponent();
         }
     }
 
@@ -69,7 +54,7 @@ public class BattleGridSystem
             Monster monster = Managers.ObjectMng.SpawnMonster(monsterData.DataId);
             Vector2Int pos = new Vector2Int(monsterData.x, monsterData.y);
             MonsterGrid[pos.y, pos.x].PlaceCreature(monster);
-            monster.transform.LookAt(HeroGrid[pos.y, 2 - pos.x].transform.position);
+            monster.LookOpponent();
             _battleManager.Monsters.Add(monster);
         }
     }
@@ -80,16 +65,30 @@ public class BattleGridSystem
         // 조건이 없을 시, A를 B의 위치로 옮긴 후 B를 A의 위치로 옮길 때 문제가 생김.
         if(creature.CurrentCell.PlacedCreature == creature) creature.CurrentCell.PlacedCreature = null;
         targetCell.PlaceCreature(creature);
-        //creature.transform.LookAt(HeroGrid[targetCell.Row, 2 - targetCell.Col].transform.position);
+        //creature.transform.LookAt(HeroGrid[targetCell.Row, 2 - targetCell.Column].transform.position);
     }
 
-    public void HighlightTargetables()
+    public void HighlightTargetableCells(BaseAction action)
     {
-        var targetables = _battleManager.CurrentAction.TargetSelector.TargettableCells;
+        var targetables = action.TargetSelector.TargettableCells;
 
         foreach (var targetable in targetables)
         {
-            //targetable.HighlightHarder();
+            targetable.HighlightOutline();
+        }
+    }
+
+    public void ResetCellColor()
+    {
+        foreach(var cell in HeroGrid)
+        {
+            cell.RevertFillColor();
+            cell.RevertOutlineColor();
+        }
+        foreach (var cell in MonsterGrid)
+        {
+            cell.RevertFillColor();
+            cell.RevertOutlineColor();
         }
     }
 }

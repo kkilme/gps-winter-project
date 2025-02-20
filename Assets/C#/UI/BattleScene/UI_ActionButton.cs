@@ -5,14 +5,14 @@ using UnityEngine.UI;
 public class UI_ActionButton : MonoBehaviour
 {
     private UI_BattleActionPanel _actionPanel;
-    private BaseAction _action;
+    private BaseSkill _skill;
 
-    public void Init(BaseAction action)
+    public void Init(BaseSkill skill)
     {
         var Button = gameObject.GetOrAddComponent<Button>();
 
         _actionPanel = Managers.BattleMng.BattleSceneUI.BattleActionPanel;
-        _action = action;
+        _skill = skill;
 
         Button.onClick.AddListener(OnClick);
         gameObject.BindEvent(OnMouseEnterEvent, UIEvent.Enter);
@@ -20,11 +20,11 @@ public class UI_ActionButton : MonoBehaviour
 
     protected void OnClick()
     {
-        Managers.BattleMng.SetAction(_action);
+        Managers.BattleMng.SetAction(_skill);
     }
 
     protected void OnMouseEnterEvent(PointerEventData data)
     {   
-        _actionPanel.ShowActionInfo(_action);
+        _actionPanel.ShowSkillInfo(_skill);
     }
 }

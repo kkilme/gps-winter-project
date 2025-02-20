@@ -90,14 +90,61 @@ namespace Data
     }
     #endregion
 
-    #region ItemData
+    #region ActionData
 
     [Serializable]
-    public class ItemData
+    public class ActionData
     {
         public int DataId;
         public string Name;
         public string Description;
+        public string IconPath;
+        public ActionDataType Type; // ActionData를 상속받는 클래스명
+    }
+
+    [Serializable]
+    public class SkillData : ActionData
+    {
+        public int CoinCount;
+        public StatName UsingStat;
+    }
+
+    [Serializable]
+    public class AttackSkillData : SkillData
+    {
+        public AttackType AttackType;
+        public int DamagePerCoin;
+    }
+
+    [Serializable]
+    public class SkillDataLoader : ILoader<int, SkillData>
+    {
+        public List<SkillData> skills = new List<SkillData>();
+
+        public Dictionary<int, SkillData> MakeDict()
+        {
+            var dic = new Dictionary<int, SkillData>();
+            foreach (var skill in skills)
+            {
+                Type skillType = Type.GetType("Data." + skill.Type.ToString());
+                if (skillType == null)
+                {
+                    Debug.LogError($"Failed to get type: " + skill.Type);
+                    return null;
+                }
+                string json = JsonConvert.SerializeObject(skill);
+                SkillData skillData = JsonConvert.DeserializeObject(json, skillType) as SkillData; // DeserializeObject는 object타입을 반환하기 때문에 SkillData로 캐스팅
+                dic.Add(skill.DataId, skillData);
+            }
+
+            return dic;
+        }
+    }
+
+    // TODO: ItemData
+    [Serializable]
+    public class ItemData : ActionData
+    {
         public int Heal;
     }
 
@@ -115,6 +162,7 @@ namespace Data
             return dic;
         }
     }
+
     #endregion
 
     #region EquipmentData
@@ -141,12 +189,11 @@ namespace Data
         public int LeftIndex;
         public int RightIndex;
         public WeaponType WeaponType;
-        public List<int> Actions;
+        public List<int> Skills;
     }
 
     [Serializable]
     public class WeaponDataLoader : ILoader<int, WeaponData>
-
     {
         public List<WeaponData> weapons = new List<WeaponData>();
 
@@ -178,52 +225,6 @@ namespace Data
             var dic = new Dictionary<int, ArmorData>();
             foreach (var armor in armors)
                 dic.Add(armor.DataId, armor);
-
-            return dic;
-        }
-    }
-    #endregion
-
-    #region ActionData
-    [Serializable]
-    public class ActionData
-    {
-        public int DataId;
-        public ActionDataType Type; // ActionData 또는 이를 상속받는 클래스명
-        public string Name;
-        public string Description;
-        public int CoinCount;
-        public StatName UsingStat;
-        public string IconName;
-    }
-
-    [Serializable]
-    public class AttackActionData : ActionData
-    {
-        public AttackType AttackType;
-        public int DamagePerCoin;
-    }
-
-    [Serializable]
-    public class ActionDataLoader : ILoader<int, ActionData>
-    {
-        public List<ActionData> actions = new List<ActionData>();
-
-        public Dictionary<int, ActionData> MakeDict()
-        {
-            var dic = new Dictionary<int, ActionData>();
-            foreach (var action in actions)
-            {
-                Type actionType = Type.GetType("Data."+ action.Type.ToString());
-                if (actionType == null)
-                {
-                    Debug.LogError($"Failed to get type: " + action.Type);
-                    return null;
-                }
-                string json = JsonConvert.SerializeObject(action);
-                ActionData actionData = JsonConvert.DeserializeObject(json, actionType) as ActionData; // DeserializeObject는 object타입을 반환하기 때문에 ActionData로 캐스팅
-                dic.Add(action.DataId, actionData);
-            }
 
             return dic;
         }

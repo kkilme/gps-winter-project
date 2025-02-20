@@ -34,15 +34,15 @@ public class UI_CoinToss : UI_Base
         }
     }
     
-    public void ShowCoinNum(BaseAction action)
+    public void ShowCoinNum(BaseSkill skill)
     {
         for (int i = 0; i < 5; i++)
-            Get<GameObject>(i).SetActive(i < action.CoinNum);
+            Get<GameObject>(i).SetActive(i < skill.SkillData.CoinCount);
     }
     
-    public void ShowCoinToss(BaseAction action, int coinHeadNum)
+    public void ShowCoinToss(BaseSkill skill, int coinHeadNum)
     {
-        ShowCoinNum(action);
+        ShowCoinNum(skill);
 
         for (int i = 0; i < 5; i++)
         {

@@ -5,7 +5,7 @@ public class Weapon: Equipment
 {
     public Data.WeaponData WeaponData => EquipmentData as Data.WeaponData;
     public WeaponType WeaponType { get; protected set; }
-    public List<BaseAction> Actions { get; protected set; } = new();
+    public List<BaseSkill> Skills { get; protected set; } = new();
     
     public override void SetInfo(int dataId)
     {
@@ -15,12 +15,12 @@ public class Weapon: Equipment
 
         base.SetInfo(dataId);
 
-        foreach (int actionId in WeaponData.Actions)
+        foreach (int actionId in WeaponData.Skills)
         {
-            Actions.Add(Managers.ObjectMng.Actions[actionId]);
+            Skills.Add(Managers.ObjectMng.Skills[actionId]);
         }
 
-        Actions.Add(Managers.ObjectMng.Actions[GlobalValues.ACTION_MOVE_ID]);
-        Actions.Add(Managers.ObjectMng.Actions[GlobalValues.ACTION_FLEE_ID]);
+        Skills.Add(Managers.ObjectMng.Skills[GlobalValues.ACTION_MOVE_ID]);
+        Skills.Add(Managers.ObjectMng.Skills[GlobalValues.ACTION_FLEE_ID]);
     }
 }

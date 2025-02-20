@@ -6,7 +6,7 @@
       "Attack": 5,
       "RightIndex": 1,
       "WeaponType": "SingleSword",
-      "Actions": [
+      "Skills": [
         402000,
       ]
     },
@@ -17,7 +17,7 @@
       "LeftIndex" : 17,
       "RightIndex": 3,
       "WeaponType": "SwordAndShield",
-      "Actions": [
+      "Skills": [
         402000,
       ]
     },
@@ -27,7 +27,7 @@
        "Attack": 5,
        "RightIndex": 24,
        "WeaponType": "Wand",
-	   "Actions": [
+	   "Skills": [
 		 402001,
 	   ]
     }
