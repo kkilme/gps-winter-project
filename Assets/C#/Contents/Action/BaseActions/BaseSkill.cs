@@ -13,4 +13,5 @@ public abstract class BaseSkill : BaseAction
         base.SetInfo(dataId);
         SkillData = Managers.DataMng.SkillDataDict[dataId];
     }
+
 }

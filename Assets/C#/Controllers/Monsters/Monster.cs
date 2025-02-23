@@ -24,12 +24,12 @@ public abstract class Monster : Creature
         EquipAction();
         TargetCell = ChooseTarget(); 
         
-        if (!CurrentAction.IsExecutable())
-        {
-            CurrentAction.UnEquip();
-            TargetCell = null;
-            DoPrepareAction();
-        }
+        //if (!CurrentAction.IsExecutable())
+        //{
+        //    CurrentAction.UnEquip();
+        //    TargetCell = null;
+        //    DoPrepareAction();
+        //}
         
         CreatureBattleState = CreatureBattleState.ActionProceed;
     }
@@ -52,9 +52,9 @@ public abstract class Monster : Creature
         Managers.BattleMng.NextTurn();
     }
 
-    public override void LookOpponent(float duration = 0f)
+    public override Tween LookOpponent(float duration = 0f)
     {
-        transform.DOLookAt(Managers.BattleMng.BattleGridSystem.HeroGrid[CurrentCell.Row, 2 - CurrentCell.Column].transform.position, duration);
+        return transform.DOLookAt(Managers.BattleMng.BattleGridSystem.HeroGrid[CurrentCell.Row, 2 - CurrentCell.Column].transform.position, duration);
     }
 
     #endregion
@@ -62,10 +62,10 @@ public abstract class Monster : Creature
     // TODO - Action 선택 알고리즘 구현
     protected void EquipAction()
     {
-        int randomKey = MonsterData.Actions[Random.Range(0, MonsterData.Actions.Count)];
+        //int randomKey = MonsterData.Actions[Random.Range(0, MonsterData.Actions.Count)];
 
-        CurrentAction =  Managers.ObjectMng.Skills[randomKey];
-        CurrentAction.Equip(this);
+        //CurrentAction =  Managers.ObjectMng.Skills[randomKey];
+        //CurrentAction.Equip(this);
     }
     
     // TODO - Target 선택 알고리즘 구현

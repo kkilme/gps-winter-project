@@ -29,8 +29,8 @@ public class UI_CoinToss : UI_Base
     {
         for (int i = 0; i < 5; i++)
         {
-            Util.FindChild(Get<GameObject>(i), "SuccessIcon").SetActive(false);
-            Util.FindChild(Get<GameObject>(i), "FailedIcon").SetActive(false);
+            GlobalUtility.FindChild(Get<GameObject>(i), "SuccessIcon").SetActive(false);
+            GlobalUtility.FindChild(Get<GameObject>(i), "FailedIcon").SetActive(false);
         }
     }
     
@@ -46,8 +46,8 @@ public class UI_CoinToss : UI_Base
 
         for (int i = 0; i < 5; i++)
         {
-            Util.FindChild(Get<GameObject>(i), "SuccessIcon").SetActive(i < coinHeadNum);
-            Util.FindChild(Get<GameObject>(i), "FailedIcon").SetActive(i >= coinHeadNum);
+            GlobalUtility.FindChild(Get<GameObject>(i), "SuccessIcon").SetActive(i < coinHeadNum);
+            GlobalUtility.FindChild(Get<GameObject>(i), "FailedIcon").SetActive(i >= coinHeadNum);
         }
     }
 }

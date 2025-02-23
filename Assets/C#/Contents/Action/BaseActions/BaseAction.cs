@@ -9,7 +9,7 @@ public abstract class BaseAction
 
     public int DataId { get; protected set; }
     public Creature Owner { get; set; }
-    public BattleGridCell TargetCell { get; set; }
+    public BattleGridCell SelectedTargetCell { get; set; }
     public abstract ActionTargetSelector TargetSelector { get; protected set; }
 
     protected Animator _animator => Owner.Animator;
@@ -32,11 +32,10 @@ public abstract class BaseAction
         }
 
         TargetSelector.SetTargettableCells();
-    }
-
-    public void Equip(Creature owner)
-    {
-        Owner = owner;
+        if(!TargetSelector.NeedTargetSelection)
+        {
+            SelectedTargetCell = TargetSelector.GetRandomTarget();
+        }
     }
     
     public void UnEquip()
@@ -45,23 +44,11 @@ public abstract class BaseAction
         Owner = null;
     }
 
-    public virtual bool IsExecutable()
-    {
-        return TargetSelector.IsTargettable(TargetCell);
-    }
-
     public abstract IEnumerator Execute(int coinHeadCount = -1);
     
-    public void OnActionEnd()
+    public virtual void OnActionEnd()
     {
-        _animator.Play("Idle");
-        
-        Vector3 front;
-        if (Owner.CreatureType == CreatureType.Hero)
-            front = new Vector3(0, 0, 1);
-        else
-            front = new Vector3(0, 0, -1);
-
-        Owner.transform.DOLookAt(front, 0.3f, AxisConstraint.None, new Vector3(0, 1, 0)).OnComplete(Owner.DoEndTurn);
+        TargetSelector.OnActionEnd();
+        SelectedTargetCell = null;
     }
 }

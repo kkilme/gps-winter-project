@@ -24,9 +24,9 @@ public class Hero : Creature
     {
         base.Init();
         
-        Head = Util.FindChild(gameObject, "head", true);
-        LeftHand = Util.FindChild(gameObject, "weapon_l", true);
-        RightHand = Util.FindChild(gameObject, "weapon_r", true);
+        Head = GlobalUtility.FindChild(gameObject, "head", true);
+        LeftHand = GlobalUtility.FindChild(gameObject, "weapon_l", true);
+        RightHand = GlobalUtility.FindChild(gameObject, "weapon_r", true);
 
         Bag = new Bag();
         Bag.SetInfo();
@@ -72,9 +72,9 @@ public class Hero : Creature
         Managers.BattleMng.NextTurn();
     }
 
-    public override void LookOpponent(float duration = 0f)
+    public override Tween LookOpponent(float duration = 0f)
     {
-        transform.DOLookAt(Managers.BattleMng.BattleGridSystem.MonsterGrid[CurrentCell.Row, 2 - CurrentCell.Column].transform.position, duration);
+        return transform.DOLookAt(Managers.BattleMng.BattleGridSystem.MonsterGrid[CurrentCell.Row, 2 - CurrentCell.Column].transform.position, duration);
     }
 
     #endregion

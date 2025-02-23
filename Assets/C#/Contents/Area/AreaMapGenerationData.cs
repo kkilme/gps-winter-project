@@ -108,7 +108,7 @@ public class AreaTileGroupData
 
         AreaBaseTileData tileData = _globalAvailableTiles[Random.Range(0, _globalAvailableTiles.Count)];
 
-        Util.IncreaseDictCount(_globalCount, tileData.Name);
+        GlobalUtility.IncreaseDictCount(_globalCount, tileData.Name);
 
         // GlobalLimit에 도달 시
         if (tileData.HasGlobalLimit && _globalCount[tileData.Name] == tileData.GlobalLimitCount)
@@ -161,8 +161,8 @@ public class AreaSubTileGroupData
 
         AreaSubTileData tileData = _localAvailableTiles[Random.Range(0, _localAvailableTiles.Count)];
 
-        Util.IncreaseDictCount(_globalCount, tileData.Name);
-        Util.IncreaseDictCount(_localCount, tileData.Name);
+        GlobalUtility.IncreaseDictCount(_globalCount, tileData.Name);
+        GlobalUtility.IncreaseDictCount(_localCount, tileData.Name);
 
         // GlobalLimit에 도달 시
         if (tileData.HasGlobalLimit && _globalCount[tileData.Name] == tileData.GlobalLimitCount)

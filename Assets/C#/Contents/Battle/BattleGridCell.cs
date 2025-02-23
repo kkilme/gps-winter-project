@@ -18,7 +18,7 @@ public abstract class BattleGridCell : MonoBehaviour
     private void Start()
     {
         _outline = GetComponent<SpriteRenderer>();
-        _fill = Util.FindChild<SpriteRenderer>(gameObject, "fill");
+        _fill = GlobalUtility.FindChild<SpriteRenderer>(gameObject, "fill");
         _outlineOriginalColor = _outline.color;
         _fillOriginalColor = _fill.color;
     }

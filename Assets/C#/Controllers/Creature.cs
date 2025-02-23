@@ -84,7 +84,7 @@ public abstract class Creature : MonoBehaviour
     /// <summary>
     /// 전투 씬에서 Creature가 정면을 바라보도록 함
     /// </summary>
-    public abstract void LookOpponent(float duration = 0f);
+    public abstract Tween LookOpponent(float duration = 0f);
     
     #endregion
     

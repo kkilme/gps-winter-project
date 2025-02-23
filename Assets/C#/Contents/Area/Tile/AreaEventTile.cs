@@ -63,7 +63,7 @@ public abstract class AreaEventTile: MonoBehaviour
     // Sprite로 Mesh를 만들고 Collider에 적용: raycast를 위해 필요
     private void InitMesh()
     {
-        Mesh mesh = Util.SpriteToMesh(_fill.sprite);
+        Mesh mesh = GlobalUtility.SpriteToMesh(_fill.sprite);
         gameObject.transform.GetComponentInChildren<MeshCollider>().sharedMesh = mesh;
     }
 

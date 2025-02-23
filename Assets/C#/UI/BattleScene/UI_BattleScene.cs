@@ -41,11 +41,13 @@ public class UI_BattleScene : UI_Scene
         CoinTossUI.Hide();
         ChooseTargetUI.Hide();
         TurnstateUI.Setup();
+        TurnstateUI.HideInstantly();
     }
 
-    public void OnBattlePhaseStart()
+    public IEnumerator OnBattlePhaseStart()
     {
-        PlacementPhaseUI.Hide();
+        yield return PlacementPhaseUI.Hide().WaitForCompletion();
+        TurnstateUI.Show();
     }
 
     public void OnBattleEnd(BattleResultType battleResult)
@@ -74,6 +76,7 @@ public class UI_BattleScene : UI_Scene
     public void OnTurnStart()
     {
         if(Managers.BattleMng.CurrentTurnCreature is Hero) BattleActionPanel.Show();
+        else BattleActionPanel.Hide();
     }
 
     public void OnTurnEnd()

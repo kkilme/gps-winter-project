@@ -61,7 +61,7 @@ public class UI_TurnState : UI_Base
                 index++;
             }
 
-            creatureTurnFrame.Move(x);
+            creatureTurnFrame.MoveTo(x);
         }
     }
 
@@ -72,4 +72,15 @@ public class UI_TurnState : UI_Base
         sizeDelta.x = BIG_FRAME_SIZE / 2 + (NORMAL_FRAME_SIZE + PADDING) * (_turnFrames.Count - 1) + BORDER_SIZE * 2;
         _rectTransform.DOSizeDelta(sizeDelta, 0.5f);
     }
+    public override Tween Show()
+    {
+        gameObject.SetActive(true);
+        return _rectTransform.DOAnchorPosY(500, 1f).From(true).SetEase(Ease.OutBack);
+    }
+
+    public override Tween Hide()
+    {
+        return _rectTransform.DOAnchorPosY(500, 0.7f).SetEase(Ease.InBack);
+    }
+
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Util : MonoBehaviour
+public static class GlobalUtility
 {
     // go에 T컴포넌트가 있다면 가져오고, 없다면 생성하여 반환
     public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component

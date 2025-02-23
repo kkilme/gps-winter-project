@@ -50,6 +50,7 @@ public class Managers : MonoBehaviour
             {
                 go = new GameObject { name = "@Managers" };
                 go.AddComponent<Managers>();
+                go.AddComponent<CoroutineRunner>();
             }
             
             DontDestroyOnLoad(go);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class ActionTargetSelector
 {
@@ -19,9 +20,18 @@ public abstract class ActionTargetSelector
     /// TargettableCells 설정
     /// </summary>
     public abstract void SetTargettableCells();
+    public BattleGridCell GetRandomTarget()
+    {
+        return TargettableCells[Random.Range(0, TargettableCells.Count)];
+    }
 
     public bool IsTargettable(BattleGridCell cell)
     {
-        return TargettableCells.Contains(cell);
+        return cell != null && TargettableCells.Contains(cell);
+    }
+
+    public virtual void OnActionEnd()
+    {
+        TargettableCells.Clear();
     }
 }

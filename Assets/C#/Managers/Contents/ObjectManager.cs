@@ -76,7 +76,7 @@ public class ObjectManager
         HeroParty ??= new HeroParty();
 
         string className = Managers.DataMng.HeroDataDict[heroDataId].Name;
-        GameObject go = Managers.ResourceMng.Instantiate($"{GlobalValues.HERO_PATH}/{className}");
+        GameObject go = Managers.ResourceMng.Instantiate($"{GlobalValues.HERO_PREFAB_PATH_ROOT}/{className}");
         Hero hero = go.GetComponent<Hero>();
         HeroParty.AddHero(hero);
 
@@ -106,7 +106,7 @@ public class ObjectManager
     public Monster SpawnMonster(int monsterDataId)
     {
         string className = Managers.DataMng.MonsterDataDict[monsterDataId].Name;
-        GameObject go = Managers.ResourceMng.Instantiate($"{GlobalValues.MONSTER_PATH}/{className}");
+        GameObject go = Managers.ResourceMng.Instantiate($"{GlobalValues.MONSTER_PREFAB_PATH_ROOT}/{className}");
         Monster monster = go.GetComponent<Monster>();
 
         monster.SetInfo(monsterDataId);

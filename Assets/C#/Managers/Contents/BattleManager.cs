@@ -43,7 +43,7 @@ public class BattleManager
         GameObject battleField = Managers.ResourceMng.Instantiate($"Battle/Field/{battleFieldname}");
         battleField.transform.position = new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0, GlobalValues.BATTLEFIELD_POS_Z);
 
-        // MouseInputHandler 초기화 - 반드시 배틀 필드 생성 이후에 해야함.
+        // MouseInputHandler 초기화 - 카메라가 배틀 필드에 포함되어 있기 때문에 반드시 배틀 필드 생성 이후에 해야함.
         MouseInputHandler.Init();
 
         // Creature 배치
@@ -72,30 +72,37 @@ public class BattleManager
     // 전투 시작
     public void StartBattlePhase()
     {   
-        if(BattleState != BattleState.HeroPlacement)
+        if (BattleState != BattleState.HeroPlacement)
             return;
 
         BattleState = BattleState.Idle;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
         Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
-        BattleSceneUI.OnBattlePhaseStart();
+        CoroutineRunner.Instance.Run(BattleSceneUI.OnBattlePhaseStart());
     }
 
+    // Action 선택
     public void SetAction(BaseAction action)
     {
         if (action == null) return;
         CurrentAction = action;
         CurrentAction.OnSet();
         BattleSceneUI.BattleActionPanel.Hide();
-        BattleSceneUI.ChooseTargetUI.Show();
 
-        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
-        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
-        Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnTargetSelect;
-
-        BattleGridSystem.ResetCellColor();
-        BattleGridSystem.HighlightTargetableCells(action);
+        // 대상 선택이 필요한 액션인 경우
+        if (action.TargetSelector.NeedTargetSelection)
+        {
+            BattleSceneUI.ChooseTargetUI.Show();
+            Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
+            Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
+            Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnTargetSelect;
+            BattleGridSystem.HighlightTargetableCells(action);
+        }
+        else // 대상 선택이 필요 없는 액션인 경우
+        {
+            CoroutineRunner.Instance.Run(CurrentAction.Execute());
+        }
     }
 
     public void UnsetAction()
@@ -109,6 +116,13 @@ public class BattleManager
         Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
 
         BattleGridSystem.ResetCellColor();
+    }
+
+    public void OnActionEnd()
+    {
+        CurrentAction.OnActionEnd();
+        UnsetAction();
+        NextTurn();
     }
 
     public void NextTurn()

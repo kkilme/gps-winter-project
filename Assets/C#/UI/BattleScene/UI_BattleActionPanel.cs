@@ -34,13 +34,13 @@ public class UI_BattleActionPanel : UI_Base
         _rect = GetComponent<RectTransform>();
     }
 
-    public override void Show()
+    public override Tween Show()
     {   
         gameObject.SetActive(true);
-        _rect.DOAnchorPosY(-400f, 1f).From(true).SetEase(Ease.OutCirc);
         _hero = Managers.BattleMng.CurrentTurnCreature as Hero;
-
         SetupActionButtons();
+
+        return _rect.DOAnchorPosY(-400f, 1f).From(true).SetEase(Ease.OutCirc);
     }
 
     private void SetupActionButtons()

@@ -102,7 +102,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                 // 타일이 생성될 위치
                 Vector2Int tilePosition;
                 // 행/열 합하여 가장 적은 수의 타일이 생성된 위치를 가져옴
-                Util.FindMinIndex(numOfSubtiles, out int x, out int z);
+                GlobalUtility.FindMinIndex(numOfSubtiles, out int x, out int z);
 
                 // 위에서 가져온 위치에 이미 타일을 생성했을 수 있음. 그럴 시 빈 타일 중 랜덤 선택.
                 if (_map.TileTypeMap[z, x] != AreaTileType.Empty)

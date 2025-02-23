@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,14 +19,34 @@ public abstract class UI_Base : MonoBehaviour
         Init();
     }
 
-    public virtual void Show()
+    public void ShowInstantly()
     {
         gameObject.SetActive(true);
     }
 
-    public virtual void Hide()
+    public void HideInstantly()
     {
         gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// DOTween을 사용해 UI를 보여주는 메소드
+    /// </summary>
+    public virtual Tween Show()
+    {
+        gameObject.SetActive(true);
+
+        return DOVirtual.DelayedCall(0, () => {}); // 즉시 종료되는 Dummy Tween
+    }
+
+    /// <summary>
+    /// DOTween을 사용해 UI를 숨기는 메소드
+    /// </summary>
+    public virtual Tween Hide()
+    {
+        gameObject.SetActive(false);
+
+        return DOVirtual.DelayedCall(0, () => { });
     }
 
     // T컴포넌트를 가지고 있는 모든 자식 GameObject를 검색해 _objectDic에 Add
@@ -38,9 +59,9 @@ public abstract class UI_Base : MonoBehaviour
         for (int i = 0; i < uiNames.Length; i++)
         {
             if (typeof(T) == typeof(GameObject))
-                objects[i] = Util.FindChild(gameObject, uiNames[i], true);
+                objects[i] = GlobalUtility.FindChild(gameObject, uiNames[i], true);
             else
-                objects[i] = Util.FindChild<T>(gameObject, uiNames[i], true);
+                objects[i] = GlobalUtility.FindChild<T>(gameObject, uiNames[i], true);
             
             if (objects[i] == null)
                 Debug.Log(($"Failed to bind({uiNames[i]})"));
@@ -78,7 +99,7 @@ public abstract class UI_Base : MonoBehaviour
     public static void BindEvent(GameObject go, Action<PointerEventData> action,
         UIEvent type = UIEvent.Click)
     {
-        UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
+        UI_EventHandler evt = GlobalUtility.GetOrAddComponent<UI_EventHandler>(go);
 
         switch (type)
         {
@@ -111,7 +132,7 @@ public abstract class UI_Base : MonoBehaviour
 
     public static void ClearEvent(GameObject go)
     {
-        UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
+        UI_EventHandler evt = GlobalUtility.GetOrAddComponent<UI_EventHandler>(go);
 
         evt.OnClickHandler = null;
         evt.OnDragHandler = null;

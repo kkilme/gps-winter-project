@@ -1,12 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
+
 public static class GlobalValues
 {
     #region Value
     public const float BATTLEFIELD_POS_X = -1000f;
     public const float BATTLEFIELD_POS_Z = -1000f;
 
-    public static readonly int[,] DIRECTION_4WAY = new int[4, 2] { { 1, 0 }, { 0, 1 }, { 1, 0 }, { 1, 0 } };
+    public const float CREATURE_BATTLE_VELOCITY = 3f;
+
+    public static readonly int[,] DIRECTION_4WAY = new int[4, 2] { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
     public static readonly int[,] HERO_TILE_POS_OFFSET = new int[4, 2] { { 0, 1 }, { -1, 0 }, { 1, 0 }, { 0, -1 } };
 
     // Flat-top Hexagon 타일맵에서는 X좌표의 홀/짝 여부에 따라 방향에 해당하는 좌표값이 다름
@@ -22,8 +24,8 @@ public static class GlobalValues
     public const string BATTLE_SCENE_NAME = "BattleScene";
     public const string AREA_SCENE_NAME = "AreaScene";
 
-    public const string HERO_PATH = "Heroes";
-    public const string MONSTER_PATH = "Monsters";
+    public const string HERO_PREFAB_PATH_ROOT = "Heroes";
+    public const string MONSTER_PREFAB_PATH_ROOT = "Monsters";
 
     #endregion
 

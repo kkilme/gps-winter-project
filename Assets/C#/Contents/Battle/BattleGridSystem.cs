@@ -18,11 +18,11 @@ public class BattleGridSystem
         {
             for (int col = 0; col < 3; col++)
             {
-                var herocell = Util.FindChild(heroGrid, $"BattleGridCell ({row}, {col})");
+                var herocell = GlobalUtility.FindChild(heroGrid, $"BattleGridCell ({row}, {col})");
                 HeroGrid[row, col] = herocell.GetOrAddComponent<HeroBattleGridCell>();
                 HeroGrid[row, col].Init(row, col, GridSide.HeroSide);
 
-                var monsterCell = Util.FindChild(monsterGrid, $"BattleGridCell ({row}, {col})");
+                var monsterCell = GlobalUtility.FindChild(monsterGrid, $"BattleGridCell ({row}, {col})");
                 MonsterGrid[row, col] = monsterCell.GetOrAddComponent<MonsterBattleGridCell>();
                 MonsterGrid[row, col].Init(row, col, GridSide.MonsterSide);
             }
@@ -65,11 +65,18 @@ public class BattleGridSystem
         // 조건이 없을 시, A를 B의 위치로 옮긴 후 B를 A의 위치로 옮길 때 문제가 생김.
         if(creature.CurrentCell.PlacedCreature == creature) creature.CurrentCell.PlacedCreature = null;
         targetCell.PlaceCreature(creature);
-        //creature.transform.LookAt(HeroGrid[targetCell.Row, 2 - targetCell.Column].transform.position);
+    }
+
+    public void SwapCreaturePosition(Creature creature1, Creature creature2)
+    {
+        var tempCell = creature1.CurrentCell;
+        MoveCreature(creature1, creature2.CurrentCell);
+        MoveCreature(creature2, tempCell);
     }
 
     public void HighlightTargetableCells(BaseAction action)
     {
+        ResetCellColor();
         var targetables = action.TargetSelector.TargettableCells;
 
         foreach (var targetable in targetables)

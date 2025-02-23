@@ -30,7 +30,7 @@ public class UIManager
     //sort가 false면, go의 Canvas 컴포넌트를 가져와 _order값을 0으로 설정(SceneUI)
     public void SetCanvas(GameObject go, bool sort = true)
     {
-        Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
+        Canvas canvas = GlobalUtility.GetOrAddComponent<Canvas>(go);
         //canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.overrideSorting = true; // 부모 캔버스와는 독립적인 오더값을 가짐
 
@@ -51,7 +51,7 @@ public class UIManager
             name = typeof(T).Name;
 
         GameObject go = Managers.ResourceMng.Instantiate($"UI/SceneUI/{name}");
-        T sceneUI = Util.GetOrAddComponent<T>(go);
+        T sceneUI = GlobalUtility.GetOrAddComponent<T>(go);
         SceneUI = sceneUI;
 
         go.transform.SetParent(Root.transform);
@@ -66,7 +66,7 @@ public class UIManager
             name = typeof(T).Name;
 
         GameObject go = Managers.ResourceMng.Instantiate($"UI/PopupUI/{name}");
-        T popupUI = Util.GetOrAddComponent<T>(go);
+        T popupUI = GlobalUtility.GetOrAddComponent<T>(go);
         PopupStack.Push(popupUI);
         
         go.transform.SetParent(Root.transform);
@@ -92,7 +92,7 @@ public class UIManager
             return null;
         }
          
-        T ui = Util.FindChild<T>(SceneUI.gameObject, recursive: true);
+        T ui = GlobalUtility.FindChild<T>(SceneUI.gameObject, recursive: true);
         return ui;
     }
 

@@ -109,23 +109,27 @@ public class BattleMouseInputHandler
     }
 
     private void OnClickGridCell()
-    {
-        if (CurrentMouseOverCell == null || Managers.BattleMng.BattleState != BattleState.ActionTargetSelecting)
+    {   
+        BaseAction action = Managers.BattleMng.CurrentAction;
+
+        if (CurrentMouseOverCell == null || !action.TargetSelector.IsTargettable(CurrentMouseOverCell))
             return;
 
+        action.SelectedTargetCell = CurrentMouseOverCell;
+        CoroutineRunner.Instance.Run(action.Execute());
         //CurrentAction.Equip(this);
-        //TargetCell = CurrentMouseOverCell;
+        //SelectedTargetCell = CurrentMouseOverCell;
 
         //if (!CurrentAction.IsExecutable())
         //{
         //    CurrentAction.UnEquip();
-        //    TargetCell = null;
+        //    SelectedTargetCell = null;
         //    return;
         //}
 
         //CreatureBattleState = CreatureBattleState.ActionProceed;
 
-        CurrentMouseOverCell.RevertOutlineColor();
+        //CurrentMouseOverCell.RevertOutlineColor();
     }
 
     private Vector3 GetMouseWorldPosition()
@@ -140,7 +144,7 @@ public class BattleMouseInputHandler
 
     private void OnDragStart()
     {
-        if (CurrentMouseOverCell?.PlacedCreature == null) return;
+        if (CurrentMouseOverCell?.PlacedCreature == null || CurrentMouseOverCell.GridSide == GridSide.MonsterSide) return;
 
         _draggingCreature = CurrentMouseOverCell.PlacedCreature;
         _dragStartCell =    CurrentMouseOverCell;
@@ -163,8 +167,7 @@ public class BattleMouseInputHandler
             }
             else
             {
-                _battleGridSystem.MoveCreature(CurrentMouseOverCell.PlacedCreature, _dragStartCell);
-                _battleGridSystem.MoveCreature(_draggingCreature, CurrentMouseOverCell);
+                _battleGridSystem.SwapCreaturePosition(_draggingCreature, CurrentMouseOverCell.PlacedCreature);
             }
         }
         else

@@ -33,7 +33,7 @@ public class UI_CreatureTurnFrame : UI_Base
         Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{creature.CreatureStat.Name}_Front");
     }
 
-    public void Move(float x)
+    public void MoveTo(float x)
     {
         if (_moveTweener != null)
             _moveTweener.Kill();
