@@ -2,20 +2,24 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_ActionButton : MonoBehaviour
+public class UI_ActionButton : UI_Base
 {
     private UI_BattleActionPanel _actionPanel;
     private BaseSkill _skill;
 
-    public void Init(BaseSkill skill)
+    public override void Init()
     {
         var Button = gameObject.GetOrAddComponent<Button>();
 
         _actionPanel = Managers.BattleMng.BattleSceneUI.BattleActionPanel;
-        _skill = skill;
 
         Button.onClick.AddListener(OnClick);
         gameObject.BindEvent(OnMouseEnterEvent, UIEvent.Enter);
+    }
+
+    public void SetSkill(BaseSkill skill)
+    {
+        _skill = skill;
     }
 
     protected void OnClick()

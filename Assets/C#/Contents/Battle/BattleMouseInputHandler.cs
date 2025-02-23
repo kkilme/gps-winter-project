@@ -116,20 +116,8 @@ public class BattleMouseInputHandler
             return;
 
         action.SelectedTargetCell = CurrentMouseOverCell;
+        Managers.BattleMng.BattleSceneUI.ChooseTargetUI.Hide();
         CoroutineRunner.Instance.Run(action.Execute());
-        //CurrentAction.Equip(this);
-        //SelectedTargetCell = CurrentMouseOverCell;
-
-        //if (!CurrentAction.IsExecutable())
-        //{
-        //    CurrentAction.UnEquip();
-        //    SelectedTargetCell = null;
-        //    return;
-        //}
-
-        //CreatureBattleState = CreatureBattleState.ActionProceed;
-
-        //CurrentMouseOverCell.RevertOutlineColor();
     }
 
     private Vector3 GetMouseWorldPosition()

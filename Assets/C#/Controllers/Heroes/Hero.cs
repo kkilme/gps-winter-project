@@ -67,7 +67,6 @@ public class Hero : Creature
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.EndTurn();
         
         CreatureBattleState = CreatureBattleState.Wait;
-        CurrentAction.UnEquip();
         TargetCell = null;
         Managers.BattleMng.NextTurn();
     }

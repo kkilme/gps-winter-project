@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleManager
@@ -12,7 +11,27 @@ public class BattleManager
     public TurnSystem TurnSystem { get; private set; }
     public BattleGridSystem BattleGridSystem { get; private set; }
     public BattleMouseInputHandler MouseInputHandler { get; private set; }
-    public BaseAction CurrentAction { get; private set; }
+    private BaseAction _currentAction;
+    public BaseAction CurrentAction {
+        get => _currentAction;
+        set
+        {
+            if (_currentAction == value)
+                return;
+
+            if (value == null)
+            {
+                _currentAction.OnUnset();
+                _currentAction = null;
+            
+            }
+            else
+            {
+                _currentAction = value;
+                _currentAction.OnSet();
+            }
+        }
+    }
     public Creature CurrentTurnCreature => TurnSystem.Turns[0];
     public List<Creature> Creatures
     {
@@ -60,9 +79,6 @@ public class BattleManager
     // 히어로 배치 단계
     private void StartPlacementPhase()
     {   
-        if(BattleState != BattleState.Starting)
-            return;
-
         BattleState = BattleState.HeroPlacement;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
         Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnPlacementPhase;
@@ -72,9 +88,6 @@ public class BattleManager
     // 전투 시작
     public void StartBattlePhase()
     {   
-        if (BattleState != BattleState.HeroPlacement)
-            return;
-
         BattleState = BattleState.Idle;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
@@ -85,9 +98,12 @@ public class BattleManager
     // Action 선택
     public void SetAction(BaseAction action)
     {
-        if (action == null) return;
+        if(action == null)
+        {
+            Debug.LogError("Action is null");
+            return;
+        }
         CurrentAction = action;
-        CurrentAction.OnSet();
         BattleSceneUI.BattleActionPanel.Hide();
 
         // 대상 선택이 필요한 액션인 경우
@@ -120,7 +136,6 @@ public class BattleManager
 
     public void OnActionEnd()
     {
-        CurrentAction.OnActionEnd();
         UnsetAction();
         NextTurn();
     }

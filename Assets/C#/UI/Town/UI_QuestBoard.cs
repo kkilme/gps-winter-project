@@ -138,7 +138,7 @@ public class UI_QuestBoard : UI_Base
         foreach (Data.QuestData questData in Managers.DataMng.QuestDataDict.Values)
         {
             Quest quest = new Quest(questData);
-            UI_QuestBoard_Quest questBoard_Quest = Managers.UIMng.MakeSubItemUI<UI_QuestBoard_Quest>(content.transform);
+            UI_QuestBoard_Quest questBoard_Quest = Managers.UIMng.MakeSubItemUI<UI_QuestBoard_Quest>(content.transform, "Town/" + nameof(UI_QuestBoard_Quest));
             questBoard_Quest.SetQuest(quest);
 
             #region legacy: 퀘스트 시작 버튼 누를 시 퀘스트 정보 창이 한번 더 뜸. Prototype 버전에서 사용 X

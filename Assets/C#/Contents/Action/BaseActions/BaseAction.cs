@@ -21,6 +21,7 @@ public abstract class BaseAction
     {
         DataId = dataId;
     }
+    public abstract IEnumerator Execute(int coinHeadCount = -1);
 
     public void OnSet()
     {
@@ -37,6 +38,13 @@ public abstract class BaseAction
             SelectedTargetCell = TargetSelector.GetRandomTarget();
         }
     }
+
+    public void OnUnset()
+    {
+        Owner = null;
+        SelectedTargetCell = null;
+        TargetSelector.OnActionUnset();
+    }
     
     public void UnEquip()
     {
@@ -44,11 +52,4 @@ public abstract class BaseAction
         Owner = null;
     }
 
-    public abstract IEnumerator Execute(int coinHeadCount = -1);
-    
-    public virtual void OnActionEnd()
-    {
-        TargetSelector.OnActionEnd();
-        SelectedTargetCell = null;
-    }
 }

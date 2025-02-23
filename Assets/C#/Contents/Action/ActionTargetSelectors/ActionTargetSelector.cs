@@ -30,7 +30,7 @@ public abstract class ActionTargetSelector
         return cell != null && TargettableCells.Contains(cell);
     }
 
-    public virtual void OnActionEnd()
+    public virtual void OnActionUnset()
     {
         TargettableCells.Clear();
     }

@@ -29,7 +29,7 @@ public class UI_TurnState : UI_Base
     {
         foreach (Creature creature in Managers.BattleMng.TurnSystem.Turns)
         {
-            UI_CreatureTurnFrame creatureTurnFrame = Managers.UIMng.MakeSubItemUI<UI_CreatureTurnFrame>(_bgFrame);
+            UI_CreatureTurnFrame creatureTurnFrame = Managers.UIMng.MakeSubItemUI<UI_CreatureTurnFrame>(_bgFrame, "Battle/" + nameof(UI_CreatureTurnFrame));
             creatureTurnFrame.Setup(creature);
             _turnFrames.Add(creature, creatureTurnFrame);
         }

@@ -48,8 +48,8 @@ public class UI_BattleActionPanel : UI_Base
         ClearActionButtons();
         foreach (BaseSkill skill in _hero.Weapon.Skills)
         {
-            var actionButton = Managers.ResourceMng.Instantiate("UI/SubItemUI/UI_ActionButton", _actionButtonParent).GetComponent<UI_ActionButton>();
-            actionButton.Init(skill);
+            var actionButton = Managers.UIMng.MakeSubItemUI<UI_ActionButton>(_actionButtonParent, "Battle/" + nameof(UI_ActionButton));
+            actionButton.SetSkill(skill);
             
             var image = actionButton.GetComponent<Image>();
             image.sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Icons/{skill.SkillData.IconPath}");

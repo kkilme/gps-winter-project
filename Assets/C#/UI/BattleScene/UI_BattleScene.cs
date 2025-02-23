@@ -27,7 +27,7 @@ public class UI_BattleScene : UI_Scene
         base.Init();
 
 		Bind<UI_Base>(typeof(SubItemUI));
-        Managers.UIMng.ShowPlayerProfileGroupUI(true);
+        //Managers.UIMng.ShowPlayerProfileGroupUI(true);
         BattleActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
         CoinTossUI = Get<UI_Base>(SubItemUI.UI_CoinToss).GetOrAddComponent<UI_CoinToss>();
         TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
