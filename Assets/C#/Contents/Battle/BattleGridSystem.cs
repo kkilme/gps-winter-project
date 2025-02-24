@@ -63,20 +63,19 @@ public class BattleGridSystem
     {
         // 서로의 위치 교환을 위해 밑의 if문 필요.
         // 조건이 없을 시, A를 B의 위치로 옮긴 후 B를 A의 위치로 옮길 때 문제가 생김.
-        if(creature.CurrentCell.PlacedCreature == creature) creature.CurrentCell.PlacedCreature = null;
+        if(creature.StandingCell.PlacedCreature == creature) creature.StandingCell.PlacedCreature = null;
         targetCell.PlaceCreature(creature);
     }
 
     public void SwapCreaturePosition(Creature creature1, Creature creature2)
     {
-        var tempCell = creature1.CurrentCell;
-        MoveCreature(creature1, creature2.CurrentCell);
+        var tempCell = creature1.StandingCell;
+        MoveCreature(creature1, creature2.StandingCell);
         MoveCreature(creature2, tempCell);
     }
 
     public void HighlightTargetableCells(BaseAction action)
     {
-        ResetCellColor();
         var targetables = action.TargetSelector.TargettableCells;
 
         foreach (var targetable in targetables)
@@ -85,7 +84,7 @@ public class BattleGridSystem
         }
     }
 
-    public void ResetCellColor()
+    public void ResetAllCellColor()
     {
         foreach(var cell in HeroGrid)
         {

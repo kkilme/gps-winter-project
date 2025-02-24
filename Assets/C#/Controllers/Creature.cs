@@ -42,7 +42,7 @@ public abstract class Creature : MonoBehaviour
         }
     }
     
-    public BattleGridCell CurrentCell { get; set; }
+    public BattleGridCell StandingCell { get; set; }
 
     public BaseAction CurrentAction { get; set; }
     public BattleGridCell TargetCell { get; protected set; }

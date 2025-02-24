@@ -10,6 +10,7 @@ public class InputManager
 {
     public Action KeyAction;
     public Action<MouseEvent> MouseAction;
+    public Action PointerOverGameObjectAction;
 
     private bool _pressed;
     private float _pressedTime;
@@ -27,7 +28,11 @@ public class InputManager
     public void OnUpdate()
     {
         if (EventSystem.current.IsPointerOverGameObject())
+        {
+            PointerOverGameObjectAction?.Invoke(); 
             return;
+        }
+
         if (KeyAction != null && Input.anyKey)
         {
             KeyAction.Invoke();
@@ -35,16 +40,16 @@ public class InputManager
 
         if (MouseAction != null)
         {   
-            MouseAction.Invoke(MouseEvent.Hover);
+            MouseAction?.Invoke(MouseEvent.Hover);
             if (Input.GetMouseButton(0))
             {
                 if (!_pressed)
                 {
-                    MouseAction.Invoke(MouseEvent.PointerDown);
+                    MouseAction?.Invoke(MouseEvent.PointerDown);
                     _pressedTime = Time.time;
                 }
 
-                MouseAction.Invoke(MouseEvent.Press);
+                MouseAction?.Invoke(MouseEvent.Press);
                 _pressed = true;
             }
             else
@@ -52,8 +57,8 @@ public class InputManager
                 if (_pressed)
                 {
                     if (Time.time < _pressedTime + 0.2f)
-                        MouseAction.Invoke(MouseEvent.Click);
-                    MouseAction.Invoke(MouseEvent.PointerUp);
+                        MouseAction?.Invoke(MouseEvent.Click);
+                    MouseAction?.Invoke(MouseEvent.PointerUp);
 
                 }
                 

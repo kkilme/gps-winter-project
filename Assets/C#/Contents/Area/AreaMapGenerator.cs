@@ -71,14 +71,6 @@ public partial class AreaMapGenerator : MonoBehaviour
     public void GenerateSubtiles()
     {
         AreaSubTileGroupData[] subTileGroupDatas = _data.SubTileGroupData;
-        if (subTileGroupDatas.Length == 0) return;
-
-        // 전체 맵에서 차지하는 Subtile 비율의 합이 1을 넘으면 생성 불가
-        if (subTileGroupDatas.Sum(x => x.Proportion) > 1)
-        {
-            Debug.LogError("Sum of subtiles' Proportion is over 1!");
-            return;
-        }
 
         CurrentGeneratePhase = MapGeneratePhase.SubtileGenerate;
 
@@ -278,6 +270,7 @@ public partial class AreaMapGenerator : MonoBehaviour
     }
 
     // 플레이 불가능 필드의 장애물(장식물) 생성
+    // 나중에 Fog Of War이 추가되면서 큰 의미는 없어졌음. (장애물이 보이지 않음)
     public void GenerateUnplayableFieldObstacles(List<Vector2Int> unplayableField)
     {
         CurrentGeneratePhase = MapGeneratePhase.UnplayableFieldObstacleGenerate;

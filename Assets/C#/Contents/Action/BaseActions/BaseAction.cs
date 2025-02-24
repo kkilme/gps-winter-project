@@ -23,6 +23,7 @@ public abstract class BaseAction
     }
     public abstract IEnumerator Execute(int coinHeadCount = -1);
 
+
     public void OnSet()
     {
         Owner = Managers.BattleMng.CurrentTurnCreature;
@@ -46,10 +47,21 @@ public abstract class BaseAction
         TargetSelector.OnActionUnset();
     }
     
-    public void UnEquip()
+    public void HighlightAffectedTargets(BattleGridCell cell)
     {
-        Owner.CurrentAction = null;
-        Owner = null;
+        foreach (var target in TargetSelector.GetAffectedTargets(cell))
+        {
+            target.HighlightAll();
+        }
     }
 
+    public void HighlightAffectedTargets()
+    {
+        if(SelectedTargetCell == null)
+        {
+            Debug.LogError("SelectedTargetCell is null");
+            return;
+        }
+        HighlightAffectedTargets(SelectedTargetCell);
+    }
 }

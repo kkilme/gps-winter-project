@@ -5,21 +5,22 @@ using UnityEngine;
 public class TurnSystem
 {
     public List<Creature> Turns { get; protected set; }
-    public int CurrentTurn { get; protected set; }
+    public int TurnCount { get; protected set; }
 
     public void Init()
     {
-        CurrentTurn = 0;
-        var rawCreatures = Managers.BattleMng.Creatures;
-        Turns = new List<Creature>(rawCreatures);
+        TurnCount = 1;
+        Turns = new List<Creature>(Managers.BattleMng.Creatures);
         Turns.Sort((a, b) => a.CreatureStat.Dexterity.CompareTo(b.CreatureStat.Dexterity));
     }
 
     public void NextTurn()
     {
-        CurrentTurn++;
+        TurnCount++;
         var current = Turns[0];
+        Turns[0].StandingCell.RevertOutlineColor();
         Turns.RemoveAt(0);
         Turns.Add(current);
+        Turns[0].StandingCell.HighlightOutline();
     }
 }

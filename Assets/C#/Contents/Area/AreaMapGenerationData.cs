@@ -80,6 +80,12 @@ public class AreaMapGenerationData : ScriptableObject
             }
         }
 
+        // 전체 맵에서 차지하는 Subtile 비율의 합이 1을 넘으면 생성 불가
+        if (SubTileGroupData.Sum(x => x.Proportion) > 1)
+        {
+            Debug.LogError("Sum of subtiles' Proportion is over 1!");
+            return false;
+        }
         return true;
     }
 }

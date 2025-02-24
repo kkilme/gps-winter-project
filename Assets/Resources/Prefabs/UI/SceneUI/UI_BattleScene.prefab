@@ -845,10 +845,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI_PlacementPhase
       objectReference: {fileID: 0}
-    - target: {fileID: 4207798755749883083, guid: 094bbe17edf09e34dab7dc483eb4213b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 094bbe17edf09e34dab7dc483eb4213b, type: 3}
 --- !u!224 &8712719836109216191 stripped

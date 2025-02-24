@@ -80,8 +80,12 @@ public class BattleManager
     private void StartPlacementPhase()
     {   
         BattleState = BattleState.HeroPlacement;
+
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
         Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnPlacementPhase;
+        Managers.InputMng.PointerOverGameObjectAction -= MouseInputHandler.OnDragEnd;
+        Managers.InputMng.PointerOverGameObjectAction += MouseInputHandler.OnDragEnd;
+
         BattleSceneUI.OnPlacementPhaseStart();
     }
 
@@ -89,9 +93,14 @@ public class BattleManager
     public void StartBattlePhase()
     {   
         BattleState = BattleState.Idle;
+
+        Managers.InputMng.PointerOverGameObjectAction -= MouseInputHandler.OnDragEnd;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
         Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
+
+        CurrentTurnCreature.StandingCell.HighlightOutline();
+
         CoroutineRunner.Instance.Run(BattleSceneUI.OnBattlePhaseStart());
     }
 
@@ -110,13 +119,17 @@ public class BattleManager
         if (action.TargetSelector.NeedTargetSelection)
         {
             BattleSceneUI.ChooseTargetUI.Show();
+
             Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
             Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
             Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnTargetSelect;
+
             BattleGridSystem.HighlightTargetableCells(action);
         }
         else // 대상 선택이 필요 없는 액션인 경우
         {
+            BattleGridSystem.ResetAllCellColor();
+            CurrentAction.HighlightAffectedTargets();
             CoroutineRunner.Instance.Run(CurrentAction.Execute());
         }
     }
@@ -131,7 +144,8 @@ public class BattleManager
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
         Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
 
-        BattleGridSystem.ResetCellColor();
+        BattleGridSystem.ResetAllCellColor();
+        CurrentTurnCreature.StandingCell.HighlightOutline();
     }
 
     public void OnActionEnd()

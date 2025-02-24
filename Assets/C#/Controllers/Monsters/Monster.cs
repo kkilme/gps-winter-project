@@ -53,7 +53,7 @@ public abstract class Monster : Creature
 
     public override Tween LookOpponent(float duration = 0f)
     {
-        return transform.DOLookAt(Managers.BattleMng.BattleGridSystem.HeroGrid[CurrentCell.Row, 2 - CurrentCell.Column].transform.position, duration);
+        return transform.DOLookAt(Managers.BattleMng.BattleGridSystem.HeroGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration);
     }
 
     #endregion
@@ -73,6 +73,6 @@ public abstract class Monster : Creature
         List<ulong> keysList = new List<ulong>(Managers.ObjectMng.Heroes.Keys);
         ulong randomKey = keysList[Random.Range(0, keysList.Count)];
 
-        return Managers.ObjectMng.Heroes[randomKey].CurrentCell;
+        return Managers.ObjectMng.Heroes[randomKey].StandingCell;
     }
 }

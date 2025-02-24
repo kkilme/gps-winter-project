@@ -22,7 +22,7 @@ public class BattleMouseInputHandler
         switch (mouseEvent)
         {
             case MouseEvent.Hover:
-                OnMouseHover_Default();
+                OnMouseHover_PlacementPhase();
                 break;
             case MouseEvent.PointerDown:
                 OnDragStart();
@@ -41,7 +41,7 @@ public class BattleMouseInputHandler
         switch (mouseEvent)
         {
             case MouseEvent.Hover:
-                OnMouseHover_Default();
+                OnMouseHover_BattleIdle();
                 break;
         }
     }
@@ -59,7 +59,7 @@ public class BattleMouseInputHandler
         }
     }
 
-    private void OnMouseHover_Default()
+    private void OnMouseHover_PlacementPhase()
     {
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
@@ -76,6 +76,25 @@ public class BattleMouseInputHandler
         else
         {
             if (CurrentMouseOverCell != null) CurrentMouseOverCell.RevertOutlineColor();
+            CurrentMouseOverCell = null;
+        }
+    }
+
+    private void OnMouseHover_BattleIdle()
+    {
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: GlobalValues.LAYERMASK_BATTLEGRIDCELL))
+        {
+            var cell = rayHit.transform.gameObject.GetComponent<BattleGridCell>();
+
+            if (CurrentMouseOverCell == cell)
+                return;
+
+            CurrentMouseOverCell = cell;
+        }
+        else
+        {
             CurrentMouseOverCell = null;
         }
     }
@@ -115,8 +134,15 @@ public class BattleMouseInputHandler
         if (CurrentMouseOverCell == null || !action.TargetSelector.IsTargettable(CurrentMouseOverCell))
             return;
 
+        Managers.InputMng.MouseAction -= HandleMouseOnTargetSelect;
+
         action.SelectedTargetCell = CurrentMouseOverCell;
+        _battleGridSystem.ResetAllCellColor();
+        action.HighlightAffectedTargets(CurrentMouseOverCell);
+
         Managers.BattleMng.BattleSceneUI.ChooseTargetUI.Hide();
+
+        // 액션 실행
         CoroutineRunner.Instance.Run(action.Execute());
     }
 
@@ -135,16 +161,18 @@ public class BattleMouseInputHandler
         if (CurrentMouseOverCell?.PlacedCreature == null || CurrentMouseOverCell.GridSide == GridSide.MonsterSide) return;
 
         _draggingCreature = CurrentMouseOverCell.PlacedCreature;
-        _dragStartCell =    CurrentMouseOverCell;
+        _dragStartCell = CurrentMouseOverCell;
     }
 
     private void OnDragging()
     {
         if (_draggingCreature == null) return;
+
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         _draggingCreature.transform.position = GetMouseWorldPosition();
     }
 
-    private void OnDragEnd()
+    public void OnDragEnd()
     {
         if (_draggingCreature == null) return;
         if (CurrentMouseOverCell != null && CurrentMouseOverCell.GridSide == GridSide.HeroSide)
@@ -165,7 +193,4 @@ public class BattleMouseInputHandler
         _draggingCreature = null;
         _dragStartCell = null;
     }
-
-    
-
 }

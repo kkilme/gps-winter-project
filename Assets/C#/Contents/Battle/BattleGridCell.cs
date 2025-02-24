@@ -15,7 +15,7 @@ public abstract class BattleGridCell : MonoBehaviour
     private Tweener _outlineColorTween;
     private Tweener _fillColorTween;
 
-    private void Start()
+    private void Awake()
     {
         _outline = GetComponent<SpriteRenderer>();
         _fill = GlobalUtility.FindChild<SpriteRenderer>(gameObject, "fill");
@@ -33,7 +33,7 @@ public abstract class BattleGridCell : MonoBehaviour
     public void PlaceCreature(Creature creature)
     {
         PlacedCreature = creature;
-        creature.CurrentCell = this;
+        creature.StandingCell = this;
         creature.gameObject.transform.position = transform.position;
     }
 
@@ -64,7 +64,12 @@ public abstract class BattleGridCell : MonoBehaviour
         ChangeFillColor(_fillOriginalColor);
     }
 
-    //기본 Unity 메소드 OnMouseEnterEvent & OnMouseOut 사용 시, Hero 및 Enemy 오브젝트에 의해 MouseOver가 가로막힘
+    public void HighlightAll()
+    {
+        HighlightOutline();
+        HighlightFill();
+    }
+
     public abstract void HighlightOutline();
     public abstract void HighlightFill();
 

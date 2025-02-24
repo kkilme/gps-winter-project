@@ -73,7 +73,7 @@ public class Hero : Creature
 
     public override Tween LookOpponent(float duration = 0f)
     {
-        return transform.DOLookAt(Managers.BattleMng.BattleGridSystem.MonsterGrid[CurrentCell.Row, 2 - CurrentCell.Column].transform.position, duration);
+        return transform.DOLookAt(Managers.BattleMng.BattleGridSystem.MonsterGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration);
     }
 
     #endregion
