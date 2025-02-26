@@ -29,7 +29,7 @@ public class UI_ItemDescription : UI_Base
     
     public void SetInfo(BaseItem item)
     {
-        //GetImage(Images.Icon).sprite = item.image;
+        //GetImage(StatImages.Icon).sprite = item.image;
         GetText(Texts.Name).text = item.ItemData.Name;
         GetText(Texts.Description).text = item.ItemData.Description;
     }

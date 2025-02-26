@@ -45,31 +45,6 @@ public class Hero : Creature
     }
 
     #region Battle
-    
-    public override void DoPrepareAction()
-    {
-        //((UI_BattleScene)Managers.UIMng.SceneUI).BattleActionPanel.Show();
-        
-        //Managers.InputMng.MouseAction -= HandleMouseOnBattlePhase;
-        //Managers.InputMng.MouseAction += HandleMouseOnBattlePhase;
-    }
-    
-    public override void DoAction()
-    {
-        CurrentAction.Execute();
-    }
-
-    public override void DoEndTurn()
-    {
-        //Managers.InputMng.MouseAction -= HandleMouseOnBattlePhase;
-        
-        //((UI_BattleScene)Managers.UIMng.SceneUI).BattleActionPanel.EndTurn();
-        ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.EndTurn();
-        
-        CreatureBattleState = CreatureBattleState.Wait;
-        TargetCell = null;
-        Managers.BattleMng.NextTurn();
-    }
 
     public override Tween LookOpponent(float duration = 0f)
     {

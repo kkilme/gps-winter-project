@@ -54,7 +54,7 @@ public class UI_MonsterProfile : UI_Base
         GetText(Text.Text_Attack).text = creatureStat.BaseDamage.ToString();
         GetText(Text.Text_Defense).text = creatureStat.PhysicalDefense.ToString();
 
-        //Get<Image>(Images.UserPicture).sprite = monsterStat.Texture;
+        //Get<Image>(StatImages.UserPicture).sprite = monsterStat.Texture;
     }
 
     private void OnDestroy()

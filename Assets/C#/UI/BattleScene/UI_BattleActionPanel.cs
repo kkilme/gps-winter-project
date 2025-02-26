@@ -38,9 +38,15 @@ public class UI_BattleActionPanel : UI_Base
     {   
         gameObject.SetActive(true);
         _hero = Managers.BattleMng.CurrentTurnCreature as Hero;
-        SetupActionButtons();
+        ClearActionInfo();
 
-        return _rect.DOAnchorPosY(-400f, 1f).From(true).SetEase(Ease.OutCirc);
+        return _rect.DOAnchorPosY(-400f, 1f).From(true).SetEase(Ease.OutCirc).OnComplete(() => { SetupActionButtons(); });
+    }
+
+    public override void ShowInstantly()
+    {
+        SetupActionButtons();
+        gameObject.SetActive(true);
     }
 
     private void SetupActionButtons()
@@ -75,17 +81,17 @@ public class UI_BattleActionPanel : UI_Base
             GetText(Texts.Text_SlotPercentage).text = _hero.CreatureStat.NameToStat(skill.UsingStat).ToString();
         }
 
-        ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinNum(skill);
+        ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossDisplay.Show(skill.SkillData.CoinCount, skill.SkillData.UsingStat);
     }
 
     protected void ClearActionInfo()
     {
-        GetText(Texts.Text_ActionName).text = null;
-        GetText(Texts.Text_ActionDescription).text = null;
-        GetText(Texts.Text_AmountWord).text = null;
-        GetText(Texts.Text_AmountNumber).text = null;
-        GetText(Texts.Text_SlotPercentageWord).text = null;
-        GetText(Texts.Text_SlotPercentage).text = null;
+        GetText(Texts.Text_ActionName).text = "";
+        GetText(Texts.Text_ActionDescription).text = "";
+        GetText(Texts.Text_AmountWord).text = "";
+        GetText(Texts.Text_AmountNumber).text = "";
+        GetText(Texts.Text_SlotPercentageWord).text = "";
+        GetText(Texts.Text_SlotPercentage).text = "";
     }
 
     private void ClearActionButtons()

@@ -8,6 +8,8 @@ public static class GlobalValues
 
     public const float CREATURE_BATTLE_VELOCITY = 3f;
 
+    public const int MAX_COINT_COUNT = 8;
+
     public static readonly int[,] DIRECTION_4WAY = new int[4, 2] { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
     public static readonly int[,] HERO_TILE_POS_OFFSET = new int[4, 2] { { 0, 1 }, { -1, 0 }, { 1, 0 }, { 0, -1 } };
 

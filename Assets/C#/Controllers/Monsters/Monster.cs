@@ -19,38 +19,6 @@ public abstract class Monster : Creature
 
     #region Battle
 
-    public override void DoPrepareAction()
-    {
-        EquipAction();
-        TargetCell = ChooseTarget(); 
-        
-        //if (!CurrentAction.IsExecutable())
-        //{
-        //    CurrentAction.UnEquip();
-        //    TargetCell = null;
-        //    DoPrepareAction();
-        //}
-        
-        CreatureBattleState = CreatureBattleState.ActionProceed;
-    }
-
-    public override void DoAction()
-    {
-        CoinHeadNum = 0;
-        //((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.ShowCoinToss(CurrentAction, CoinHeadNum);
-        
-        CurrentAction.Execute();
-    }
-
-    public override void DoEndTurn()
-    {
-        ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossUI.EndTurn();
-        
-        CreatureBattleState = CreatureBattleState.Wait;
-        TargetCell = null;
-        Managers.BattleMng.NextTurn();
-    }
-
     public override Tween LookOpponent(float duration = 0f)
     {
         return transform.DOLookAt(Managers.BattleMng.BattleGridSystem.HeroGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration);
@@ -67,12 +35,4 @@ public abstract class Monster : Creature
         //CurrentAction.Equip(this);
     }
     
-    // TODO - Target 선택 알고리즘 구현
-    protected BattleGridCell ChooseTarget()
-    {
-        List<ulong> keysList = new List<ulong>(Managers.ObjectMng.Heroes.Keys);
-        ulong randomKey = keysList[Random.Range(0, keysList.Count)];
-
-        return Managers.ObjectMng.Heroes[randomKey].StandingCell;
-    }
 }

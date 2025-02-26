@@ -138,7 +138,7 @@ public class BattleManager
     {
         CurrentAction = null;
         BattleSceneUI.ChooseTargetUI.Hide();
-        BattleSceneUI.BattleActionPanel.Show();
+        BattleSceneUI.BattleActionPanel.ShowInstantly();
 
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;

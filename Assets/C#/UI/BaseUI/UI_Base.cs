@@ -19,12 +19,12 @@ public abstract class UI_Base : MonoBehaviour
         Init();
     }
 
-    public void ShowInstantly()
+    public virtual void ShowInstantly()
     {
         gameObject.SetActive(true);
     }
 
-    public void HideInstantly()
+    public virtual void HideInstantly()
     {
         gameObject.SetActive(false);
     }

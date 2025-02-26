@@ -9,7 +9,7 @@ public class UI_BattleScene : UI_Scene
 	enum SubItemUI
 	{
 		UI_BattleActionPanel,
-		UI_CoinToss,
+		UI_CoinTossDisplay,
 		UI_TurnState,
         UI_BattleVictory,
         UI_PlacementPhase,
@@ -17,7 +17,7 @@ public class UI_BattleScene : UI_Scene
     }
 
 	public UI_BattleActionPanel BattleActionPanel { get; protected set; }
-	public UI_CoinToss CoinTossUI { get; protected set; }
+	public UI_CoinTossDisplay CoinTossDisplay { get; protected set; }
     public UI_TurnState TurnstateUI { get; protected set; }
     public UI_PlacementPhase PlacementPhaseUI { get; protected set; }
     public UI_ChooseTarget ChooseTargetUI { get; protected set; }
@@ -29,7 +29,7 @@ public class UI_BattleScene : UI_Scene
 		Bind<UI_Base>(typeof(SubItemUI));
         //Managers.UIMng.ShowPlayerProfileGroupUI(true);
         BattleActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
-        CoinTossUI = Get<UI_Base>(SubItemUI.UI_CoinToss).GetOrAddComponent<UI_CoinToss>();
+        CoinTossDisplay = Get<UI_Base>(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
         TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
         PlacementPhaseUI = Get<UI_Base>(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
         ChooseTargetUI = Get<UI_Base>(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget>();
@@ -38,7 +38,7 @@ public class UI_BattleScene : UI_Scene
     public void OnPlacementPhaseStart()
     {
         BattleActionPanel.Hide();
-        CoinTossUI.Hide();
+        CoinTossDisplay.Hide();
         ChooseTargetUI.Hide();
         TurnstateUI.Setup();
         TurnstateUI.HideInstantly();
@@ -56,7 +56,7 @@ public class UI_BattleScene : UI_Scene
         {
             case BattleResultType.Victory:
                 Get<UI_Base>(SubItemUI.UI_BattleActionPanel).gameObject.SetActive(false);
-                Get<UI_Base>(SubItemUI.UI_CoinToss).gameObject.SetActive(false);
+                //Get<UI_Base>(SubItemUI.UI_CoinToss).gameObject.SetActive(false);
 
                 // Turn 상태바 움직임을 통해 자연스럽게 숨기기
                 // TODO: TurnStateUI로 기능 이동
