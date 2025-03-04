@@ -6,7 +6,11 @@ public static class GlobalValues
     public const float BATTLEFIELD_POS_X = -1000f;
     public const float BATTLEFIELD_POS_Z = -1000f;
 
-    public const float CREATURE_BATTLE_VELOCITY = 3f;
+    // 2X3을 유지할 계획이지만, 나중에 변경될 수 있으므로 변수로 선언
+    public const int BATTLEGRID_ROW_COUNT = 2;
+    public const int BATTLEGRID_COL_COUNT = 3;
+
+    public const float CREATURE_BATTLE_VELOCITY = 5f;
 
     public const int MAX_COINT_COUNT = 8;
 
@@ -18,6 +22,7 @@ public static class GlobalValues
     public static readonly int[,] DIRECTION_6WAY_X_EVEN = new int[6, 2] { { 0, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, -1 }, { -1, 0 } };
 
     public static readonly int ANIMATION_PARAM_MOVING = Animator.StringToHash("Moving");
+    public static readonly int ANIMATION_PARAM_ATTACK = Animator.StringToHash("Attack");
 
     #endregion
 
@@ -60,7 +65,7 @@ public static class GlobalValues
     public static readonly Color HEROGRID_OUTLINE_HIGHLIGHT_COLOR = Color.green;
     public static readonly Color HEROGRID_FILL_HIGHLIGHT_COLOR = new Color(0.4f, 1, 0.4f);
     public static readonly Color ENEMYGRID_OUTLINE_HIGHLIGHT_COLOR = Color.red;
-    public static readonly Color ENEMYGRID_FILL_HIGHLIGHT_COLOR = new Color(1, 0.4f, 0.4f);
+    public static readonly Color ENEMYGRID_FILL_HIGHLIGHT_COLOR = new Color(1, 0.2f, 0.2f);
 
     #endregion
 

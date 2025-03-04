@@ -45,14 +45,6 @@ public enum ItemType
     Recover,
 }
 
-public enum ActionTargetType
-{
-    Single,
-    Cross,
-    Horizontal,
-    Vertical,
-}
-
 public enum AreaTileType
 {
     OutOfField,
@@ -111,18 +103,17 @@ public enum ActionDataType
     SkillData,
     AttackSkillData,
 }
-public enum ActionType
-{
-    Move,
-    Flee,
-    Attack,
-    Buff,
-}
 
 public enum AttackType
 {
     Physical,
     Magical,
+}
+
+public enum AttackRangeType
+{
+    Melee,
+    Ranged,
 }
 #endregion
 

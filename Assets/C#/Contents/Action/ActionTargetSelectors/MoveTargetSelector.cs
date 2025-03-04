@@ -6,22 +6,22 @@ public class MoveTargetSelector : ActionTargetSelector
     public override bool NeedTargetSelection { get; protected set; } = true;
     public override void SetTargettableCells()
     {
-        List<BattleGridCell> targets = new List<BattleGridCell>();
+        TargettableCells.Clear();
+        var currentcell = Managers.BattleMng.CurrentTurnCreature.StandingCell;
+        var myGrid = Managers.BattleMng.BattleGridSystem.SideToGrid(currentcell.GridSide);
 
-        int row = _currentcell.Row;
-        int col = _currentcell.Column;
+        int row = currentcell.Row;
+        int col = currentcell.Column;
 
         for (int i = 0; i<4; i++)
         {
             int nr = row + GlobalValues.DIRECTION_4WAY[i, 0];
             int nc = col + GlobalValues.DIRECTION_4WAY[i, 1];
 
-            if (nr >= 0 && nr <= 1 && nc >= 0 && nc <= 2)
+            if (nr >= 0 && nr <= GlobalValues.BATTLEGRID_ROW_COUNT - 1 && nc >= 0 && nc <= GlobalValues.BATTLEGRID_COL_COUNT - 1)
             {
-                targets.Add(_myGrid[nr, nc]);
+                TargettableCells.Add(myGrid[nr, nc]);
             }
         }
-
-        TargettableCells = targets;
     }
 }

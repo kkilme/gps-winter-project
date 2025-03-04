@@ -22,7 +22,7 @@ public abstract class BaseItem : BaseAction
         Count += addNum;
     }
     
-    public override IEnumerator Execute(int coinHeadCount = -1)
+    public override IEnumerator Execute()
     {
         Count--;
         if (Count <= 0)

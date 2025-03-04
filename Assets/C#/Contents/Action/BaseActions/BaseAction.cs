@@ -6,14 +6,12 @@ using UnityEngine;
 public abstract class BaseAction
 {
     #region Field
-
     public int DataId { get; protected set; }
     public Creature Owner { get; set; }
+    protected Animator _animator => Owner.Animator;
     public BattleGridCell SelectedTargetCell { get; set; }
     public abstract ActionTargetSelector TargetSelector { get; protected set; }
-
-    protected Animator _animator => Owner.Animator;
-    protected int _coinHeadCount;
+    public abstract ActionEffectRange EffectRange { get; protected set; }
 
     #endregion
     
@@ -21,8 +19,12 @@ public abstract class BaseAction
     {
         DataId = dataId;
     }
-    public abstract IEnumerator Execute(int coinHeadCount = -1);
 
+    /// <summary>
+    /// 액션 수행 로직
+    /// </summary>
+    /// <returns></returns>
+    public abstract IEnumerator Execute();
 
     public void OnSet()
     {
@@ -46,15 +48,17 @@ public abstract class BaseAction
         SelectedTargetCell = null;
         TargetSelector.OnActionUnset();
     }
-    
+
+    // 임의의 cell 기준으로 영향 받는 대상들을 모두 하이라이트
     public void HighlightAffectedTargets(BattleGridCell cell)
     {
-        foreach (var target in TargetSelector.GetAffectedTargets(cell))
+        foreach (var target in EffectRange.GetAffectedTargets(cell))
         {
             target.HighlightAll();
         }
     }
 
+    // 현재 선택된 cell 기준으로 영향 받는 대상들을 모두 하이라이트
     public void HighlightAffectedTargets()
     {
         if(SelectedTargetCell == null)

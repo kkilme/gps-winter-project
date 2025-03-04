@@ -1,8 +1,5 @@
-public class Bite : MoveAttackSkill
+public class Bite : MeleeSkill
 {
-    public override ActionTargetSelector TargetSelector { get; protected set; } = new SingleOpponentSelector();
-    public override void SetInfo(int templateId)
-    {        
-        base.SetInfo(templateId);
-    }
+    public override ActionEffectRange EffectRange { get; protected set; } = new SingleRange();
+    public override ActionTargetSelector TargetSelector { get; protected set; } = new OpponentSelector(AttackRangeType.Melee);
 }

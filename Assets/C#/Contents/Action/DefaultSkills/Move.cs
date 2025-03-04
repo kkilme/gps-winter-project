@@ -7,9 +7,10 @@ using UnityEngine;
 /// </summary>
 public class Move : BaseSkill
 {
+    public override ActionEffectRange EffectRange { get; protected set; } = new SingleRange();
     public override ActionTargetSelector TargetSelector { get; protected set; } = new MoveTargetSelector();
 
-    public override IEnumerator Execute(int coinHeadCount = -1)
+    public override IEnumerator Execute()
     {
         Sequence sequence = DOTween.Sequence();
 

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class HealPotion : BaseItem
 {
-    public override ActionTargetSelector TargetSelector { get; protected set; } = new SingleAllySelector();
-    public override IEnumerator Execute(int coinHeadCount = -1)
+    public override ActionEffectRange EffectRange { get; protected set; } = new DummyRange();
+    public override ActionTargetSelector TargetSelector { get; protected set; } = new AllySelector(); // TODO
+    public override IEnumerator Execute()
     {
-        return base.Execute(coinHeadCount);
+        return base.Execute();
     }
 
 }

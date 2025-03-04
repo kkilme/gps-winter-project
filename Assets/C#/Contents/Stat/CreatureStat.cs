@@ -57,11 +57,9 @@ public class CreatureStat : MonoBehaviour
     }
     #region Event
 
-    public void OnDamage(int damage, int attackCount = 1)
+    public void TakeDamage(int damage)
     {
         int trueDamage = Mathf.Max(damage - PhysicalDefense, 1);
-        if (attackCount > 1)
-            trueDamage = Mathf.Max(trueDamage / attackCount, 1);
 
         Hp = Mathf.Clamp(Hp - trueDamage, 0, MaxHp);
     }

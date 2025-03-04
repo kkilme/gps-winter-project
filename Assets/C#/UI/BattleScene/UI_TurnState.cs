@@ -34,7 +34,6 @@ public class UI_TurnState : UI_Base
             _turnFrames.Add(creature, creatureTurnFrame);
         }
         ResizeBGFrame();
-        MoveTurnFrames();
     }
 
     // 턴 프레임들을 턴 순서에 맞게 배치

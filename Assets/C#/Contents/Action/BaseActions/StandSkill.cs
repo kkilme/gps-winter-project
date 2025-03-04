@@ -9,7 +9,7 @@ public abstract class StandSkill : BaseSkill
 {
     protected Vector3 _meleeAttackRange;
 
-    public override IEnumerator Execute(int coinHeadCount = -1)
+    public override IEnumerator Execute()
     {
         throw new System.NotImplementedException();
     }

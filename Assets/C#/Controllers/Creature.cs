@@ -49,10 +49,9 @@ public abstract class Creature : MonoBehaviour
     
     #region Event
 
-    // TODO - 코인 앞면 수에 비례한 데미지 계산 
-    public void OnDamage(int damage, int attackCount = 1)
+    public void TakeDamage(int damage)
     {
-        CreatureStat.OnDamage(damage, attackCount);
+        CreatureStat.TakeDamage(damage);
         
         if (CreatureStat.Hp <= 0)
         {

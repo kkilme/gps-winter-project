@@ -3,20 +3,19 @@ using UnityEngine;
 // grid 및 마우스 입력 관리
 public class BattleGridSystem
 {
-    public BattleGridCell[,] HeroGrid { get; protected set; } = new BattleGridCell[2, 3];
-    public BattleGridCell[,] MonsterGrid { get; protected set; } = new BattleGridCell[2, 3];
+    public BattleGridCell[,] HeroGrid { get; protected set; } = new BattleGridCell[GlobalValues.BATTLEGRID_ROW_COUNT, GlobalValues.BATTLEGRID_COL_COUNT];
+    public BattleGridCell[,] MonsterGrid { get; protected set; } = new BattleGridCell[GlobalValues.BATTLEGRID_ROW_COUNT, GlobalValues.BATTLEGRID_COL_COUNT];
 
     private BattleManager _battleManager;
-
 
     public void Init()
     {
         GameObject heroGrid = GameObject.FindGameObjectWithTag("HeroGrid");
         GameObject monsterGrid = GameObject.FindGameObjectWithTag("MonsterGrid");
 
-        for (int row = 0; row < 2; row++)
+        for (int row = 0; row < GlobalValues.BATTLEGRID_ROW_COUNT; row++)
         {
-            for (int col = 0; col < 3; col++)
+            for (int col = 0; col < GlobalValues.BATTLEGRID_COL_COUNT; col++)
             {
                 var herocell = GlobalUtility.FindChild(heroGrid, $"BattleGridCell ({row}, {col})");
                 HeroGrid[row, col] = herocell.GetOrAddComponent<HeroBattleGridCell>();
@@ -74,7 +73,7 @@ public class BattleGridSystem
         MoveCreature(creature2, tempCell);
     }
 
-    public void HighlightTargetableCells(BaseAction action)
+    public void HighlightTargettableCells(BaseAction action)
     {
         var targetables = action.TargetSelector.TargettableCells;
 
@@ -82,6 +81,11 @@ public class BattleGridSystem
         {
             targetable.HighlightOutline();
         }
+    }
+
+    public BattleGridCell[,] SideToGrid(GridSide side)
+    {
+        return side == GridSide.HeroSide ? HeroGrid : MonsterGrid;
     }
 
     public void ResetAllCellColor()

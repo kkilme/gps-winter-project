@@ -75,7 +75,8 @@ public class UI_BattleScene : UI_Scene
 
     public void OnTurnStart()
     {
-        if(Managers.BattleMng.CurrentTurnCreature is Hero) BattleActionPanel.Show();
+        TurnstateUI.MoveTurnFrames();
+        if (Managers.BattleMng.CurrentTurnCreature is Hero) BattleActionPanel.Show();
         else BattleActionPanel.Hide();
     }
 

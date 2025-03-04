@@ -1,17 +1,32 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using Data;
 
 /// <summary>
-/// 이동 후 공격하는 액션 (근접 공격)
+/// 적에게 접근 후 공격하는 스킬 (근접 공격)
 /// </summary>
-public abstract class MoveAttackSkill : BaseSkill
+public abstract class MeleeSkill : BaseSkill
 {
     protected Vector3 _originalPos;
-    public override IEnumerator Execute(int coinHeadCount)
+    public override IEnumerator Execute()
     {
+        // 코인 던지기
+        var coinResult = CoinTossser.CoinToss(SkillData.CoinCount, Owner.CreatureStat.NameToStat(SkillData.UsingStat));
+
+        // 코인 던지기 UI 애니메이션 재생
+        yield return Managers.BattleMng.BattleSceneUI.CoinTossDisplay.ShowResult(coinResult.result);
+
+        // 타겟으로 이동
         yield return MoveToTarget().WaitForCompletion();
-        //TODO
+
+        // 공격
+        yield return Attack(coinResult.successCount);
+        
+        // 제자리로 복귀
+        yield return Return().WaitForCompletion();
+
+        Managers.BattleMng.OnActionEnd();
     }
 
     protected virtual Tween MoveToTarget()
@@ -38,7 +53,13 @@ public abstract class MoveAttackSkill : BaseSkill
 
     protected virtual IEnumerator Attack(int coinHeadCount)
     {
-        yield return null;
+        var attackSkillData = SkillData as AttackSkillData;
+        int baseDamage = Owner.CreatureData.BaseDamage + coinHeadCount * attackSkillData.DamagePerCoin;
+
+        _animator.SetTrigger(GlobalValues.ANIMATION_PARAM_ATTACK);
+        SelectedTargetCell.PlacedCreature.TakeDamage(baseDamage);
+
+        yield return DOVirtual.DelayedCall(_animator.GetCurrentAnimatorStateInfo(0).length + 0.1f, () => { }).WaitForCompletion();
     }
 
     protected virtual Tween Return()
@@ -56,5 +77,4 @@ public abstract class MoveAttackSkill : BaseSkill
 
         return sequence.Play();
     }
-
 }

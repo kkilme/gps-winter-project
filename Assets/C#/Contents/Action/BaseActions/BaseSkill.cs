@@ -6,7 +6,6 @@ using UnityEngine;
 public abstract class BaseSkill : BaseAction
 {
     public SkillData SkillData { get; protected set; }
-    public StatName UsingStat { get; protected set; }
 
     public override void SetInfo(int dataId)
     {

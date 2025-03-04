@@ -124,7 +124,7 @@ public class BattleManager
             Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
             Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnTargetSelect;
 
-            BattleGridSystem.HighlightTargetableCells(action);
+            BattleGridSystem.HighlightTargettableCells(action);
         }
         else // 대상 선택이 필요 없는 액션인 경우
         {
@@ -169,11 +169,7 @@ public class BattleManager
         }
 
         TurnSystem.NextTurn();
-        BattleSceneUI.TurnstateUI.MoveTurnFrames();
-        
-
-        //CurrentTurnCreature.CreatureBattleState = CreatureBattleState.PrepareAction;
-        //BattleSceneUI.OnTurnStart();
+        BattleSceneUI.OnTurnStart();
     }
 
     public void EndBattle(BattleResultType battleResult)

@@ -78,7 +78,7 @@ public class UI_BattleActionPanel : UI_Base
         if (skill.SkillData.UsingStat != StatName.None)
         {
             GetText(Texts.Text_SlotPercentageWord).text = "Percentage\nPer Slot";
-            GetText(Texts.Text_SlotPercentage).text = _hero.CreatureStat.NameToStat(skill.UsingStat).ToString();
+            GetText(Texts.Text_SlotPercentage).text = _hero.CreatureStat.NameToStat(skill.SkillData.UsingStat).ToString();
         }
 
         ((UI_BattleScene)Managers.UIMng.SceneUI).CoinTossDisplay.Show(skill.SkillData.CoinCount, skill.SkillData.UsingStat);
