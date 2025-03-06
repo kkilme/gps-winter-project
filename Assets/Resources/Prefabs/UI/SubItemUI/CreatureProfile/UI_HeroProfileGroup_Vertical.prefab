@@ -90,6 +90,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6902493890577231886}
   - component: {fileID: 1973916440705711217}
+  - component: {fileID: 1951710858496521871}
   m_Layer: 0
   m_Name: UI_HeroProfileGroup_Vertical
   m_TagString: Untagged
@@ -139,6 +140,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1951710858496521871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066473141100715945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bec0ec7cf53dec4d9e36ed840c2bb7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &192325728756730129
 PrefabInstance:
   m_ObjectHideFlags: 0

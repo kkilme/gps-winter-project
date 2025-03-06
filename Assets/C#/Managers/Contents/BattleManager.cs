@@ -68,7 +68,7 @@ public class BattleManager
         // Creature 배치
         BattleGridSystem.Init();
         BattleGridSystem.PlaceHero();
-        BattleGridSystem.PlaceEnemy(squadId);
+        BattleGridSystem.PlaceMonster(squadId);
 
         // TurnSystem 초기화
         TurnSystem.Init();

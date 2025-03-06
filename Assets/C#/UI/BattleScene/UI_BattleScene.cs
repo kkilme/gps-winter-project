@@ -13,7 +13,9 @@ public class UI_BattleScene : UI_Scene
 		UI_TurnState,
         UI_BattleVictory,
         UI_PlacementPhase,
-        UI_ChooseTarget
+        UI_ChooseTarget,
+        UI_HeroProfileGroup_Vertical,
+        UI_MonsterProfileGroup,
     }
 
 	public UI_BattleActionPanel BattleActionPanel { get; protected set; }
@@ -21,18 +23,21 @@ public class UI_BattleScene : UI_Scene
     public UI_TurnState TurnstateUI { get; protected set; }
     public UI_PlacementPhase PlacementPhaseUI { get; protected set; }
     public UI_ChooseTarget ChooseTargetUI { get; protected set; }
+    public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
+    public UI_MonsterProfileGroup MonsterProfileGroupUI { get; protected set; }
 
     public override void Init()
     {
         base.Init();
 
 		Bind<UI_Base>(typeof(SubItemUI));
-        //Managers.UIMng.ShowPlayerProfileGroupUI(true);
         BattleActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
         CoinTossDisplay = Get<UI_Base>(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
         TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
         PlacementPhaseUI = Get<UI_Base>(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
         ChooseTargetUI = Get<UI_Base>(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget>();
+        HeroProfileGroupUI = Get<UI_Base>(SubItemUI.UI_HeroProfileGroup_Vertical).GetOrAddComponent<UI_HeroProfileGroup>();
+        MonsterProfileGroupUI = Get<UI_Base>(SubItemUI.UI_MonsterProfileGroup).GetOrAddComponent<UI_MonsterProfileGroup>();
     }
 
     public void OnPlacementPhaseStart()
@@ -42,6 +47,8 @@ public class UI_BattleScene : UI_Scene
         ChooseTargetUI.Hide();
         TurnstateUI.Setup();
         TurnstateUI.HideInstantly();
+        HeroProfileGroupUI.BindHeroProfileUIs();
+        MonsterProfileGroupUI.BindMonsterProfileUIs();
     }
 
     public IEnumerator OnBattlePhaseStart()

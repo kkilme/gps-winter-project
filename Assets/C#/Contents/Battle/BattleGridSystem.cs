@@ -39,7 +39,7 @@ public class BattleGridSystem
         }
     }
 
-    public void PlaceEnemy(int squadId)
+    public void PlaceMonster(int squadId)
     {
         Managers.DataMng.MonsterSquadDataDict.TryGetValue(squadId, out Data.MonsterSquadData squadData);
         if (squadData == null)

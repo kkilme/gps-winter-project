@@ -58,8 +58,6 @@ public abstract class Creature : MonoBehaviour
             OnDead();
             return;
         }
-        
-        Debug.Log($"{CreatureStat.Name}: {CreatureStat.Hp}");
 
         // TODO - 애니메이션
     }

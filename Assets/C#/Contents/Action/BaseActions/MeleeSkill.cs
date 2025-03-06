@@ -55,6 +55,7 @@ public abstract class MeleeSkill : BaseSkill
     {
         var attackSkillData = SkillData as AttackSkillData;
         int baseDamage = Owner.CreatureData.BaseDamage + coinHeadCount * attackSkillData.DamagePerCoin;
+        Debug.Log($"[MeleeSkill] {Owner.CreatureData.BaseDamage} + {coinHeadCount} * {attackSkillData.DamagePerCoin}");
 
         _animator.SetTrigger(GlobalValues.ANIMATION_PARAM_ATTACK);
         SelectedTargetCell.PlacedCreature.TakeDamage(baseDamage);

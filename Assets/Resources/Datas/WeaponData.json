@@ -13,7 +13,7 @@
     {
       "DataId": 201001,
       "Name": "SampleSwordAndShield",
-      "Attack": 9,
+      "Attack": 5,
       "LeftIndex" : 17,
       "RightIndex": 3,
       "WeaponType": "SwordAndShield",

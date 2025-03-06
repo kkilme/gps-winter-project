@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 1946561080056577606}
   - component: {fileID: 3345066272795528077}
   m_Layer: 5
-  m_Name: Attack
+  m_Name: BaseDamage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2223,7 +2223,7 @@ RectTransform:
   m_GameObject: {fileID: 3873356424396885939}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.000074, y: 1.000074, z: 1.000074}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3873356424306911158}
@@ -3386,7 +3386,7 @@ GameObject:
   - component: {fileID: 6409862553200015343}
   - component: {fileID: 189501091642900500}
   m_Layer: 5
-  m_Name: Text_Attack
+  m_Name: Text_BaseDamage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

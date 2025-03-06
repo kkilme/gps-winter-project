@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UI_HeroProfileGroup : UI_Base
@@ -16,19 +14,15 @@ public class UI_HeroProfileGroup : UI_Base
     public override void Init()
     {
         Bind<GameObject>(typeof(HeroProfileUI));
-        //DontDestroyOnLoad(transform.parent.gameObject);
     }
 
-    void Start()
+    public void BindHeroProfileUIs()
     {
-        Clear();
-        BindPlayerUIs();
-    }
+        foreach (HeroProfileUI playerUI in Enum.GetValues(typeof(HeroProfileUI)))
+            GetGameObject(playerUI).SetActive(false);
 
-    private void BindPlayerUIs()
-    {
         int index = 0;
-        foreach (var hero in Managers.ObjectMng.Heroes.Values)
+        foreach (var hero in Managers.ObjectMng.HeroParty.Heroes)
         {
             var go = GetGameObject((HeroProfileUI)index++);
             go.GetOrAddComponent<UI_CreatureProfile>().BindStat(hero.CreatureStat);
@@ -36,11 +30,5 @@ public class UI_HeroProfileGroup : UI_Base
             
             //go.transform.Find("Bag").GetOrAddComponent<UI_Bag>().BindBag(hero.Bag);
         }
-    }
-
-    private void Clear()
-    {
-        foreach (HeroProfileUI playerUI in Enum.GetValues(typeof(HeroProfileUI)))
-            GetGameObject(playerUI).SetActive(false);
     }
 }

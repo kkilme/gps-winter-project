@@ -6,14 +6,12 @@ using UnityEngine.UI;
 
 public class UI_CreatureProfile : UI_Base
 {
-    private event Action OnClaer;
-
     enum Text
     {
         Text_Name,
 
         Text_HP,
-        Text_Attack,
+        Text_BaseDamage,
         Text_PhysicalDefense,
         Text_MagicDefense,
 
@@ -42,24 +40,21 @@ public class UI_CreatureProfile : UI_Base
 
     public void BindStat(CreatureStat stat)
     {
-        stat.StatChangeAction += ChangePlayerStatUI;
-
-        OnClaer?.Invoke();
-        OnClaer = null;
-        OnClaer += () => stat.StatChangeAction -= ChangePlayerStatUI;
+        stat.StatChangeAction -= UpdateCreatureProfile;
+        stat.StatChangeAction += UpdateCreatureProfile;
         
         // init
-        ChangePlayerStatUI(stat);
+        UpdateCreatureProfile(stat);
     }
 
-    private void ChangePlayerStatUI(CreatureStat creatureStat)
+    private void UpdateCreatureProfile(CreatureStat creatureStat)
     {
         
         GetText(Text.Text_Name).text = creatureStat.Name;
 
         Get<Slider>(Sliders.Slider_HP).value = (float)creatureStat.Hp / creatureStat.MaxHp;
         GetText(Text.Text_HP).text = $"{creatureStat.Hp}/{creatureStat.MaxHp}";
-        GetText(Text.Text_Attack).text = creatureStat.BaseDamage.ToString();
+        GetText(Text.Text_BaseDamage).text = creatureStat.BaseDamage.ToString();
         GetText(Text.Text_PhysicalDefense).text = creatureStat.PhysicalDefense.ToString();
         GetText(Text.Text_MagicDefense).text = creatureStat.MagicDefense.ToString();
 
@@ -69,10 +64,5 @@ public class UI_CreatureProfile : UI_Base
         GetText(Text.Text_Dexterity).text = creatureStat.Dexterity.ToString();
 
         Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{creatureStat.Name}_Front");
-    }
-
-    private void OnDestroy()
-    {
-        OnClaer?.Invoke();
     }
 }

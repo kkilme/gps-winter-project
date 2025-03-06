@@ -31,7 +31,9 @@ namespace Data
         {
             Dictionary<int, CreatureData> dic = new Dictionary<int, CreatureData>();
             foreach (CreatureData hero in heroes)
+            {
                 dic.Add(hero.DataId, hero);
+            }
 
             return dic;
         }
@@ -133,8 +135,19 @@ namespace Data
                     return null;
                 }
                 string json = JsonConvert.SerializeObject(skill);
-                SkillData skillData = JsonConvert.DeserializeObject(json, skillType) as SkillData; // DeserializeObject는 object타입을 반환하기 때문에 SkillData로 캐스팅
-                dic.Add(skill.DataId, skillData);
+                
+                if(skillType == typeof(AttackSkillData))
+                {
+                    AttackSkillData attackSkillData = JsonConvert.DeserializeObject(json, skillType) as AttackSkillData;
+                    Debug.Log(attackSkillData.Name + attackSkillData.DamagePerCoin);
+                    dic.Add(skill.DataId, attackSkillData);
+                }
+                else
+                {
+                    SkillData skillData = JsonConvert.DeserializeObject(json, skillType) as SkillData;
+                    dic.Add(skill.DataId, skillData);
+                }
+
             }
 
             return dic;
