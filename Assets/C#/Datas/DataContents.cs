@@ -122,34 +122,13 @@ namespace Data
     public class SkillDataLoader : ILoader<int, SkillData>
     {
         public List<SkillData> skills = new List<SkillData>();
-
         public Dictionary<int, SkillData> MakeDict()
         {
             var dic = new Dictionary<int, SkillData>();
             foreach (var skill in skills)
             {
-                Type skillType = Type.GetType("Data." + skill.Type.ToString());
-                if (skillType == null)
-                {
-                    Debug.LogError($"Failed to get type: " + skill.Type);
-                    return null;
-                }
-                string json = JsonConvert.SerializeObject(skill);
-                
-                if(skillType == typeof(AttackSkillData))
-                {
-                    AttackSkillData attackSkillData = JsonConvert.DeserializeObject(json, skillType) as AttackSkillData;
-                    Debug.Log(attackSkillData.Name + attackSkillData.DamagePerCoin);
-                    dic.Add(skill.DataId, attackSkillData);
-                }
-                else
-                {
-                    SkillData skillData = JsonConvert.DeserializeObject(json, skillType) as SkillData;
-                    dic.Add(skill.DataId, skillData);
-                }
-
+                dic.Add(skill.DataId, skill);
             }
-
             return dic;
         }
     }
