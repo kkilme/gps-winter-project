@@ -3,7 +3,7 @@
     {
       "DataId": 102000,
       "Name": "Bat",
-      "Hp": 10,
+      "Hp": 25,
       "BaseDamage": 5,
       "PhysicalDefense": 0,
       "MagicDefense": 0,

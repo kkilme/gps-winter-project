@@ -59,9 +59,7 @@ public class CreatureStat : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        int trueDamage = Mathf.Max(damage - PhysicalDefense, 1);
-
-        Hp = Mathf.Clamp(Hp - trueDamage, 0, MaxHp);
+        Hp = Mathf.Clamp(Hp - damage, 0, MaxHp);
     }
 
     public void OnHeal(int amount)

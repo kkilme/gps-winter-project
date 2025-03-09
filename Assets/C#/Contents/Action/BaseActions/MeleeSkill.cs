@@ -54,13 +54,14 @@ public abstract class MeleeSkill : BaseSkill
     protected virtual IEnumerator Attack(int coinHeadCount)
     {
         var attackSkillData = SkillData as AttackSkillData;
-        int baseDamage = Owner.CreatureData.BaseDamage + coinHeadCount * attackSkillData.DamagePerCoin;
-        Debug.Log($"[MeleeSkill] {Owner.CreatureData.BaseDamage} + {coinHeadCount} * {attackSkillData.DamagePerCoin}");
+        var target = SelectedTargetCell.PlacedCreature;
+
+        var damage = DamageCalculator.CalculateFinalDamage(Owner, target, attackSkillData, coinHeadCount);
 
         _animator.SetTrigger(GlobalValues.ANIMATION_PARAM_ATTACK);
-        SelectedTargetCell.PlacedCreature.TakeDamage(baseDamage);
+        SelectedTargetCell.PlacedCreature.TakeDamage(damage);
 
-        yield return DOVirtual.DelayedCall(_animator.GetCurrentAnimatorStateInfo(0).length + 0.1f, () => { }).WaitForCompletion();
+        yield return DOVirtual.DelayedCall(_animator.GetCurrentAnimatorStateInfo(0).length + 0.2f, () => { }).WaitForCompletion();
     }
 
     protected virtual Tween Return()

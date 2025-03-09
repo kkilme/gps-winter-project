@@ -44,7 +44,7 @@ public class UI_CoinTossDisplay : UI_Base
         for (int i = 0; i < result.Length; i++)
         {
             Get<UI_Coin>(i).ShowResult(result[i]);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.3f);
         }
     }
 }
