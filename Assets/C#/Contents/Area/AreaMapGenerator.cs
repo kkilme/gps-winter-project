@@ -6,9 +6,9 @@ using Random = UnityEngine.Random;
 
 public partial class AreaMapGenerator : MonoBehaviour
 {
-    // 모든 구역의 맵 생성용 데이터셋 (key: 구역 이름, value: 구역 데이터)
+    // 모든 구역의 맵 생성용 데이터셋 (key: Area 이름, value: Area 데이터)
     [SerializeField] private SerializedDictionary<AreaName, AreaMapGenerationData> _dataset;
-    // 데이터셋 중 현재 생성할 구역의 데이터
+    // 데이터셋 중 현재 생성할 Area의 데이터
     private AreaMapGenerationData _data;
 
     private AreaMap _map;

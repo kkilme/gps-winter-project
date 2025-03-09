@@ -6,10 +6,10 @@ public class HeroParty
 {
     public List<Hero> Heroes { get; set; }
     public Dictionary<Hero, Vector2Int> BattlePositions { get; set; } // 전투 맵에서 배치되는 그리드 위치
-    public int Gold { get; set; } // 골드는 파티가 공유
-
+    public int Gold { get; set; }
     private int _nextHeroPosX = 0;
     private int _nextHeroPosY = 0;
+
     public HeroParty()
     {
         Heroes = new List<Hero>();
@@ -30,7 +30,6 @@ public class HeroParty
         {
             _nextHeroPosX++;
         }
-
     }
 
     // Area에서 시작 지점에 히어로 배치

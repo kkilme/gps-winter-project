@@ -156,13 +156,13 @@ public class BattleManager
 
     public void NextTurn()
     {
-        if (Managers.ObjectMng.Monsters.Count <= 0)
+        if (Monsters.Count <= 0)
         {
             EndBattle(BattleResultType.Victory);
             return;
         }
 
-        if (Managers.ObjectMng.Heroes.Count <= 0)
+        if (Heroes.Count <= 0)
         {
             EndBattle(BattleResultType.Defeat);
             return;

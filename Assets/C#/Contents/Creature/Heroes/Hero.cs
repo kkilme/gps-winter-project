@@ -2,21 +2,16 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class Hero : Creature
 {
     #region Field
 
-    public GameObject Head { get; protected set; }
-    public GameObject LeftHand { get; protected set; }
-    public GameObject RightHand { get; protected set; }
-
-    public Bag Bag { get; protected set; }
-    
     public Weapon Weapon { get; protected set; }
-    public WeaponType WeaponType => Weapon.WeaponType;
     public Dictionary<ArmorType, Armor> Armors { get; protected set; }
+    private GameObject _head;
+    private GameObject _leftHand;
+    private GameObject _rightHand;
     
     #endregion
     
@@ -24,13 +19,9 @@ public class Hero : Creature
     {
         base.Init();
         
-        Head = GlobalUtility.FindChild(gameObject, "head", true);
-        LeftHand = GlobalUtility.FindChild(gameObject, "weapon_l", true);
-        RightHand = GlobalUtility.FindChild(gameObject, "weapon_r", true);
-
-        Bag = new Bag();
-        Bag.SetInfo();
-        Bag.Owner = this;
+        _head = GlobalUtility.FindChild(gameObject, "head", true);
+        _leftHand = GlobalUtility.FindChild(gameObject, "weapon_l", true);
+        _rightHand = GlobalUtility.FindChild(gameObject, "weapon_r", true);
 
         Armors = new Dictionary<ArmorType, Armor>();
         foreach (ArmorType type in (ArmorType[])Enum.GetValues(typeof(ArmorType)))
@@ -44,14 +35,10 @@ public class Hero : Creature
         base.SetInfo(templateId);
     }
 
-    #region Battle
-
     public override Tween LookOpponent(float duration = 0f)
     {
         return transform.DOLookAt(Managers.BattleMng.BattleGridSystem.MonsterGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration);
     }
-
-    #endregion
 
     // Prototype버전에선 Weapon, Armor 구현 X
     // TODO - Data Id로 무기 및 아머를 장착하도록 구현
@@ -59,7 +46,7 @@ public class Hero : Creature
 
     public void ChangeAnimator()
     {
-        string path = "Animators/Players/" + WeaponType;
+        string path = "Animators/Players/" + Weapon.WeaponType;
         Animator.runtimeAnimatorController = Managers.ResourceMng.Load<RuntimeAnimatorController>(path);
     }
 
@@ -103,11 +90,11 @@ public class Hero : Creature
         int rightIndex = Weapon.WeaponData.RightIndex;
         if (leftIndex != 0)
         {
-            LeftHand.transform.GetChild(leftIndex).gameObject.SetActive(isActive);
+            _leftHand.transform.GetChild(leftIndex).gameObject.SetActive(isActive);
         }
         if (rightIndex != 0)
         {
-            RightHand.transform.GetChild(rightIndex).gameObject.SetActive(isActive);
+            _rightHand.transform.GetChild(rightIndex).gameObject.SetActive(isActive);
         }
     }
 
@@ -155,10 +142,10 @@ public class Hero : Creature
                  transform.GetChild(idx + 19).gameObject.SetActive(isActive);
                  break;
              case ArmorType.HeadAccessory:
-                 Head.transform.GetChild(idx - 1).gameObject.SetActive(isActive);
+                 _head.transform.GetChild(idx - 1).gameObject.SetActive(isActive);
                  break;
              case ArmorType.Helmet:
-                 Head.transform.GetChild(idx + 96).gameObject.SetActive(isActive);
+                 _head.transform.GetChild(idx + 96).gameObject.SetActive(isActive);
                  break;
         }
     }

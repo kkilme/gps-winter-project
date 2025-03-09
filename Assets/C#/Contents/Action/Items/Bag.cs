@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO
 public class Bag
 {
     public Hero Owner { get; set; }

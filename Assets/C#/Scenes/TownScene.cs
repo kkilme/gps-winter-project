@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TownScene : BaseScene
 {
-    [SerializeField] private int[] _startHeroIds;
     [SerializeField] private Transform[] _heroPositions;
     protected override void Init()
     {
@@ -22,19 +21,11 @@ public class TownScene : BaseScene
 
     private void SpawnHeroes()
     {
-        if (_startHeroIds.Length > 4)
-        {
-            Debug.LogError("Max number of heroes is 4!");
-            return;
-        }
-        foreach (int id in _startHeroIds)
-        {
-             Managers.ObjectMng.SpawnHero(id);
-        }
+        Managers.ObjectMng.SpawnHeroesOnTest();
 
         int i = 0;
 
-        foreach (var hero in Managers.ObjectMng.Heroes.Values)
+        foreach (var hero in Managers.ObjectMng.HeroParty.Heroes)
         {
             hero.gameObject.transform.position = _heroPositions[i++].position;
             hero.transform.LookAt(Camera.main.transform.position);

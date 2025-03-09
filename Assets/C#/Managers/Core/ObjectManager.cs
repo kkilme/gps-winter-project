@@ -6,28 +6,17 @@ using Object = UnityEngine.Object;
 public class ObjectManager
 {
     public bool Initialized { get; protected set; }
-    public Dictionary<ulong, Hero> Heroes { get; protected set; }
-    public Dictionary<ulong, Monster> Monsters { get; protected set; }
     public HeroParty HeroParty { get; protected set; }
+    public Dictionary<int, BaseSkill> Skills { get; protected set; } // 스킬 객체를 미리 생성해놓고 계속해서 사용
 
-    public ulong NextHeroId;
-    public ulong NextMonsterId;
-
-    public Dictionary<int, BaseSkill> Skills { get; protected set; }
-
-    public Transform HeroRoot => GetRootTransform("@Heroes");
-    public Transform MonsterRoot => GetRootTransform("@Monsters");
+    private Transform _heroRoot => GetRootTransform("@Heroes");
+    private Transform _monsterRoot => GetRootTransform("@Monsters");
 
     public void Init()
     {
-        Heroes = new Dictionary<ulong, Hero>();
-        Monsters = new Dictionary<ulong, Monster>();
         Skills = new Dictionary<int, BaseSkill>();
 
-        NextHeroId = 10000;
-        NextMonsterId = 20000;
-
-        Object.DontDestroyOnLoad(HeroRoot.gameObject);
+        Object.DontDestroyOnLoad(_heroRoot.gameObject);
         BindSkills();
 
         Initialized = true;
@@ -41,8 +30,6 @@ public class ObjectManager
 
         return root.transform;
     }
-
-    #region Bind
 
     public void BindSkills()
     {
@@ -62,14 +49,11 @@ public class ObjectManager
         }
     }
 
-    #endregion
-
-    #region Creature
     public Hero SpawnHero(int heroDataId)
     {
         if (!Managers.DataMng.HeroDataDict.ContainsKey(heroDataId))
         {
-            Debug.LogError($"No hero data exists with heroDataId: {heroDataId}");
+            Debug.LogError($"Hero data doesn't exist. HeroDataId: {heroDataId}");
             return null;
         }
 
@@ -82,12 +66,31 @@ public class ObjectManager
 
         hero.SetInfo(heroDataId);
         go.transform.position = Vector3.zero;
-        hero.transform.parent = HeroRoot;
-        hero.Id = NextHeroId;
-        Heroes[NextHeroId++] = hero;
+        hero.transform.parent = _heroRoot;
+
         return hero;
     }
 
+    public Monster SpawnMonster(int monsterDataId)
+    {
+        if (!Managers.DataMng.HeroDataDict.ContainsKey(monsterDataId))
+        {
+            Debug.LogError($"Monster data doesn't exist. MonsterDataId: {monsterDataId}");
+            return null;
+        }
+
+        string monsterName = Managers.DataMng.MonsterDataDict[monsterDataId].Name;
+        GameObject go = Managers.ResourceMng.Instantiate($"{GlobalValues.MONSTER_PREFAB_PATH_ROOT}/{monsterName}");
+        Monster monster = go.GetComponent<Monster>();
+
+        monster.SetInfo(monsterDataId);
+        go.transform.position = Vector3.zero;
+        monster.transform.parent = _monsterRoot;
+
+        return monster;
+    }
+    
+    // 프로토타입 버전에서의 영웅 스폰: Knight 2명, Wizard 2명
     public void SpawnHeroesOnTest()
     {   
         for(int i = 0; i < 2; i++)
@@ -102,52 +105,4 @@ public class ObjectManager
             hero.EquipWeapon(GlobalValues.WIZARD_START_WEAPON_ID);
         }
     }
-
-    public Monster SpawnMonster(int monsterDataId)
-    {
-        string className = Managers.DataMng.MonsterDataDict[monsterDataId].Name;
-        GameObject go = Managers.ResourceMng.Instantiate($"{GlobalValues.MONSTER_PREFAB_PATH_ROOT}/{className}");
-        Monster monster = go.GetComponent<Monster>();
-
-        monster.SetInfo(monsterDataId);
-        go.transform.position = Vector3.zero;
-        monster.transform.parent = MonsterRoot;
-        monster.Id = NextMonsterId;
-        Monsters[NextMonsterId++] = monster;
-
-        return monster;
-    }
-
-    public void Despawn(CreatureType creatureType, ulong id)
-    {
-        Creature creature = null;
-        switch (creatureType)
-        {
-            case CreatureType.Hero:
-                creature = Heroes[id];
-                Heroes.Remove(id);
-                break;
-            case CreatureType.Monster:
-                creature = Monsters[id];
-                Monsters.Remove(id);
-                break;
-        }
-
-        if (creature != null)
-            Managers.ResourceMng.Destroy(creature.gameObject);
-    }
-
-    public Creature GetCreatureWithId(ulong id)
-    {
-        Creature creature = null;
-        if (Managers.ObjectMng.Heroes.TryGetValue(id, out Hero hero))
-            creature = hero;
-        if (Managers.ObjectMng.Monsters.TryGetValue(id, out Monster monster))
-            creature = monster;
-
-        return creature;
-    }
-
-
-    #endregion
 }
