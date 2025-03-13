@@ -28,25 +28,24 @@ public class Hero : Creature
             Armors.TryAdd(type, null);
     }
     
-    public override void SetInfo(int templateId)
+    public override void SetInfo(int dataId)
     {
         CreatureType = CreatureType.Hero;
-        CreatureData = Managers.DataMng.HeroDataDict[templateId];
-        base.SetInfo(templateId);
+        CreatureData = Managers.DataMng.HeroDataDict[dataId];
+        base.SetInfo(dataId);
     }
 
     public override Tween LookOpponent(float duration = 0f)
     {
-        return transform.DOLookAt(Managers.BattleMng.BattleGridSystem.MonsterGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration);
+        return transform.DOLookAt(Managers.BattleMng.GridSystem.MonsterGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration);
     }
 
-    // Prototype버전에선 Weapon, Armor 구현 X
-    // TODO - Data Id로 무기 및 아머를 장착하도록 구현
+    // Prototype버전에선 많은 종류의 Weapon, Armor는 구현 X
     #region Weapon
 
-    public void ChangeAnimator()
+    private void ChangeAnimator()
     {
-        string path = "Animators/Players/" + Weapon.WeaponType;
+        string path = $"{GlobalValues.HERO_ANIMATOR_PATH_ROOT}/{Weapon.WeaponType}";
         Animator.runtimeAnimatorController = Managers.ResourceMng.Load<RuntimeAnimatorController>(path);
     }
 

@@ -18,7 +18,7 @@ public class UI_BattleScene : UI_Scene
         UI_MonsterProfileGroup,
     }
 
-	public UI_BattleActionPanel BattleActionPanel { get; protected set; }
+	public UI_BattleActionPanel ActionPanel { get; protected set; }
 	public UI_CoinTossDisplay CoinTossDisplay { get; protected set; }
     public UI_TurnState TurnstateUI { get; protected set; }
     public UI_PlacementPhase PlacementPhaseUI { get; protected set; }
@@ -31,7 +31,7 @@ public class UI_BattleScene : UI_Scene
         base.Init();
 
 		Bind<UI_Base>(typeof(SubItemUI));
-        BattleActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
+        ActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
         CoinTossDisplay = Get<UI_Base>(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
         TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
         PlacementPhaseUI = Get<UI_Base>(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
@@ -42,7 +42,7 @@ public class UI_BattleScene : UI_Scene
 
     public void OnPlacementPhaseStart()
     {
-        BattleActionPanel.Hide();
+        ActionPanel.Hide();
         CoinTossDisplay.Hide();
         ChooseTargetUI.Hide();
         TurnstateUI.Setup();
@@ -51,10 +51,10 @@ public class UI_BattleScene : UI_Scene
         MonsterProfileGroupUI.BindMonsterProfileUIs();
     }
 
-    public IEnumerator OnBattlePhaseStart()
+    public void OnBattlePhaseStart()
     {
-        yield return PlacementPhaseUI.Hide().WaitForCompletion();
         TurnstateUI.Show();
+        OnTurnStart();
     }
 
     public void OnBattleEnd(BattleResultType battleResult)
@@ -82,9 +82,12 @@ public class UI_BattleScene : UI_Scene
 
     public void OnTurnStart()
     {
-        TurnstateUI.MoveTurnFrames();
-        if (Managers.BattleMng.CurrentTurnCreature is Hero) BattleActionPanel.Show();
-        else BattleActionPanel.Hide();
+        var turnCreature = Managers.BattleMng.CurrentTurnCreature;
+
+        TurnstateUI.RefreshTurnFramesPosition();
+
+        if (turnCreature is Hero) ActionPanel.Show();
+        else ActionPanel.Hide();
     }
 
     public void OnTurnEnd()

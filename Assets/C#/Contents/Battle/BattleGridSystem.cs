@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// grid 및 마우스 입력 관리
+// 전투 씬의 grid 관련 로직 관리
 public class BattleGridSystem
 {
     public BattleGridCell[,] HeroGrid { get; protected set; } = new BattleGridCell[GlobalValues.BATTLEGRID_ROW_COUNT, GlobalValues.BATTLEGRID_COL_COUNT];

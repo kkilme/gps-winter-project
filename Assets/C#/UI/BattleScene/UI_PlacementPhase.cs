@@ -16,7 +16,7 @@ public class UI_PlacementPhase : UI_Base
         _rectTransform = GetComponent<RectTransform>();
         GetButton(Buttons.Button_StartBattle).onClick.AddListener(() =>
         {
-            Managers.BattleMng.StartBattlePhase();
+            Hide();
         });
     }
 
@@ -25,7 +25,7 @@ public class UI_PlacementPhase : UI_Base
         return _rectTransform.DOAnchorPosY(500, 0.7f).SetEase(Ease.InBack).OnComplete(() =>
         {
             gameObject.SetActive(false);
-            Managers.BattleMng.BattleSceneUI.OnTurnStart();
+            Managers.BattleMng.StartBattlePhase();
         });
     }
 }

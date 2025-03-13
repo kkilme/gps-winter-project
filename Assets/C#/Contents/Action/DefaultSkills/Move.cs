@@ -51,7 +51,7 @@ public class Move : BaseSkill
         if (!SelectedTargetCell.IsEmpty())
         {   
             Creature targetCreature = SelectedTargetCell.PlacedCreature;
-            Managers.BattleMng.BattleGridSystem.SwapCreaturePosition(Owner, SelectedTargetCell.PlacedCreature);
+            Managers.BattleMng.GridSystem.SwapCreaturePosition(Owner, SelectedTargetCell.PlacedCreature);
 
             sequence = DOTween.Sequence();
             sequence.Append(Owner.LookOpponent(0.1f));
@@ -60,7 +60,7 @@ public class Move : BaseSkill
             yield return sequence.Play().WaitForCompletion();
         } else
         {
-            Managers.BattleMng.BattleGridSystem.MoveCreature(Owner, SelectedTargetCell);
+            Managers.BattleMng.GridSystem.MoveCreature(Owner, SelectedTargetCell);
             yield return Owner.LookOpponent(0.1f).WaitForCompletion();
         }
 

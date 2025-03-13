@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BattleMouseInputHandler
 {
-    public BattleGridCell CurrentMouseOverCell { get; private set; }
+    public BattleGridCell CurrentMouseOverCell { get; private set; } // 현재 마우스를 올리고 있는 Cell
     private BattleGridSystem _battleGridSystem;
     private BaseAction _currentAction => Managers.BattleMng.CurrentAction;
 
@@ -14,7 +14,7 @@ public class BattleMouseInputHandler
     public void Init()
     {
         _camera = Camera.main;
-        _battleGridSystem = Managers.BattleMng.BattleGridSystem;
+        _battleGridSystem = Managers.BattleMng.GridSystem;
     }
 
     public void HandleMouseOnPlacementPhase(MouseEvent mouseEvent)
@@ -129,21 +129,19 @@ public class BattleMouseInputHandler
 
     private void OnClickGridCell()
     {   
-        BaseAction action = Managers.BattleMng.CurrentAction;
-
-        if (CurrentMouseOverCell == null || !action.TargetSelector.IsTargettable(CurrentMouseOverCell))
+        if (CurrentMouseOverCell == null || !_currentAction.TargetSelector.IsTargettable(CurrentMouseOverCell))
             return;
 
         Managers.InputMng.MouseAction -= HandleMouseOnTargetSelect;
 
-        action.SelectedTargetCell = CurrentMouseOverCell;
+        _currentAction.SetTarget(CurrentMouseOverCell);
         _battleGridSystem.ResetAllCellColor();
-        action.HighlightAffectedTargets(CurrentMouseOverCell);
+        _currentAction.HighlightAffectedTargets(CurrentMouseOverCell);
 
-        Managers.BattleMng.BattleSceneUI.ChooseTargetUI.Hide();
+        Managers.BattleMng.UI.ChooseTargetUI.Hide();
 
         // 액션 실행
-        CoroutineRunner.Instance.Run(action.Execute());
+        CoroutineRunner.Instance.StartCoroutine(_currentAction.Execute());
     }
 
     private Vector3 GetMouseWorldPosition()

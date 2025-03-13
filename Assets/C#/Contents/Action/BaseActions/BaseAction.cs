@@ -7,9 +7,9 @@ public abstract class BaseAction
 {
     #region Field
     public int DataId { get; protected set; }
-    public Creature Owner { get; set; }
+    public Creature Owner { get; protected set; }
     protected Animator _animator => Owner.Animator;
-    public BattleGridCell SelectedTargetCell { get; set; }
+    public BattleGridCell SelectedTargetCell { get; protected set; }
     public abstract ActionTargetSelector TargetSelector { get; protected set; }
     public abstract ActionEffectRange EffectRange { get; protected set; }
 
@@ -26,30 +26,60 @@ public abstract class BaseAction
     /// <returns></returns>
     public abstract IEnumerator Execute();
 
-    public void OnSet()
+    public void Set(Creature creature)
     {
-        Owner = Managers.BattleMng.CurrentTurnCreature;
-        if(TargetSelector == null)
-        {
-            Debug.LogError("Action doesn't have targetselector: " + GetType().Name);
-            return;
-        }
+        Owner = creature;
 
-        TargetSelector.SetTargettableCells();
+        TargetSelector.CalculateTargettableCells();
         if(!TargetSelector.NeedTargetSelection)
         {
-            SelectedTargetCell = TargetSelector.GetRandomTarget();
+            SetRandomTarget();
         }
     }
 
-    public void OnUnset()
+    public void Unset()
     {
         Owner = null;
         SelectedTargetCell = null;
         TargetSelector.OnActionUnset();
     }
 
-    // 임의의 cell 기준으로 영향 받는 대상들을 모두 하이라이트
+    public void SetTarget(BattleGridCell target)
+    {
+        SelectedTargetCell = target;
+    }
+
+    /// <summary>
+    /// 랜덤 타겟 선택.
+    /// 이는 단순히 여러 가능한 타겟 중 1개의 타겟을 랜덤으로 선택할 때 뿐만이 아니라 TargetSelector에서 선택된 단 1개의 대상을 선택하는 데에도 사용됨.
+    /// </summary>
+    public void SetRandomTarget()
+    {
+        SelectedTargetCell = TargetSelector.GetRandomTarget();
+    }
+
+    /// <summary>
+    /// 액션이 실행가능한지 여부
+    /// </summary>
+    public bool IsExecutable()
+    {
+        return Owner != null && (TargetSelector.TargettableCells.Count > 0 || TargetSelector is DummySelector);
+    }
+
+    /// <summary>
+    /// creature가 이 액션을 실행 가능한지 여부. Set과 Unset을 내부적으로 실행함.
+    /// </summary>
+    public bool IsExecutable(Creature creature)
+    {
+        Set(creature);
+        bool result = IsExecutable();
+        Unset();
+        return result;
+    }
+
+    /// <summary>
+    /// parameter의 cell 기준으로 영향 받는 대상들을 모두 하이라이트
+    /// </summary>
     public void HighlightAffectedTargets(BattleGridCell cell)
     {
         foreach (var target in EffectRange.GetAffectedTargets(cell))
@@ -58,7 +88,9 @@ public abstract class BaseAction
         }
     }
 
-    // 현재 선택된 cell 기준으로 영향 받는 대상들을 모두 하이라이트
+    /// <summary>
+    /// 현재 대상으로 선택된 cell 기준으로 영향 받는 대상들을 모두 하이라이트
+    /// </summary>
     public void HighlightAffectedTargets()
     {
         if(SelectedTargetCell == null)

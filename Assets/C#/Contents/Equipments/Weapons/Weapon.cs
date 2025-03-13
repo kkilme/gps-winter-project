@@ -15,9 +15,9 @@ public class Weapon: Equipment
 
         base.SetInfo(dataId);
 
-        foreach (int actionId in WeaponData.Skills)
+        foreach (int skillId in WeaponData.Skills)
         {
-            Skills.Add(Managers.ObjectMng.Skills[actionId]);
+            Skills.Add(Managers.ObjectMng.Skills[skillId]);
         }
 
         Skills.Add(Managers.ObjectMng.Skills[GlobalValues.ACTION_MOVE_ID]);

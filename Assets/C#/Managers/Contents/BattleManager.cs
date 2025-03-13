@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,9 +8,9 @@ public class BattleManager
     #region Field
 
     public BattleState BattleState { get; private set; }
-    public UI_BattleScene BattleSceneUI { get; private set; }
+    public UI_BattleScene UI { get; private set; }
     public TurnSystem TurnSystem { get; private set; }
-    public BattleGridSystem BattleGridSystem { get; private set; }
+    public BattleGridSystem GridSystem { get; private set; }
     public BattleMouseInputHandler MouseInputHandler { get; private set; }
     private BaseAction _currentAction;
     public BaseAction CurrentAction {
@@ -21,18 +22,18 @@ public class BattleManager
 
             if (value == null)
             {
-                _currentAction.OnUnset();
+                _currentAction.Unset();
                 _currentAction = null;
             
             }
             else
             {
                 _currentAction = value;
-                _currentAction.OnSet();
+                _currentAction.Set(CurrentTurnCreature);
             }
         }
     }
-    public Creature CurrentTurnCreature => TurnSystem.Turns[0];
+    public Creature CurrentTurnCreature => TurnSystem.CurrentTurnCreature;
     public List<Creature> Creatures
     {
         get
@@ -52,9 +53,9 @@ public class BattleManager
     {
         BattleState = BattleState.Starting;
         TurnSystem = new TurnSystem();
-        BattleGridSystem = new BattleGridSystem();
+        GridSystem = new BattleGridSystem();
         MouseInputHandler = new BattleMouseInputHandler();
-        BattleSceneUI = Managers.UIMng.ShowSceneUI<UI_BattleScene>();
+        UI = Managers.UIMng.ShowSceneUI<UI_BattleScene>();
         Monsters = new();
 
         // 배틀 필드 생성
@@ -66,13 +67,14 @@ public class BattleManager
         MouseInputHandler.Init();
 
         // Creature 배치
-        BattleGridSystem.Init();
-        BattleGridSystem.PlaceHero();
-        BattleGridSystem.PlaceMonster(squadId);
+        GridSystem.Init();
+        GridSystem.PlaceHero();
+        GridSystem.PlaceMonster(squadId);
 
         // TurnSystem 초기화
         TurnSystem.Init();
         
+        // 배치 단계 시작
         StartPlacementPhase();
     }
 
@@ -86,7 +88,7 @@ public class BattleManager
         Managers.InputMng.PointerOverGameObjectAction -= MouseInputHandler.OnDragEnd;
         Managers.InputMng.PointerOverGameObjectAction += MouseInputHandler.OnDragEnd;
 
-        BattleSceneUI.OnPlacementPhaseStart();
+        UI.OnPlacementPhaseStart();
     }
 
     // 전투 시작
@@ -101,11 +103,16 @@ public class BattleManager
 
         CurrentTurnCreature.StandingCell.HighlightOutline();
 
-        CoroutineRunner.Instance.Run(BattleSceneUI.OnBattlePhaseStart());
+        UI.OnBattlePhaseStart();
+
+        if (CurrentTurnCreature is Monster)
+        {
+            CoroutineRunner.Instance.StartCoroutine(ProceedMonsterTurn());
+        }
     }
 
-    // Action 선택
-    public void SetAction(BaseAction action)
+    // Hero가 Action 선택 시
+    public void SetAction_Hero(BaseAction action)
     {
         if(action == null)
         {
@@ -113,63 +120,88 @@ public class BattleManager
             return;
         }
         CurrentAction = action;
-        BattleSceneUI.BattleActionPanel.Hide();
+        UI.ActionPanel.Hide();
 
         // 대상 선택이 필요한 액션인 경우
         if (action.TargetSelector.NeedTargetSelection)
         {
-            BattleSceneUI.ChooseTargetUI.Show();
+            UI.ChooseTargetUI.Show();
 
             Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
             Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
             Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnTargetSelect;
 
-            BattleGridSystem.HighlightTargettableCells(action);
+            GridSystem.HighlightTargettableCells(action);
         }
-        else // 대상 선택이 필요 없는 액션인 경우
+        else if(action.IsExecutable()) // 대상 선택이 필요 없는 액션인 경우
         {
-            BattleGridSystem.ResetAllCellColor();
+            action.SetRandomTarget();
+            GridSystem.ResetAllCellColor();
             CurrentAction.HighlightAffectedTargets();
-            CoroutineRunner.Instance.Run(CurrentAction.Execute());
+            CoroutineRunner.Instance.StartCoroutine(CurrentAction.Execute());
+        } else
+        {
+            Debug.LogWarning("Action is not executable");
+            UnsetAction();
         }
     }
 
     public void UnsetAction()
     {
         CurrentAction = null;
-        BattleSceneUI.ChooseTargetUI.Hide();
-        BattleSceneUI.BattleActionPanel.ShowInstantly();
+        UI.ChooseTargetUI.Hide();
 
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
         Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
 
-        BattleGridSystem.ResetAllCellColor();
+        GridSystem.ResetAllCellColor();
         CurrentTurnCreature.StandingCell.HighlightOutline();
     }
 
     public void OnActionEnd()
     {
         UnsetAction();
-        NextTurn();
+        UI.CoinTossDisplay.Hide();
+        CoroutineRunner.Instance.StartCoroutine(NextTurn());
     }
 
-    public void NextTurn()
+    public IEnumerator ProceedMonsterTurn()
     {
+        Monster monster = CurrentTurnCreature as Monster;
+        CurrentAction = monster.AIBrain.DecideSkill();
+
+        GridSystem.ResetAllCellColor();
+        CurrentTurnCreature.StandingCell.HighlightOutline();
+        CurrentAction.HighlightAffectedTargets();
+
+        yield return new WaitForSeconds(1.5f);
+
+        CoroutineRunner.Instance.StartCoroutine(CurrentAction.Execute());
+    }
+
+    public IEnumerator NextTurn()
+    {
+        yield return new WaitForSeconds(0.7f); // 턴 전환시 약간의 대기시간을 둠
         if (Monsters.Count <= 0)
         {
             EndBattle(BattleResultType.Victory);
-            return;
+            yield break;
         }
 
         if (Heroes.Count <= 0)
         {
             EndBattle(BattleResultType.Defeat);
-            return;
+            yield break;
         }
 
         TurnSystem.NextTurn();
-        BattleSceneUI.OnTurnStart();
+        UI.OnTurnStart();
+
+        if (CurrentTurnCreature is Monster)
+        {
+            CoroutineRunner.Instance.StartCoroutine(ProceedMonsterTurn());
+        }
     }
 
     public void EndBattle(BattleResultType battleResult)

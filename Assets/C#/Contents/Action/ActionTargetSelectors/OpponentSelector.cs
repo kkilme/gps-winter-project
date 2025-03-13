@@ -11,11 +11,11 @@ public class OpponentSelector : ActionTargetSelector
         _rangeType = rangeType;
     }
 
-    public override void SetTargettableCells()
+    public override void CalculateTargettableCells()
     {
         TargettableCells.Clear();
         var currentcell = Managers.BattleMng.CurrentTurnCreature.StandingCell;
-        var opponentGrid = Managers.BattleMng.BattleGridSystem.SideToGrid(currentcell.GridSide == GridSide.HeroSide ? GridSide.MonsterSide : GridSide.HeroSide);
+        var opponentGrid = Managers.BattleMng.GridSystem.SideToGrid(currentcell.GridSide == GridSide.HeroSide ? GridSide.MonsterSide : GridSide.HeroSide);
 
         if (_rangeType == AttackRangeType.Ranged)
         {

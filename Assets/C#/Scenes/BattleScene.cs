@@ -37,13 +37,15 @@ public class BattleScene : BaseScene
         }
     }
 
+#if UNITY_EDITOR
     // TOOD: for test
     protected void Update()
     {
         base.Update();
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Managers.BattleMng.NextTurn();
+            StartCoroutine(Managers.BattleMng.NextTurn());
         }
     }
+#endif
 }

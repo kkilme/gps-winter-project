@@ -23,7 +23,7 @@ public abstract class Creature : MonoBehaviour
     }
     
     // 수동 실행
-    public virtual void SetInfo(int templateId)
+    public virtual void SetInfo(int dataId)
     { 
         gameObject.name = $"{CreatureData.DataId}_{CreatureData.Name}";
         CreatureStat.SetStat(CreatureData);

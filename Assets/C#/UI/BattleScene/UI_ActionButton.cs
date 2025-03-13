@@ -11,7 +11,7 @@ public class UI_ActionButton : UI_Base
     {
         var Button = gameObject.GetOrAddComponent<Button>();
 
-        _actionPanel = Managers.BattleMng.BattleSceneUI.BattleActionPanel;
+        _actionPanel = Managers.BattleMng.UI.ActionPanel;
 
         Button.onClick.AddListener(OnClick);
         gameObject.BindEvent(OnMouseEnterEvent, UIEvent.Enter);
@@ -24,7 +24,7 @@ public class UI_ActionButton : UI_Base
 
     protected void OnClick()
     {
-        Managers.BattleMng.SetAction(_skill);
+        Managers.BattleMng.SetAction_Hero(_skill);
     }
 
     protected void OnMouseEnterEvent(PointerEventData data)

@@ -6,16 +6,16 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SingleSword
+  m_Name: Wand_temp
   m_Controller: {fileID: 9100000, guid: cf32c9ae99396e748aab1a450c2582ab, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 1827226128182048838, guid: a55f0e8fd223ffc498678ffd76daf802, type: 3}
-    m_OverrideClip: {fileID: 1827226128182048838, guid: a55f0e8fd223ffc498678ffd76daf802, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: 4659730ec34aea645a8df81f72a1c066, type: 3}
   - m_OriginalClip: {fileID: 1827226128182048838, guid: 3ba49699b39c446449b9c1cdac5b8515, type: 3}
-    m_OverrideClip: {fileID: 1827226128182048838, guid: 3ba49699b39c446449b9c1cdac5b8515, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: 6047a8bb25a95e74d8d687f84c41ede9, type: 3}
   - m_OriginalClip: {fileID: 1827226128182048838, guid: 644f45525bf721c4f8b07c23e68600bc, type: 3}
-    m_OverrideClip: {fileID: 1827226128182048838, guid: 644f45525bf721c4f8b07c23e68600bc, type: 3}
-  - m_OriginalClip: {fileID: 1827226128182048838, guid: 5a5da45036000864e9c4ab503294a824, type: 3}
-    m_OverrideClip: {fileID: 1827226128182048838, guid: 5a5da45036000864e9c4ab503294a824, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: d164fa86af7ac354aa8e5ebb9cdfa23d, type: 3}
   - m_OriginalClip: {fileID: 1827226128182048838, guid: f4b79da8760375b49a1649d8fe1862b6, type: 3}
-    m_OverrideClip: {fileID: 1827226128182048838, guid: f4b79da8760375b49a1649d8fe1862b6, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: 58ce6fdbcc0a91b45826d8f7eb9a919d, type: 3}
+  - m_OriginalClip: {fileID: 1827226128182048838, guid: 5a5da45036000864e9c4ab503294a824, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: f8e3ccf20d4f8ab4fba19fa0469d4b4d, type: 3}

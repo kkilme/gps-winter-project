@@ -22,7 +22,12 @@ public static class GlobalValues
     public static readonly int[,] DIRECTION_6WAY_X_EVEN = new int[6, 2] { { 0, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, -1 }, { -1, 0 } };
 
     public static readonly int ANIMATION_PARAM_MOVING = Animator.StringToHash("Moving");
-    public static readonly int ANIMATION_PARAM_ATTACK = Animator.StringToHash("Attack");
+    public static readonly int ANIMATION_PARAM_ONDAMAGED = Animator.StringToHash("OnDamaged");
+    public static readonly int ANIMATION_PARAM_DEAD = Animator.StringToHash("Dead");
+    public static readonly int ANIMATION_PARAM_ATTACK1 = Animator.StringToHash("Attack1");
+    public static readonly int ANIMATION_PARAM_ATTACK2 = Animator.StringToHash("Attack2");
+    public static readonly int ANIMATION_PARAM_ATTACK3 = Animator.StringToHash("Attack3");
+    public static readonly int ANIMATION_PARAM_ATTACK4 = Animator.StringToHash("Attack4");
 
     #endregion
 
@@ -33,6 +38,8 @@ public static class GlobalValues
 
     public const string HERO_PREFAB_PATH_ROOT = "Heroes";
     public const string MONSTER_PREFAB_PATH_ROOT = "Monsters";
+
+    public const string HERO_ANIMATOR_PATH_ROOT = "Animators/Heroes";
 
     #endregion
 

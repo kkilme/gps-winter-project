@@ -4,11 +4,11 @@ using UnityEngine;
 public class MoveTargetSelector : ActionTargetSelector
 {
     public override bool NeedTargetSelection { get; protected set; } = true;
-    public override void SetTargettableCells()
+    public override void CalculateTargettableCells()
     {
         TargettableCells.Clear();
         var currentcell = Managers.BattleMng.CurrentTurnCreature.StandingCell;
-        var myGrid = Managers.BattleMng.BattleGridSystem.SideToGrid(currentcell.GridSide);
+        var myGrid = Managers.BattleMng.GridSystem.SideToGrid(currentcell.GridSide);
 
         int row = currentcell.Row;
         int col = currentcell.Column;

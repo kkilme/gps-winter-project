@@ -15,7 +15,7 @@ public abstract class MeleeSkill : BaseSkill
         var coinResult = CoinTossser.CoinToss(SkillData.CoinCount, Owner.CreatureStat.NameToStat(SkillData.UsingStat));
 
         // 코인 던지기 UI 애니메이션 재생
-        yield return Managers.BattleMng.BattleSceneUI.CoinTossDisplay.ShowResult(coinResult.result);
+        yield return Managers.BattleMng.UI.CoinTossDisplay.ShowResult(coinResult.result, SkillData.UsingStat);
 
         // 타겟으로 이동
         yield return MoveToTarget().WaitForCompletion();
@@ -51,6 +51,7 @@ public abstract class MeleeSkill : BaseSkill
         return sequence.Play();
     }
 
+    // 공격 애니메이션 등을 변경하려면 override 필요
     protected virtual IEnumerator Attack(int coinHeadCount)
     {
         var attackSkillData = SkillData as AttackSkillData;
@@ -58,7 +59,7 @@ public abstract class MeleeSkill : BaseSkill
 
         var damage = DamageCalculator.CalculateFinalDamage(Owner, target, attackSkillData, coinHeadCount);
 
-        _animator.SetTrigger(GlobalValues.ANIMATION_PARAM_ATTACK);
+        _animator.SetTrigger(GlobalValues.ANIMATION_PARAM_ATTACK1);
         SelectedTargetCell.PlacedCreature.TakeDamage(damage);
 
         yield return DOVirtual.DelayedCall(_animator.GetCurrentAnimatorStateInfo(0).length + 0.2f, () => { }).WaitForCompletion();

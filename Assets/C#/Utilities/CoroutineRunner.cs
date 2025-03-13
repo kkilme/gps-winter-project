@@ -14,8 +14,8 @@ public class CoroutineRunner : MonoBehaviour
         }
     }
 
-    public Coroutine Run(IEnumerator routine)
+    public new Coroutine StartCoroutine(IEnumerator routine)
     {
-        return StartCoroutine(routine);
+        return base.StartCoroutine(routine);
     }
 }

@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Action의 대상을 선택하는 데 도움을 주는 헬퍼
+/// </summary>
 public abstract class ActionTargetSelector
 {
     /// <summary>
@@ -15,7 +18,7 @@ public abstract class ActionTargetSelector
     /// <summary>
     /// Action의 대상이 될 수 있는 Cell 계산
     /// </summary>
-    public abstract void SetTargettableCells();
+    public abstract void CalculateTargettableCells();
     public BattleGridCell GetRandomTarget()
     {
         return TargettableCells.ElementAt(Random.Range(0, TargettableCells.Count));

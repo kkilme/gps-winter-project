@@ -37,7 +37,7 @@ public class UI_TurnState : UI_Base
     }
 
     // 턴 프레임들을 턴 순서에 맞게 배치
-    public void MoveTurnFrames()
+    public void RefreshTurnFramesPosition()
     {
         int index = 0;
         foreach (Creature creature in Managers.BattleMng.TurnSystem.Turns)

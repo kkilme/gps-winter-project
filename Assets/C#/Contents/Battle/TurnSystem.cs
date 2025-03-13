@@ -1,26 +1,30 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TurnSystem
 {
+    public Creature CurrentTurnCreature => Turns[0];
     public List<Creature> Turns { get; protected set; }
     public int TurnCount { get; protected set; }
+    private BattleManager _battleManager;
 
     public void Init()
     {
+        _battleManager = Managers.BattleMng;
         TurnCount = 1;
-        Turns = new List<Creature>(Managers.BattleMng.Creatures);
-        Turns.Sort((a, b) => a.CreatureStat.Dexterity.CompareTo(b.CreatureStat.Dexterity));
+        Turns = new List<Creature>(_battleManager.Creatures);
+        Turns.Sort((a, b) => b.CreatureStat.Dexterity.CompareTo(a.CreatureStat.Dexterity));
     }
 
     public void NextTurn()
     {
         TurnCount++;
-        var current = Turns[0];
-        Turns[0].StandingCell.RevertOutlineColor();
+        var current = CurrentTurnCreature;
+        CurrentTurnCreature.StandingCell.RevertOutlineColor();
         Turns.RemoveAt(0);
         Turns.Add(current);
-        Turns[0].StandingCell.HighlightOutline();
+        CurrentTurnCreature.StandingCell.HighlightOutline(); // 현재 턴인 Creature의 Cell 강조표시
     }
 }

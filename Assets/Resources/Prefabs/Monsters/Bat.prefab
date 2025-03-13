@@ -1186,6 +1186,7 @@ GameObject:
   - component: {fileID: 5122791751595274401}
   - component: {fileID: -5795243612444854825}
   - component: {fileID: -270549169374951312}
+  - component: {fileID: 2612707496403756836}
   m_Layer: 8
   m_Name: Bat
   m_TagString: Monster
@@ -1253,6 +1254,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8fbe6c3ed7371aa4881b319855e9f5df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2612707496403756836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5122791751604650877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14930bd2cbbe4f1479a73389ab671d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5122791751604650879

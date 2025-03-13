@@ -4,27 +4,19 @@ using DG.Tweening;
 
 public abstract class Monster : Creature
 {
+    public CreatureAI AIBrain { get; protected set; } // 자동 전투를 구현한다면 Creature로 옮겨야 할 듯
     public Data.MonsterData MonsterData => CreatureData as Data.MonsterData;
     
-    public override void SetInfo(int templateId)
+    public override void SetInfo(int dataId)
     {
         CreatureType = CreatureType.Monster;
-        CreatureData = Managers.DataMng.MonsterDataDict[templateId];
-        base.SetInfo(templateId);
+        CreatureData = Managers.DataMng.MonsterDataDict[dataId];
+        AIBrain = GetComponent<CreatureAI>();
+        base.SetInfo(dataId);
     }
 
     public override Tween LookOpponent(float duration = 0f)
     {
-        return transform.DOLookAt(Managers.BattleMng.BattleGridSystem.HeroGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration);
-    }
-
-    // TODO - Action 선택 알고리즘 구현
-    protected void EquipAction()
-    {
-        //int randomKey = MonsterData.Actions[Random.Range(0, MonsterData.Actions.Count)];
-
-        //CurrentAction =  Managers.ObjectMng.Skills[randomKey];
-        //CurrentAction.Equip(this);
-    }
-    
+        return transform.DOLookAt(Managers.BattleMng.GridSystem.HeroGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration);
+    }    
 }

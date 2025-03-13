@@ -17,6 +17,7 @@ public class ObjectManager
         Skills = new Dictionary<int, BaseSkill>();
 
         Object.DontDestroyOnLoad(_heroRoot.gameObject);
+
         BindSkills();
 
         Initialized = true;
@@ -73,7 +74,7 @@ public class ObjectManager
 
     public Monster SpawnMonster(int monsterDataId)
     {
-        if (!Managers.DataMng.HeroDataDict.ContainsKey(monsterDataId))
+        if (!Managers.DataMng.MonsterDataDict.ContainsKey(monsterDataId))
         {
             Debug.LogError($"Monster data doesn't exist. MonsterDataId: {monsterDataId}");
             return null;
