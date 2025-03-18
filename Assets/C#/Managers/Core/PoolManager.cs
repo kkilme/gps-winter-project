@@ -23,8 +23,8 @@ public class PoolManager
         Pool pool = new Pool();
         pool.Init(original, count);
         pool.Root.parent = _root;
-        
-        _poolDic.Add(original.name, pool);
+
+        _poolDic[original.name] = pool;
     }
 
     // 다 사용한 poolable오브젝트를 Pool에 다시 넣어 대기 상태로 전환

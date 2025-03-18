@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
-public static class TileFactory
+
+// 타입을 받아 Area 타일(AreaEventTile) 및 FogOfWar을 생성하는 팩토리 클래스
+public static class AreaTileFactory
 {
     private const string NORMAL_TILE_PATH = "Area/Tiles/NormalTile";
     private const string BATTLE_TILE_PATH = "Area/Tiles/BattleTile";

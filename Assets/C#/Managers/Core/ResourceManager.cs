@@ -5,6 +5,12 @@ using UnityEngine;
 // 파일 로드 및 GameObject 생성
 public class ResourceManager
 {
+    public void Init()
+    {
+        // 각종 static 클래스의 init
+        DamageTextFactory.Init();
+    }
+
     // Resources폴더를 시작 위치로 path에 해당하는 에셋 파일을 로드하여 T 타입으로 반환
     public T Load<T>(string path) where T : Object
     {

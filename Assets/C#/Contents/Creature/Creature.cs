@@ -34,17 +34,16 @@ public abstract class Creature : MonoBehaviour
     /// </summary>
     public abstract Tween LookOpponent(float duration = 0f);
     
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, DamageTextType damageTextType)
     {
         CreatureStat.TakeDamage(damage);
-        
+        DamageTextFactory.CreateDamageText(this, damage, damageTextType);
+
         if (CreatureStat.Hp <= 0)
         {
             OnDead();
             return;
         }
-
-        // TODO - 애니메이션
     }
     
     public void OnDead()
@@ -52,9 +51,10 @@ public abstract class Creature : MonoBehaviour
         //Managers.ObjectMng.Despawn(CreatureType, Id);
     }
 
-    public void OnHeal(int heal)
+    public void TakeHeal(int heal)
     {
-        CreatureStat.OnHeal(heal);
+        CreatureStat.TakeHeal(heal);
+        DamageTextFactory.CreateDamageText(this, heal, DamageTextType.Heal);
     }
 
 }

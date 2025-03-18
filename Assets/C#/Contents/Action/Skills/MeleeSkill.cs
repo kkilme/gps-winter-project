@@ -60,9 +60,11 @@ public abstract class MeleeSkill : BaseSkill
         var damage = DamageCalculator.CalculateFinalDamage(Owner, target, attackSkillData, coinHeadCount);
 
         _animator.SetTrigger(GlobalValues.ANIMATION_PARAM_ATTACK1);
-        SelectedTargetCell.PlacedCreature.TakeDamage(damage);
 
         yield return DOVirtual.DelayedCall(_animator.GetCurrentAnimatorStateInfo(0).length + 0.2f, () => { }).WaitForCompletion();
+
+        var dmgTextType = attackSkillData.AttackType == AttackType.Physical ? DamageTextType.PhysicalDamage : DamageTextType.MagicDamage;
+        SelectedTargetCell.PlacedCreature.TakeDamage(damage, dmgTextType);
     }
 
     protected virtual Tween Return()

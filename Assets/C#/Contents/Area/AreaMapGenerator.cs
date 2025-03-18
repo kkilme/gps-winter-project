@@ -454,7 +454,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             {
                 if (_map.TileTypeMap[z, x] == AreaTileType.Boss) continue;
 
-                FogOfWar fog = TileFactory.CreateFogOfWar(_map.GridToWorldPosition(x, z, 1.06f),
+                FogOfWar fog = AreaTileFactory.CreateFogOfWar(_map.GridToWorldPosition(x, z, 1.06f),
                     _map.TileTypeMap[z, x] == AreaTileType.OutOfField,
                     _fogOfWarParent);
                 _map.FogOfWarMap[z, x] = fog;

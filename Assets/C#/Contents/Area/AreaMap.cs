@@ -204,7 +204,7 @@ public class AreaMap
             oldTile.Destroy();
         }
 
-        AreaEventTile tile = TileFactory.CreateTile(worldPosition, tileType, _eventTileParent);
+        AreaEventTile tile = AreaTileFactory.CreateTile(worldPosition, tileType, _eventTileParent);
 
         EventTileMap[z, x] = tile;
         TileTypeMap[z, x] = tileType;

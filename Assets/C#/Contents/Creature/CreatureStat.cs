@@ -62,7 +62,7 @@ public class CreatureStat : MonoBehaviour
         Hp = Mathf.Clamp(Hp - damage, 0, MaxHp);
     }
 
-    public void OnHeal(int amount)
+    public void TakeHeal(int amount)
     {
         Hp = Mathf.Clamp(Hp + amount, 0, MaxHp);
     }

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -55,11 +55,8 @@ public class Pool
         }
         
         poolAble.gameObject.SetActive(true);
-        
-        if (parent == null) 
-            poolAble.transform.parent = Managers.SceneMng.CurrentScene.transform;
 
-        poolAble.transform.parent = parent;
+        poolAble.transform.parent = parent ?? Managers.SceneMng.CurrentScene.transform;
         poolAble.IsUsing = true;
 
         return poolAble;

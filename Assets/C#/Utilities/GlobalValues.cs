@@ -74,6 +74,10 @@ public static class GlobalValues
     public static readonly Color ENEMYGRID_OUTLINE_HIGHLIGHT_COLOR = Color.red;
     public static readonly Color ENEMYGRID_FILL_HIGHLIGHT_COLOR = new Color(1, 0.2f, 0.2f);
 
+    public static readonly Color PHYSICAL_UI_ELEMENT_BASE_COLOR = new Color(0, 0.5f, 1);
+    public static readonly Color MAGIC_UI_ELEMENT_BASE_COLOR = new Color(0.65f, 0, 1);
+    public static readonly Color HEAL_ELEMENT_BASE_COLOR = Color.green;
+
     #endregion
 
     #region layermask

@@ -39,8 +39,8 @@ public class UI_BattleActionPanel : UI_Base
         gameObject.SetActive(true);
         _hero = Managers.BattleMng.CurrentTurnCreature as Hero;
         ClearActionInfo();
-
-        return _rect.DOAnchorPosY(-400f, 1f).From(true).SetEase(Ease.OutCirc).OnComplete(() => { SetupActionButtons(); });
+        SetupActionButtons();
+        return _rect.DOAnchorPosY(-400f, 1f).From(true).SetEase(Ease.OutCirc).OnComplete(() => { });
     }
 
     public override void ShowInstantly()

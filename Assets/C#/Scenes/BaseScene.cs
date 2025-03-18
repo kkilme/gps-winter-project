@@ -33,6 +33,7 @@ public abstract class BaseScene : MonoBehaviour
             Managers.PoolMng.Init();
             Managers.UIMng.Init();
             Managers.ObjectMng.Init();
+            Managers.ResourceMng.Init();
         }
         
         Object obj = FindObjectOfType(typeof(EventSystem));

@@ -115,6 +115,13 @@ public enum AttackRangeType
     Melee,
     Ranged,
 }
+
+public enum DamageTextType
+{
+    PhysicalDamage,
+    MagicDamage,
+    Heal,
+}
 #endregion
 
 #region Attribute
