@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 public class ObjectManager
 {
     public bool Initialized { get; protected set; }
-    public HeroParty HeroParty { get; protected set; }
+    public HeroParty HeroParty { get; protected set; } // 나중에 파티 편성 같은 기능이 추가될 시 따로 매니저 만들어서 분리
     public Dictionary<int, BaseSkill> Skills { get; protected set; } // 스킬 객체를 미리 생성해놓고 계속해서 사용
 
     private Transform _heroRoot => GetRootTransform("@Heroes");

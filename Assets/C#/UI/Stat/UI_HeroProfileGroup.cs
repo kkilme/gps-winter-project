@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UI_HeroProfileGroup : UI_Base
 {
+    private Dictionary<Hero, UI_CreatureProfile> _heroProfiles = new Dictionary<Hero, UI_CreatureProfile>();
+
     enum HeroProfileUI
     {
         UI_HeroProfile_1,
@@ -23,12 +26,22 @@ public class UI_HeroProfileGroup : UI_Base
 
         int index = 0;
         foreach (var hero in Managers.ObjectMng.HeroParty.Heroes)
-        {
-            var go = GetGameObject((HeroProfileUI)index++);
-            go.GetOrAddComponent<UI_CreatureProfile>().BindStat(hero.CreatureStat);
-            go.SetActive(true);
-            
-            //go.transform.Find("Bag").GetOrAddComponent<UI_Bag>().BindBag(hero.Bag);
+        {   
+            var profile = GetGameObject((HeroProfileUI)index++).GetOrAddComponent<UI_CreatureProfile>();
+            _heroProfiles.Add(hero, profile);
+            profile.BindStat(hero.CreatureStat);
+            profile.Show();
         }
+    }
+
+    public void StopBlinking()
+    {
+        foreach (var profile in _heroProfiles.Values)
+            profile.StopBlinking();
+    }
+
+    public void StartBlinking(Hero hero)
+    {
+        _heroProfiles[hero].StartBlinking();
     }
 }

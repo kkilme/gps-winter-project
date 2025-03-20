@@ -182,6 +182,7 @@ public class BattleManager
 
     public IEnumerator NextTurn()
     {
+        UI.OnTurnEnd();
         yield return new WaitForSeconds(0.7f); // 턴 전환시 약간의 대기시간을 둠
         if (Monsters.Count <= 0)
         {

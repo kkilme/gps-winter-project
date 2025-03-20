@@ -1,11 +1,14 @@
-using System;
+using DG.Tweening;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_CreatureProfile : UI_Base
 {
+    private Tweener _blinkTweener;
+    private Image _bg;
+    private Color _bgOriginalColor;
+
     enum Text
     {
         Text_Name,
@@ -29,6 +32,7 @@ public class UI_CreatureProfile : UI_Base
     enum Images
     {
         Creature_Image,
+        bg,
     }
 
     public override void Init()
@@ -36,6 +40,8 @@ public class UI_CreatureProfile : UI_Base
         Bind<TextMeshProUGUI>(typeof(Text));
         Bind<Slider>(typeof(Sliders));
         Bind<Image>(typeof(Images));
+        _bg = Get<Image>(Images.bg);
+        _bgOriginalColor = _bg.color;
     }
 
     public void BindStat(CreatureStat stat)
@@ -64,5 +70,17 @@ public class UI_CreatureProfile : UI_Base
         GetText(Text.Text_Dexterity).text = creatureStat.Dexterity.ToString();
 
         Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{creatureStat.Name}_Front");
+    }
+
+    public void StartBlinking()
+    {
+        _blinkTweener = _bg.DOColor(Color.yellow, 1f).SetLoops(-1, LoopType.Yoyo);
+    }
+
+    public void StopBlinking()
+    {
+        if (_blinkTweener != null)
+            _blinkTweener.Kill();
+        _bg.color = _bgOriginalColor;
     }
 }

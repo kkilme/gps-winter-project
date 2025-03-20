@@ -51,20 +51,23 @@ public abstract class MeleeSkill : BaseSkill
         return sequence.Play();
     }
 
-    // 공격 애니메이션 등을 변경하려면 override 필요
+    // 공격 애니메이션, 각종 스킬 효과 등을 변경하려면 override 필요
     protected virtual IEnumerator Attack(int coinHeadCount)
     {
         var attackSkillData = SkillData as AttackSkillData;
-        var target = SelectedTargetCell.PlacedCreature;
-
-        var damage = DamageCalculator.CalculateFinalDamage(Owner, target, attackSkillData, coinHeadCount);
+        var targets = EffectRange.GetAffectedTargets(SelectedTargetCell);
 
         _animator.SetTrigger(GlobalValues.ANIMATION_PARAM_ATTACK1);
 
         yield return DOVirtual.DelayedCall(_animator.GetCurrentAnimatorStateInfo(0).length + 0.2f, () => { }).WaitForCompletion();
 
         var dmgTextType = attackSkillData.AttackType == AttackType.Physical ? DamageTextType.PhysicalDamage : DamageTextType.MagicDamage;
-        SelectedTargetCell.PlacedCreature.TakeDamage(damage, dmgTextType);
+        foreach(var target in targets)
+        {
+            // target.PlacedCreature이 null이 아니라는 보증은 EffectRange.GetAffectedTargets에서 함
+            var damage = DamageCalculator.CalculateFinalDamage(Owner, target.PlacedCreature, attackSkillData, coinHeadCount, targets.Count);
+            SelectedTargetCell.PlacedCreature.TakeDamage(damage, dmgTextType);
+        }
     }
 
     protected virtual Tween Return()

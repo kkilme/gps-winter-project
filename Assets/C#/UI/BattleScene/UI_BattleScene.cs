@@ -86,12 +86,21 @@ public class UI_BattleScene : UI_Scene
 
         TurnstateUI.RefreshTurnFramesPosition();
 
-        if (turnCreature is Hero) ActionPanel.Show();
-        else ActionPanel.Hide();
+        if (turnCreature is Hero)
+        {
+            HeroProfileGroupUI.StartBlinking(turnCreature as Hero);
+            ActionPanel.Show();
+        }
+        else
+        {
+            MonsterProfileGroupUI.StartBlinking(turnCreature as Monster);
+            ActionPanel.Hide();
+        }
     }
 
     public void OnTurnEnd()
     {
-
+        HeroProfileGroupUI.StopBlinking();
+        MonsterProfileGroupUI.StopBlinking();
     }
 }

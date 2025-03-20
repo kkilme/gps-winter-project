@@ -36,6 +36,7 @@ public abstract class Creature : MonoBehaviour
     
     public void TakeDamage(int damage, DamageTextType damageTextType)
     {
+        if(damage > 0) Animator.SetTrigger("OnDamaged");
         CreatureStat.TakeDamage(damage);
         DamageTextFactory.CreateDamageText(this, damage, damageTextType);
 
