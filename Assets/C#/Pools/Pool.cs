@@ -35,7 +35,7 @@ public class Pool
         if (poolAble == null)
             return;
         
-        poolAble.transform.parent = Root;
+        poolAble.transform.SetParent(Root);
         poolAble.gameObject.SetActive(false);
         poolAble.IsUsing = false;
         
@@ -56,7 +56,7 @@ public class Pool
         
         poolAble.gameObject.SetActive(true);
 
-        poolAble.transform.parent = parent ?? Managers.SceneMng.CurrentScene.transform;
+        poolAble.transform.SetParent(parent ?? Managers.SceneMng.CurrentScene.transform);
         poolAble.IsUsing = true;
 
         return poolAble;

@@ -13,7 +13,7 @@
       "DataId": 401001,
       "Type": "SkillData",
       "Name": "Flee",
-      "Description": "Run away from the battle. Requires perfect coin toss.",
+      "Description": "Run away from the battle.\nRequires perfect coin toss.",
       "CoinCount": 2,
       "UsingStat": "Dexterity",
       "IconPath": "Icon_Run"
@@ -36,7 +36,7 @@
       "Description": "Attacks an enemy with thunder bolt",
       "CoinCount": 4,
       "UsingStat": "Intelligence",
-      "AttackType": "Magical",
+      "AttackType": "Magic",
       "DamagePerCoin": 2,
       "IconPath": "Icon_Thunder"
     },

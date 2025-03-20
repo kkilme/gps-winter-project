@@ -107,7 +107,7 @@ public enum ActionDataType
 public enum AttackType
 {
     Physical,
-    Magical,
+    Magic,
 }
 
 public enum AttackRangeType

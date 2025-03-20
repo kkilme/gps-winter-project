@@ -5,12 +5,15 @@ using UnityEngine.UI;
 using UnityEngine;
 using DG.Tweening;
 
+// 전투 중 액션 선택 창
 public class UI_BattleActionPanel : UI_Base
 {
     private RectTransform _rect;
     enum GameObjects
     {
-        ActionButtons
+        ActionButtons,
+        Amount,
+        Percentage,
     }
     enum Texts
     {
@@ -49,6 +52,7 @@ public class UI_BattleActionPanel : UI_Base
         gameObject.SetActive(true);
     }
 
+    // Hero(무기)가 가진 스킬 버튼들 생성 및 배치
     private void SetupActionButtons()
     {
         ClearActionButtons();
@@ -63,6 +67,7 @@ public class UI_BattleActionPanel : UI_Base
         ShowSkillInfo(_hero.Weapon.Skills[0]);
     }
 
+    // 마우스를 가져다 댄 스킬의 정보 표시
     public void ShowSkillInfo(BaseSkill skill)
     {   
         ClearActionInfo();
@@ -71,12 +76,25 @@ public class UI_BattleActionPanel : UI_Base
 
         if (skill.SkillData is Data.AttackSkillData)
         {
-            GetText(Texts.Text_AmountWord).text = "DAMAGE";
-            GetText(Texts.Text_AmountNumber).text = _hero.CreatureStat.BaseDamage.ToString();
+            GetGameObject(GameObjects.Amount).SetActive(true);
+            var skillData = skill.SkillData as Data.AttackSkillData;
+            GetText(Texts.Text_AmountWord).text = "Damage\nPer Slot";
+            if(skillData.AttackType == AttackType.Physical)
+            {
+                GetText(Texts.Text_AmountNumber).color = GlobalValues.PHYSICAL_UI_ELEMENT_BASE_COLOR;
+            } else if (skillData.AttackType == AttackType.Magic)
+            {
+                GetText(Texts.Text_AmountNumber).color = GlobalValues.MAGIC_UI_ELEMENT_BASE_COLOR;
+            }
+            GetText(Texts.Text_AmountNumber).text = skillData.DamagePerCoin.ToString();
+        } else
+        {
+            GetGameObject(GameObjects.Amount).SetActive(false);
         }
 
         if (skill.SkillData.UsingStat != StatName.None)
         {
+            GetGameObject(GameObjects.Percentage).SetActive(true);
             GetText(Texts.Text_SlotPercentageWord).text = "Percentage\nPer Slot";
             GetText(Texts.Text_SlotPercentage).text = _hero.CreatureStat.NameToStat(skill.SkillData.UsingStat).ToString();
         }
