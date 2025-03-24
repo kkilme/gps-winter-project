@@ -32,7 +32,7 @@ public abstract class Creature : MonoBehaviour
     /// <summary>
     /// 전투 씬에서 Creature가 정면을 바라보도록 함
     /// </summary>
-    public abstract Tween LookOpponent(float duration = 0f);
+    public abstract Tween LookFront(float duration = 0f);
     
     public void TakeDamage(int damage, DamageTextType damageTextType)
     {

@@ -43,25 +43,32 @@ public class UI_TurnState : UI_Base
         foreach (Creature creature in Managers.BattleMng.TurnSystem.Turns)
         {
             UI_CreatureTurnFrame creatureTurnFrame = _turnFrames[creature];
-            bool isCurrentTurn = creature == Managers.BattleMng.CurrentTurnCreature;
             float x;
-
+            creatureTurnFrame.StopBlinking();
             // 현재 턴일 시 프레임 크기를 크게 하고 깜빡임 효과
-            if (isCurrentTurn)
+            if (index == 0)
             {
                 x = BORDER_SIZE;
                 creatureTurnFrame.Resize(BIG_FRAME_SIZE);
                 creatureTurnFrame.StartBlinking();
             } else
             {
-                x = BORDER_SIZE + BIG_FRAME_SIZE / 2 + PADDING + NORMAL_FRAME_SIZE / 2 + (NORMAL_FRAME_SIZE + PADDING) * index;
+                x = BORDER_SIZE + BIG_FRAME_SIZE / 2 + PADDING + NORMAL_FRAME_SIZE / 2 + (NORMAL_FRAME_SIZE + PADDING) * (index-1);
                 creatureTurnFrame.Resize(NORMAL_FRAME_SIZE);
-                creatureTurnFrame.StopBlinking();
-                index++;
             }
+            index++;
 
             creatureTurnFrame.MoveTo(x);
         }
+    }
+
+    // creature의 턴 프레임 제거
+    public void RemoveTurnFrame(Creature creature)
+    {
+        _turnFrames[creature].Hide();
+        _turnFrames.Remove(creature);
+        RefreshTurnFramesPosition();
+        ResizeBGFrame();
     }
 
     // Creature 수에 맞게 배경 프레임 크기 조절

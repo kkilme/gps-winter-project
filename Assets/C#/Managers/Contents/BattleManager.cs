@@ -17,7 +17,7 @@ public class BattleManager
         get => _currentAction;
         set
         {
-            if (_currentAction == value)
+            if (_currentAction == value && _currentAction.Executor == CurrentTurnCreature)
                 return;
 
             if (value == null)
@@ -34,7 +34,7 @@ public class BattleManager
         }
     }
     public Creature CurrentTurnCreature => TurnSystem.CurrentTurnCreature;
-    public List<Creature> Creatures
+    public List<Creature> Creatures // 전투에 참여중인 모든 Creature
     {
         get
         {
@@ -43,7 +43,7 @@ public class BattleManager
             return creatures;
         }
     }
-    public List<Hero> Heroes => _party.Heroes;
+    public List<Hero> Heroes;
     public List<Monster> Monsters;
     private HeroParty _party => Managers.ObjectMng.HeroParty;
 
@@ -56,6 +56,7 @@ public class BattleManager
         GridSystem = new BattleGridSystem();
         MouseInputHandler = new BattleMouseInputHandler();
         UI = Managers.UIMng.ShowSceneUI<UI_BattleScene>();
+        Heroes = new(_party.Heroes);
         Monsters = new();
 
         // 배틀 필드 생성
@@ -101,6 +102,7 @@ public class BattleManager
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
         Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
 
+        GridSystem.ResetAllCellColor();
         CurrentTurnCreature.StandingCell.HighlightOutline();
 
         UI.OnBattlePhaseStart();
@@ -111,18 +113,13 @@ public class BattleManager
         }
     }
 
-    // Hero가 Action 선택 시
-    public void SetAction_Hero(BaseAction action)
+    // Hero 턴에서 Action 선택 시
+    public void SetAction(BaseAction action)
     {
-        if(action == null)
-        {
-            Debug.LogError("Action is null");
-            return;
-        }
         CurrentAction = action;
         UI.ActionPanel.Hide();
 
-        // 대상 선택이 필요한 액션인 경우
+        // 유저가 직접 대상을 선택할 필요가 있는 액션인 경우
         if (action.TargetSelector.NeedTargetSelection)
         {
             UI.ChooseTargetUI.Show();
@@ -133,16 +130,17 @@ public class BattleManager
 
             GridSystem.HighlightTargettableCells(action);
         }
-        else if(action.IsExecutable()) // 대상 선택이 필요 없는 액션인 경우
+        else // 대상 선택이 필요 없는 액션인 경우: 대상이 스킬에서 강제로 정해져 있거나, 랜덤 대상을 선택하는 액션임
         {
+            if (!action.IsExecutable())
+            {
+                // TODO: 선택 가능한 대상이 없을 때의 처리
+
+            }
             action.SetRandomTarget();
             GridSystem.ResetAllCellColor();
             CurrentAction.HighlightAffectedTargets();
             CoroutineRunner.Instance.StartCoroutine(CurrentAction.Execute());
-        } else
-        {
-            Debug.LogWarning("Action is not executable");
-            UnsetAction();
         }
     }
 
@@ -166,9 +164,12 @@ public class BattleManager
         CoroutineRunner.Instance.StartCoroutine(NextTurn());
     }
 
+    // 몬스터 턴 진행 로직
     public IEnumerator ProceedMonsterTurn()
     {
         Monster monster = CurrentTurnCreature as Monster;
+
+        // AI로 스킬 선택
         CurrentAction = monster.AIBrain.DecideSkill();
 
         GridSystem.ResetAllCellColor();
@@ -177,13 +178,17 @@ public class BattleManager
 
         yield return new WaitForSeconds(1.5f);
 
+        // 스킬 실행
         CoroutineRunner.Instance.StartCoroutine(CurrentAction.Execute());
     }
 
     public IEnumerator NextTurn()
     {
         UI.OnTurnEnd();
+        GridSystem.ResetAllCellColor();
+
         yield return new WaitForSeconds(0.7f); // 턴 전환시 약간의 대기시간을 둠
+
         if (Monsters.Count <= 0)
         {
             EndBattle(BattleResultType.Victory);
@@ -202,6 +207,28 @@ public class BattleManager
         if (CurrentTurnCreature is Monster)
         {
             CoroutineRunner.Instance.StartCoroutine(ProceedMonsterTurn());
+        }
+    }
+
+    public void RemoveCreature(Creature creature)
+    {   
+        creature.StandingCell.RemoveCreature();
+        TurnSystem.Remove(creature);
+        UI.TurnstateUI.RemoveTurnFrame(creature);
+
+        if (creature is Hero)
+        {
+            Heroes.Remove(creature as Hero);
+        }
+        else if (creature is Monster)
+        {
+            Monsters.Remove(creature as Monster);
+        }
+
+        // 현재 턴인 Creature가 이번 턴에 전투에서 이탈한 경우, 다음 턴으로 넘어감
+        if (creature == CurrentTurnCreature)
+        {
+            CoroutineRunner.Instance.StartCoroutine(NextTurn());
         }
     }
 

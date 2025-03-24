@@ -15,8 +15,8 @@ public abstract class Monster : Creature
         base.SetInfo(dataId);
     }
 
-    public override Tween LookOpponent(float duration = 0f)
+    public override Tween LookFront(float duration = 0f)
     {
-        return transform.DOLookAt(Managers.BattleMng.GridSystem.HeroGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration);
+        return transform.DOLookAt(Managers.BattleMng.GridSystem.HeroGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration).SetEase(Ease.OutQuad);
     }    
 }

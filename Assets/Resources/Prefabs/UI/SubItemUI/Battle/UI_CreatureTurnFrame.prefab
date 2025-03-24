@@ -163,6 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 748340486992817637}
   - component: {fileID: 1645232861474145980}
+  - component: {fileID: 2520175796563821313}
   m_Layer: 5
   m_Name: UI_CreatureTurnFrame
   m_TagString: Untagged
@@ -204,6 +205,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e247ebbf1b1899b43b91afa20d740eb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &2520175796563821313
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748340486992817642}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &748340487194280325
 GameObject:
   m_ObjectHideFlags: 0

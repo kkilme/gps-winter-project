@@ -37,6 +37,13 @@ public abstract class BattleGridCell : MonoBehaviour
         creature.gameObject.transform.position = transform.position;
     }
 
+    public void RemoveCreature()
+    {   
+        if(PlacedCreature != null)
+            PlacedCreature.StandingCell = null;
+        PlacedCreature = null;
+    }
+
     public bool IsEmpty()
     {
         return PlacedCreature == null;

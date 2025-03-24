@@ -16,7 +16,7 @@ public abstract class BaseItem : BaseAction
         DataId = dataId;
         ItemData = Managers.DataMng.ItemDataDict[dataId];
         
-        Owner = owner;
+        Executor = owner;
         Bag = bag;
         Idx = idx;
         Count += addNum;

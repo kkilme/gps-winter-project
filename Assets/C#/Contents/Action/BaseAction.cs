@@ -7,8 +7,8 @@ public abstract class BaseAction
 {
     #region Field
     public int DataId { get; protected set; }
-    public Creature Owner { get; protected set; }
-    protected Animator _animator => Owner.Animator;
+    public Creature Executor { get; protected set; } // 이 액션을 실행하는 Creature
+    protected Animator _animator => Executor.Animator;
     public BattleGridCell SelectedTargetCell { get; protected set; }
     public abstract ActionTargetSelector TargetSelector { get; protected set; }
     public abstract ActionEffectRange EffectRange { get; protected set; }
@@ -23,12 +23,11 @@ public abstract class BaseAction
     /// <summary>
     /// 액션 수행 로직
     /// </summary>
-    /// <returns></returns>
     public abstract IEnumerator Execute();
 
     public void Set(Creature creature)
     {
-        Owner = creature;
+        Executor = creature;
 
         TargetSelector.CalculateTargettableCells();
         if(!TargetSelector.NeedTargetSelection)
@@ -39,7 +38,7 @@ public abstract class BaseAction
 
     public void Unset()
     {
-        Owner = null;
+        Executor = null;
         SelectedTargetCell = null;
         TargetSelector.OnActionUnset();
     }
@@ -63,7 +62,7 @@ public abstract class BaseAction
     /// </summary>
     public bool IsExecutable()
     {
-        return Owner != null && (TargetSelector.TargettableCells.Count > 0 || TargetSelector is DummySelector);
+        return TargetSelector.TargettableCells.Count > 0 || TargetSelector is DummySelector;
     }
 
     /// <summary>
@@ -95,7 +94,6 @@ public abstract class BaseAction
     {
         if(SelectedTargetCell == null)
         {
-            Debug.LogError("SelectedTargetCell is null");
             return;
         }
         HighlightAffectedTargets(SelectedTargetCell);

@@ -12,7 +12,7 @@ public abstract class MeleeSkill : BaseSkill
     public override IEnumerator Execute()
     {
         // 코인 던지기
-        var coinResult = CoinTossser.CoinToss(SkillData.CoinCount, Owner.CreatureStat.NameToStat(SkillData.UsingStat));
+        var coinResult = CoinTossser.CoinToss(SkillData.CoinCount, Executor.CreatureStat.NameToStat(SkillData.UsingStat));
 
         // 코인 던지기 UI 애니메이션 재생
         yield return Managers.BattleMng.UI.CoinTossDisplay.ShowResult(coinResult.result, SkillData.UsingStat);
@@ -31,20 +31,20 @@ public abstract class MeleeSkill : BaseSkill
 
     protected virtual Tween MoveToTarget()
     {   
-        _originalPos = Owner.transform.position;
+        _originalPos = Executor.transform.position;
 
         Sequence sequence = DOTween.Sequence();
 
-        sequence.Append(Owner.transform.DOLookAt(SelectedTargetCell.transform.position, 0.3f));
+        sequence.Append(Executor.transform.DOLookAt(SelectedTargetCell.transform.position, 0.3f));
 
-        Vector3 direction = (Owner.transform.position - SelectedTargetCell.transform.position).normalized;
+        Vector3 direction = (Executor.transform.position - SelectedTargetCell.transform.position).normalized;
 
         float stopDistance = 1.5f;
 
         Vector3 targetPos = SelectedTargetCell.transform.position + direction * stopDistance;
         // 상대의 약간 앞까지만 이동
         sequence.Append(
-            Owner.transform.DOMove(targetPos, GameUtility.CalculateMovetime(Owner.transform.position, targetPos))
+            Executor.transform.DOMove(targetPos, GameUtility.CalculateMovetime(Executor.transform.position, targetPos))
             .OnStart(() => { _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, true); })
             .OnComplete(() => { _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, false); }));
 
@@ -65,7 +65,7 @@ public abstract class MeleeSkill : BaseSkill
         foreach(var target in targets)
         {
             // target.PlacedCreature이 null이 아니라는 보증은 EffectRange.GetAffectedTargets에서 함
-            var damage = DamageCalculator.CalculateFinalDamage(Owner, target.PlacedCreature, attackSkillData, coinHeadCount, targets.Count);
+            var damage = DamageCalculator.CalculateFinalDamage(Executor, target.PlacedCreature, attackSkillData, coinHeadCount, targets.Count);
             SelectedTargetCell.PlacedCreature.TakeDamage(damage, dmgTextType);
         }
     }
@@ -74,13 +74,13 @@ public abstract class MeleeSkill : BaseSkill
     {
         Sequence sequence = DOTween.Sequence();
 
-        sequence.Append(Owner.transform.DOLookAt(_originalPos, 0.3f));
+        sequence.Append(Executor.transform.DOLookAt(_originalPos, 0.3f));
 
-        sequence.Append(Owner.transform.DOMove(_originalPos, GameUtility.CalculateMovetime(Owner.transform.position, _originalPos))
+        sequence.Append(Executor.transform.DOMove(_originalPos, GameUtility.CalculateMovetime(Executor.transform.position, _originalPos))
             .OnStart(() => { _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, true); })
             .OnComplete(() => { 
                 _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, false);
-                Owner.LookOpponent(0.5f);
+                Executor.LookFront(0.5f);
             }));
 
         return sequence.Play();

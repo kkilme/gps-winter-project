@@ -10,6 +10,7 @@ public class UI_CreatureTurnFrame : UI_Base
     private Tweener _sizeTweener;
     private Tweener _blinkTweener;
     private RectTransform _rectTransform;
+    private CanvasGroup _canvasGroup;
     private Image _bg;
     private Color _original;
 
@@ -23,6 +24,7 @@ public class UI_CreatureTurnFrame : UI_Base
     {
         Bind<Image>(typeof(Images));
         _rectTransform = GetComponent<RectTransform>();
+        _canvasGroup = GetComponent<CanvasGroup>();
         _bg = Get<Image>(Images.bg);
         _original = _bg.color;
     }
@@ -45,6 +47,11 @@ public class UI_CreatureTurnFrame : UI_Base
         if (_sizeTweener != null)
             _sizeTweener.Kill();
         _sizeTweener = _rectTransform.DOSizeDelta(new Vector2(size, size), 0.5f);
+    }
+
+    public override Tween Hide()
+    {
+        return _canvasGroup.DOFade(0, 0.5f).OnComplete(() => gameObject.SetActive(false));
     }
 
     public void StartBlinking()

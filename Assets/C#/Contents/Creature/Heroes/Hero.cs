@@ -35,9 +35,9 @@ public class Hero : Creature
         base.SetInfo(dataId);
     }
 
-    public override Tween LookOpponent(float duration = 0f)
+    public override Tween LookFront(float duration = 0f)
     {
-        return transform.DOLookAt(Managers.BattleMng.GridSystem.MonsterGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration);
+        return transform.DOLookAt(Managers.BattleMng.GridSystem.MonsterGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration).SetEase(Ease.OutQuad);
     }
 
     // Prototype버전에선 많은 종류의 Weapon, Armor는 구현 X

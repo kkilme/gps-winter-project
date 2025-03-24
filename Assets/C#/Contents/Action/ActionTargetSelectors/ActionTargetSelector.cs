@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Action의 대상을 선택하는 데 도움을 주는 헬퍼
+/// Action의 대상을 선택하는 역할을 하는 클래스
 /// </summary>
 public abstract class ActionTargetSelector
 {
@@ -19,8 +19,15 @@ public abstract class ActionTargetSelector
     /// Action의 대상이 될 수 있는 Cell 계산
     /// </summary>
     public abstract void CalculateTargettableCells();
+
+    /// <summary>
+    /// 가능한 대상들 중 랜덤 대상 선택. 
+    /// 주의: 가능한 대상이 없을 경우 null을 반환하므로, 실행 전 Action.IsExecutable()을 통해 미리 확인해야 함.
+    /// </summary>
     public BattleGridCell GetRandomTarget()
     {
+        if (TargettableCells.Count == 0) return null;
+
         return TargettableCells.ElementAt(Random.Range(0, TargettableCells.Count));
     }
 

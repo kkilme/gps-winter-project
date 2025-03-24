@@ -35,7 +35,7 @@ public class BattleGridSystem
         {
             Vector2Int pos = Managers.ObjectMng.HeroParty.BattlePositions[hero];
             HeroGrid[pos.y, pos.x].PlaceCreature(hero);
-            hero.LookOpponent();
+            hero.LookFront();
         }
     }
 
@@ -53,7 +53,7 @@ public class BattleGridSystem
             Monster monster = Managers.ObjectMng.SpawnMonster(monsterData.DataId);
             Vector2Int pos = new Vector2Int(monsterData.x, monsterData.y);
             MonsterGrid[pos.y, pos.x].PlaceCreature(monster);
-            monster.LookOpponent();
+            monster.LookFront();
             _battleManager.Monsters.Add(monster);
         }
     }

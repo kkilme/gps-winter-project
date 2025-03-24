@@ -24,7 +24,7 @@ public class UI_ActionButton : UI_Base
 
     protected void OnClick()
     {
-        Managers.BattleMng.SetAction_Hero(_skill);
+        Managers.BattleMng.SetAction(_skill);
     }
 
     protected void OnMouseEnterEvent(PointerEventData data)

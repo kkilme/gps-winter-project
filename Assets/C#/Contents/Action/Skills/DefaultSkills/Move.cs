@@ -20,25 +20,25 @@ public class Move : BaseSkill
             Creature targetCreature = SelectedTargetCell.PlacedCreature;
             Animator targetAnimator = targetCreature.Animator;
 
-            sequence.Append(Owner.transform.DOLookAt(SelectedTargetCell.transform.position, 0.1f));
-            sequence.Join(targetCreature.transform.DOLookAt(Owner.transform.position, 0.1f));
+            sequence.Append(Executor.transform.DOLookAt(SelectedTargetCell.transform.position, 0.1f));
+            sequence.Join(targetCreature.transform.DOLookAt(Executor.transform.position, 0.1f));
 
             sequence.Append(
-                Owner.transform.DOMove(SelectedTargetCell.transform.position, GameUtility.CalculateMovetime(Owner.transform, SelectedTargetCell.transform))
+                Executor.transform.DOMove(SelectedTargetCell.transform.position, GameUtility.CalculateMovetime(Executor.transform, SelectedTargetCell.transform))
                 .OnStart(() => { _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, true); })
                 .OnComplete(() => { _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, false); })
              );
 
             sequence.Join(
-                targetCreature.transform.DOMove(Owner.transform.position, GameUtility.CalculateMovetime(targetCreature.transform, Owner.transform))
+                targetCreature.transform.DOMove(Executor.transform.position, GameUtility.CalculateMovetime(targetCreature.transform, Executor.transform))
                 .OnStart(() => { targetAnimator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, true); })
                 .OnComplete(() => { targetAnimator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, false); })
              );
         } else // 해당 셀이 비어있을 경우, 그냥 이동
         {
-            sequence.Append(Owner.transform.DOLookAt(SelectedTargetCell.transform.position, 0.1f));
+            sequence.Append(Executor.transform.DOLookAt(SelectedTargetCell.transform.position, 0.1f));
             sequence.Append(
-                Owner.transform.DOMove(SelectedTargetCell.transform.position, GameUtility.CalculateMovetime(Owner.transform, SelectedTargetCell.transform))
+                Executor.transform.DOMove(SelectedTargetCell.transform.position, GameUtility.CalculateMovetime(Executor.transform, SelectedTargetCell.transform))
                 .OnStart(() => { _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, true); })
                 .OnComplete(() => { _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, false); })
              );
@@ -51,17 +51,17 @@ public class Move : BaseSkill
         if (!SelectedTargetCell.IsEmpty())
         {   
             Creature targetCreature = SelectedTargetCell.PlacedCreature;
-            Managers.BattleMng.GridSystem.SwapCreaturePosition(Owner, SelectedTargetCell.PlacedCreature);
+            Managers.BattleMng.GridSystem.SwapCreaturePosition(Executor, SelectedTargetCell.PlacedCreature);
 
             sequence = DOTween.Sequence();
-            sequence.Append(Owner.LookOpponent(0.1f));
-            sequence.Join(targetCreature.LookOpponent(0.1f));
+            sequence.Append(Executor.LookFront(0.1f));
+            sequence.Join(targetCreature.LookFront(0.1f));
 
             yield return sequence.Play().WaitForCompletion();
         } else
         {
-            Managers.BattleMng.GridSystem.MoveCreature(Owner, SelectedTargetCell);
-            yield return Owner.LookOpponent(0.1f).WaitForCompletion();
+            Managers.BattleMng.GridSystem.MoveCreature(Executor, SelectedTargetCell);
+            yield return Executor.LookFront(0.1f).WaitForCompletion();
         }
 
         Managers.BattleMng.OnActionEnd();
