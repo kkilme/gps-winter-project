@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UI_HeroProfileGroup : UI_Base
 {
-    private Dictionary<Hero, UI_CreatureProfile> _heroProfiles = new Dictionary<Hero, UI_CreatureProfile>();
+    private Dictionary<Hero, UI_HeroProfile> _heroProfiles = new Dictionary<Hero, UI_HeroProfile>();
 
     enum HeroProfileUI
     {
@@ -27,7 +27,7 @@ public class UI_HeroProfileGroup : UI_Base
         int index = 0;
         foreach (var hero in Managers.ObjectMng.HeroParty.Heroes)
         {   
-            var profile = GetGameObject((HeroProfileUI)index++).GetOrAddComponent<UI_CreatureProfile>();
+            var profile = GetGameObject((HeroProfileUI)index++).GetOrAddComponent<UI_HeroProfile>();
             _heroProfiles.Add(hero, profile);
             profile.BindStat(hero.CreatureStat);
             profile.Show();
@@ -43,5 +43,10 @@ public class UI_HeroProfileGroup : UI_Base
     public void StartBlinking(Hero hero)
     {
         _heroProfiles[hero].StartBlinking();
+    }
+
+    public void OnFlee(Hero hero)
+    {
+        _heroProfiles[hero].OnFlee();
     }
 }

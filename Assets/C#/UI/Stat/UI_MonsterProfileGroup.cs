@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UI_MonsterProfileGroup : UI_Base
 {
-    private Dictionary<Monster, UI_CreatureProfile> _montserProfiles = new Dictionary<Monster, UI_CreatureProfile>();
+    private Dictionary<Monster, UI_MonsterProfile> _montserProfiles = new Dictionary<Monster, UI_MonsterProfile>();
     enum MonsterProfileUI
     {
         UI_MonsterProfile_1,
@@ -29,7 +29,7 @@ public class UI_MonsterProfileGroup : UI_Base
 
         foreach (var monster in Managers.BattleMng.Monsters)
         {
-            var profile = GetGameObject((MonsterProfileUI)index++).GetOrAddComponent<UI_CreatureProfile>();
+            var profile = GetGameObject((MonsterProfileUI)index++).GetOrAddComponent<UI_MonsterProfile>();
             _montserProfiles.Add(monster, profile);
             profile.BindStat(monster.CreatureStat);
             profile.Show();

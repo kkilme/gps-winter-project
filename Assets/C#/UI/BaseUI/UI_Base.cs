@@ -49,26 +49,48 @@ public abstract class UI_Base : MonoBehaviour
         return DOVirtual.DelayedCall(0, () => { });
     }
 
-    // T컴포넌트를 가지고 있는 모든 자식 GameObject를 검색해 _objectDic에 Add
+    /// <summary>
+    /// enum 타입의 이름들을 스트링으로 변환해 UI 요소에 연결한다.
+    /// </summary>
+    /// <typeparam name="T">UI 요소</typeparam>
+    /// <param name="type">enum 타입</param>
     protected void Bind<T>(Type type) where T : UnityEngine.Object
     {
-        string[] uiNames = Enum.GetNames(type);
-        UnityEngine.Object[] objects = new UnityEngine.Object[uiNames.Length];
-        _objectDic.Add(typeof(T), objects);
+        string[] names = Enum.GetNames(type);
 
-        for (int i = 0; i < uiNames.Length; i++)
+        if (names.Length == 0) return;
+
+        int startIdx = 0;
+
+        if (!_objectDic.TryGetValue(typeof(T), out UnityEngine.Object[] objects))
+        {
+            // T key값이 _objects에 없음
+            objects = new UnityEngine.Object[names.Length];
+            _objectDic[typeof(T)] = objects;
+        }
+        else
+        {
+            // T key값이 이미 _objects에 있음: 배열 길이 늘리기
+            // UI_Base를 상속받는 클래스로부터의 재상속을 위해 필요
+            // 부모 클래스에 이미 있는 enum을 자식 클래스에서 다시 사용할 수 있게 하기 위함
+            startIdx = objects.Length;
+            Array.Resize(ref objects, objects.Length + names.Length);
+            _objectDic[typeof(T)] = objects;
+        }
+
+        for (int i = 0; i < names.Length; i++)
         {
             if (typeof(T) == typeof(GameObject))
-                objects[i] = GlobalUtility.FindChild(gameObject, uiNames[i], true);
+                objects[i + startIdx] = GlobalUtility.FindChild(gameObject, names[i], true);
             else
-                objects[i] = GlobalUtility.FindChild<T>(gameObject, uiNames[i], true);
-            
-            if (objects[i] == null)
-                Debug.Log(($"Failed to bind({uiNames[i]})"));
+                objects[i + startIdx] = GlobalUtility.FindChild<T>(gameObject, names[i], true);
+
+            if (objects[i + startIdx] == null)
+                Debug.Log($"Failed to bind({names[i]})");
         }
     }
 
-    // T컴포넌트를 가지고 있으며 파라미터로 넘긴 idx에 해당하는 GameObject 검색 후 반환
+    // 등록된 enum중에서 해당하는 인덱스의 UI 요소를 가져온다.
     protected T Get<T>(Enum idx) where T : UnityEngine.Object
     {
         UnityEngine.Object[] objects;

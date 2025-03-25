@@ -1929,7 +1929,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7280767530763780182}
-  - component: {fileID: 7280767530763780184}
+  - component: {fileID: 7107710984185143590}
   m_Layer: 5
   m_Name: UI_MonsterProfile
   m_TagString: Untagged
@@ -1960,7 +1960,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 600, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7280767530763780184
+--- !u!114 &7107710984185143590
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1969,7 +1969,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7280767530763780183}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49df2dddfc6e7c64fb6ad914e5309e95, type: 3}
+  m_Script: {fileID: 11500000, guid: 187d9960d00505a48a57e96bc6656390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7281295675751534869
