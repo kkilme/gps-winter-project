@@ -47,8 +47,8 @@ public class UI_BattleScene : UI_Scene
         ChooseTargetUI.Hide();
         TurnstateUI.Setup();
         TurnstateUI.HideInstantly();
-        HeroProfileGroupUI.BindHeroProfileUIs();
-        MonsterProfileGroupUI.BindMonsterProfileUIs();
+        HeroProfileGroupUI.BindProfileUIs();
+        MonsterProfileGroupUI.BindProfileUIs();
     }
 
     public void OnBattlePhaseStart()

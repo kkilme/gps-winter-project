@@ -218,10 +218,12 @@ public class BattleManager
 
         if (creature is Hero)
         {
+            UI.HeroProfileGroupUI.OnDead(creature);
             Heroes.Remove(creature as Hero);
         }
         else if (creature is Monster)
         {
+            UI.MonsterProfileGroupUI.OnDead(creature);
             Monsters.Remove(creature as Monster);
         }
 

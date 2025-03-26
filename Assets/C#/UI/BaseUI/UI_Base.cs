@@ -72,7 +72,8 @@ public abstract class UI_Base : MonoBehaviour
         {
             // T key값이 이미 _objects에 있음: 배열 길이 늘리기
             // UI_Base를 상속받는 클래스로부터의 재상속을 위해 필요
-            // 부모 클래스에 이미 있는 enum을 자식 클래스에서 다시 사용할 수 있게 하기 위함
+            // 부모 클래스에서 이미 Bind한 타입을 자식 클래스에서 다시 Bind할 수 있게 하기 위함
+            // 단, 상속 관계에서 같은 타입을 Bind할 경우 enum의 이름이 겹치면 안되며, Get을 사용할 때 부모 클래스 enum의 Length를 더해주어야 하는 불편함이 있음
             startIdx = objects.Length;
             Array.Resize(ref objects, objects.Length + names.Length);
             _objectDic[typeof(T)] = objects;
@@ -86,7 +87,7 @@ public abstract class UI_Base : MonoBehaviour
                 objects[i + startIdx] = GlobalUtility.FindChild<T>(gameObject, names[i], true);
 
             if (objects[i + startIdx] == null)
-                Debug.Log($"Failed to bind({names[i]})");
+                Debug.LogWarning($"[UI_Base] Failed to bind({names[i]}) in {gameObject.name}");
         }
     }
 
@@ -95,7 +96,10 @@ public abstract class UI_Base : MonoBehaviour
     {
         UnityEngine.Object[] objects;
         if (_objectDic.TryGetValue(typeof(T), out objects) == false)
+        {
+            Debug.LogError($"[UI_Base] Get<{typeof(T).Name}>() failed: No UI elements registered!");
             return null;
+        }
 
         return objects[Convert.ToInt32(idx)] as T;
     }

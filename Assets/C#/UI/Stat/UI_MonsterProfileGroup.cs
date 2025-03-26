@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_MonsterProfileGroup : UI_Base
+public class UI_MonsterProfileGroup : UI_CreatureProfileGroup
 {
-    private Dictionary<Monster, UI_MonsterProfile> _montserProfiles = new Dictionary<Monster, UI_MonsterProfile>();
     enum MonsterProfileUI
     {
         UI_MonsterProfile_1,
@@ -20,7 +19,7 @@ public class UI_MonsterProfileGroup : UI_Base
         Bind<GameObject>(typeof(MonsterProfileUI));
     }
 
-    public void BindMonsterProfileUIs()
+    public override void BindProfileUIs()
     {
         foreach (MonsterProfileUI monsterUI in Enum.GetValues(typeof(MonsterProfileUI)))
             GetGameObject(monsterUI).SetActive(false);
@@ -30,20 +29,9 @@ public class UI_MonsterProfileGroup : UI_Base
         foreach (var monster in Managers.BattleMng.Monsters)
         {
             var profile = GetGameObject((MonsterProfileUI)index++).GetOrAddComponent<UI_MonsterProfile>();
-            _montserProfiles.Add(monster, profile);
+            _creatureProfiles.Add(monster, profile);
             profile.BindStat(monster.CreatureStat);
             profile.Show();
         }
-    }
-
-    public void StopBlinking()
-    {
-        foreach (var profile in _montserProfiles.Values)
-            profile.StopBlinking();
-    }
-
-    public void StartBlinking(Monster monster)
-    {
-        _montserProfiles[monster].StartBlinking();
     }
 }

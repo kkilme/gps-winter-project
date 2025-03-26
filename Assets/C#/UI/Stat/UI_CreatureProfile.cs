@@ -1,10 +1,12 @@
 using DG.Tweening;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_CreatureProfile : UI_Base
 {
+    protected CanvasGroup _canvasGroup;
     private Tweener _blinkTweener;
     private Image _bg;
     private Color _bgOriginalColor;
@@ -22,6 +24,8 @@ public class UI_CreatureProfile : UI_Base
         Text_Vitality,
         Text_Intelligence,
         Text_Dexterity,
+
+        Text_Dead,
     }
 
     enum Sliders
@@ -40,6 +44,8 @@ public class UI_CreatureProfile : UI_Base
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<Slider>(typeof(Sliders));
         Bind<Image>(typeof(Images));
+        GetText(Texts.Text_Dead).gameObject.SetActive(false);
+        _canvasGroup = GetComponent<CanvasGroup>();
         _bg = Get<Image>(Images.bg);
         _bgOriginalColor = _bg.color;
     }
@@ -55,24 +61,33 @@ public class UI_CreatureProfile : UI_Base
 
     private void UpdateCreatureProfile(CreatureStat creatureStat)
     {
+        var stats = new (Texts, int)[]
+        {
+            (Texts.Text_BaseDamage, creatureStat.BaseDamage),
+            (Texts.Text_PhysicalDefense, creatureStat.PhysicalDefense),
+            (Texts.Text_MagicDefense, creatureStat.MagicDefense),
+            (Texts.Text_Strength, creatureStat.Strength),
+            (Texts.Text_Vitality, creatureStat.Vitality),
+            (Texts.Text_Intelligence, creatureStat.Intelligence),
+            (Texts.Text_Dexterity, creatureStat.Dexterity),
+        };
+
         GetText(Texts.Text_Name).text = creatureStat.Name;
-
-        Get<Slider>(Sliders.Slider_HP).value = (float)creatureStat.Hp / creatureStat.MaxHp;
         GetText(Texts.Text_HP).text = $"{creatureStat.Hp}/{creatureStat.MaxHp}";
-        GetText(Texts.Text_BaseDamage).text = creatureStat.BaseDamage.ToString();
-        GetText(Texts.Text_PhysicalDefense).text = creatureStat.PhysicalDefense.ToString();
-        GetText(Texts.Text_MagicDefense).text = creatureStat.MagicDefense.ToString();
+        Get<Slider>(Sliders.Slider_HP).value = (float)creatureStat.Hp / creatureStat.MaxHp;
 
-        GetText(Texts.Text_Strength).text = creatureStat.Strength.ToString();
-        GetText(Texts.Text_Vitality).text = creatureStat.Vitality.ToString();
-        GetText(Texts.Text_Intelligence).text = creatureStat.Intelligence.ToString();
-        GetText(Texts.Text_Dexterity).text = creatureStat.Dexterity.ToString();
+        foreach (var (textType, value) in stats)
+        {
+            GetText(textType).text = value.ToString();
+        }
 
         Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{creatureStat.Name}_Front");
     }
 
     public void StartBlinking()
     {
+        if (_blinkTweener != null)
+            _blinkTweener.Kill();
         _blinkTweener = _bg.DOColor(Color.yellow, 1f).SetLoops(-1, LoopType.Yoyo);
     }
 
@@ -81,5 +96,11 @@ public class UI_CreatureProfile : UI_Base
         if (_blinkTweener != null)
             _blinkTweener.Kill();
         _bg.color = _bgOriginalColor;
+    }
+
+    public void OnDead()
+    {
+        GetText(Texts.Text_Dead).gameObject.SetActive(true);
+        _canvasGroup.DOFade(0.33f, 1f).OnComplete(() => GetText(Texts.Text_Dead).gameObject.SetActive(true));
     }
 }

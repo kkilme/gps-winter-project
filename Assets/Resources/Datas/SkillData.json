@@ -48,7 +48,7 @@
       "CoinCount": 2,
       "UsingStat": "Strength",
       "AttackType": "Physical",
-      "DamagePerCoin": 2,
+      "DamagePerCoin": 5,
       "IconPath": "Icon_Sword"
     }
   ]

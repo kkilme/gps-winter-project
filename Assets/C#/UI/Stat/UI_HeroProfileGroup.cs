@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_HeroProfileGroup : UI_Base
+public class UI_HeroProfileGroup : UI_CreatureProfileGroup
 {
-    private Dictionary<Hero, UI_HeroProfile> _heroProfiles = new Dictionary<Hero, UI_HeroProfile>();
-
     enum HeroProfileUI
     {
         UI_HeroProfile_1,
@@ -19,7 +17,7 @@ public class UI_HeroProfileGroup : UI_Base
         Bind<GameObject>(typeof(HeroProfileUI));
     }
 
-    public void BindHeroProfileUIs()
+    public override void BindProfileUIs()
     {
         foreach (HeroProfileUI playerUI in Enum.GetValues(typeof(HeroProfileUI)))
             GetGameObject(playerUI).SetActive(false);
@@ -28,25 +26,14 @@ public class UI_HeroProfileGroup : UI_Base
         foreach (var hero in Managers.ObjectMng.HeroParty.Heroes)
         {   
             var profile = GetGameObject((HeroProfileUI)index++).GetOrAddComponent<UI_HeroProfile>();
-            _heroProfiles.Add(hero, profile);
+            _creatureProfiles.Add(hero, profile);
             profile.BindStat(hero.CreatureStat);
             profile.Show();
         }
     }
 
-    public void StopBlinking()
-    {
-        foreach (var profile in _heroProfiles.Values)
-            profile.StopBlinking();
-    }
-
-    public void StartBlinking(Hero hero)
-    {
-        _heroProfiles[hero].StartBlinking();
-    }
-
     public void OnFlee(Hero hero)
     {
-        _heroProfiles[hero].OnFlee();
+        (_creatureProfiles[hero] as UI_HeroProfile).OnFlee();
     }
 }

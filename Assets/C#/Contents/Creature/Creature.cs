@@ -40,15 +40,21 @@ public abstract class Creature : MonoBehaviour
         CreatureStat.TakeDamage(damage);
         DamageTextFactory.CreateDamageText(this, damage, damageTextType);
 
-        if (CreatureStat.Hp <= 0)
+        if (IsDead())
         {
-            OnDead();
-            return;
+            CoroutineRunner.Instance.StartCoroutine(OnDead());
         }
     }
     
-    public void OnDead()
-    { 
+    public IEnumerator OnDead()
+    {
+        Animator.SetBool(GlobalValues.ANIMATION_PARAM_DEAD, true);
+        if(Managers.SceneMng.CurrentScene.SceneType == SceneType.BattleScene)
+        {
+            Managers.BattleMng.RemoveCreature(this);
+        }
+        yield return new WaitForSeconds(5f);
+        Managers.ResourceMng.Destroy(gameObject);
         //Managers.ObjectMng.Despawn(CreatureType, Id);
     }
 
@@ -56,6 +62,11 @@ public abstract class Creature : MonoBehaviour
     {
         CreatureStat.TakeHeal(heal);
         DamageTextFactory.CreateDamageText(this, heal, DamageTextType.Heal);
+    }
+
+    public bool IsDead()
+    {
+        return CreatureStat.Hp <= 0;
     }
 
 }

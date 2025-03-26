@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class UI_HeroProfile : UI_CreatureProfile
 {
-    private CanvasGroup _canvasGroup;
-
     enum HeroTexts
     {
         Text_Flee
@@ -18,7 +16,6 @@ public class UI_HeroProfile : UI_CreatureProfile
         base.Init();
         Bind<TextMeshProUGUI>(typeof(HeroTexts));
         GetText(Enum.GetNames(typeof(Texts)).Length + HeroTexts.Text_Flee).gameObject.SetActive(false);
-        _canvasGroup = GetComponent<CanvasGroup>();
     }
 
     public void OnFlee()
