@@ -9,11 +9,20 @@
       "MagicDefense": 0,
       "Strength": 70,
       "Vitality": 50,
-      "Dexterity": 90,
+      "Dexterity": 9,
       "Intelligence": 10,
       "Actions": [
         403000,
         403000
+      ],
+      "MinGold": 5,
+      "MaxGold": 10,
+      "LootTable": [
+        {
+          "LootType": "Item",
+          "DataId": 301000,
+          "DropChance": 20,
+        },
       ]
     }
   ]

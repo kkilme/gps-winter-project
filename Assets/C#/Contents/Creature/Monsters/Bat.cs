@@ -1,7 +1,7 @@
 ﻿public class Bat : Monster
 {
-    public override void SetInfo(int templateId)
+    public override void SetData(int templateId)
     {
-        base.SetInfo(templateId);
+        base.SetData(templateId);
     }
 }

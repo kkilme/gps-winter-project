@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
+using System.Linq;
 
 public class UI_BattleScene : UI_Scene
 {
@@ -31,13 +31,13 @@ public class UI_BattleScene : UI_Scene
         base.Init();
 
 		Bind<UI_Base>(typeof(SubItemUI));
-        ActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
-        CoinTossDisplay = Get<UI_Base>(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
-        TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
-        PlacementPhaseUI = Get<UI_Base>(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
-        ChooseTargetUI = Get<UI_Base>(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget>();
-        HeroProfileGroupUI = Get<UI_Base>(SubItemUI.UI_HeroProfileGroup_Vertical).GetOrAddComponent<UI_HeroProfileGroup>();
-        MonsterProfileGroupUI = Get<UI_Base>(SubItemUI.UI_MonsterProfileGroup).GetOrAddComponent<UI_MonsterProfileGroup>();
+        ActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetComponent<UI_BattleActionPanel>();
+        CoinTossDisplay = Get<UI_Base>(SubItemUI.UI_CoinTossDisplay).GetComponent<UI_CoinTossDisplay>();
+        TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetComponent<UI_TurnState>();
+        PlacementPhaseUI = Get<UI_Base>(SubItemUI.UI_PlacementPhase).GetComponent<UI_PlacementPhase>();
+        ChooseTargetUI = Get<UI_Base>(SubItemUI.UI_ChooseTarget).GetComponent<UI_ChooseTarget>();
+        HeroProfileGroupUI = Get<UI_Base>(SubItemUI.UI_HeroProfileGroup_Vertical).GetComponent<UI_HeroProfileGroup>();
+        MonsterProfileGroupUI = Get<UI_Base>(SubItemUI.UI_MonsterProfileGroup).GetComponent<UI_MonsterProfileGroup>();
     }
 
     public void OnPlacementPhaseStart()
@@ -55,29 +55,6 @@ public class UI_BattleScene : UI_Scene
     {
         TurnstateUI.Show();
         OnTurnStart();
-    }
-
-    public void OnBattleEnd(BattleResultType battleResult)
-    {
-        switch (battleResult)
-        {
-            case BattleResultType.Victory:
-                Get<UI_Base>(SubItemUI.UI_BattleActionPanel).gameObject.SetActive(false);
-                //Get<UI_Base>(SubItemUI.UI_CoinToss).gameObject.SetActive(false);
-
-                // Turn 상태바 움직임을 통해 자연스럽게 숨기기
-                // TODO: TurnStateUI로 기능 이동
-                TurnstateUI.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, 90), 1f).OnComplete(() =>
-                {
-                    TurnstateUI.gameObject.SetActive(false);
-                    Get<UI_Base>(SubItemUI.UI_BattleVictory).gameObject.SetActive(true);
-                });
-                break;
-            case BattleResultType.Defeat:
-                break;
-            case BattleResultType.Flee:
-                break;
-        }
     }
 
     public void OnTurnStart()
@@ -103,4 +80,63 @@ public class UI_BattleScene : UI_Scene
         HeroProfileGroupUI.StopBlinking();
         MonsterProfileGroupUI.StopBlinking();
     }
+
+    public void OnBattleEnd(BattleResultType battleResult)
+    {
+        ActionPanel.Hide();
+        TurnstateUI.Hide();
+        CoinTossDisplay.Hide();
+        switch (battleResult)
+        {
+            case BattleResultType.Victory:
+                Get<UI_Base>(SubItemUI.UI_BattleVictory).Show().OnComplete(() => { ShowReward(); });
+                break;
+            case BattleResultType.Defeat:
+                break;
+            case BattleResultType.Flee:
+                break;
+        }
+    }
+
+    private void ShowReward()
+    {
+        // TODO: Test code
+        Dictionary<int, int> testrewards = new() { { 1, 2 }, { 2, 1 }, { 3, 1 } };
+        UI_Reward rewardUI = Managers.UIMng.ShowPopupUI<UI_Reward>();
+
+        KeyValuePair<int, int> reward = testrewards.Last();
+        int rewardId = reward.Key;
+        int rewardQuantity = reward.Value;
+
+        rewardUI.Init(rewardId, rewardQuantity);
+
+
+        testrewards.Remove(rewardId);
+
+        void OnRewardAction(RewardActionType action)
+        {
+            Managers.UIMng.ClosePopupUI(rewardUI);
+            switch (action)
+            {
+                case RewardActionType.Take:
+                case RewardActionType.Dispose:
+                    if (testrewards.Count == 0)
+                    {
+                        // TODO: BattleScene 언로딩 (AreaScene 복귀)
+                    }
+                    else
+                    {
+                        ShowReward();
+                    }
+                    break;
+            }
+
+        }
+
+        rewardUI.OnRewardAction -= OnRewardAction;
+        rewardUI.OnRewardAction += OnRewardAction;
+
+    }
+
+
 }

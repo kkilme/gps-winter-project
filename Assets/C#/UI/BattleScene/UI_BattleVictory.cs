@@ -1,16 +1,10 @@
 using DG.Tweening;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 
 public class UI_BattleVictory : UI_Base
 {
-    // TODO: Test code
-    private Dictionary<int, int> testrewards = new() { { 1, 2 }, { 2, 1 }, { 3, 1 } };
-
     enum RectTransforms
     {
         VictoryTitle,
@@ -28,13 +22,9 @@ public class UI_BattleVictory : UI_Base
         Bind<TextMeshProUGUI>(typeof(Text));
     }
 
-    private void OnEnable()
+    public override Tween Show()
     {
-        StartCoroutine(UIAnimation());
-    }
-
-    private IEnumerator UIAnimation()
-    {
+        gameObject.SetActive(true);
         RectTransform titleRect = Get<RectTransform>(RectTransforms.VictoryTitle);
         RectTransform descRect = Get<RectTransform>(RectTransforms.VictoryDescription);
 
@@ -54,67 +44,7 @@ public class UI_BattleVictory : UI_Base
         }));
         seq.Append(descRect.DOAnchorPosX(240, 1.5f).SetEase(Ease.OutCirc));
 
-        seq.Play();
-        yield return seq.WaitForCompletion();
-        
-        ShowReward();
-
-    }
-
-    private void ShowReward(int recentReward = -1)
-    {
-        UI_Reward rewardUI = Managers.UIMng.ShowPopupUI<UI_Reward>();
-
-        KeyValuePair<int, int> reward = testrewards.Last();
-        int rewardId = reward.Key;
-        int rewardQuantity = reward.Value;
-
-        // Pass 선택 시 RewardUI 애니메이션을 다시 재생하지 않도록 하기 위한 코드
-        if (recentReward == rewardId)
-        {
-            rewardUI.Init(rewardId, rewardQuantity, false);
-        }
-        else
-        {
-            rewardUI.Init(rewardId, rewardQuantity);
-        }
-
-        testrewards.Remove(rewardId);
-
-        Debug.Log($"Current reward: {rewardId}");
-
-        void OnRewardAction(RewardActionType action)
-        {   
-            Managers.UIMng.ClosePopupUI(rewardUI);
-            switch (action)
-            {
-                case RewardActionType.Take:
-                case RewardActionType.Dispose:
-                    if (testrewards.Count == 0)
-                    {
-                        // TODO: BattleScene 언로딩 (AreaScene 복귀)
-                    }
-                    else
-                    {
-                        ShowReward(rewardId);
-                    }
-                    break;
-                case RewardActionType.Pass:
-                    testrewards.Add(rewardId, rewardQuantity);
-                    ShowReward(rewardId);
-                    break;
-            }
-
-        }
-
-        rewardUI.OnRewardAction -= OnRewardAction;
-        rewardUI.OnRewardAction += OnRewardAction;
-
-    }
-
-    private void OnDisable()
-    {
-        StopAllCoroutines();
+        return seq.Play();
     }
 }
     

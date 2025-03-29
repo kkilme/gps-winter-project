@@ -15,7 +15,7 @@ public abstract class BaseAction
 
     #endregion
     
-    public virtual void SetInfo(int dataId)
+    public virtual void SetData(int dataId)
     {
         DataId = dataId;
     }

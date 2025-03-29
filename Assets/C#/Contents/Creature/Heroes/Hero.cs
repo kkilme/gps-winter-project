@@ -28,11 +28,11 @@ public class Hero : Creature
             Armors.TryAdd(type, null);
     }
     
-    public override void SetInfo(int dataId)
+    public override void SetData(int dataId)
     {
         CreatureType = CreatureType.Hero;
         CreatureData = Managers.DataMng.HeroDataDict[dataId];
-        base.SetInfo(dataId);
+        base.SetData(dataId);
     }
 
     public override Tween LookFront(float duration = 0f)
@@ -52,19 +52,17 @@ public class Hero : Creature
     public void EquipWeapon(int weaponDataId)
     {
         Weapon weapon = new Weapon();
-        weapon.SetInfo(weaponDataId);
+        weapon.SetData(weaponDataId);
         EquipWeapon(weapon);
     }
     
     public void EquipWeapon(Weapon equippingWeapon)
     {
-        if (Weapon != null)
-        {
-            if (Weapon.WeaponData.DataId == equippingWeapon.WeaponData.DataId)
-                return;
-            UnEquipWeapon();
-        }
-        
+        if (Weapon?.WeaponData.DataId == equippingWeapon.WeaponData.DataId) // 동일한 무기 장착 시
+            return;
+
+        UnEquipWeapon();
+
         Weapon = equippingWeapon;
         CreatureStat.AttachEquipment(Weapon.EquipmentData);
         Weapon.Equip(this);

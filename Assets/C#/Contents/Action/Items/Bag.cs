@@ -2,24 +2,24 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO
+// TODO: 재작성 필요
 public class Bag
 {
     public Hero Owner { get; set; }
-    public List<BaseItem> Items { get; protected set; }
+    public List<ItemAction> Items { get; protected set; }
     public int Gold { get; protected set; }
     public event Action<Bag> ContentChange;
 
     public void SetInfo()
     {
-        Items = new List<BaseItem>(6);
+        Items = new List<ItemAction>(6);
         for (int i = 0; i < 6; i++)
             Items.Add(null);
         
         Gold = 0;
     }
     
-    public BaseItem StoreItem(int itemDataId, int addNum = 1)
+    public ItemAction StoreItem(int itemDataId, int addNum = 1)
     {
         int currentItemIdx = IsInBag(itemDataId);
         if (currentItemIdx != -1)
@@ -30,7 +30,7 @@ public class Bag
         }
         
         string className = Managers.DataMng.ItemDataDict[itemDataId].Name;
-        BaseItem item = Activator.CreateInstance(Type.GetType(className)) as BaseItem;
+        ItemAction item = Activator.CreateInstance(Type.GetType(className)) as ItemAction;
         if (item == null)
             return null;
         
@@ -38,7 +38,7 @@ public class Bag
         {
             if (Items[idx] == null)
             {
-                item.SetInfo(itemDataId, Owner, this, idx, addNum);
+                //item.SetData(itemDataId, Owner, this, idx, addNum);
                 Items[idx] = item;
                 break;
             }

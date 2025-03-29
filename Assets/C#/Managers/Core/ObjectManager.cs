@@ -45,7 +45,7 @@ public class ObjectManager
 
             var skill = Activator.CreateInstance(skillType) as BaseSkill;
 
-            skill.SetInfo(skillData.Key);
+            skill.SetData(skillData.Key);
             Skills[skillData.Key] = skill;
         }
     }
@@ -65,7 +65,7 @@ public class ObjectManager
         Hero hero = go.GetComponent<Hero>();
         HeroParty.AddHero(hero);
 
-        hero.SetInfo(heroDataId);
+        hero.SetData(heroDataId);
         go.transform.position = Vector3.zero;
         hero.transform.parent = _heroRoot;
 
@@ -84,7 +84,7 @@ public class ObjectManager
         GameObject go = Managers.ResourceMng.Instantiate($"{GlobalValues.MONSTER_PREFAB_PATH_ROOT}/{monsterName}");
         Monster monster = go.GetComponent<Monster>();
 
-        monster.SetInfo(monsterDataId);
+        monster.SetData(monsterDataId);
         go.transform.position = Vector3.zero;
         monster.transform.parent = _monsterRoot;
 

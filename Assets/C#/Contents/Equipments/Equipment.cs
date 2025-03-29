@@ -6,7 +6,7 @@ public class Equipment
     public Hero Owner { get; protected set; }
     
     // 수동 실행
-    public virtual void SetInfo(int dataId)
+    public virtual void SetData(int dataId)
     {
         DataId = dataId;
     }

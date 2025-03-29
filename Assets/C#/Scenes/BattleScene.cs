@@ -46,6 +46,14 @@ public class BattleScene : BaseScene
         {
             StartCoroutine(Managers.BattleMng.NextTurn());
         }
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            Managers.BattleMng.EndBattle(BattleResultType.Victory);
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            Managers.BattleMng.EndBattle(BattleResultType.Defeat);
+        }
     }
 #endif
 }

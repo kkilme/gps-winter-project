@@ -76,7 +76,6 @@ public enum BattleResultType
 public enum RewardActionType
 {
     Take,
-    Pass,
     Dispose
 }
 

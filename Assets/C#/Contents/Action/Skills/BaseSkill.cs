@@ -7,9 +7,9 @@ public abstract class BaseSkill : BaseAction
 {
     public SkillData SkillData { get; protected set; }
 
-    public override void SetInfo(int dataId)
+    public override void SetData(int dataId)
     {
-        base.SetInfo(dataId);
+        base.SetData(dataId);
         SkillData = Managers.DataMng.SkillDataDict[dataId];
     }
 }

@@ -27,7 +27,7 @@ public class UI_ItemDescription : UI_Base
         Bind<GameObject>(typeof(GameObjects));
     }
     
-    public void SetInfo(BaseItem item)
+    public void SetInfo(ItemAction item)
     {
         //GetImage(StatImages.Icon).sprite = item.image;
         GetText(Texts.Name).text = item.ItemData.Name;

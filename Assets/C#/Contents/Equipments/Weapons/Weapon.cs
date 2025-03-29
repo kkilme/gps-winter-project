@@ -1,3 +1,4 @@
+using Data;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,13 +8,15 @@ public class Weapon: Equipment
     public WeaponType WeaponType { get; protected set; }
     public List<BaseSkill> Skills { get; protected set; } = new();
     
-    public override void SetInfo(int dataId)
+    public override void SetData(int dataId)
     {
         EquipmentType = EquipmentType.Weapon;
-        EquipmentData = Managers.DataMng.WeaponDataDict[dataId];
-        WeaponType = Managers.DataMng.WeaponDataDict[dataId].WeaponType;
 
-        base.SetInfo(dataId);
+        WeaponData weaponData = Managers.DataMng.WeaponDataDict[dataId];
+        EquipmentData = weaponData;
+        WeaponType = weaponData.WeaponType;
+
+        base.SetData(dataId);
 
         foreach (int skillId in WeaponData.Skills)
         {

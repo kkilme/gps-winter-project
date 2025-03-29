@@ -4,12 +4,12 @@ public abstract class Armor: Equipment
     public ArmorType ArmorType { get; protected set; }
     public int ArmorIndex { get; protected set; }
     
-    public override void SetInfo(int dataId)
+    public override void SetData(int dataId)
     {
         EquipmentType = EquipmentType.Armor;
         EquipmentData = Managers.DataMng.ArmorDataDict[dataId];
 
-        base.SetInfo(dataId);
+        base.SetData(dataId);
 
         ArmorIndex = ArmorData.ArmorIndex;
     }

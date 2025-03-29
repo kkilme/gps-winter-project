@@ -5,8 +5,8 @@ using Data;
 
 public abstract class Creature : MonoBehaviour
 {
-    public CreatureStat CreatureStat { get; protected set; }
     public CreatureData CreatureData { get; protected set; }
+    public CreatureStat CreatureStat { get; protected set; }
     public CreatureType CreatureType { get; protected set; }
     public Animator Animator { get; protected set; }
     public BattleGridCell StandingCell { get; set; }
@@ -23,7 +23,7 @@ public abstract class Creature : MonoBehaviour
     }
     
     // 수동 실행
-    public virtual void SetInfo(int dataId)
+    public virtual void SetData(int dataId)
     { 
         gameObject.name = $"{CreatureData.DataId}_{CreatureData.Name}";
         CreatureStat.SetStat(CreatureData);
