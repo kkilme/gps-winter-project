@@ -27,15 +27,11 @@ public class AreaScene : BaseScene
         set => AreaManager.AreaState = value;
     }
 
-    public Action OnBattleSceneUnloadFinish;
 
     protected override void Init()
     {
         base.Init();
         SceneType = SceneType.AreaScene;
-
-        OnBattleSceneUnloadFinish -= AreaManager.OnBattleSceneUnloadFinish;
-        OnBattleSceneUnloadFinish += AreaManager.OnBattleSceneUnloadFinish;
 
         _areaMapGenerator = GetComponent<AreaMapGenerator>();
     }
@@ -49,16 +45,6 @@ public class AreaScene : BaseScene
         AreaMap map = _areaMapGenerator.GenerateMap();
 
         AreaManager.Init(map);
-    }
-
-    public void LoadBattleScene()
-    {
-        StartCoroutine(Managers.SceneMng.LoadBattleScene());
-    }
-
-    public void UnloadBattleScene()
-    {
-        StartCoroutine(Managers.SceneMng.UnloadBattleScene());
     }
 
     public override void Clear()

@@ -1,4 +1,3 @@
-using Data;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
@@ -14,7 +13,7 @@ public abstract class BaseAction
     public abstract ActionEffectRange EffectRange { get; protected set; }
 
     #endregion
-    
+
     public virtual void SetData(int dataId)
     {
         DataId = dataId;

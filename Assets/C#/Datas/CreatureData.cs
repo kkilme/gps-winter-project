@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Data
-{
     [Serializable]
     public class CreatureData
     {
@@ -60,4 +58,3 @@ namespace Data
             return dic;
         }
     }
-}

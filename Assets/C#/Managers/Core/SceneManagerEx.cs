@@ -43,8 +43,6 @@ public class SceneManagerEx
         Debug.Log("Battle Scene Load Start");
         var sceneName = GlobalValues.BATTLE_SCENE_NAME;
 
-        Managers.AreaMng.OnBattleSceneLoadStart(); // 카메라 정지
-
         UI_Loading loadingScreen = Managers.UIMng.ShowSceneUI<UI_Loading>(); // 로딩화면
         yield return loadingScreen.Fade(false); // fade out
 
@@ -63,8 +61,8 @@ public class SceneManagerEx
 
     public IEnumerator UnloadBattleScene()
     {
-        var battlesceneName = "TestBattleScene"; // TODO - Test Code
-        var areasceneName = "TestAreaScene"; // TODO - Test Code
+        var battlesceneName = GlobalValues.BATTLE_SCENE_NAME;
+        var areasceneName = GlobalValues.AREA_SCENE_NAME;
 
         UI_Loading loadingScreen = Managers.UIMng.ShowSceneUI<UI_Loading>();
         yield return loadingScreen.Fade(false); // fade out
@@ -76,7 +74,7 @@ public class SceneManagerEx
         }
 
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(areasceneName));
-        GetCurrentScene<AreaScene>().OnBattleSceneUnloadFinish.Invoke(); // Battlescene 언로드 된 후 실행
+        Managers.AreaMng.OnBattleSceneUnloadFinish();// Battlescene 언로드 된 후 실행
 
 
         yield return loadingScreen.Fade(true); // fade in, LoadingUI 삭제

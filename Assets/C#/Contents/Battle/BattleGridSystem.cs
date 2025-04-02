@@ -41,14 +41,14 @@ public class BattleGridSystem
 
     public void PlaceMonster(int squadId)
     {
-        Managers.DataMng.MonsterSquadDataDict.TryGetValue(squadId, out Data.MonsterSquadData squadData);
+        Managers.DataMng.MonsterSquadDataDict.TryGetValue(squadId, out MonsterSquadData squadData);
         if (squadData == null)
         {
             Debug.LogError($"Failed to get MonsterSquadData, squadId: {squadId}");
             return;
         }
 
-        foreach (Data.MonsterSquad_MonsterData monsterData in squadData.Monsters)
+        foreach (MonsterSquad_MonsterData monsterData in squadData.Monsters)
         {
             Monster monster = Managers.ObjectMng.SpawnMonster(monsterData.DataId);
             Vector2Int pos = new Vector2Int(monsterData.x, monsterData.y);

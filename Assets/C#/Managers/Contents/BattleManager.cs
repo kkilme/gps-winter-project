@@ -13,7 +13,8 @@ public class BattleManager
     public BattleGridSystem GridSystem { get; private set; }
     public BattleMouseInputHandler MouseInputHandler { get; private set; }
     private BaseAction _currentAction;
-    public BaseAction CurrentAction {
+    public BaseAction CurrentAction
+    {
         get => _currentAction;
         set
         {
@@ -24,7 +25,7 @@ public class BattleManager
             {
                 _currentAction.Unset();
                 _currentAction = null;
-            
+
             }
             else
             {
@@ -74,14 +75,14 @@ public class BattleManager
 
         // TurnSystem 초기화
         TurnSystem.Init();
-        
+
         // 배치 단계 시작
         StartPlacementPhase();
     }
 
     // 히어로 배치 단계
     private void StartPlacementPhase()
-    {   
+    {
         BattleState = BattleState.HeroPlacement;
 
         Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
@@ -94,7 +95,7 @@ public class BattleManager
 
     // 전투 시작
     public void StartBattlePhase()
-    {   
+    {
         BattleState = BattleState.Idle;
 
         Managers.InputMng.PointerOverGameObjectAction -= MouseInputHandler.OnDragEnd;
@@ -189,15 +190,8 @@ public class BattleManager
 
         yield return new WaitForSeconds(0.7f); // 턴 전환시 약간의 대기시간을 둠
 
-        if (Monsters.Count <= 0)
+        if (CheckBattleFinished())
         {
-            EndBattle(BattleResultType.Victory);
-            yield break;
-        }
-
-        if (Heroes.Count <= 0)
-        {
-            EndBattle(BattleResultType.Defeat);
             yield break;
         }
 
@@ -211,7 +205,7 @@ public class BattleManager
     }
 
     public void RemoveCreature(Creature creature)
-    {   
+    {
         creature.StandingCell.RemoveCreature();
         TurnSystem.Remove(creature);
         UI.TurnstateUI.RemoveTurnFrame(creature);
@@ -234,9 +228,38 @@ public class BattleManager
         }
     }
 
-    public void EndBattle(BattleResultType battleResult)
+    public bool CheckBattleFinished()
     {
-        ((UI_BattleScene)Managers.UIMng.SceneUI).OnBattleEnd(battleResult);
+        if (Monsters.Count <= 0)
+        {
+            FinishBattle(BattleResultType.Victory);
+            return true;
+        }
+        if (Heroes.Count <= 0)
+        {
+            FinishBattle(BattleResultType.Defeat);
+            return true;
+        }
+        return false;
     }
 
+    public void FinishBattle(BattleResultType battleResult)
+    {
+        UI.OnBattleEnd(battleResult);
+    }
+
+    public Loot GenerateLoot()
+    {
+        Loot loot = new Loot();
+        foreach (var monster in Monsters)
+        {
+            loot.Add(monster.GetLoot());
+        }
+        return loot;
+    }
+
+    public void UnloadBattleScene()
+    {
+        Debug.Log("Battle Scene Unload Start");
+    }
 }

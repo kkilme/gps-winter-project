@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Data;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -27,7 +26,7 @@ public class DataManager
         HeroDataDict = LoadJson<HeroDataLoader, int, CreatureData>("HeroData").MakeDict();
         MonsterDataDict = LoadJson<MonsterDataLoader, int, MonsterData>("MonsterData").MakeDict();
         MonsterSquadDataDict = LoadJson<MonsterSquadDataLoader, int, MonsterSquadData>("MonsterSquadData").MakeDict();
-        ItemDataDict = LoadJson<ItemDataLoader, int, ItemData>("ItemData").MakeDict();
+        //ItemDataDict = LoadJson<ItemDataLoader, int, ItemData>("ItemData").MakeDict();
         SkillDataDict = LoadJson<SkillDataLoader, int, SkillData>("SkillData").MakeDict();
         WeaponDataDict = LoadJson<WeaponDataLoader, int, WeaponData>("WeaponData").MakeDict();
         ArmorDataDict = LoadJson<ArmorDataLoader, int, ArmorData>("ArmorData").MakeDict();

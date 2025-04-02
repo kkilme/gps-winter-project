@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
-using Data;
 
 /// <summary>
 /// 적에게 접근 후 공격하는 스킬 (근접 공격)

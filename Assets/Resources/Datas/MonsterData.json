@@ -21,7 +21,7 @@
         {
           "LootType": "Item",
           "DataId": 301000,
-          "DropChance": 20,
+          "DropChance": 10,
         },
       ]
     }

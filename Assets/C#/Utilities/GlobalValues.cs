@@ -36,10 +36,14 @@ public static class GlobalValues
     public const string BATTLE_SCENE_NAME = "BattleScene";
     public const string AREA_SCENE_NAME = "AreaScene";
 
-    public const string HERO_PREFAB_PATH_ROOT = "Heroes";
-    public const string MONSTER_PREFAB_PATH_ROOT = "Monsters";
+    public const string HERO_PREFAB_PATH_PREFIX = "Heroes/";
+    public const string MONSTER_PREFAB_PATH_PREFIX = "Monsters/";
 
-    public const string HERO_ANIMATOR_PATH_ROOT = "Animators/Heroes";
+    public const string HERO_ANIMATOR_PATH_PREFIX = "Animators/Heroes/";
+
+    public const string ACTIONICON_PATH_PREFIX = "Textures/ActionIcons/";
+    public const string ITEMIMAGE_PATH_PREFIX = "Textures/ItemImages/";
+    public const string ITEMICON_PATH_PREFIX = "Textures/ItemIcons/";
 
     #endregion
 

@@ -3,6 +3,7 @@
     {
       "DataId": 201000,
       "Name": "Tree branch",
+      "ItemType": "Weapon",
       "Attack": 5,
       "RightIndex": 1,
       "WeaponType": "SingleSword",
@@ -13,6 +14,7 @@
     {
       "DataId": 201001,
       "Name": "SampleSwordAndShield",
+      "ItemType": "Weapon",
       "Attack": 5,
       "LeftIndex" : 17,
       "RightIndex": 3,
@@ -24,6 +26,7 @@
     {
        "DataId": 201002,
        "Name": "Basic Wand",
+       "ItemType": "Weapon",
        "Attack": 5,
        "RightIndex": 24,
        "WeaponType": "Wand",

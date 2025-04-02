@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
-using Data;
 
 public abstract class Creature : MonoBehaviour
 {

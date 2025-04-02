@@ -62,7 +62,7 @@ public class UI_BattleActionPanel : UI_Base
             actionButton.SetSkill(skill);
             
             var image = actionButton.GetComponent<Image>();
-            image.sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Icons/{skill.SkillData.IconPath}");
+            image.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ACTIONICON_PATH_PREFIX + skill.SkillData.IconPath);
         }
         ShowSkillInfo(_hero.Weapon.Skills[0]);
     }
@@ -74,10 +74,10 @@ public class UI_BattleActionPanel : UI_Base
         GetText(Texts.Text_ActionName).text = skill.SkillData.Name;
         GetText(Texts.Text_ActionDescription).text = skill.SkillData.Description;
 
-        if (skill.SkillData is Data.AttackSkillData)
+        if (skill.SkillData is AttackSkillData)
         {
             GetGameObject(GameObjects.Amount).SetActive(true);
-            var skillData = skill.SkillData as Data.AttackSkillData;
+            var skillData = skill.SkillData as AttackSkillData;
             GetText(Texts.Text_AmountWord).text = "Damage\nPer Slot";
             if(skillData.AttackType == AttackType.Physical)
             {

@@ -38,11 +38,9 @@ public enum ArmorType
 
 public enum ItemType
 {
-    None,
-    Attack,
-    Buff,
-    Debuff,
-    Recover,
+    Consumable,
+    Armor,
+    Weapon,
 }
 
 public enum AreaTileType
@@ -73,7 +71,7 @@ public enum BattleResultType
     Flee,
 }
 
-public enum RewardActionType
+public enum LootActionType
 {
     Take,
     Dispose
@@ -99,6 +97,7 @@ public enum SoundType
 
 public enum ActionDataType
 {
+    ActionData,
     SkillData,
     AttackSkillData,
 }

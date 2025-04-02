@@ -1,4 +1,4 @@
-using Data;
+
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;

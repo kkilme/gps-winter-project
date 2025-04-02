@@ -29,7 +29,7 @@ public class CreatureStat : MonoBehaviour
 
     public Action<CreatureStat> StatChangeAction;
 
-    public virtual void SetStat(Data.CreatureData creatureData)
+    public virtual void SetStat(CreatureData creatureData)
     {
         StatChangeAction = null;
         _name = creatureData.Name;
@@ -69,7 +69,7 @@ public class CreatureStat : MonoBehaviour
 
     #endregion
     #region Equipment
-    public void AttachEquipment(Data.EquipmentData equipmentData)
+    public void AttachEquipment(EquipmentData equipmentData)
     {
         Hp += equipmentData.Hp;
         MaxHp += equipmentData.Hp;
@@ -82,7 +82,7 @@ public class CreatureStat : MonoBehaviour
         Dexterity += equipmentData.Dexterity;
     }
 
-    public void DetachEquipment(Data.EquipmentData equipmentData)
+    public void DetachEquipment(EquipmentData equipmentData)
     {
         Hp -= equipmentData.Hp;
         MaxHp -= equipmentData.Hp;

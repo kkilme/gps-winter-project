@@ -6,9 +6,9 @@ using System;
 
 public class Quest
 {
-    public Data.QuestData QuestData { get; }
+    public QuestData QuestData { get; }
 
-    public Quest(Data.QuestData data)
+    public Quest(QuestData data)
     {
         QuestData = data;
     }

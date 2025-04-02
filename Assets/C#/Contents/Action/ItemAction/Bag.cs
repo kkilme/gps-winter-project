@@ -24,7 +24,7 @@ public class Bag
         int currentItemIdx = IsInBag(itemDataId);
         if (currentItemIdx != -1)
         {
-            Items[currentItemIdx].Count += addNum;
+            //Items[currentItemIdx].Count += addNum;
             ContentChange?.Invoke(this);
             return Items[currentItemIdx];
         }

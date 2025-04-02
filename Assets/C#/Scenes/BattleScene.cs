@@ -39,7 +39,7 @@ public class BattleScene : BaseScene
 
 #if UNITY_EDITOR
     // TOOD: for test
-    protected void Update()
+    public new void Update()
     {
         base.Update();
         if (Input.GetKeyDown(KeyCode.Space))
@@ -48,11 +48,11 @@ public class BattleScene : BaseScene
         }
         if(Input.GetKeyDown(KeyCode.V))
         {
-            Managers.BattleMng.EndBattle(BattleResultType.Victory);
+            Managers.BattleMng.FinishBattle(BattleResultType.Victory);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            Managers.BattleMng.EndBattle(BattleResultType.Defeat);
+            Managers.BattleMng.FinishBattle(BattleResultType.Defeat);
         }
     }
 #endif

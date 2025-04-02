@@ -45,7 +45,7 @@ public class Hero : Creature
 
     private void ChangeAnimator()
     {
-        string path = $"{GlobalValues.HERO_ANIMATOR_PATH_ROOT}/{Weapon.WeaponType}";
+        string path = GlobalValues.HERO_ANIMATOR_PATH_PREFIX + Weapon.WeaponType;
         Animator.runtimeAnimatorController = Managers.ResourceMng.Load<RuntimeAnimatorController>(path);
     }
 

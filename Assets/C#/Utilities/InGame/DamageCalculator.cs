@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using Data;
 
 
 public static class DamageCalculator

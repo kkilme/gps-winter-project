@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5998612615118960078}
   - component: {fileID: 4967224967441105552}
   m_Layer: 5
-  m_Name: RewardNameFrame
+  m_Name: LootNameFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 4144216745941184514}
   - component: {fileID: 3284730471955330987}
   m_Layer: 5
-  m_Name: Panel_RewardInfo
+  m_Name: Panel_LootInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 517768267003987869}
   - component: {fileID: 1797243538351724219}
   m_Layer: 5
-  m_Name: UI_Reward
+  m_Name: UI_Loot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2200505484589507220}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e57c7f5155964d348b87ac17a73f6fb8, type: 3}
+  m_Script: {fileID: 11500000, guid: 073bc5296c6b3e64ab5b2a9a02e65224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2582280750038069873
@@ -293,7 +293,7 @@ GameObject:
   - component: {fileID: 6046649801486461251}
   - component: {fileID: 4818361025036726746}
   m_Layer: 5
-  m_Name: RewardImageFrame
+  m_Name: LootImageFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -580,7 +580,7 @@ GameObject:
   - component: {fileID: 2551029912758239561}
   - component: {fileID: 1413326836825735209}
   m_Layer: 5
-  m_Name: RewardImage
+  m_Name: LootImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -656,7 +656,7 @@ GameObject:
   - component: {fileID: 6205295567627419416}
   - component: {fileID: 5628039710487967602}
   m_Layer: 5
-  m_Name: Panel_RewardAction
+  m_Name: Panel_LootAction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -734,7 +734,7 @@ GameObject:
   - component: {fileID: 6132755389395039223}
   - component: {fileID: 1140364700149797654}
   m_Layer: 5
-  m_Name: Text_RewardDescription
+  m_Name: Text_LootDescription
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -869,7 +869,7 @@ GameObject:
   - component: {fileID: 3308029441424005340}
   - component: {fileID: 703732537581992721}
   m_Layer: 5
-  m_Name: Text_RewardQuantity
+  m_Name: Text_LootQuantity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1006,7 +1006,7 @@ GameObject:
   - component: {fileID: 8280102026822350494}
   - component: {fileID: 3350578871756523303}
   m_Layer: 5
-  m_Name: RewardDescriptionFrame
+  m_Name: LootDescriptionFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1083,7 +1083,7 @@ GameObject:
   - component: {fileID: 7242549833998212002}
   - component: {fileID: 3885252067413420613}
   m_Layer: 5
-  m_Name: Text_RewardName
+  m_Name: Text_LootName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1477,7 +1477,7 @@ GameObject:
   - component: {fileID: 9160540935975118137}
   - component: {fileID: 4163095167277406343}
   m_Layer: 5
-  m_Name: Text_ActionOwner
+  m_Name: Text_ActionDescription
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1734,7 +1734,7 @@ GameObject:
   - component: {fileID: 5656636806846213084}
   - component: {fileID: 6302274040045580994}
   m_Layer: 5
-  m_Name: RewardTypeIcon
+  m_Name: LootTypeIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

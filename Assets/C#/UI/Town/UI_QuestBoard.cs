@@ -135,7 +135,7 @@ public class UI_QuestBoard : UI_Base
             Managers.ResourceMng.Destroy(child.gameObject);
 
         // 퀘스트 목록 받아오기
-        foreach (Data.QuestData questData in Managers.DataMng.QuestDataDict.Values)
+        foreach (QuestData questData in Managers.DataMng.QuestDataDict.Values)
         {
             Quest quest = new Quest(questData);
             UI_QuestBoard_Quest questBoard_Quest = Managers.UIMng.MakeSubItemUI<UI_QuestBoard_Quest>(content.transform, "Town/" + nameof(UI_QuestBoard_Quest));

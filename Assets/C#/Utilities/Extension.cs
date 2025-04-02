@@ -28,7 +28,7 @@ public static class Extension
         return go != null & go.activeSelf;
     }
 
-    public static string QuestRewardToString(this Data.QuestReward[] rewards)
+    public static string QuestRewardToString(this QuestReward[] rewards)
     {
         string toString = "";
 

@@ -4,6 +4,7 @@ using UnityEngine;
 public class AreaManager
 {
     public AreaName AreaName { get; set; }
+    public Loot Loots { get; set; } = new Loot();
 
     private AreaState _areaState;
     public AreaState AreaState
@@ -25,9 +26,9 @@ public class AreaManager
 
 
     private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
-    private GameObject _mouseoverIndicator; // 마우스 오버 위치의 타일 강조하는 게임오브젝트
+    private GameObject _mouseoverIndicator; // 마우스 위치의 타일 강조해주는 육각형 테두리 형태 게임오브젝트
     private Vector3 _currentPlayerPosition; // 현재 플레이어 WorldPosition
-    private Vector3 _currentMouseoverPosition; // 현재 마우스 오버 위치의 WorldPosition
+    private Vector3 _currentMouseoverPosition; // 현재 마우스 위치의 WorldPosition
 
     private GameObject _light;
 
@@ -125,11 +126,13 @@ public class AreaManager
     }
 
     // 전투씬 전환 흐름: 카메라 정지 -> 로딩화면 Fade in 완료 ->  배틀 씬 로딩 시작 및 완료 -> Area의 빛, 카메라 비활성화 -> 로딩화면 Fade out
-    public void OnBattleSceneLoadStart()
+    public void LoadBattleScene()
     {
         AreaState = AreaState.Battle;
         _cameraController.Freeze = true;
         Managers.InputMng.MouseAction -= HandleMouseInput;
+
+        CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadBattleScene());
     }
 
     public void OnBattleSceneLoadFinish()

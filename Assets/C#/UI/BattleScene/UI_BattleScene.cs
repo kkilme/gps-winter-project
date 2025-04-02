@@ -26,6 +26,8 @@ public class UI_BattleScene : UI_Scene
     public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
     public UI_MonsterProfileGroup MonsterProfileGroupUI { get; protected set; }
 
+    private BattleManager _battleManager;
+
     public override void Init()
     {
         base.Init();
@@ -38,6 +40,7 @@ public class UI_BattleScene : UI_Scene
         ChooseTargetUI = Get<UI_Base>(SubItemUI.UI_ChooseTarget).GetComponent<UI_ChooseTarget>();
         HeroProfileGroupUI = Get<UI_Base>(SubItemUI.UI_HeroProfileGroup_Vertical).GetComponent<UI_HeroProfileGroup>();
         MonsterProfileGroupUI = Get<UI_Base>(SubItemUI.UI_MonsterProfileGroup).GetComponent<UI_MonsterProfileGroup>();
+        _battleManager = Managers.BattleMng;
     }
 
     public void OnPlacementPhaseStart()
@@ -59,7 +62,7 @@ public class UI_BattleScene : UI_Scene
 
     public void OnTurnStart()
     {
-        var turnCreature = Managers.BattleMng.CurrentTurnCreature;
+        var turnCreature = _battleManager.CurrentTurnCreature;
 
         TurnstateUI.RefreshTurnFramesPosition();
 
@@ -89,7 +92,7 @@ public class UI_BattleScene : UI_Scene
         switch (battleResult)
         {
             case BattleResultType.Victory:
-                Get<UI_Base>(SubItemUI.UI_BattleVictory).Show().OnComplete(() => { ShowReward(); });
+                Get<UI_Base>(SubItemUI.UI_BattleVictory).Show().OnComplete(() => { ShowLoot(); });
                 break;
             case BattleResultType.Defeat:
                 break;
@@ -98,45 +101,39 @@ public class UI_BattleScene : UI_Scene
         }
     }
 
-    private void ShowReward()
-    {
-        // TODO: Test code
-        Dictionary<int, int> testrewards = new() { { 1, 2 }, { 2, 1 }, { 3, 1 } };
-        UI_Reward rewardUI = Managers.UIMng.ShowPopupUI<UI_Reward>();
+    private void ShowLoot()
+    {   
+        Loot loot = Managers.BattleMng.GenerateLoot();
+        UI_Loot lootUI = Managers.UIMng.ShowPopupUI<UI_Loot>();
 
-        KeyValuePair<int, int> reward = testrewards.Last();
-        int rewardId = reward.Key;
-        int rewardQuantity = reward.Value;
+        int itemCount = loot.Items.Count + 1;
+        lootUI.Init(loot.Gold);
+        lootUI.OnLootAction -= OnLootAction;
+        lootUI.OnLootAction += OnLootAction;
+        lootUI.Show();
 
-        rewardUI.Init(rewardId, rewardQuantity);
-
-
-        testrewards.Remove(rewardId);
-
-        void OnRewardAction(RewardActionType action)
+        void OnLootAction(LootActionType action)
         {
-            Managers.UIMng.ClosePopupUI(rewardUI);
-            switch (action)
-            {
-                case RewardActionType.Take:
-                case RewardActionType.Dispose:
-                    if (testrewards.Count == 0)
-                    {
-                        // TODO: BattleScene 언로딩 (AreaScene 복귀)
-                    }
-                    else
-                    {
-                        ShowReward();
-                    }
-                    break;
-            }
+            Managers.UIMng.ClosePopupUI(lootUI);
+            itemCount--;
 
+            if (itemCount == 0)
+            {
+                _battleManager.UnloadBattleScene();
+            } 
+            else
+            {
+                ShowNext();
+            }
         }
 
-        rewardUI.OnRewardAction -= OnRewardAction;
-        rewardUI.OnRewardAction += OnRewardAction;
-
+        void ShowNext()
+        {
+            UI_Loot lootUI = Managers.UIMng.ShowPopupUI<UI_Loot>();
+            lootUI.Init(loot.Items[itemCount - 1]);
+            lootUI.OnLootAction -= OnLootAction;
+            lootUI.OnLootAction += OnLootAction;
+            lootUI.Show();
+        }
     }
-
-
 }
