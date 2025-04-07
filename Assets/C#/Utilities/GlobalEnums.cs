@@ -127,11 +127,14 @@ public enum DamageTextType
 public enum StatName
 {
     None,
+    BaseDamage,
+    MaxHp,
+    PhysicalDefense,
+    MagicDefense,
     Strength,
     Intelligence,
     Vitality,
     Dexterity,
-    Monster,
 }
 
 public enum GridSide

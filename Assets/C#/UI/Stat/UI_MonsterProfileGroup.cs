@@ -26,11 +26,11 @@ public class UI_MonsterProfileGroup : UI_CreatureProfileGroup
 
         int index = 0;
 
-        foreach (var monster in Managers.BattleMng.Monsters)
+        foreach (var monster in Managers.BattleMng.AliveMonsters)
         {
             var profile = GetGameObject((MonsterProfileUI)index++).GetOrAddComponent<UI_MonsterProfile>();
             _creatureProfiles.Add(monster, profile);
-            profile.BindStat(monster.CreatureStat);
+            profile.BindCreature(monster);
             profile.Show();
         }
     }

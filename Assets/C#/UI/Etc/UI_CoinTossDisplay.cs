@@ -28,7 +28,7 @@ public class UI_CoinTossDisplay : UI_Base
             return;
         }
 
-        for (int i = 0; i < GlobalValues.MAX_COINT_COUNT; i++)
+        for (int i = 0; i < GlobalValues.MAX_COIN_COUNT; i++)
         {
             if (i < coinCount)
                 Get<UI_Coin>(i).ShowDefault(stat);

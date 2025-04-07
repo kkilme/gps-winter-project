@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // 전투 씬의 grid 관련 로직 관리
@@ -18,10 +19,15 @@ public class BattleGridSystem
             for (int col = 0; col < GlobalValues.BATTLEGRID_COL_COUNT; col++)
             {
                 var herocell = GlobalUtility.FindChild(heroGrid, $"BattleGridCell ({row}, {col})");
+                var monsterCell = GlobalUtility.FindChild(monsterGrid, $"BattleGridCell ({row}, {col})");
+                if(herocell == null || monsterCell == null)
+                {
+                    Debug.LogError($"Failed to find BattleGridCell ({row}, {col})");
+                    continue;
+                }
                 HeroGrid[row, col] = herocell.GetOrAddComponent<HeroBattleGridCell>();
                 HeroGrid[row, col].Init(row, col, GridSide.HeroSide);
 
-                var monsterCell = GlobalUtility.FindChild(monsterGrid, $"BattleGridCell ({row}, {col})");
                 MonsterGrid[row, col] = monsterCell.GetOrAddComponent<MonsterBattleGridCell>();
                 MonsterGrid[row, col].Init(row, col, GridSide.MonsterSide);
             }
@@ -29,11 +35,11 @@ public class BattleGridSystem
         _battleManager = Managers.BattleMng;
     }
 
-    public void PlaceHero()
+    public void PlaceHero(List<Hero> heroes)
     {
-        foreach (Hero hero in Managers.ObjectMng.HeroParty.Heroes)
+        foreach (Hero hero in heroes)
         {
-            Vector2Int pos = Managers.ObjectMng.HeroParty.BattlePositions[hero];
+            Vector2Int pos = Managers.HeroMng.HeroParty.GetBattlePosition(hero.InstanceId);
             HeroGrid[pos.y, pos.x].PlaceCreature(hero);
             hero.LookFront();
         }
@@ -54,16 +60,18 @@ public class BattleGridSystem
             Vector2Int pos = new Vector2Int(monsterData.x, monsterData.y);
             MonsterGrid[pos.y, pos.x].PlaceCreature(monster);
             monster.LookFront();
-            _battleManager.Monsters.Add(monster);
+            _battleManager.AliveMonsters.Add(monster);
         }
     }
 
     public void MoveCreature(Creature creature, BattleGridCell targetCell)
     {
-        // 서로의 위치 교환을 위해 밑의 if문 필요.
+        // Creature끼리의 위치 교환을 위해 밑의 if문 필요.
         // 조건이 없을 시, A를 B의 위치로 옮긴 후 B를 A의 위치로 옮길 때 문제가 생김.
         if(creature.StandingCell.PlacedCreature == creature) creature.StandingCell.PlacedCreature = null;
         targetCell.PlaceCreature(creature);
+
+        if(_battleManager.BattleState == BattleState.HeroPlacement && creature is Hero hero) Managers.HeroMng.HeroParty.SaveBattlePosition(hero.InstanceId, new Vector2Int(targetCell.Column, targetCell.Row));
     }
 
     public void SwapCreaturePosition(Creature creature1, Creature creature2)

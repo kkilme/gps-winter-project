@@ -7,6 +7,11 @@ public class Weapon: Equipment
     public WeaponType WeaponType { get; protected set; }
     public List<BaseSkill> Skills { get; protected set; } = new();
     
+    public Weapon(int dataId)
+    {
+        SetData(dataId);
+    }
+
     public override void SetData(int dataId)
     {
         EquipmentType = EquipmentType.Weapon;

@@ -97,4 +97,12 @@ public static class GlobalUtility
         }
     }
 
+    public static Transform FindOrCreateTransform(string name)
+    {
+        GameObject transform = GameObject.Find(name);
+        if (transform == null)
+            transform = new GameObject { name = name };
+
+        return transform.transform;
+    }
 }

@@ -2,15 +2,16 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
+// 전투에서 Creature가 자신의 턴에 취할 수 있는 행동
 public abstract class BaseAction
 {
     #region Field
     public int DataId { get; protected set; }
-    public Creature Executor { get; protected set; } // 이 액션을 실행하는 Creature
-    protected Animator _animator => Executor.Animator;
+    public Creature Executor { get; protected set; } // 이 액션을 실행하는 Creature. 전투에서 한 턴에 한 Creature만 Action을 실행하는 것이 보장되어야 함.
     public BattleGridCell SelectedTargetCell { get; protected set; }
     public abstract ActionTargetSelector TargetSelector { get; protected set; }
     public abstract ActionEffectRange EffectRange { get; protected set; }
+    protected Animator _animator => Executor.Animator;
 
     #endregion
 

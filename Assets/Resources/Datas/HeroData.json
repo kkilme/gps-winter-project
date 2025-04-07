@@ -10,7 +10,8 @@
       "Strength": 70,
       "Vitality": 60,
       "Dexterity": 50,
-      "Intelligence": 40
+      "Intelligence": 40,
+      "StartWeapon": 201000
     },
     {
       "DataId": 101001,
@@ -22,7 +23,8 @@
       "Strength": 40,
       "Vitality": 50,
       "Dexterity": 60,
-      "Intelligence": 70
+      "Intelligence": 70,
+      "StartWeapon": 201002
     }
   ]
 }

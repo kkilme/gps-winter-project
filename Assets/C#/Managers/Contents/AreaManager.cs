@@ -22,8 +22,7 @@ public class AreaManager
 
     private AreaMap _map;
     private AreaCameraController _cameraController;
-    private HeroParty _party => Managers.ObjectMng.HeroParty;
-
+    private HeroParty _party => Managers.HeroMng.HeroParty;
 
     private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
     private GameObject _mouseoverIndicator; // 마우스 위치의 타일 강조해주는 육각형 테두리 형태 게임오브젝트
@@ -49,22 +48,41 @@ public class AreaManager
     #region Init
     public void Init(AreaMap map)
     {
+        AreaState = AreaState.Idle;
         _map = map;
+        _light = GameObject.FindGameObjectWithTag("AreaLight");
+
         _currentPlayerPosition = _map.GetPlayerStartPosition();
         _currentTile = _map.GetEventTile(_currentPlayerPosition);
         _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
         _mouseoverIndicator.transform.position = _currentPlayerPosition;
-        AreaState = AreaState.Idle;
-        _light = GameObject.FindGameObjectWithTag("AreaLight");
 
-        _party.InitOnArea(_currentPlayerPosition);
+        InitHeroes();
         InitCamera();
+
         _map.RevealFogOfWar(_currentPlayerPosition, 3); // 시작 지점에서 범위 3 반경의 전장의 안개 제거
 
         Managers.InputMng.MouseAction -= HandleMouseInput;
         Managers.InputMng.MouseAction += HandleMouseInput;
     }
 
+    /// <summary>
+    /// 영웅 스폰 및 위치 초기화
+    /// </summary>
+    private void InitHeroes()
+    {
+        Managers.HeroMng.SpawnHeroes();
+        var heroes = _party.Heroes;
+        for (int i = 0; i < heroes.Count; i++)
+        {
+            heroes[i].transform.LookAt(Vector3.forward);
+            heroes[i].transform.position = _currentPlayerPosition + new Vector3(GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 0], 0, GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 1]);
+        }
+    }
+
+    /// <summary>
+    /// Area Camera 초기화
+    /// </summary>
     private void InitCamera()
     {
         _cameraController = Managers.ResourceMng.Instantiate("Area/AreaCamera").GetComponent<AreaCameraController>();

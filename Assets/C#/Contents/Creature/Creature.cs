@@ -4,9 +4,8 @@ using UnityEngine;
 
 public abstract class Creature : MonoBehaviour
 {
-    public CreatureData CreatureData { get; protected set; }
-    public CreatureStat CreatureStat { get; protected set; }
-    public CreatureType CreatureType { get; protected set; }
+    public CreatureData CreatureData { get; protected set; } // 변하지 않는 기초 데이터
+    public CreatureStat CreatureStat { get; protected set; } // 장비 등에 의해 변할 수 있는 스탯
     public Animator Animator { get; protected set; }
     public BattleGridCell StandingCell { get; set; }
     
@@ -18,15 +17,10 @@ public abstract class Creature : MonoBehaviour
     protected virtual void Init()
     {
         Animator = gameObject.GetOrAddComponent<Animator>();
-        CreatureStat = gameObject.GetOrAddComponent<CreatureStat>();
     }
-    
+
     // 수동 실행
-    public virtual void SetData(int dataId)
-    { 
-        gameObject.name = $"{CreatureData.DataId}_{CreatureData.Name}";
-        CreatureStat.SetStat(CreatureData);
-    }
+    public abstract void SetData(int dataId);
 
     /// <summary>
     /// 전투 씬에서 Creature가 정면을 바라보도록 함
@@ -53,8 +47,8 @@ public abstract class Creature : MonoBehaviour
             Managers.BattleMng.RemoveCreature(this);
         }
         yield return new WaitForSeconds(5f);
+
         Managers.ResourceMng.Destroy(gameObject);
-        //Managers.ObjectMng.Despawn(CreatureType, Id);
     }
 
     public void TakeHeal(int heal)

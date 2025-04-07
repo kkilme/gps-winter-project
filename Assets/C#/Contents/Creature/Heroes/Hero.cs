@@ -5,15 +5,14 @@ using UnityEngine;
 
 public class Hero : Creature
 {
-    #region Field
-
+    public HeroStat HeroStat => CreatureStat as HeroStat;
+    public int InstanceId => HeroStat.HeroInstanceId;
     public Weapon Weapon { get; protected set; }
     public Dictionary<ArmorType, Armor> Armors { get; protected set; }
+
     private GameObject _head;
     private GameObject _leftHand;
     private GameObject _rightHand;
-    
-    #endregion
     
     protected override void Init()
     {
@@ -27,12 +26,19 @@ public class Hero : Creature
         foreach (ArmorType type in (ArmorType[])Enum.GetValues(typeof(ArmorType)))
             Armors.TryAdd(type, null);
     }
-    
     public override void SetData(int dataId)
     {
-        CreatureType = CreatureType.Hero;
         CreatureData = Managers.DataMng.HeroDataDict[dataId];
-        base.SetData(dataId);
+    }
+
+    public void SetData(int dataId, HeroStat savedStat)
+    {
+        SetData(dataId);
+
+        // 스탯 정보 복원
+        CreatureStat = savedStat;
+
+        gameObject.name = $"{InstanceId}_{CreatureData.Name}";
     }
 
     public override Tween LookFront(float duration = 0f)
@@ -40,7 +46,6 @@ public class Hero : Creature
         return transform.DOLookAt(Managers.BattleMng.GridSystem.MonsterGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration).SetEase(Ease.OutQuad);
     }
 
-    // Prototype버전에선 많은 종류의 Weapon, Armor는 구현 X
     #region Weapon
 
     private void ChangeAnimator()
@@ -51,47 +56,48 @@ public class Hero : Creature
 
     public void EquipWeapon(int weaponDataId)
     {
-        Weapon weapon = new Weapon();
-        weapon.SetData(weaponDataId);
+        Weapon weapon = new Weapon(weaponDataId);
         EquipWeapon(weapon);
     }
     
     public void EquipWeapon(Weapon equippingWeapon)
     {
-        if (Weapon?.WeaponData.DataId == equippingWeapon.WeaponData.DataId) // 동일한 무기 장착 시
+        if (Weapon?.WeaponData.DataId == equippingWeapon.WeaponData.DataId) // 동일한 무기 장착 시 무시
             return;
 
         UnEquipWeapon();
 
         Weapon = equippingWeapon;
-        CreatureStat.AttachEquipment(Weapon.EquipmentData);
+        HeroStat.AttachEquipment(Weapon.EquipmentData);
         Weapon.Equip(this);
         ChangeWeaponVisibility(true);
         ChangeAnimator();
+
+        Managers.StorageMng.HeroStorage.SaveWeapon(InstanceId, equippingWeapon.DataId);
     }
     
     public void UnEquipWeapon()
     {
         if (Weapon == null)
             return;
-        
-        CreatureStat.DetachEquipment(Weapon.EquipmentData);
+
+        HeroStat.DetachEquipment(Weapon.EquipmentData);
         Weapon.UnEquip();
         ChangeWeaponVisibility(false);
         Weapon = null;
     }
     
-    public void ChangeWeaponVisibility(bool isActive)
+    public void ChangeWeaponVisibility(bool isVisible)
     {
         int leftIndex = Weapon.WeaponData.LeftIndex;
         int rightIndex = Weapon.WeaponData.RightIndex;
         if (leftIndex != 0)
         {
-            _leftHand.transform.GetChild(leftIndex).gameObject.SetActive(isActive);
+            _leftHand.transform.GetChild(leftIndex).gameObject.SetActive(isVisible);
         }
         if (rightIndex != 0)
         {
-            _rightHand.transform.GetChild(rightIndex).gameObject.SetActive(isActive);
+            _rightHand.transform.GetChild(rightIndex).gameObject.SetActive(isVisible);
         }
     }
 
@@ -100,20 +106,27 @@ public class Hero : Creature
     
     #region Armor
 
+    public void EquipArmor(int armorDataId)
+    {
+        Armor armor = new Armor(armorDataId);
+        EquipArmor(armor);
+    }
+
     public void EquipArmor(Armor equippingArmor)
     {
         ArmorType armorType = equippingArmor.ArmorType;
-        if (Armors[armorType] != null)
-        {
-            if (Armors[armorType].ArmorData.DataId == equippingArmor.ArmorData.DataId)
-                return;
-            UnEquipArmor(armorType);
-        }
+
+        if (Armors[armorType]?.ArmorData.DataId == equippingArmor.ArmorData.DataId) // 동일한 장비 장착 시 무시
+            return;
+
+        UnEquipArmor(armorType);
         
         Armors[armorType] = equippingArmor;
-        CreatureStat.AttachEquipment(Armors[armorType].EquipmentData);
+        HeroStat.AttachEquipment(Armors[armorType].EquipmentData);
         Armors[armorType].Equip(this);
         ChangeArmorVisibility(armorType ,true);
+
+        Managers.StorageMng.HeroStorage.SaveArmor(InstanceId, armorType, equippingArmor.DataId);
     }
 
     public void UnEquipArmor(ArmorType armorType)
@@ -121,7 +134,7 @@ public class Hero : Creature
         if (Armors[armorType] == null)
             return;
 
-        CreatureStat.DetachEquipment(Armors[armorType].EquipmentData);
+        HeroStat.DetachEquipment(Armors[armorType].EquipmentData);
         Armors[armorType].UnEquip();
         ChangeArmorVisibility(armorType, false);
         Armors[armorType] = null;

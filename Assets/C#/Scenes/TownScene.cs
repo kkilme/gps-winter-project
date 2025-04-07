@@ -21,11 +21,11 @@ public class TownScene : BaseScene
 
     private void SpawnHeroes()
     {
-        Managers.ObjectMng.SpawnHeroesOnTest();
+        Managers.HeroMng.AddHeroesOnTest();
 
         int i = 0;
 
-        foreach (var hero in Managers.ObjectMng.HeroParty.Heroes)
+        foreach (var hero in Managers.HeroMng.HeroParty.Heroes)
         {
             hero.gameObject.transform.position = _heroPositions[i++].position;
             hero.transform.LookAt(Camera.main.transform.position);

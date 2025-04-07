@@ -10,6 +10,7 @@ public class UI_CreatureProfile : UI_Base
     private Tweener _blinkTweener;
     private Image _bg;
     private Color _bgOriginalColor;
+    private Creature _creature;
 
     protected enum Texts
     {
@@ -50,16 +51,22 @@ public class UI_CreatureProfile : UI_Base
         _bgOriginalColor = _bg.color;
     }
 
-    public void BindStat(CreatureStat stat)
+    public void BindCreature(Creature creature)
     {
-        stat.StatChangeAction -= UpdateCreatureProfile;
-        stat.StatChangeAction += UpdateCreatureProfile;
-        
+        _creature = creature;
+
+        var stat = creature.CreatureStat;
+        stat.StatChangeAction -= UpdateStatProfile;
+        stat.StatChangeAction += UpdateStatProfile;
+
+        GetText(Texts.Text_Name).text = creature.CreatureData.Name;
+        Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{creature.CreatureData.Name}_Front");
+
         // init
-        UpdateCreatureProfile(stat);
+        UpdateStatProfile(stat);
     }
 
-    private void UpdateCreatureProfile(CreatureStat creatureStat)
+    private void UpdateStatProfile(CreatureStat creatureStat)
     {
         var stats = new (Texts, int)[]
         {
@@ -71,8 +78,6 @@ public class UI_CreatureProfile : UI_Base
             (Texts.Text_Intelligence, creatureStat.Intelligence),
             (Texts.Text_Dexterity, creatureStat.Dexterity),
         };
-
-        GetText(Texts.Text_Name).text = creatureStat.Name;
         GetText(Texts.Text_HP).text = $"{creatureStat.Hp}/{creatureStat.MaxHp}";
         Get<Slider>(Sliders.Slider_HP).value = (float)creatureStat.Hp / creatureStat.MaxHp;
 
@@ -81,7 +86,6 @@ public class UI_CreatureProfile : UI_Base
             GetText(textType).text = value.ToString();
         }
 
-        Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{creatureStat.Name}_Front");
     }
 
     public void StartBlinking()

@@ -11,18 +11,21 @@ public class Managers : MonoBehaviour
     public static Managers Instance { get { Init(); return s_instance; } }
 
     #region Contents
-    private ObjectManager _objectMng = new ObjectManager();
     private BattleManager _battleMng = new BattleManager();
     private AreaManager _areaMng = new AreaManager();
-    
-    public static ObjectManager ObjectMng => Instance._objectMng;
+    private HeroManager _heroMng = new HeroManager();
+    private StorageManager _storageMng = new StorageManager();
+
     public static BattleManager BattleMng => Instance._battleMng;
     public static AreaManager AreaMng => Instance._areaMng;
+    public static HeroManager HeroMng => Instance._heroMng;
+    public static StorageManager StorageMng => Instance._storageMng;
     #endregion
 
     #region Core
     private DataManager _dataMng = new DataManager();
     private InputManager _inputMng = new InputManager();
+    private ObjectManager _objectMng = new ObjectManager();
     private PoolManager _poolMng = new PoolManager();
     private ResourceManager _resourceMng = new ResourceManager();
     private SceneManagerEx _sceneMng = new SceneManagerEx();
@@ -31,6 +34,7 @@ public class Managers : MonoBehaviour
 
     public static DataManager DataMng => Instance._dataMng;
     public static InputManager InputMng => Instance._inputMng;
+    public static ObjectManager ObjectMng => Instance._objectMng;
     public static PoolManager PoolMng => Instance._poolMng;
     public static ResourceManager ResourceMng => Instance._resourceMng;
     public static SceneManagerEx SceneMng => Instance._sceneMng;

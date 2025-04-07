@@ -12,10 +12,11 @@ public static class GlobalValues
 
     public const float CREATURE_BATTLE_VELOCITY = 5f;
 
-    public const int MAX_COINT_COUNT = 8;
+    public const int MAX_COIN_COUNT = 8;
+    public const int MAX_HERO_COUNT = 4;
 
     public static readonly int[,] DIRECTION_4WAY = new int[4, 2] { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
-    public static readonly int[,] HERO_TILE_POS_OFFSET = new int[4, 2] { { 0, 1 }, { -1, 0 }, { 1, 0 }, { 0, -1 } };
+    public static readonly int[,] HERO_POS_ON_AREA_TILE_OFFSET = new int[4, 2] { { 0, 1 }, { -1, 0 }, { 1, 0 }, { 0, -1 } };
 
     // Flat-top Hexagon 타일맵에서는 X좌표의 홀/짝 여부에 따라 방향에 해당하는 좌표값이 다름
     public static readonly int[,] DIRECTION_6WAY_X_ODD = new int[6, 2] { { 0, 1 }, { 1, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, 1 } };

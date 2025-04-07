@@ -6,31 +6,18 @@ using Object = UnityEngine.Object;
 public class ObjectManager
 {
     public bool Initialized { get; protected set; }
-    public HeroParty HeroParty { get; protected set; } // 나중에 파티 편성 같은 기능이 추가될 시 따로 매니저 만들어서 분리
     public Dictionary<int, BaseSkill> Skills { get; protected set; } // 스킬 객체를 미리 생성해놓고 계속해서 사용
-
-    private Transform _heroRoot => GetRootTransform("@Heroes");
-    private Transform _monsterRoot => GetRootTransform("@Monsters");
+    private Transform _monsterRoot => GlobalUtility.FindOrCreateTransform("@AliveMonsters");
 
     public void Init()
     {
         Skills = new Dictionary<int, BaseSkill>();
-
-        Object.DontDestroyOnLoad(_heroRoot.gameObject);
 
         BindSkills();
 
         Initialized = true;
     }
 
-    public Transform GetRootTransform(string name)
-    {
-        GameObject root = GameObject.Find(name);
-        if (root == null)
-            root = new GameObject { name = name };
-
-        return root.transform;
-    }
 
     public void BindSkills()
     {
@@ -50,28 +37,6 @@ public class ObjectManager
         }
     }
 
-    public Hero SpawnHero(int heroDataId)
-    {
-        if (!Managers.DataMng.HeroDataDict.ContainsKey(heroDataId))
-        {
-            Debug.LogError($"Hero data doesn't exist. HeroDataId: {heroDataId}");
-            return null;
-        }
-
-        HeroParty ??= new HeroParty();
-
-        string className = Managers.DataMng.HeroDataDict[heroDataId].Name;
-        GameObject go = Managers.ResourceMng.Instantiate(GlobalValues.HERO_PREFAB_PATH_PREFIX + className);
-        Hero hero = go.GetComponent<Hero>();
-        HeroParty.AddHero(hero);
-
-        hero.SetData(heroDataId);
-        go.transform.position = Vector3.zero;
-        hero.transform.parent = _heroRoot;
-
-        return hero;
-    }
-
     public Monster SpawnMonster(int monsterDataId)
     {
         if (!Managers.DataMng.MonsterDataDict.ContainsKey(monsterDataId))
@@ -89,21 +54,5 @@ public class ObjectManager
         monster.transform.parent = _monsterRoot;
 
         return monster;
-    }
-    
-    // 프로토타입 버전에서의 영웅 스폰: Knight 2명, Wizard 2명
-    public void SpawnHeroesOnTest()
-    {   
-        for(int i = 0; i < 2; i++)
-        {
-            var hero = SpawnHero(GlobalValues.HERO_KNIGHT_ID);
-            hero.EquipWeapon(GlobalValues.KNIGHT_START_WEAPON_ID);
-        }
-
-        for (int i = 0; i < 2; i++)
-        {
-            var hero = SpawnHero(GlobalValues.HERO_WIZARD_ID);
-            hero.EquipWeapon(GlobalValues.WIZARD_START_WEAPON_ID);
-        }
     }
 }

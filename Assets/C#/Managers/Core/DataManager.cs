@@ -11,7 +11,7 @@ public interface ILoader<Key, Value>
 // 시작하면 바로 데이터를 Load하여 Dict로 관리
 public class DataManager
 {
-    public Dictionary<int, CreatureData> HeroDataDict { get; private set; }
+    public Dictionary<int, HeroData> HeroDataDict { get; private set; }
     public Dictionary<int, MonsterData> MonsterDataDict { get; private set; }
     public Dictionary<int, MonsterSquadData> MonsterSquadDataDict { get; private set; }
     public Dictionary<int, ItemData> ItemDataDict { get; private set; }
@@ -23,7 +23,7 @@ public class DataManager
 
     public void Init()
     {
-        HeroDataDict = LoadJson<HeroDataLoader, int, CreatureData>("HeroData").MakeDict();
+        HeroDataDict = LoadJson<HeroDataLoader, int, HeroData>("HeroData").MakeDict();
         MonsterDataDict = LoadJson<MonsterDataLoader, int, MonsterData>("MonsterData").MakeDict();
         MonsterSquadDataDict = LoadJson<MonsterSquadDataLoader, int, MonsterSquadData>("MonsterSquadData").MakeDict();
         //ItemDataDict = LoadJson<ItemDataLoader, int, ItemData>("ItemData").MakeDict();

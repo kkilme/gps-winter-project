@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Battle의 턴 시스템 관리
 public class TurnSystem
 {
     public Creature CurrentTurnCreature { get; private set; }
@@ -15,7 +16,7 @@ public class TurnSystem
         _battleManager = Managers.BattleMng;
         TurnCount = 1;
         Turns = new List<Creature>(_battleManager.Creatures);
-        Turns.Sort((a, b) => b.CreatureStat.Dexterity.CompareTo(a.CreatureStat.Dexterity)); // Dex 높은 순으로 턴 순서 정렬
+        Turns.Sort((a, b) => b.CreatureStat.FinalStat.Dexterity.CompareTo(a.CreatureStat.FinalStat.Dexterity)); // Dex 높은 순으로 턴 순서 정렬
         CurrentTurnCreature = Turns[0];
     }
 

@@ -30,7 +30,7 @@ public class UI_ItemDescription : UI_Base
     public void SetInfo(ItemAction item)
     {
         //GetImage(StatImages.Icon).sprite = item.image;
-        //GetText(Texts.Name).text = item.ItemData.Name;
+        //GetText(Texts.ClassName).text = item.ItemData.ClassName;
         //GetText(Texts.Description).text = item.ItemData.Description;
     }
 

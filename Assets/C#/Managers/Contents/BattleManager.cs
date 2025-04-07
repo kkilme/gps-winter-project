@@ -39,14 +39,14 @@ public class BattleManager
     {
         get
         {
-            List<Creature> creatures = new(Heroes);
-            creatures.AddRange(Monsters);
+            List<Creature> creatures = new(AliveHeroes);
+            creatures.AddRange(AliveMonsters);
             return creatures;
         }
     }
-    public List<Hero> Heroes;
-    public List<Monster> Monsters;
-    private HeroParty _party => Managers.ObjectMng.HeroParty;
+    public List<Hero> AliveHeroes;
+    public List<Monster> AliveMonsters;
+    private HeroParty _party => Managers.HeroMng.HeroParty;
 
     #endregion
 
@@ -57,8 +57,8 @@ public class BattleManager
         GridSystem = new BattleGridSystem();
         MouseInputHandler = new BattleMouseInputHandler();
         UI = Managers.UIMng.ShowSceneUI<UI_BattleScene>();
-        Heroes = new(_party.Heroes);
-        Monsters = new();
+        AliveHeroes = new(_party.GetAliveHeroes());
+        AliveMonsters = new();
 
         // 배틀 필드 생성
         string battleFieldname = Managers.DataMng.AreaDataDict[Managers.AreaMng.AreaName].BattleFieldName;
@@ -70,7 +70,7 @@ public class BattleManager
 
         // Creature 배치
         GridSystem.Init();
-        GridSystem.PlaceHero();
+        GridSystem.PlaceHero(AliveHeroes);
         GridSystem.PlaceMonster(squadId);
 
         // TurnSystem 초기화
@@ -213,12 +213,12 @@ public class BattleManager
         if (creature is Hero)
         {
             UI.HeroProfileGroupUI.OnDead(creature);
-            Heroes.Remove(creature as Hero);
+            AliveHeroes.Remove(creature as Hero);
         }
         else if (creature is Monster)
         {
             UI.MonsterProfileGroupUI.OnDead(creature);
-            Monsters.Remove(creature as Monster);
+            AliveMonsters.Remove(creature as Monster);
         }
 
         // 현재 턴인 Creature가 이번 턴에 전투에서 이탈한 경우, 다음 턴으로 넘어감
@@ -230,12 +230,12 @@ public class BattleManager
 
     public bool CheckBattleFinished()
     {
-        if (Monsters.Count <= 0)
+        if (AliveMonsters.Count <= 0)
         {
             FinishBattle(BattleResultType.Victory);
             return true;
         }
-        if (Heroes.Count <= 0)
+        if (AliveHeroes.Count <= 0)
         {
             FinishBattle(BattleResultType.Defeat);
             return true;
@@ -251,7 +251,7 @@ public class BattleManager
     public Loot GenerateLoot()
     {
         Loot loot = new Loot();
-        foreach (var monster in Monsters)
+        foreach (var monster in AliveMonsters)
         {
             loot.Add(monster.GetLoot());
         }

@@ -9,10 +9,10 @@ public abstract class Monster : Creature
     
     public override void SetData(int dataId)
     {
-        CreatureType = CreatureType.Monster;
         CreatureData = Managers.DataMng.MonsterDataDict[dataId];
         AIBrain = GetComponent<CreatureAI>();
-        base.SetData(dataId);
+        CreatureStat = new CreatureStat(CreatureData);
+        gameObject.name = $"{CreatureData.DataId}_{CreatureData.Name}";
     }
 
     public override Tween LookFront(float duration = 0f)

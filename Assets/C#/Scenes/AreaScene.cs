@@ -61,7 +61,7 @@ public class AreaScene : BaseScene
             areaName = AreaName.Forest;
         }
 
-        Managers.ObjectMng.SpawnHeroesOnTest();
+        Managers.HeroMng.AddHeroesOnTest();
         InitArea(areaName, testQuest);
     }
 

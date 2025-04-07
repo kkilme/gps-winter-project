@@ -32,7 +32,7 @@ public class UI_CreatureTurnFrame : UI_Base
     public void Setup(Creature creature)
     {
         _rectTransform.anchoredPosition = new Vector2(0, 0);
-        Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{creature.CreatureStat.Name}_Front");
+        Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{creature.CreatureData.Name}_Front");
     }
 
     public void MoveTo(float x)
