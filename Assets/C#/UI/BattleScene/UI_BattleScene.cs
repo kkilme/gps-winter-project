@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using System.Linq;
+using UnityEngine.UI;
 
 public class UI_BattleScene : UI_Scene
 {
@@ -11,11 +11,17 @@ public class UI_BattleScene : UI_Scene
 		UI_BattleActionPanel,
 		UI_CoinTossDisplay,
 		UI_TurnState,
-        UI_BattleVictory,
         UI_PlacementPhase,
         UI_ChooseTarget,
         UI_HeroProfileGroup_Vertical,
         UI_MonsterProfileGroup,
+        UI_BattleVictory,
+        UI_BattleDefeat,
+    }
+
+    enum Images
+    {
+        FadeBG,
     }
 
 	public UI_BattleActionPanel ActionPanel { get; protected set; }
@@ -27,12 +33,13 @@ public class UI_BattleScene : UI_Scene
     public UI_MonsterProfileGroup MonsterProfileGroupUI { get; protected set; }
 
     private BattleManager _battleManager;
+    private Image _fadeBG;
 
     public override void Init()
     {
-        base.Init();
-
 		Bind<UI_Base>(typeof(SubItemUI));
+        Bind<Image>(typeof(Images));
+
         ActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetComponent<UI_BattleActionPanel>();
         CoinTossDisplay = Get<UI_Base>(SubItemUI.UI_CoinTossDisplay).GetComponent<UI_CoinTossDisplay>();
         TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetComponent<UI_TurnState>();
@@ -40,11 +47,14 @@ public class UI_BattleScene : UI_Scene
         ChooseTargetUI = Get<UI_Base>(SubItemUI.UI_ChooseTarget).GetComponent<UI_ChooseTarget>();
         HeroProfileGroupUI = Get<UI_Base>(SubItemUI.UI_HeroProfileGroup_Vertical).GetComponent<UI_HeroProfileGroup>();
         MonsterProfileGroupUI = Get<UI_Base>(SubItemUI.UI_MonsterProfileGroup).GetComponent<UI_MonsterProfileGroup>();
+
         _battleManager = Managers.BattleMng;
+        _fadeBG = GetImage(Images.FadeBG);
     }
 
     public void OnPlacementPhaseStart()
     {
+       
         ActionPanel.Hide();
         CoinTossDisplay.Hide();
         ChooseTargetUI.Hide();
@@ -89,16 +99,20 @@ public class UI_BattleScene : UI_Scene
         ActionPanel.Hide();
         TurnstateUI.Hide();
         CoinTossDisplay.Hide();
-        switch (battleResult)
+        _fadeBG.DOColor(new Color(_fadeBG.color.r, _fadeBG.color.g, _fadeBG.color.b, 0.9f), 0.7f).OnComplete(() =>
         {
-            case BattleResultType.Victory:
-                Get<UI_Base>(SubItemUI.UI_BattleVictory).Show().OnComplete(() => { ShowLoot(); });
-                break;
-            case BattleResultType.Defeat:
-                break;
-            case BattleResultType.Flee:
-                break;
-        }
+            switch (battleResult)
+            {
+                case BattleResultType.Victory:
+                    Get<UI_Base>(SubItemUI.UI_BattleVictory).Show().OnComplete(() => { ShowLoot(); });
+                    break;
+                case BattleResultType.Defeat:
+                    Get<UI_Base>(SubItemUI.UI_BattleDefeat).Show();
+                    break;
+                case BattleResultType.Flee:
+                    break;
+            }
+        });
     }
 
     private void ShowLoot()

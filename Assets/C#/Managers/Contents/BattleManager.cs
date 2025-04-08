@@ -91,6 +91,7 @@ public class BattleManager
         Managers.InputMng.PointerOverGameObjectAction += MouseInputHandler.OnDragEnd;
 
         UI.OnPlacementPhaseStart();
+        CoroutineRunner.Instance.StartCoroutine(GlobalUtility.FixUISorting(UI.gameObject)); // UI의 SortingOrder를 Fix
     }
 
     // 전투 시작

@@ -55,7 +55,6 @@ public class UIManager
         SceneUI = sceneUI;
 
         go.transform.SetParent(Root.transform);
-        
         return sceneUI;
     }
 
@@ -72,15 +71,6 @@ public class UIManager
         go.transform.SetParent(Root.transform);
         
         return popupUI;
-    }
-
-    public UI_HeroProfileGroup ShowPlayerProfileGroupUI(bool isVertical = false)
-    {
-        string name = isVertical ? nameof(UI_HeroProfileGroup)+"_Vertical" : nameof(UI_HeroProfileGroup) + "_Horizontal";
-        GameObject go = Managers.ResourceMng.Instantiate($"UI/SceneUI/{name}");
-        go.transform.SetParent(Root.transform);
-
-        return go.GetComponentInChildren<UI_HeroProfileGroup>();
     }
     
     // T 타입의 UI 컴포넌트를 반환

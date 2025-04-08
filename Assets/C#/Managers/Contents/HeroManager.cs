@@ -32,7 +32,6 @@ public class HeroManager
 
                     // 저장된 무기 장착
                     int weaponDataId = _heroStorage.GetEquippedWeapon(heroInstanceId);
-                    Debug.Log(heroInstanceId + " " + weaponDataId);
                     if (weaponDataId != -1)
                         hero.EquipWeapon(weaponDataId);
 

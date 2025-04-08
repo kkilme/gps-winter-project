@@ -768,7 +768,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: -20
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!1 &3873356422873161666
 GameObject:
@@ -1227,7 +1227,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!1 &3873356423416054547
 GameObject:
@@ -1375,7 +1375,6 @@ GameObject:
   - component: {fileID: 3873356423505252957}
   - component: {fileID: 3873356423505252944}
   - component: {fileID: 3873356423505252947}
-  - component: {fileID: 3873356423505252946}
   - component: {fileID: 4033977278631551520}
   m_Layer: 5
   m_Name: Frame_Creature_Image
@@ -1444,21 +1443,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3873356423505252946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3873356423505252956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.15294118}
-  m_EffectDistance: {x: 8, y: -8}
-  m_UseGraphicAlpha: 1
 --- !u!223 &4033977278631551520
 Canvas:
   m_ObjectHideFlags: 0
@@ -1477,8 +1461,8 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 20
+  m_SortingLayerID: -1644739335
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!1 &3873356423587247671
 GameObject:
@@ -2445,7 +2429,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: -10
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!1 &3873356424430273636
 GameObject:
@@ -2957,7 +2941,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &3970654126100789655
 GameObject:

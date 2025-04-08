@@ -105,4 +105,14 @@ public static class GlobalUtility
 
         return transform.transform;
     }
+
+    // UI의 하이어아키상에 다른 Canvas를 가지고 overrideSorting을 하는 오브젝트가 있는 경우 제대로 Sorting이 되지 않는 버그가 있음.
+    // GameObject를 비활성화 후 다시 활성화하여 UI를 sorting을 강제로 갱신
+    // WaitForEndOfFrame를 통해 렌더링이 끝난 후 UI를 갱신함
+    public static IEnumerator FixUISorting(GameObject ui)
+    {
+        yield return new WaitForEndOfFrame();
+        ui.SetActive(false);
+        ui.SetActive(true);
+    }
 }
