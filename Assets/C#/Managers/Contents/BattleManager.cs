@@ -246,6 +246,7 @@ public class BattleManager
 
     public void FinishBattle(BattleResultType battleResult)
     {
+        Managers.InputMng.Clear();
         UI.OnBattleEnd(battleResult);
     }
 
@@ -257,10 +258,5 @@ public class BattleManager
             loot.Add(monster.GetLoot());
         }
         return loot;
-    }
-
-    public void UnloadBattleScene()
-    {
-        Debug.Log("Battle Scene Unload Start");
     }
 }

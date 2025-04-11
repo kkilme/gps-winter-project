@@ -20,7 +20,7 @@ public static class DamageTextFactory
 
     public static void CreateDamageText(Creature creature, int amount, DamageTextType type)
     {
-        var damageText = Managers.UIMng.MakeWorldSpaceUI<UI_DamageText>(Managers.UIMng.Root.transform);
+        var damageText = Managers.UIMng.MakeWorldSpaceUI<UI_DamageText>();
         damageText.transform.position = creature.transform.position;
         damageText.transform.rotation = Quaternion.identity;
 

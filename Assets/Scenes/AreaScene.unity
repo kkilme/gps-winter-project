@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &110198594
 AudioListener:
   m_ObjectHideFlags: 0
@@ -531,7 +531,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d0953b6e8045a479b21483b97eae44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapOriginPosition: {x: 0, y: 0, z: 0}
   _dataset:
     _serializedList:
     - Key: 0

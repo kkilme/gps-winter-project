@@ -30,7 +30,7 @@ public class BattleScene : BaseScene
             // TODO: for test
             // BattleScene에서 시작하여 플레이 테스트 시에만 실행
             Managers.HeroMng.AddHeroesOnTest();
-            Managers.HeroMng.SpawnHeroes();
+            Managers.HeroMng.SpawnHeroParty();
             InitBattle(GlobalValues.MONSTERSQUAD_SQUAD1_ID);
         } else
         {

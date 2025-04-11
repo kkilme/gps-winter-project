@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-// Battle의 턴 시스템 관리
+// 전투의 턴 시스템 관리
 public class TurnSystem
 {
     public Creature CurrentTurnCreature { get; private set; }
@@ -24,8 +21,8 @@ public class TurnSystem
     {
         TurnCount++;
         var current = CurrentTurnCreature;
-        if(current == Turns[0]) // 현재 턴인 Creature가 이번 턴에 전투에서 이탈한 경우, 실행하지 않음
-        {   
+        if (current == Turns[0]) // 현재 턴인 Creature가 이번 턴에 전투에서 이탈한 경우, 실행하지 않음
+        {
             Turns.RemoveAt(0);
             Turns.Add(current);
         }

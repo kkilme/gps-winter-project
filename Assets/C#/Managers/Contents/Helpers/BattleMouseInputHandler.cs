@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// 전투에서 마우스 입력에 따른 로직 관리
 public class BattleMouseInputHandler
 {
     public BattleGridCell CurrentMouseOverCell { get; private set; } // 현재 마우스를 올리고 있는 Cell

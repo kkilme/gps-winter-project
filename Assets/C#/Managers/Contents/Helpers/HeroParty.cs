@@ -13,6 +13,9 @@ public class HeroParty
     private Dictionary<int, Vector2Int> _battlePositions = new(); // key: heroInstanceId, value: Battle에서 배치되는 위치(col, row). 현재 파티에 포함되어 있지 않은 영웅의 위치 정보도 저장되어있음. 
     private Dictionary<int, Vector2Int> _battlePositionsCache = new(); // key: heroInstanceId, value: 좌표. 현재 파티에 포함되어 있는 영웅의 battlePosition만 저장되는 딕셔너리. - 최대 Length 4
 
+    /// <summary>
+    /// 파티에 영웅(Id) 추가. 최대 인원 초과 시 추가하지 못함.
+    /// </summary>
     public void AddHero(int id)
     {
         if(HeroIds.Count >= GlobalValues.MAX_HERO_COUNT)
@@ -23,8 +26,15 @@ public class HeroParty
         HeroIds.Add(id);
     }
 
+    /// <summary>
+    /// 실제 게임에서 사용될 Hero 객체를 딕셔너리에 추가.
+    /// </summary>
     public void AddRuntimeHero(int id, Hero hero)
     {
+        if(HeroesDict.ContainsKey(id) || Heroes.Contains(hero))
+        {
+            return;
+        }
         Heroes.Add(hero);
         HeroesDict.Add(id, hero);
     }

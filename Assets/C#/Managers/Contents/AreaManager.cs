@@ -48,7 +48,6 @@ public class AreaManager
     #region Init
     public void Init(AreaMap map)
     {
-        AreaState = AreaState.Idle;
         _map = map;
         _light = GameObject.FindGameObjectWithTag("AreaLight");
 
@@ -61,6 +60,7 @@ public class AreaManager
         InitCamera();
 
         _map.RevealFogOfWar(_currentPlayerPosition, 3); // 시작 지점에서 범위 3 반경의 전장의 안개 제거
+        AreaState = AreaState.Idle;
 
         Managers.InputMng.MouseAction -= HandleMouseInput;
         Managers.InputMng.MouseAction += HandleMouseInput;
@@ -71,7 +71,7 @@ public class AreaManager
     /// </summary>
     private void InitHeroes()
     {
-        Managers.HeroMng.SpawnHeroes();
+        Managers.HeroMng.SpawnHeroParty();
         var heroes = _party.Heroes;
         for (int i = 0; i < heroes.Count; i++)
         {
@@ -159,16 +159,17 @@ public class AreaManager
         _cameraController.gameObject.SetActive(false);
     }
 
-    public void OnBattleSceneUnloadFinish()
+    public void OnBattleSceneUnloadFinish(BattleResultType battleResult)
     {
         // TODO - 배틀 씬에서 에어리어 씬으로 넘어올 시 배틀 씬 UI 삭제하는 코드. 구조적으로 더 좋은 코드가 가능해 보임.
-        GameObject.Destroy(GameObject.FindObjectOfType<UI_BattleScene>().gameObject);
+        //GameObject.Destroy(GameObject.FindObjectOfType<UI_BattleScene>().gameObject);
 
         _cameraController.gameObject.SetActive(true);
         _cameraController.GetComponent<AreaCameraController>().Freeze = false;
         _light.SetActive(true);
         OnTileEventFinish();
         AreaState = AreaState.Idle;
+        Managers.InputMng.MouseAction -= HandleMouseInput;
         Managers.InputMng.MouseAction += HandleMouseInput;
     }
 

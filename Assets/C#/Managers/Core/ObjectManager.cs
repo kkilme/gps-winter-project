@@ -6,8 +6,8 @@ using Object = UnityEngine.Object;
 public class ObjectManager
 {
     public bool Initialized { get; protected set; }
-    public Dictionary<int, BaseSkill> Skills { get; protected set; } // 스킬 객체를 미리 생성해놓고 계속해서 사용
-    private Transform _monsterRoot => GlobalUtility.FindOrCreateTransform("@AliveMonsters");
+    public Dictionary<int, BaseSkill> Skills { get; protected set; } // 스킬 객체를 미리 생성해놓고 반복해서 사용
+    private Transform _monsterRoot => GlobalUtility.FindOrCreateTransform("@Monsters");
 
     public void Init()
     {

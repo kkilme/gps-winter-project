@@ -35,6 +35,10 @@ public class UI_BattleDefeat : UI_Base
         {
             button.gameObject.SetActive(true);
             button.GetComponent<RectTransform>().DOScale(new Vector3(.5f, .5f, .5f), 0.5f).From().SetEase(Ease.OutBack);
+            button.onClick.AddListener(() =>
+            {
+                CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.EndBattleScene(BattleResultType.Defeat));
+            });
         }));
 
         return seq.Play();

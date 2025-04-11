@@ -11,8 +11,6 @@ public class HeroStorage
     /// <summary>
     /// 새로운 영웅 추가
     /// </summary>
-    /// <param name="heroDataId"></param>
-    /// <returns></returns>
     public int AddHero(int heroDataId)
     {
         int heroInstanceId = _nextHeroInstanceId++;

@@ -12,8 +12,10 @@ public class HeroManager
     /// <summary>
     /// 현재 파티에 편성된 영웅들을 게임오브젝트로 스폰. 오브젝트의 Transform 설정은 별도로 해주어야 함에 주의.
     /// </summary>
-    public void SpawnHeroes()
+    public void SpawnHeroParty()
     {
+        HeroParty.Heroes.Clear();
+        HeroParty.HeroesDict.Clear();
         foreach (int heroInstanceId in HeroParty.HeroIds)
         {
             if (_heroStorage.SavedHeroDatas.ContainsKey(heroInstanceId))

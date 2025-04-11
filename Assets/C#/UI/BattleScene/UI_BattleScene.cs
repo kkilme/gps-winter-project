@@ -133,7 +133,7 @@ public class UI_BattleScene : UI_Scene
 
             if (itemCount == 0)
             {
-                _battleManager.UnloadBattleScene();
+                CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.EndBattleScene(BattleResultType.Victory));
             } 
             else
             {

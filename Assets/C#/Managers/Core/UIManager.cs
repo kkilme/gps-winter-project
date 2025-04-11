@@ -44,6 +44,21 @@ public class UIManager
         }
     }
 
+    private void SetUIParent(GameObject ui, Transform parent, bool forceRootParent = true)
+    {
+        if (parent != null)
+        {
+            var rectTransform = ui.GetComponent<RectTransform>();
+            Vector3 localScale = rectTransform.localScale;
+            ui.transform.SetParent(parent);
+            rectTransform.localScale = localScale;
+        }
+        else if(forceRootParent)
+        {
+            ui.transform.SetParent(Root.transform);
+        }
+    }
+
     // 이름이 name인 SceneUI를 생성한 후 T컴포넌트로 반환
     public T ShowSceneUI<T>(string name = null) where T : UI_Scene
     {
@@ -54,7 +69,8 @@ public class UIManager
         T sceneUI = GlobalUtility.GetOrAddComponent<T>(go);
         SceneUI = sceneUI;
 
-        go.transform.SetParent(Root.transform);
+        SetUIParent(go, Root.transform);
+
         return sceneUI;
     }
 
@@ -68,22 +84,21 @@ public class UIManager
         T popupUI = GlobalUtility.GetOrAddComponent<T>(go);
         PopupStack.Push(popupUI);
         
-        go.transform.SetParent(Root.transform);
+        SetUIParent(go, Root.transform);
         
         return popupUI;
     }
-    
-    // T 타입의 UI 컴포넌트를 반환
-    public T GetUIComponent<T>() where T: UI_Base
+
+    public T MakeGeneralUI<T>(Transform parent = null, string name = null) where T : UI_Base
     {
-        if (SceneUI == null)
-        {
-            Debug.Log("SceneUI is null!"); 
-            return null;
-        }
-         
-        T ui = GlobalUtility.FindChild<T>(SceneUI.gameObject, recursive: true);
-        return ui;
+        if (string.IsNullOrEmpty(name))
+            name = typeof(T).Name;
+
+        GameObject go = Managers.ResourceMng.Instantiate($"UI/GeneralUI/{name}");
+        
+        SetUIParent(go, parent, false);
+
+        return go.GetOrAddComponent<T>();
     }
 
     // 이름이 name인 SubItemUI를 생성한 후 T컴포넌트로 반환
@@ -93,15 +108,9 @@ public class UIManager
             name = typeof(T).Name;
 
         GameObject go = Managers.ResourceMng.Instantiate($"UI/SubItemUI/{name}");
-        RectTransform   rectTransform = go.GetComponent<RectTransform>();
-        if (parent != null)
-        {
-            // 부모 설정 후 스케일 변하는거 방지
-            Vector3 localScale = rectTransform.localScale;
-            go.transform.SetParent(parent);
-            rectTransform.localScale = localScale;
-        }
         
+        SetUIParent(go, parent);
+
         return go.GetOrAddComponent<T>();
     }
 
@@ -112,8 +121,8 @@ public class UIManager
             name = typeof(T).Name;
 
         GameObject go = Managers.ResourceMng.Instantiate($"UI/WorldSpaceUI/{name}");
-        if (parent != null)
-            go.transform.SetParent(parent);
+
+        SetUIParent(go, parent);
 
         Canvas canvas = go.GetOrAddComponent<Canvas>();
         canvas.renderMode = RenderMode.WorldSpace;

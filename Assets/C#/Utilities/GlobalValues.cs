@@ -36,6 +36,7 @@ public static class GlobalValues
 
     public const string BATTLE_SCENE_NAME = "BattleScene";
     public const string AREA_SCENE_NAME = "AreaScene";
+    public const string TOWN_SCENE_NAME = "TownScene";
 
     public const string HERO_PREFAB_PATH_PREFIX = "Heroes/";
     public const string MONSTER_PREFAB_PATH_PREFIX = "Monsters/";
