@@ -17,6 +17,7 @@ public class UI_BattleScene : UI_Scene
         UI_MonsterProfileGroup,
         UI_BattleVictory,
         UI_BattleDefeat,
+        UI_BattleRetreat
     }
 
     enum Images
@@ -109,7 +110,8 @@ public class UI_BattleScene : UI_Scene
                 case BattleResultType.Defeat:
                     Get<UI_Base>(SubItemUI.UI_BattleDefeat).Show();
                     break;
-                case BattleResultType.Flee:
+                case BattleResultType.Retreat:
+                    Get<UI_Base>(SubItemUI.UI_BattleRetreat).Show();
                     break;
             }
         });

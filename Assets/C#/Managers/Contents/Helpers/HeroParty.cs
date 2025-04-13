@@ -93,6 +93,14 @@ public class HeroParty
         return Heroes.Where(hero => !hero.IsDead()).ToList();
     }
 
+    public bool IsAllDead()
+    {
+        bool flag = true;
+        foreach(var hero in Heroes) flag &= hero.IsDead();
+
+        return flag;
+    }
+
     /// <summary>
     /// Area에서 특정 위치로 이동하는 시퀀스를 반환.
     /// </summary>

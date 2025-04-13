@@ -45,7 +45,7 @@ public class HeroStat : CreatureStat
                 return;
         }
 
-        StatChangeAction?.Invoke(this);
+        OnStatChanged?.Invoke(this);
     }
 
     // BaseStat만 남기고 이외 스탯 초기화
@@ -67,7 +67,7 @@ public class HeroStat : CreatureStat
         EquipmentStat.Intelligence += equipment.Intelligence;
         EquipmentStat.Dexterity += equipment.Dexterity;
 
-        StatChangeAction?.Invoke(this);
+        OnStatChanged?.Invoke(this);
     }
 
     public void DetachEquipment(EquipmentData equipment)
@@ -81,6 +81,6 @@ public class HeroStat : CreatureStat
         EquipmentStat.Intelligence -= equipment.Intelligence;
         EquipmentStat.Dexterity -= equipment.Dexterity;
 
-        StatChangeAction?.Invoke(this);
+        OnStatChanged?.Invoke(this);
     }
 }

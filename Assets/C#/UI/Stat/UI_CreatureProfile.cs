@@ -56,8 +56,8 @@ public class UI_CreatureProfile : UI_Base
         _creature = creature;
 
         var stat = creature.CreatureStat;
-        stat.StatChangeAction -= UpdateStatProfile;
-        stat.StatChangeAction += UpdateStatProfile;
+        stat.OnStatChanged -= UpdateStatProfile;
+        stat.OnStatChanged += UpdateStatProfile;
 
         GetText(Texts.Text_Name).text = creature.CreatureData.Name;
         Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{creature.CreatureData.Name}_Front");

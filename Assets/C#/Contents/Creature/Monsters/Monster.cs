@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 
@@ -20,10 +21,22 @@ public abstract class Monster : Creature
         return transform.DOLookAt(Managers.BattleMng.GridSystem.HeroGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration).SetEase(Ease.OutQuad);
     }
 
+    public override IEnumerator OnDead()
+    {
+        Animator.SetBool(GlobalValues.ANIMATION_PARAM_DEAD, true);
+        if (Managers.SceneMng.CurrentScene.SceneType == SceneType.BattleScene)
+        {
+            Managers.BattleMng.RemoveMonster(this);
+        }
+        yield return new WaitForSeconds(5f);
+
+        Managers.ResourceMng.Destroy(gameObject);
+    }
+
     public Loot GetLoot()
     {
         Loot loot = new Loot();
-        loot.Gold = (uint)Random.Range(MonsterData.MinGold, MonsterData.MaxGold + 1);
+        loot.Gold = Random.Range(MonsterData.MinGold, MonsterData.MaxGold + 1);
         foreach (ItemLootData lootData in MonsterData.LootTable)
         {
             if (Random.Range(0, 101) <= lootData.DropChance)

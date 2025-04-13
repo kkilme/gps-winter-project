@@ -68,7 +68,7 @@ public enum BattleResultType
 {
     Victory,
     Defeat,
-    Flee,
+    Retreat,
 }
 
 public enum LootActionType

@@ -10,7 +10,7 @@ public class CreatureStat
     public StatLayer DebuffStat { get; protected set; }
 
 
-    public Action<CreatureStat> StatChangeAction;
+    public Action<CreatureStat> OnStatChanged;
 
 
     private int _currentHp;
@@ -20,7 +20,7 @@ public class CreatureStat
         set
         {
             _currentHp = Mathf.Clamp(value, 0, FinalStat.MaxHp);
-            StatChangeAction?.Invoke(this);
+            OnStatChanged?.Invoke(this);
         }
     }
 

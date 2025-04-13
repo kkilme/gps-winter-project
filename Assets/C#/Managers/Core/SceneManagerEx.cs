@@ -42,8 +42,8 @@ public class SceneManagerEx
 
     // 전투씬 종료 흐름
     // 1. 전투씬 언로드
-    // 2-1. 패배 시: Area 씬 언로드, Town 씬 로드
-    // 2-2. 승리 또는 도망 시: Area 씬 활성화
+    // 2-1. 영웅 모두 사망: Area 씬 언로드, Town 씬 로드
+    // 2-2. 승리 / 도망친 영웅 존재: Area 씬 활성화
     public IEnumerator EndBattleScene(BattleResultType result)
     {
         Debug.Log($"[SceneManagerEx] Battle Scene End Start, Result: {result}");
@@ -74,6 +74,7 @@ public class SceneManagerEx
             if(!SceneManager.GetSceneByName(GlobalValues.AREA_SCENE_NAME).isLoaded)
             {
                 // AreaScene이 로드되지 않은 경우: 테스트용으로 BattleScene에서 시작 한 경우임
+                // 임의로 Area 생성
                 Quest quest = new Quest(Managers.DataMng.QuestDataDict.Values.ToList()[0]);
                 yield return SceneManager.LoadSceneAsync(GlobalValues.AREA_SCENE_NAME);
                 GetCurrentScene<AreaScene>().InitArea(AreaName.Forest, quest);

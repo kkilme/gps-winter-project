@@ -13,7 +13,7 @@
       "DataId": 401001,
       "Type": "SkillData",
       "Name": "Flee",
-      "Description": "Run away from the battle.\nRequires perfect coin toss.",
+      "Description": "Retreat from the battle.\nRequires perfect coin toss.",
       "CoinCount": 2,
       "UsingStat": "Dexterity",
       "IconPath": "Icon_Run"

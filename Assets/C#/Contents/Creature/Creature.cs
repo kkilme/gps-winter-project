@@ -39,23 +39,13 @@ public abstract class Creature : MonoBehaviour
         }
     }
     
-    public IEnumerator OnDead()
-    {
-        Animator.SetBool(GlobalValues.ANIMATION_PARAM_DEAD, true);
-        if(Managers.SceneMng.CurrentScene.SceneType == SceneType.BattleScene)
-        {
-            Managers.BattleMng.RemoveCreature(this);
-        }
-        yield return new WaitForSeconds(5f);
-
-        Managers.ResourceMng.Destroy(gameObject);
-    }
-
     public void TakeHeal(int heal)
     {
         CreatureStat.TakeHeal(heal);
         DamageTextFactory.CreateDamageText(this, heal, DamageTextType.Heal);
     }
+
+    public abstract IEnumerator OnDead();
 
     public bool IsDead()
     {

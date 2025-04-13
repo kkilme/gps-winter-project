@@ -37,7 +37,6 @@ public class Flee : BaseSkill
 
         _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, false);
 
-        Managers.BattleMng.UI.HeroProfileGroupUI.OnFlee(Executor as Hero);
-        Managers.BattleMng.RemoveCreature(Executor);
+        Managers.BattleMng.RemoveHero(Executor as Hero, true);
     }
 }

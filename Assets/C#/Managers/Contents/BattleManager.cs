@@ -50,7 +50,7 @@ public class BattleManager
 
     #endregion
 
-    public void Init(int squadId)
+    public void Init(int monsterSquadId)
     {
         BattleState = BattleState.Starting;
         TurnSystem = new TurnSystem();
@@ -68,10 +68,10 @@ public class BattleManager
         // MouseInputHandler 초기화 - 카메라가 배틀 필드에 포함되어 있기 때문에 반드시 배틀 필드 생성 이후에 해야함.
         MouseInputHandler.Init();
 
-        // Creature 배치
+        // GridSystem 초기화 및 Creature 배치
         GridSystem.Init();
         GridSystem.PlaceHero(AliveHeroes);
-        GridSystem.PlaceMonster(squadId);
+        GridSystem.PlaceMonster(monsterSquadId);
 
         // TurnSystem 초기화
         TurnSystem.Init();
@@ -166,7 +166,9 @@ public class BattleManager
         CoroutineRunner.Instance.StartCoroutine(NextTurn());
     }
 
-    // 몬스터 턴 진행 로직
+    /// <summary>
+    /// 몬스터 턴 진행 로직
+    /// </summary>
     public IEnumerator ProceedMonsterTurn()
     {
         Monster monster = CurrentTurnCreature as Monster;
@@ -184,6 +186,10 @@ public class BattleManager
         CoroutineRunner.Instance.StartCoroutine(CurrentAction.Execute());
     }
 
+    /// <summary>
+    /// 전투 종료 조건 확인 및 다음 턴으로 진행
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator NextTurn()
     {
         UI.OnTurnEnd();
@@ -205,28 +211,39 @@ public class BattleManager
         }
     }
 
+    /// <summary>
+    /// 전투에서 creature 제외
+    /// </summary>
+    /// <param name="creature"></param>
     public void RemoveCreature(Creature creature)
     {
         creature.StandingCell.RemoveCreature();
         TurnSystem.Remove(creature);
         UI.TurnstateUI.RemoveTurnFrame(creature);
 
-        if (creature is Hero)
-        {
-            UI.HeroProfileGroupUI.OnDead(creature);
-            AliveHeroes.Remove(creature as Hero);
-        }
-        else if (creature is Monster)
-        {
-            UI.MonsterProfileGroupUI.OnDead(creature);
-            AliveMonsters.Remove(creature as Monster);
-        }
-
         // 현재 턴인 Creature가 이번 턴에 전투에서 이탈한 경우, 다음 턴으로 넘어감
         if (creature == CurrentTurnCreature)
         {
             CoroutineRunner.Instance.StartCoroutine(NextTurn());
         }
+    }
+
+    public void RemoveHero(Hero hero, bool isFlee)
+    {
+        if (isFlee) UI.HeroProfileGroupUI.OnFlee(hero);
+        else UI.HeroProfileGroupUI.OnDead(hero);
+
+        AliveHeroes.Remove(hero);
+
+        RemoveCreature(hero);
+    }
+
+    public void RemoveMonster(Monster monster)
+    {
+        UI.MonsterProfileGroupUI.OnDead(monster);
+        AliveMonsters.Remove(monster);
+
+        RemoveCreature(monster);
     }
 
     public bool CheckBattleFinished()
@@ -236,9 +253,14 @@ public class BattleManager
             FinishBattle(BattleResultType.Victory);
             return true;
         }
-        if (AliveHeroes.Count <= 0)
+        if (_party.IsAllDead())
         {
             FinishBattle(BattleResultType.Defeat);
+            return true;
+        }
+        if (AliveHeroes.Count <= 0)
+        {
+            FinishBattle(BattleResultType.Retreat);
             return true;
         }
         return false;

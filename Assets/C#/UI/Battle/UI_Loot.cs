@@ -15,7 +15,7 @@ public class UI_Loot : UI_Popup
 
     private Item _loot;
     private bool _isGold;
-    private uint _quantity;
+    private int _quantity;
 
     enum RectTransforms
     {
@@ -62,7 +62,7 @@ public class UI_Loot : UI_Popup
     }
 
     // 골드 전리품일 시
-    public void Init(uint goldAmount)
+    public void Init(int goldAmount)
     {
         _quantity = goldAmount;
         _isGold = true;

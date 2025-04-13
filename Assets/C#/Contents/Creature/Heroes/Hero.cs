@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,6 +47,17 @@ public class Hero : Creature
         return transform.DOLookAt(Managers.BattleMng.GridSystem.MonsterGrid[StandingCell.Row, 2 - StandingCell.Column].transform.position, duration).SetEase(Ease.OutQuad);
     }
 
+    public override IEnumerator OnDead()
+    {
+        Animator.SetBool(GlobalValues.ANIMATION_PARAM_DEAD, true);
+        if (Managers.SceneMng.CurrentScene.SceneType == SceneType.BattleScene)
+        {
+            Managers.BattleMng.RemoveHero(this, false);
+        }
+        yield return new WaitForSeconds(5f);
+
+        Managers.ResourceMng.Destroy(gameObject);
+    }
     #region Weapon
 
     private void ChangeAnimator()
