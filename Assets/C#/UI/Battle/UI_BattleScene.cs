@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,7 +34,7 @@ public class UI_BattleScene : UI_Scene
     public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
     public UI_MonsterProfileGroup MonsterProfileGroupUI { get; protected set; }
 
-    private BattleManager _battleManager;
+    private BattleManager _battleManager => Managers.BattleMng;
     private Image _fadeBG;
 
     public override void Init()
@@ -41,15 +42,14 @@ public class UI_BattleScene : UI_Scene
 		Bind<UI_Base>(typeof(SubItemUI));
         Bind<Image>(typeof(Images));
 
-        ActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetComponent<UI_BattleActionPanel>();
-        CoinTossDisplay = Get<UI_Base>(SubItemUI.UI_CoinTossDisplay).GetComponent<UI_CoinTossDisplay>();
-        TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetComponent<UI_TurnState>();
-        PlacementPhaseUI = Get<UI_Base>(SubItemUI.UI_PlacementPhase).GetComponent<UI_PlacementPhase>();
-        ChooseTargetUI = Get<UI_Base>(SubItemUI.UI_ChooseTarget).GetComponent<UI_ChooseTarget>();
-        HeroProfileGroupUI = Get<UI_Base>(SubItemUI.UI_HeroProfileGroup_Vertical).GetComponent<UI_HeroProfileGroup>();
-        MonsterProfileGroupUI = Get<UI_Base>(SubItemUI.UI_MonsterProfileGroup).GetComponent<UI_MonsterProfileGroup>();
+        ActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
+        CoinTossDisplay = Get<UI_Base>(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
+        TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
+        PlacementPhaseUI = Get<UI_Base>(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
+        ChooseTargetUI = Get<UI_Base>(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget>();
+        HeroProfileGroupUI = Get<UI_Base>(SubItemUI.UI_HeroProfileGroup_Vertical).GetOrAddComponent<UI_HeroProfileGroup>();
+        MonsterProfileGroupUI = Get<UI_Base>(SubItemUI.UI_MonsterProfileGroup).GetOrAddComponent<UI_MonsterProfileGroup>();
 
-        _battleManager = Managers.BattleMng;
         _fadeBG = GetImage(Images.FadeBG);
     }
 

@@ -8,7 +8,7 @@ public class AreaManager
     public AreaInputHandler AreaInputHandler { get; private set; }
     public AreaCollapseSystem CollapseSystem { get; private set; }
     public AreaCameraController CameraController { get; private set; }
-    public Vector3 CurrentPlayerPosition { get; set; }// 현재 플레이어 WorldPosition
+    public Vector3 CurrentPlayerPosition { get; set; } // 현재 플레이어 WorldPosition
     public AreaName AreaName { get; set; }
 
     private AreaState _areaState;
