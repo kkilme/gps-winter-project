@@ -7,7 +7,7 @@ public class BattleGridSystem
     public BattleGridCell[,] HeroGrid { get; protected set; } = new BattleGridCell[GlobalValues.BATTLEGRID_ROW_COUNT, GlobalValues.BATTLEGRID_COL_COUNT];
     public BattleGridCell[,] MonsterGrid { get; protected set; } = new BattleGridCell[GlobalValues.BATTLEGRID_ROW_COUNT, GlobalValues.BATTLEGRID_COL_COUNT];
 
-    private BattleManager _battleManager;
+    private BattleManager _battleManager => Managers.BattleMng;
 
     public void Init()
     {
@@ -32,7 +32,6 @@ public class BattleGridSystem
                 MonsterGrid[row, col].Init(row, col, GridSide.MonsterSide);
             }
         }
-        _battleManager = Managers.BattleMng;
     }
 
     public void PlaceHero(List<Hero> heroes)

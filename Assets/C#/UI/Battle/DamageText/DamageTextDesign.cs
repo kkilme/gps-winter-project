@@ -22,12 +22,12 @@ public class PhysicalDamageTextDesign : DamageTextDesign
     public PhysicalDamageTextDesign()
     {
         if( _colorGradient == null )
-            _colorGradient = Managers.ResourceMng.Load<TMP_ColorGradient>("Textures/TMP_ColorGradients/ColorGradient_PhysicalDamage");
+            _colorGradient = Managers.ResourceMng.Load<TMP_ColorGradient>(GlobalValues.COLORGRADIENT_PATH_PREFIX + "PhysicalDamage");
     }
 
     protected override string GetText(int amount) => amount == 0 ? "Blocked" : $"-{amount}";
 
-    protected override Color GetTextColor() => GlobalValues.PHYSICAL_UI_ELEMENT_BASE_COLOR;
+    protected override Color GetTextColor() => GlobalValues.PHYSICAL_UI_ELEMENT_COLOR;
 }
 
 public class MagicDamageTextDesign : DamageTextDesign
@@ -35,12 +35,12 @@ public class MagicDamageTextDesign : DamageTextDesign
     public MagicDamageTextDesign()
     {
         if (_colorGradient == null)
-            _colorGradient = Managers.ResourceMng.Load<TMP_ColorGradient>("Textures/TMP_ColorGradients/ColorGradient_MagicDamage");
+            _colorGradient = Managers.ResourceMng.Load<TMP_ColorGradient>(GlobalValues.COLORGRADIENT_PATH_PREFIX + "MagicDamage");
     }
 
     protected override string GetText(int amount) => amount == 0 ? "Blocked" : $"-{amount}";
 
-    protected override Color GetTextColor() => GlobalValues.MAGIC_UI_ELEMENT_BASE_COLOR;
+    protected override Color GetTextColor() => GlobalValues.MAGIC_UI_ELEMENT_COLOR;
 }
 
 public class HealTextDesign : DamageTextDesign
@@ -48,10 +48,10 @@ public class HealTextDesign : DamageTextDesign
     public HealTextDesign()
     {
         if (_colorGradient == null)
-            _colorGradient = Managers.ResourceMng.Load<TMP_ColorGradient>("Textures/TMP_ColorGradients/ColorGradient_Heal");
+            _colorGradient = Managers.ResourceMng.Load<TMP_ColorGradient>(GlobalValues.COLORGRADIENT_PATH_PREFIX + "Heal");
     }
 
     protected override string GetText(int amount) => $"+{amount}";
 
-    protected override Color GetTextColor() => GlobalValues.HEAL_ELEMENT_BASE_COLOR;
+    protected override Color GetTextColor() => GlobalValues.HEAL_UI_ELEMENT_COLOR;
 }

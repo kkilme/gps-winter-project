@@ -56,7 +56,7 @@ public enum AreaTileType
     Battle,
     Encounter,
     Boss,
-    Destroyed
+    Collapsed
 }
 
 public enum QuestRewardType
@@ -152,7 +152,7 @@ public enum BattleState
     Idle,
     ActionTargetSelecting,
     ActionProcessing,
-    Ending,
+    Finishing,
 }
 public enum CreatureBattleState
 {

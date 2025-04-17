@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54d21f6ece3b46479f0c328f8c6007e0, type: 3}
-  m_Name: ColorGradient_Heal
+  m_Name: PhysicalDamage
   m_EditorClassIdentifier: 
   colorMode: 3
-  topLeft: {r: 0.06943973, g: 0.5999999, b: 0, a: 1}
+  topLeft: {r: 0.059911728, g: 0, b: 1, a: 1}
   topRight: {r: 1, g: 1, b: 1, a: 1}
   bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-  bottomRight: {r: 0.07058824, g: 0.6, b: 0, a: 1}
+  bottomRight: {r: 0.058823533, g: 0, b: 1, a: 1}

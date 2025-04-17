@@ -11,9 +11,10 @@ public class BattleManager
     public UI_BattleScene UI { get; private set; }
     public TurnSystem TurnSystem { get; private set; }
     public BattleGridSystem GridSystem { get; private set; }
-    public BattleMouseInputHandler MouseInputHandler { get; private set; }
+    public BattleInputHandler BattleInputHandler { get; private set; }
+
     private BaseAction _currentAction;
-    public BaseAction CurrentAction
+    public BaseAction CurrentAction // 현재 선택된 Action
     {
         get => _currentAction;
         set
@@ -55,7 +56,7 @@ public class BattleManager
         BattleState = BattleState.Starting;
         TurnSystem = new TurnSystem();
         GridSystem = new BattleGridSystem();
-        MouseInputHandler = new BattleMouseInputHandler();
+        BattleInputHandler = new BattleInputHandler();
         UI = Managers.UIMng.ShowSceneUI<UI_BattleScene>();
         AliveHeroes = new(_party.GetAliveHeroes());
         AliveMonsters = new();
@@ -65,8 +66,8 @@ public class BattleManager
         GameObject battleField = Managers.ResourceMng.Instantiate($"Battle/Field/{battleFieldname}");
         battleField.transform.position = new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0, GlobalValues.BATTLEFIELD_POS_Z);
 
-        // MouseInputHandler 초기화 - 카메라가 배틀 필드에 포함되어 있기 때문에 반드시 배틀 필드 생성 이후에 해야함.
-        MouseInputHandler.Init();
+        // BattleInputHandler 초기화 - 카메라가 배틀 필드에 포함되어 있기 때문에 반드시 배틀 필드 생성 이후에 해야함.
+        BattleInputHandler.Init();
 
         // GridSystem 초기화 및 Creature 배치
         GridSystem.Init();
@@ -85,10 +86,10 @@ public class BattleManager
     {
         BattleState = BattleState.HeroPlacement;
 
-        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
-        Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnPlacementPhase;
-        Managers.InputMng.PointerOverGameObjectAction -= MouseInputHandler.OnDragEnd;
-        Managers.InputMng.PointerOverGameObjectAction += MouseInputHandler.OnDragEnd;
+        Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnPlacementPhase;
+        Managers.InputMng.MouseAction += BattleInputHandler.HandleMouseOnPlacementPhase;
+        Managers.InputMng.PointerOverGameObjectAction -= BattleInputHandler.OnDragEnd;
+        Managers.InputMng.PointerOverGameObjectAction += BattleInputHandler.OnDragEnd;
 
         UI.OnPlacementPhaseStart();
         CoroutineRunner.Instance.StartCoroutine(GlobalUtility.FixUISorting(UI.gameObject)); // UI의 SortingOrder를 Fix
@@ -99,10 +100,10 @@ public class BattleManager
     {
         BattleState = BattleState.Idle;
 
-        Managers.InputMng.PointerOverGameObjectAction -= MouseInputHandler.OnDragEnd;
-        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnPlacementPhase;
-        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
-        Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
+        Managers.InputMng.PointerOverGameObjectAction -= BattleInputHandler.OnDragEnd;
+        Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnPlacementPhase;
+        Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnBattlePhase;
+        Managers.InputMng.MouseAction += BattleInputHandler.HandleMouseOnBattlePhase;
 
         GridSystem.ResetAllCellColor();
         CurrentTurnCreature.StandingCell.HighlightOutline();
@@ -124,11 +125,12 @@ public class BattleManager
         // 유저가 직접 대상을 선택할 필요가 있는 액션인 경우
         if (action.TargetSelector.NeedTargetSelection)
         {
+            BattleState = BattleState.ActionTargetSelecting;
             UI.ChooseTargetUI.Show();
 
-            Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
-            Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
-            Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnTargetSelect;
+            Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnBattlePhase;
+            Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnTargetSelect;
+            Managers.InputMng.MouseAction += BattleInputHandler.HandleMouseOnTargetSelect;
 
             GridSystem.HighlightTargettableCells(action);
         }
@@ -148,12 +150,13 @@ public class BattleManager
 
     public void UnsetAction()
     {
+        BattleState = BattleState.Idle;
         CurrentAction = null;
         UI.ChooseTargetUI.Hide();
 
-        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnTargetSelect;
-        Managers.InputMng.MouseAction -= MouseInputHandler.HandleMouseOnBattlePhase;
-        Managers.InputMng.MouseAction += MouseInputHandler.HandleMouseOnBattlePhase;
+        Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnTargetSelect;
+        Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnBattlePhase;
+        Managers.InputMng.MouseAction += BattleInputHandler.HandleMouseOnBattlePhase;
 
         GridSystem.ResetAllCellColor();
         CurrentTurnCreature.StandingCell.HighlightOutline();
@@ -182,6 +185,7 @@ public class BattleManager
 
         yield return new WaitForSeconds(1.5f);
 
+        BattleState = BattleState.ActionProcessing;
         // 스킬 실행
         CoroutineRunner.Instance.StartCoroutine(CurrentAction.Execute());
     }

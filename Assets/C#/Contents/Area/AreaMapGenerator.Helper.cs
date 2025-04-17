@@ -5,10 +5,10 @@ using UnityEngine;
 // 맵 생성에 필요한 각종 헬퍼 메소드 및 디버그용 메소드 보유
 public partial class AreaMapGenerator
 {
-    private int _playableFieldZStart => _map.PlayableFieldStart.y; // 플레이 영역이 시작되는 z 좌표
-    private int _playableFieldXStart => _map.PlayableFieldStart.x; // 플레이 영역이 시작되는 x 좌표
-    private Vector2Int _playerStartPosition => _map.PlayerStartPosition; // 플레이어 시작 지점의 Grid 좌표
-    private Vector2Int _bossPosition => _map.BossPosition; // 보스 타일 지점의 Grid 좌표
+    private int _playableFieldZStart => Map.PlayableFieldStart.y; // 플레이 영역이 시작되는 z 좌표
+    private int _playableFieldXStart => Map.PlayableFieldStart.x; // 플레이 영역이 시작되는 x 좌표
+    private Vector2Int _playerStartPosition => Map.PlayerStartPosition; // 플레이어 시작 지점의 Grid 좌표
+    private Vector2Int _bossPosition => Map.BossPosition; // 보스 타일 지점의 Grid 좌표
 
     private string[] _lightCullingMask = new[] { "Player", "AreaLightTarget" };
 
@@ -54,10 +54,10 @@ public partial class AreaMapGenerator
                 return true;
             }
 
-            foreach (Vector2Int neighbor in _map.GetNeighbors(currentNode))
+            foreach (Vector2Int neighbor in Map.GetNeighbors(currentNode))
             {
-                if (_map.TileTypeMap[neighbor.y, neighbor.x] == AreaTileType.OutOfField ||
-                    _map.TileTypeMap[neighbor.y, neighbor.x] == AreaTileType.Obstacle) continue;
+                if (Map.TileTypeMap[neighbor.y, neighbor.x] == AreaTileType.OutOfField ||
+                    Map.TileTypeMap[neighbor.y, neighbor.x] == AreaTileType.Obstacle) continue;
 
                 int distanceToNeighbor = distances[currentNode] + 1;
                 if (!distances.ContainsKey(neighbor) || distanceToNeighbor < distances[neighbor])
@@ -91,11 +91,11 @@ public partial class AreaMapGenerator
     // AreaBaseTile Init. AreaBaseTile의 Start 메소드에서 할 시 제대로 적용이 안 됨.
     private void InitBaseTiles()
     {
-        for (int z = 0; z < _map.BaseTileMap.GetLength(0); z++)
+        for (int z = 0; z < Map.BaseTileMap.GetLength(0); z++)
         {
-            for (int x = 0; x < _map.BaseTileMap.GetLength(1); x++)
+            for (int x = 0; x < Map.BaseTileMap.GetLength(1); x++)
             {
-                _map.BaseTileMap[z, x].Init();
+                Map.BaseTileMap[z, x].Init();
             }
         }
     }
@@ -108,7 +108,7 @@ public partial class AreaMapGenerator
         {
             for (int x = 0; x < _data.MapWidth; x++)
             {
-                if (_map.TileTypeMap[z, x] == AreaTileType.Empty)
+                if (Map.TileTypeMap[z, x] == AreaTileType.Empty)
                 {
                     emptyPositions.Add(new Vector2Int(x, z));
                 }
@@ -158,15 +158,15 @@ public partial class AreaMapGenerator
 
         ClearDebugObjects();
 
-        for (int z = 0; z < _map.TileTypeMap.GetLength(0); z++)
+        for (int z = 0; z < Map.TileTypeMap.GetLength(0); z++)
         {
-            for (int x = 0; x < _map.TileTypeMap.GetLength(1); x++)
+            for (int x = 0; x < Map.TileTypeMap.GetLength(1); x++)
             {
-                GameObject canvas = Instantiate(_infoText, _map.GridToWorldPosition(x, z, 2), Quaternion.Euler(60, 0, 0), _debugObjectParent);
+                GameObject canvas = Instantiate(_infoText, Map.GridToWorldPosition(x, z, 2), Quaternion.Euler(60, 0, 0), _debugObjectParent);
 
                 TextMeshProUGUI text = canvas.GetComponentInChildren<TextMeshProUGUI>();
-                text.SetText(_map.TileTypeMap[z, x].ToString());
-                switch (_map.TileTypeMap[z, x])
+                text.SetText(Map.TileTypeMap[z, x].ToString());
+                switch (Map.TileTypeMap[z, x])
                 {
                     case AreaTileType.Battle:
                         text.color = Color.red;
@@ -201,11 +201,11 @@ public partial class AreaMapGenerator
 
         ClearDebugObjects();
 
-        for (int z = 0; z < _map.TileTypeMap.GetLength(0); z++)
+        for (int z = 0; z < Map.TileTypeMap.GetLength(0); z++)
         {
-            for (int x = 0; x < _map.TileTypeMap.GetLength(1); x++)
+            for (int x = 0; x < Map.TileTypeMap.GetLength(1); x++)
             {
-                GameObject canvas = Instantiate(_infoText, _map.GridToWorldPosition(x, z, 2), Quaternion.Euler(60, 0, 0), _debugObjectParent);
+                GameObject canvas = Instantiate(_infoText, Map.GridToWorldPosition(x, z, 2), Quaternion.Euler(60, 0, 0), _debugObjectParent);
                 canvas.GetComponentInChildren<TextMeshProUGUI>().SetText($"{z}, {x}");
             }
         }
@@ -225,7 +225,7 @@ public partial class AreaMapGenerator
 
         foreach (var pos in path)
         {
-            Vector3 position = _map.GridToWorldPosition(pos.x, pos.y, 1.07f);
+            Vector3 position = Map.GridToWorldPosition(pos.x, pos.y, 1.07f);
             Instantiate(_pathIndicator, position, Quaternion.Euler(90, 0, 0), _debugObjectParent);
         }
     }
@@ -236,10 +236,10 @@ public partial class AreaMapGenerator
         {
             for (int x = 0; x < _data.MapWidth; x++)
             {
-                if (_map.FogOfWarMap[z, x] != null)
+                if (Map.FogOfWarMap[z, x] != null)
                 {
-                    _map.FogOfWarMap[z, x].Show();
-                    _map.BaseTileMap[z, x].DisableDecoration();
+                    Map.FogOfWarMap[z, x].Show();
+                    Map.BaseTileMap[z, x].DisableDecoration();
                 }
             }
         }
@@ -251,11 +251,11 @@ public partial class AreaMapGenerator
         {
             for (int x = 0; x < _data.MapWidth; x++)
             {
-                if (_map.FogOfWarMap[z, x] != null)
+                if (Map.FogOfWarMap[z, x] != null)
                 {
-                    _map.FogOfWarMap[z, x].Hide();
+                    Map.FogOfWarMap[z, x].Hide();
                 }
-                _map.BaseTileMap[z, x].EnableDecoration();
+                Map.BaseTileMap[z, x].EnableDecoration();
             }
         }
     }

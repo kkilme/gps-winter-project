@@ -5,7 +5,8 @@ using UnityEngine;
 // 육각형은 평평한 부분이 위 (flat-top)
 public class AreaMap
 {
-    // 맵은 2차원 배열로 표현되며, 좌측 최하단이 (0, 0) 위치임.
+    // 맵은 2차원 배열로 표현되며, 좌측 최하단이 (0, 0).
+    // 모두 _width x _height 크기임
     public AreaTileType[,] TileTypeMap { get; }
     public AreaEventTile[,] EventTileMap { get; }
     public AreaBaseTile[,] BaseTileMap { get; }
@@ -16,10 +17,10 @@ public class AreaMap
     public Vector2Int BossPosition; // 보스 타일 지점의 Grid 좌표
 
     private Vector3 _originPosition; // 맵 원점: Grid 좌표 (0,0)의 월드 좌표
-    private int _width; // Grid 단위
-    private int _height; // Grid 단위
-    private int _playableFieldWidth; // Grid 단위
-    private int _playableFieldHeight; // Grid 단위
+    private int _width; // Grid 단위, 전체 맵 너비
+    private int _height; // Grid 단위, 전체 맵 높이
+    private int _playableFieldWidth; // Grid 단위, 플레이어 이동 가능 영역의 너비
+    private int _playableFieldHeight; // Grid 단위, 플레이어 이동 가능 영역의 높이
 
     private const float TILE_PREFAB_WIDTH = 4;
     private const float TILE_PREFAB_HEIGHT = 3.5f;
@@ -33,10 +34,12 @@ public class AreaMap
         _playableFieldWidth = playableFieldWidth;
         _playableFieldHeight = playableFieldHeight;
         _originPosition = originPosition;
+
         TileTypeMap = new AreaTileType[height, width];
         EventTileMap = new AreaEventTile[height, width];
         BaseTileMap = new AreaBaseTile[height, width];
         FogOfWarMap = new FogOfWar[height, width];
+
         _eventTileParent = GameObject.Find("@EventTiles").transform;
 
         for (int z = 0; z < height; z++)
@@ -52,45 +55,66 @@ public class AreaMap
         BossPosition = new Vector2Int(_width / 2, PlayableFieldStart.y + _playableFieldHeight - 1);
     }
 
-    // 그리드 좌표를 월드 좌표로 변환
+    /// <summary>
+    /// 그리드 좌표를 월드 좌표로 변환
+    /// </summary>
     public Vector3 GridToWorldPosition(int x, int z, float y = 0)
     {
         if (x % 2 == 1) return new Vector3(x * TILE_PREFAB_WIDTH * 0.75f, y, (z + 0.5f) * TILE_PREFAB_HEIGHT) + _originPosition;
         else return new Vector3(x * TILE_PREFAB_WIDTH * 0.75f, y, z * TILE_PREFAB_HEIGHT) + _originPosition;
     }
 
-    // 월드 좌표를 그리드 좌표로 변환
+    public Vector3 GridToWorldPosition(Vector2Int pos, float y = 0)
+    {
+        return GridToWorldPosition(pos.x, pos.y, y);
+    }
+
+    /// <summary>
+    /// 월드 좌표를 그리드 좌표로 변환
+    /// </summary>
     public void WorldToGridPosition(Vector3 worldPosition, out int x, out int z)
     {
         x = Mathf.RoundToInt((worldPosition.x - (int)_originPosition.x) / (TILE_PREFAB_WIDTH * 0.75f));
         z = Mathf.RoundToInt((worldPosition.z - (int)_originPosition.z) / TILE_PREFAB_HEIGHT - (x % 2 == 1 ? 0.5f : 0f));
     }
 
-    // 월드 좌표를 해당하는 그리드 좌표 타일의 중심 월드 좌표로 변환
+    /// <summary>
+    /// 월드 좌표를 해당하는 그리드 좌표 타일의 중심 월드 좌표로 변환
+    /// </summary>
     public Vector3 GetTileCenterPosition(Vector3 worldPosition)
     {
         WorldToGridPosition(worldPosition, out int x, out int z);
         return GridToWorldPosition(x, z, 1.02f);
     }
 
-    // 플레이어 시작 지점을 월드 좌표로 반환
+    /// <summary>
+    /// 플레이어 시작 지점을 월드 좌표로 반환
+    /// </summary>
     public Vector3 GetPlayerStartPosition()
     {
         return GridToWorldPosition(PlayerStartPosition.x, PlayerStartPosition.y, 1.04f);
     }
 
-    // 보스 지점을 월드 좌표로 반환
+    /// <summary>
+    /// 보스 지점을 월드 좌표로 반환
+    /// </summary>
     public Vector3 GetBossPosition()
     {
         return GridToWorldPosition(BossPosition.x, BossPosition.y, 1.04f);
     }
 
+    /// <summary>
+    /// 월드 좌표 위치의 이벤트 타일 반환
+    /// </summary>
     public AreaEventTile GetEventTile(Vector3 worldPosition)
     {
         WorldToGridPosition(worldPosition, out int x, out int z);
         return EventTileMap[z, x];
     }
 
+    /// <summary>
+    /// 월드 좌표 위치의 타일 타입 반환
+    /// </summary>
     public AreaTileType GetTileType(Vector3 worldPosition)
     {
         WorldToGridPosition(worldPosition, out int x, out int z);
@@ -102,26 +126,32 @@ public class AreaMap
         return x >= 0 && x < _width && z >= 0 && z < _height;
     }
 
-    // 플레이어가 서 있을 수 있는 타일인지 확인
-    // 이는 단순히 플레이어가 위에 서 있을 수 있는 타일인지 확인하는 것이지, 실제 게임 도중 플레이어가 현재 위치에서 이동 가능한 타일인지 확인하는 게 아님.
-    // 게임 도중 이동 가능한지 체크는 IsPositionMoveable에서 진행 
+    /// <summary>
+    /// 해당 그리드 좌표가 영웅 파티가 서 있을 수 있는 위치인지 확인
+    /// </summary>
     public bool IsPositionStandable(int x, int z)
     {
         if (!IsPositionValid(x, z)) return false;
         return TileTypeMap[z, x] != AreaTileType.Obstacle && TileTypeMap[z, x] != AreaTileType.OutOfField;
     }
+
     public bool IsPositionStandable(Vector3 worldPosition)
     {
         WorldToGridPosition(worldPosition, out int x, out int z);
         return IsPositionStandable(x, z);
     }
-    // 게임 도중 현재 플레이어 위치에서 대상 위치가 이동 가능한 위치인지 확인
+
+    /// <summary>
+    /// 게임 진행중 영웅 파티가 대상 위치로 이동 가능한지 확인
+    /// </summary>
     public bool IsPositionMoveable(Vector3 currentPlayerPosition, Vector3 targetPosition)
     {
         return IsPositionStandable(targetPosition) && IsNeighbor(currentPlayerPosition, targetPosition);
     }
 
-    // (x,z) 타일의 이웃 타일 반환
+    /// <summary>
+    /// (x,z)의 이웃에 해당하는 좌표 반환
+    /// </summary>
     public List<Vector2Int> GetNeighbors(int x, int z)
     {
         int[,] dir = x % 2 == 0
@@ -148,7 +178,9 @@ public class AreaMap
         return GetNeighbors(pos.x, pos.y);
     }
 
-    // 두 좌표에 해당하는 타일이 이웃인지 확인
+    /// <summary>
+    /// 두 좌표에 해당하는 타일이 이웃인지 확인
+    /// </summary>
     private bool IsNeighbor(int originx, int originz, int targetx, int targetz)
     {
         List<Vector2Int> neighbors = GetNeighbors(originx, originz);
@@ -166,7 +198,9 @@ public class AreaMap
         return IsNeighbor(x1, z1, x2, z2);
     }
 
-    // 해당 셀의 이웃 중 tileType인 타일이 하나라도 있다면 true, 하나도 없다면 false 반환
+    /// <summary>
+    /// 해당 위치 타일의 이웃 중 tileType인 타일이 하나라도 있다면 true, 하나도 없다면 false 반환
+    /// </summary>
     public bool HasNeighborOfType(int x, int z, AreaTileType tileType)
     {
         List<Vector2Int> neighbors = GetNeighbors(x, z);
@@ -178,7 +212,9 @@ public class AreaMap
         return false;
     }
 
-    // 해당 타일의 이웃 타일들 색 변경
+    /// <summary>
+    /// 해당 위치 타일의 이웃 타일들 색 변경
+    /// </summary>
     public void ChangeNeighborTilesColor(Vector3 worldPosition, TileColorChangeType colorChangeType)
     {
         WorldToGridPosition(worldPosition, out int x, out int z);
@@ -193,7 +229,9 @@ public class AreaMap
         }
     }
 
-    // 맵 첫 생성 시뿐만 아니라 게임 진행 도중에 타일 타입을 바꾸는데에도 필요
+    /// <summary>
+    /// 주어진 위치에 이벤트타일 생성. 게임 진행 도중 타일 타입을 바꾸는데에도 필요.
+    /// </summary>
     public void CreateEventTile(int x, int z, AreaTileType tileType, bool isReplace = false)
     {
         Vector3 worldPosition = GridToWorldPosition(x, z, 1.02f);
@@ -216,41 +254,44 @@ public class AreaMap
         CreateEventTile(x, z, tileType, isReplace);
     }
 
-    // z행의 타일들을 DestroyedTile로 교체
+    /// <summary>
+    /// z행의 타일들을 DestroyedTile로 교체
+    /// </summary>
     public void DestroyTiles(int z)
     {
         for (int x = PlayableFieldStart.x; x < PlayableFieldStart.x + _playableFieldWidth; x++)
         {
-            if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), AreaTileType.Destroyed, true);
+            if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), AreaTileType.Collapsed, true);
             // TODO: 플레이어가 서든데스로 파괴된 타일에 있을 시 효과 발동
         }
     }
 
-    // 특정 위치를 기준으로 전장의 안개 제거
-    // 기본 시야 거리: 2
+    /// <summary>
+    /// 특정 위치를 기준으로 전장의 안개 제거. 기본 시야 거리: 2
+    /// </summary>
     public void RevealFogOfWar(Vector3 currentPosition, int visionRange = 2)
     {
-        List<Vector2Int> fogOfWarsToDestroy = new();
+        List<Vector2Int> fogOfWarsToReveal = new();
         WorldToGridPosition(currentPosition, out int currentX, out int currentZ);
 
         // 재귀로 제거할 안개 탐색
-        void FindFogOfWarToDestroy(int x, int z, int currentDistance)
+        void GetFogOfWarsToReveal(int x, int z, int currentDistance)
         {
-            fogOfWarsToDestroy.Add(new Vector2Int(x, z));
+            fogOfWarsToReveal.Add(new Vector2Int(x, z));
 
             if (currentDistance >= visionRange) return;
 
             foreach (var neighbor in GetNeighbors(x, z))
             {
-                if (BaseTileMap[neighbor.y, neighbor.x].IsDecorationEnabled) FindFogOfWarToDestroy(neighbor.x, neighbor.y, currentDistance + 2); // 장애물 타일: 거리 2
-                else FindFogOfWarToDestroy(neighbor.x, neighbor.y, currentDistance + 1); // 일반 타일: 거리 1
+                if (TileTypeMap[neighbor.y, neighbor.x] == AreaTileType.Obstacle) GetFogOfWarsToReveal(neighbor.x, neighbor.y, currentDistance + 2); // 장애물 타일: 거리 2
+                else GetFogOfWarsToReveal(neighbor.x, neighbor.y, currentDistance + 1); // 일반 타일: 거리 1
             }
 
         }
 
-        FindFogOfWarToDestroy(currentX, currentZ, 0);
+        GetFogOfWarsToReveal(currentX, currentZ, 0);
 
-        foreach (var pos in fogOfWarsToDestroy)
+        foreach (var pos in fogOfWarsToReveal)
         {
             var posx = pos.x;
             var posz = pos.y;
@@ -267,6 +308,18 @@ public class AreaMap
         }
     }
 
+    /// <summary>
+    /// Area 시작 시 특정 전장의 안개 제거
+    /// </summary>
+    public void RevealFogOfWarOnStart()
+    {
+        RevealFogOfWar(GridToWorldPosition(PlayerStartPosition), 3); // 시작 지점에서 범위 3 반경의 전장의 안개 제거
+        RevealFogOfWar(GridToWorldPosition(BossPosition), 1); // 보스 지점에서 범위 1 반경의 전장의 안개 제거
+    }
+
+    /// <summary>
+    /// AreaCamera의 X좌표 제한 계산 및 반환
+    /// </summary>
     public void CalcCameraPosLimitX(out float xmin, out float xmax)
     {
         xmin = GridToWorldPosition(PlayableFieldStart.x, 0).x;

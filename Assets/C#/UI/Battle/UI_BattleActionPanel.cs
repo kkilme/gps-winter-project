@@ -81,10 +81,10 @@ public class UI_BattleActionPanel : UI_Base
             GetText(Texts.Text_AmountWord).text = "Damage\nPer Slot";
             if(skillData.AttackType == AttackType.Physical)
             {
-                GetText(Texts.Text_AmountNumber).color = GlobalValues.PHYSICAL_UI_ELEMENT_BASE_COLOR;
+                GetText(Texts.Text_AmountNumber).color = GlobalValues.PHYSICAL_UI_ELEMENT_COLOR;
             } else if (skillData.AttackType == AttackType.Magic)
             {
-                GetText(Texts.Text_AmountNumber).color = GlobalValues.MAGIC_UI_ELEMENT_BASE_COLOR;
+                GetText(Texts.Text_AmountNumber).color = GlobalValues.MAGIC_UI_ELEMENT_COLOR;
             }
             GetText(Texts.Text_AmountNumber).text = skillData.DamagePerCoin.ToString();
         } else

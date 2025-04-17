@@ -3,8 +3,13 @@ using UnityEngine;
 
 public class AreaManager
 {
+    public AreaMap Map { get; private set; }
+    public Loot Loots { get; set; }
+    public AreaInputHandler AreaInputHandler { get; private set; }
+    public AreaCollapseSystem CollapseSystem { get; private set; }
+    public AreaCameraController CameraController { get; private set; }
+    public Vector3 CurrentPlayerPosition { get; set; }// 현재 플레이어 WorldPosition
     public AreaName AreaName { get; set; }
-    public Loot Loots { get; set; } = new Loot();
 
     private AreaState _areaState;
     public AreaState AreaState
@@ -15,55 +20,38 @@ public class AreaManager
             _areaState = value;
             if (value == AreaState.Idle)
             {
-                _map.ChangeNeighborTilesColor(_currentPlayerPosition, TileColorChangeType.Highlight);
+                Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
             }
         }
     }
 
-    private AreaMap _map;
-    private AreaCameraController _cameraController;
     private HeroParty _party => Managers.HeroMng.HeroParty;
 
     private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
-    private GameObject _mouseoverIndicator; // 마우스 위치의 타일 강조해주는 육각형 테두리 형태 게임오브젝트
-    private Vector3 _currentPlayerPosition; // 현재 플레이어 WorldPosition
-    private Vector3 _currentMouseoverPosition; // 현재 마우스 위치의 WorldPosition
 
     private GameObject _light;
-
-    private int _turnCount = 0;
-    public int TurnCount
-    {
-        get => _turnCount;
-        set
-        {
-            _turnCount = value;
-            if (TurnCount != 0 && TurnCount % _suddendeathTimer == 0) ProgressSuddendeath();
-            else AreaState = AreaState.Idle;
-        }
-    }
-    private int _suddendeathTimer = 4; // timer번의 이동마다 맨 밑 타일 파괴됨. Area별로 다르게 할 수도?
-    private int _suddendeathCount = 0;
 
     #region Init
     public void Init(AreaMap map)
     {
-        _map = map;
+        Map = map;
+        Loots = new Loot();
+        AreaInputHandler = new AreaInputHandler();
+        CollapseSystem = new AreaCollapseSystem();
         _light = GameObject.FindGameObjectWithTag("AreaLight");
 
-        _currentPlayerPosition = _map.GetPlayerStartPosition();
-        _currentTile = _map.GetEventTile(_currentPlayerPosition);
-        _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
-        _mouseoverIndicator.transform.position = _currentPlayerPosition;
+        CurrentPlayerPosition = Map.GetPlayerStartPosition();
+        _currentTile = Map.GetEventTile(CurrentPlayerPosition);
 
         InitHeroes();
         InitCamera();
+        AreaInputHandler.Init(CurrentPlayerPosition);
 
-        _map.RevealFogOfWar(_currentPlayerPosition, 3); // 시작 지점에서 범위 3 반경의 전장의 안개 제거
+        Map.RevealFogOfWarOnStart();
         AreaState = AreaState.Idle;
 
-        Managers.InputMng.MouseAction -= HandleMouseInput;
-        Managers.InputMng.MouseAction += HandleMouseInput;
+        Managers.InputMng.MouseAction -= AreaInputHandler.HandleMouseInput;
+        Managers.InputMng.MouseAction += AreaInputHandler.HandleMouseInput;
     }
 
     /// <summary>
@@ -76,7 +64,7 @@ public class AreaManager
         for (int i = 0; i < heroes.Count; i++)
         {
             heroes[i].transform.LookAt(Vector3.forward);
-            heroes[i].transform.position = _currentPlayerPosition + new Vector3(GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 0], 0, GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 1]);
+            heroes[i].transform.position = CurrentPlayerPosition + new Vector3(GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 0], 0, GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 1]);
         }
     }
 
@@ -85,60 +73,39 @@ public class AreaManager
     /// </summary>
     private void InitCamera()
     {
-        _cameraController = Managers.ResourceMng.Instantiate("Area/AreaCamera").GetComponent<AreaCameraController>();
-        _cameraController.Freeze = true;
-        _cameraController.Init();
-        _map.CalcCameraPosLimitX(out float xmin, out float xmax);
-        _cameraController.InitPosLimit(xmin, xmax, _map.GetPlayerStartPosition().z, _map.GetBossPosition().z);
-        _cameraController.Freeze = false;
+        CameraController = Managers.ResourceMng.Instantiate("Area/AreaCamera").GetComponent<AreaCameraController>();
+        CameraController.Freeze = true;
+        CameraController.Init();
+        Map.CalcCameraPosLimitX(out float xmin, out float xmax);
+        CameraController.InitPosLimit(xmin, xmax, Map.GetPlayerStartPosition().z, Map.GetBossPosition().z);
+        CameraController.Freeze = false;
 
-        _cameraController.transform.position = new Vector3(_currentPlayerPosition.x, 50, _currentPlayerPosition.z - 40);
+        CameraController.transform.position = new Vector3(CurrentPlayerPosition.x, 50, CurrentPlayerPosition.z - 40);
     }
     #endregion
 
-    private void HandleMouseInput(MouseEvent mouseEvent)
-    {
-        if (AreaState != AreaState.Idle)
-        {
-            return;
-        }
-
-        if (_cameraController.GetMouseoverPosition(out Vector3 mouseOverPosition) && _map.IsPositionStandable(mouseOverPosition))
-        {
-            _mouseoverIndicator.transform.position = _map.GetTileCenterPosition(mouseOverPosition);
-            _currentMouseoverPosition = mouseOverPosition;
-        }
-        else return;
-
-        switch (mouseEvent)
-        {
-            case MouseEvent.PointerUp:
-                MovePlayers(_currentMouseoverPosition);
-                break;
-        }
-    }
-
-    private void MovePlayers(Vector3 destination)
+    /// <summary>
+    /// 대상 위치의 타일로 영웅 파티 이동
+    /// </summary>
+    public void MoveHeroes(Vector3 targetPosition)
     {
         // 이동 가능한 타일인지 확인
-        if (_map.IsPositionMoveable(_currentPlayerPosition, _currentMouseoverPosition))
-        {
-            AreaState = AreaState.Moving;
-            _map.ChangeNeighborTilesColor(_currentPlayerPosition, TileColorChangeType.Reset);
-        }
-        else return;
+        if (!Map.IsPositionMoveable(CurrentPlayerPosition, targetPosition)) return;
 
-        destination = _map.GetTileCenterPosition(destination);
+        AreaState = AreaState.Moving;
+        Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Reset);
 
-        Sequence moveSequence = _party.MakeMoveToSequence(destination);
+        targetPosition = Map.GetTileCenterPosition(targetPosition);
+
+        Sequence moveSequence = _party.MakeMoveToSequence(targetPosition);
 
         _party.PlayMovingAnimation();
         moveSequence.Play().OnComplete(() =>
         {
             _party.StopMovingAnimation();
-            _currentPlayerPosition = destination;
-            _currentTile = _map.GetEventTile(destination);
-            _map.RevealFogOfWar(_currentPlayerPosition);
+            CurrentPlayerPosition = targetPosition;
+            Map.RevealFogOfWar(CurrentPlayerPosition);
+            _currentTile = Map.GetEventTile(targetPosition);
             _currentTile.OnTileEnter();
         });
     }
@@ -147,8 +114,8 @@ public class AreaManager
     public void LoadBattleScene()
     {
         AreaState = AreaState.Battle;
-        _cameraController.Freeze = true;
-        Managers.InputMng.MouseAction -= HandleMouseInput;
+        CameraController.Freeze = true;
+        Managers.InputMng.MouseAction -= AreaInputHandler.HandleMouseInput;
 
         CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadBattleScene());
     }
@@ -156,48 +123,35 @@ public class AreaManager
     public void OnBattleSceneLoadFinish()
     {
         _light.SetActive(false);
-        _cameraController.gameObject.SetActive(false);
+        CameraController.gameObject.SetActive(false);
     }
 
     public void OnBattleSceneUnloadFinish(BattleResultType battleResult)
     {
-        // TODO - 배틀 씬에서 에어리어 씬으로 넘어올 시 배틀 씬 UI 삭제하는 코드. 구조적으로 더 좋은 코드가 가능해 보임.
-        //GameObject.Destroy(GameObject.FindObjectOfType<UI_BattleScene>().gameObject);
-
-        _cameraController.gameObject.SetActive(true);
-        _cameraController.GetComponent<AreaCameraController>().Freeze = false;
+        CameraController.gameObject.SetActive(true);
+        CameraController.GetComponent<AreaCameraController>().Freeze = false;
         _light.SetActive(true);
+
         OnTileEventFinish();
-        AreaState = AreaState.Idle;
-        Managers.InputMng.MouseAction -= HandleMouseInput;
-        Managers.InputMng.MouseAction += HandleMouseInput;
+
+        Managers.InputMng.MouseAction -= AreaInputHandler.HandleMouseInput;
+        Managers.InputMng.MouseAction += AreaInputHandler.HandleMouseInput;
     }
 
     public void OnTileEventFinish()
     {
         _currentTile.OnTileEventFinish();
+
         switch (_currentTile.TileType)
         {
             case AreaTileType.Normal:
                 break;
             case AreaTileType.Battle:
-                _map.CreateEventTile(_currentPlayerPosition, AreaTileType.Normal, true);
+                Map.CreateEventTile(CurrentPlayerPosition, AreaTileType.Normal, true);
                 break;
         }
-        Managers.AreaMng.TurnCount++;
-    }
 
-    private void ProgressSuddendeath()
-    {
-        // 보스 위치 기준 최대 2칸 아래까지만 파괴됨
-        if (_suddendeathCount == _map.BossPosition.y - _map.PlayerStartPosition.y - 2)
-        {
-            AreaState = AreaState.Idle;
-            return;
-        }
-
-        _map.DestroyTiles(_suddendeathCount);
-        _suddendeathCount++;
         AreaState = AreaState.Idle;
+        CollapseSystem.TurnCount++;
     }
 }

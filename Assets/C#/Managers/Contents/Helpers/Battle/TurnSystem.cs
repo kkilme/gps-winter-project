@@ -6,11 +6,10 @@ public class TurnSystem
     public Creature CurrentTurnCreature { get; private set; }
     public List<Creature> Turns { get; protected set; }
     public int TurnCount { get; protected set; }
-    private BattleManager _battleManager;
+    private BattleManager _battleManager => Managers.BattleMng;
 
     public void Init()
     {
-        _battleManager = Managers.BattleMng;
         TurnCount = 1;
         Turns = new List<Creature>(_battleManager.Creatures);
         Turns.Sort((a, b) => b.CreatureStat.FinalStat.Dexterity.CompareTo(a.CreatureStat.FinalStat.Dexterity)); // Dex 높은 순으로 턴 순서 정렬

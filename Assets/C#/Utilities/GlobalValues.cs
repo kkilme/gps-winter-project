@@ -46,11 +46,12 @@ public static class GlobalValues
     public const string ACTIONICON_PATH_PREFIX = "Textures/ActionIcons/";
     public const string ITEMIMAGE_PATH_PREFIX = "Textures/ItemImages/";
     public const string ITEMICON_PATH_PREFIX = "Textures/ItemIcons/";
+    public const string COLORGRADIENT_PATH_PREFIX = "Textures/TMP_ColorGradients/";
 
     #endregion
 
     #region DataId
-
+    // 주로 테스트용으로 사용
     public const int HERO_KNIGHT_ID = 101000;
     public const int HERO_WIZARD_ID = 101001;
 
@@ -80,9 +81,9 @@ public static class GlobalValues
     public static readonly Color ENEMYGRID_OUTLINE_HIGHLIGHT_COLOR = Color.red;
     public static readonly Color ENEMYGRID_FILL_HIGHLIGHT_COLOR = new Color(1, 0.2f, 0.2f);
 
-    public static readonly Color PHYSICAL_UI_ELEMENT_BASE_COLOR = new Color(0, 0.5f, 1);
-    public static readonly Color MAGIC_UI_ELEMENT_BASE_COLOR = new Color(0.65f, 0, 1);
-    public static readonly Color HEAL_ELEMENT_BASE_COLOR = Color.green;
+    public static readonly Color PHYSICAL_UI_ELEMENT_COLOR = new Color(0, 0.5f, 1);
+    public static readonly Color MAGIC_UI_ELEMENT_COLOR = new Color(0.65f, 0, 1);
+    public static readonly Color HEAL_UI_ELEMENT_COLOR = Color.green;
 
     #endregion
 

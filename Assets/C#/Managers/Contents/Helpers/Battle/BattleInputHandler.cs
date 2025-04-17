@@ -1,10 +1,10 @@
 using UnityEngine;
 
-// 전투에서 마우스 입력에 따른 로직 관리
-public class BattleMouseInputHandler
+// 전투에서 마우스/키보드 입력에 따른 로직 관리
+public class BattleInputHandler
 {
     public BattleGridCell CurrentMouseOverCell { get; private set; } // 현재 마우스를 올리고 있는 Cell
-    private BattleGridSystem _battleGridSystem;
+    private BattleGridSystem _battleGridSystem => Managers.BattleMng.GridSystem;
     private BaseAction _currentAction => Managers.BattleMng.CurrentAction;
 
     private Camera _camera;
@@ -15,7 +15,6 @@ public class BattleMouseInputHandler
     public void Init()
     {
         _camera = Camera.main;
-        _battleGridSystem = Managers.BattleMng.GridSystem;
     }
 
     public void HandleMouseOnPlacementPhase(MouseEvent mouseEvent)

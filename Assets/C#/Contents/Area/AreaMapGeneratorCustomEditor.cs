@@ -195,6 +195,7 @@ public class AreaMapGeneratorCustomEditor : Editor
                     _generator.GeneratePlayableFieldObstacles(playableFieldPos);
                     _generator.GenerateEventTiles();
                     _generator.GenerateFogOfWar();
+                    _generator.Map.RevealFogOfWarOnStart();
                 }
             }
         }
@@ -205,7 +206,7 @@ public class AreaMapGeneratorCustomEditor : Editor
     private void DrawGridPositionTextButton()
     {
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("ShowDeafult Grid Position"))
+        if (GUILayout.Button("Show Grid Position"))
         {
             _generator.ShowGridPositionText();
         }
@@ -215,7 +216,7 @@ public class AreaMapGeneratorCustomEditor : Editor
     private void DrawTileTypeTextButton()
     {
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("ShowDeafult Tile Type"))
+        if (GUILayout.Button("Show Tile Type"))
         {
             _generator.ShowTileTypeText();
         }
@@ -224,7 +225,7 @@ public class AreaMapGeneratorCustomEditor : Editor
     private void DrawPathToBossButton()
     {
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("ShowDeafult path to boss"))
+        if (GUILayout.Button("Show path to boss"))
         {
             _generator.ShowPathToBoss();
         }
@@ -244,7 +245,7 @@ public class AreaMapGeneratorCustomEditor : Editor
     private void DrawShowFogOfWarButton()
     {
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("ShowDeafult Fog of War"))
+        if (GUILayout.Button("Show Fog of War"))
         {
             _generator.ShowFogOfWar();
         }

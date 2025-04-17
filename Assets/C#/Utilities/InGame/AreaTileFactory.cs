@@ -8,7 +8,7 @@ public static class AreaTileFactory
     private const string BATTLE_TILE_PATH = "Area/Tiles/BattleTile";
     private const string ENCOUNTER_TILE_PATH = "Area/Tiles/EncounterTile";
     private const string BOSS_TILE_PATH = "Area/Tiles/BossTile";
-    private const string DESTROYED_TILE_PATH = "Area/Tiles/DestroyedTile";
+    private const string COLLAPSED_TILE_PATH = "Area/Tiles/CollapsedTile";
 
     private const string FOG_OF_WAR_ON_PLAYABLE_FIELD_PATH = "Area/Tiles/FogOfWar_PlayableField";
     private const string FOG_OF_WAR_ON_UNPLAYABLE_FIELD_PATH = "Area/Tiles/FogOfWar_UnplayableField";
@@ -21,7 +21,7 @@ public static class AreaTileFactory
             AreaTileType.Battle => Managers.ResourceMng.Instantiate(BATTLE_TILE_PATH, parent),
             AreaTileType.Encounter => Managers.ResourceMng.Instantiate(ENCOUNTER_TILE_PATH, parent),
             AreaTileType.Boss => Managers.ResourceMng.Instantiate(BOSS_TILE_PATH, parent),
-            AreaTileType.Destroyed => Managers.ResourceMng.Instantiate(DESTROYED_TILE_PATH, parent),
+            AreaTileType.Collapsed => Managers.ResourceMng.Instantiate(COLLAPSED_TILE_PATH, parent),
             _ => Managers.ResourceMng.Instantiate(NORMAL_TILE_PATH, parent),
         };
 

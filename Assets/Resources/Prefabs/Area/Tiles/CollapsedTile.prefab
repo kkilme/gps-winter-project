@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 269549477908972617}
   - component: {fileID: 3616236003468323737}
   m_Layer: 0
-  m_Name: DestroyedTile
+  m_Name: CollapsedTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
