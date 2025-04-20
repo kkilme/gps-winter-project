@@ -2,6 +2,7 @@ using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 using Random = UnityEngine.Random;
 
 public partial class AreaMapGenerator : MonoBehaviour
@@ -30,8 +31,11 @@ public partial class AreaMapGenerator : MonoBehaviour
     public bool Init(AreaName area = AreaName.Forest)
     {
         ClearMap();
+
+        #if UNITY_EDITOR
         // 에디터상에서 디버그용
         if (_isTestMode) area = _testAreaName;
+        #endif
 
         _data = _dataset[area];
 
@@ -238,6 +242,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                     continue;
                 unplayableField.Add(new Vector2Int(x, z));
                 Map.TileTypeMap[z, x] = AreaTileType.OutOfField;
+                Map.BaseTileMap[z, x].SetBrightness(false);
             }
         }
 
@@ -265,13 +270,14 @@ public partial class AreaMapGenerator : MonoBehaviour
         void SetAsPlayableFieldTile(List<Vector2Int> field, int x, int z)
         {
             Map.BaseTileMap[z, x].EnableLight();
+            Map.BaseTileMap[z, x].SetBrightness(false);
             Map.TileTypeMap[z, x] = AreaTileType.Empty;
             field.Add(new Vector2Int(x, z));
         }
     }
 
     // 플레이 불가능 필드의 장애물(장식물) 생성
-    // 나중에 Fog Of War이 추가되면서 큰 의미는 없어졌음. (장애물이 보이지 않음)
+    // 나중에 전장의 안개가 추가되면서 큰 의미는 없어졌음. (장애물이 보이지 않음)
     public void GenerateUnplayableFieldObstacles(List<Vector2Int> unplayableField)
     {
         CurrentGeneratePhase = MapGeneratePhase.UnplayableFieldObstacleGenerate;
@@ -298,7 +304,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             if (trycount % 100 == 0) proportion -= 0.05f;
         } while (!FindPath(_bossPosition, out path) && proportion >= 0);
 
-        Debug.Log($"TryCount: {trycount}, Obstacle Proportion: {proportion}, Path Length: {path.Count}");
+        Debug.Log($"[AreaMapGenerator.GeneratePlayableFieldObstacles] TryCount: {trycount}, Obstacle Proportion: {proportion}, Path Length: {path.Count}");
 
         return;
 
@@ -309,7 +315,8 @@ public partial class AreaMapGenerator : MonoBehaviour
             {
                 if (Map.TileTypeMap[pos.y, pos.x] != AreaTileType.ForceEmpty)
                     Map.TileTypeMap[pos.y, pos.x] = AreaTileType.Empty;
-                Map.BaseTileMap[pos.y, pos.x].DisableDecoration();
+                Map.BaseTileMap[pos.y, pos.x].DisableObstacle();
+                Map.BaseTileMap[pos.y, pos.x].IsObstacleEnabled = false;
             }
         }
     }
@@ -323,9 +330,17 @@ public partial class AreaMapGenerator : MonoBehaviour
         while ((float)(totalGenerated) / totalPosCount < proportion)
         {
             Vector2Int pos = field[Random.Range(0, field.Count)];
+
             if (Map.TileTypeMap[pos.y, pos.x] == AreaTileType.ForceEmpty) continue;
-            Map.BaseTileMap[pos.y, pos.x].SetDecorationEnabled();
-            if (Map.TileTypeMap[pos.y, pos.x] != AreaTileType.OutOfField) Map.TileTypeMap[pos.y, pos.x] = AreaTileType.Obstacle;
+
+            Map.BaseTileMap[pos.y, pos.x].EnableObstacle();
+            Map.BaseTileMap[pos.y, pos.x].IsObstacleEnabled = true; // 해당 타일이 장애물이 활성화된 타일임을 체크해주어야 함. 전장의 안개 관련 로직에 필요.
+
+            if (Map.TileTypeMap[pos.y, pos.x] != AreaTileType.OutOfField)
+            {
+                Map.TileTypeMap[pos.y, pos.x] = AreaTileType.Obstacle;
+            }
+
             totalGenerated++;
             field.Remove(pos);
         }
@@ -455,7 +470,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             {
                 FogOfWar fog = AreaTileFactory.CreateFogOfWar(Map.GridToWorldPosition(x, z, 1.06f), Map.TileTypeMap[z, x] == AreaTileType.OutOfField, _fogOfWarParent);
                 Map.FogOfWarMap[z, x] = fog;
-                Map.BaseTileMap[z, x].DisableDecoration();
+                Map.BaseTileMap[z, x].DisableObstacle();
             }
         }
     }

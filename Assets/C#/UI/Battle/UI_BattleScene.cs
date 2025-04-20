@@ -39,23 +39,22 @@ public class UI_BattleScene : UI_Scene
 
     public override void Init()
     {
-		Bind<UI_Base>(typeof(SubItemUI));
+		Bind<GameObject>(typeof(SubItemUI));
         Bind<Image>(typeof(Images));
 
-        ActionPanel = Get<UI_Base>(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
-        CoinTossDisplay = Get<UI_Base>(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
-        TurnstateUI = Get<UI_Base>(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
-        PlacementPhaseUI = Get<UI_Base>(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
-        ChooseTargetUI = Get<UI_Base>(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget>();
-        HeroProfileGroupUI = Get<UI_Base>(SubItemUI.UI_HeroProfileGroup_Vertical).GetOrAddComponent<UI_HeroProfileGroup>();
-        MonsterProfileGroupUI = Get<UI_Base>(SubItemUI.UI_MonsterProfileGroup).GetOrAddComponent<UI_MonsterProfileGroup>();
+        ActionPanel = GetGameObject(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
+        CoinTossDisplay = GetGameObject(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
+        TurnstateUI = GetGameObject(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
+        PlacementPhaseUI = GetGameObject(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
+        ChooseTargetUI = GetGameObject(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget>();
+        HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Vertical).GetOrAddComponent<UI_HeroProfileGroup>();
+        MonsterProfileGroupUI = GetGameObject(SubItemUI.UI_MonsterProfileGroup).GetOrAddComponent<UI_MonsterProfileGroup>();
 
         _fadeBG = GetImage(Images.FadeBG);
     }
 
     public void OnPlacementPhaseStart()
     {
-       
         ActionPanel.Hide();
         CoinTossDisplay.Hide();
         ChooseTargetUI.Hide();

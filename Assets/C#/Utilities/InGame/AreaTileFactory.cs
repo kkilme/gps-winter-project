@@ -10,8 +10,8 @@ public static class AreaTileFactory
     private const string BOSS_TILE_PATH = "Area/Tiles/BossTile";
     private const string COLLAPSED_TILE_PATH = "Area/Tiles/CollapsedTile";
 
-    private const string FOG_OF_WAR_ON_PLAYABLE_FIELD_PATH = "Area/Tiles/FogOfWar_PlayableField";
-    private const string FOG_OF_WAR_ON_UNPLAYABLE_FIELD_PATH = "Area/Tiles/FogOfWar_UnplayableField";
+    private const string FOW_PLAYABLE_FIELD_PATH = "Area/Tiles/FogOfWar_PlayableField";
+    private const string FOW_UNPLAYABLE_FIELD_PATH = "Area/Tiles/FogOfWar_UnplayableField";
 
     public static AreaEventTile CreateTile(Vector3 position, AreaTileType type, Transform parent)
     {
@@ -36,7 +36,7 @@ public static class AreaTileFactory
     public static FogOfWar CreateFogOfWar(Vector3 position, bool isUnplayableField, Transform parent)
     {
         GameObject fogOfWarObject = isUnplayableField ?  
-            Managers.ResourceMng.Instantiate(FOG_OF_WAR_ON_UNPLAYABLE_FIELD_PATH, parent) : Managers.ResourceMng.Instantiate(FOG_OF_WAR_ON_PLAYABLE_FIELD_PATH, parent);
+            Managers.ResourceMng.Instantiate(FOW_UNPLAYABLE_FIELD_PATH, parent) : Managers.ResourceMng.Instantiate(FOW_PLAYABLE_FIELD_PATH, parent);
 
         fogOfWarObject.transform.position = position;
 

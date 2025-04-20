@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // XZ를 축으로 하는 육각형 맵
@@ -255,15 +256,45 @@ public class AreaMap
     }
 
     /// <summary>
-    /// z행의 타일들을 DestroyedTile로 교체
+    /// z행의 타일들을 CollapsedTile로 교체
     /// </summary>
-    public void DestroyTiles(int z)
+    public void CollapseTiles(int z)
     {
         for (int x = PlayableFieldStart.x; x < PlayableFieldStart.x + _playableFieldWidth; x++)
         {
             if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), AreaTileType.Collapsed, true);
-            // TODO: 플레이어가 서든데스로 파괴된 타일에 있을 시 효과 발동
+            // TODO: 플레이어가 붕괴된 타일에 있을 시 효과 발동
         }
+    }
+
+    /// <summary>
+    /// 특정 위치를 기준으로 볼 수 있는 타일들의 위치를 계산하여 반환. 기본 시야 거리: 2
+    /// </summary>
+    public List<Vector2Int> GetVisibleTilePositions(Vector3 currentPosition, int visionRange = 2)
+    {
+        WorldToGridPosition(currentPosition, out int currentX, out int currentZ);
+        List<Vector2Int> visibleTiles = new();
+
+        void Explore(int x, int z, int currentDistance)
+        {
+            var pos = new Vector2Int(x, z);
+            if (visibleTiles.Contains(pos)) return;
+            visibleTiles.Add(pos);
+
+            if (currentDistance >= visionRange) return;
+
+            foreach (var neighbor in GetNeighbors(x, z))
+            {
+                if (BaseTileMap[z, x].IsObstacleEnabled) // TileTypeMap을 사용하지 않는 이유: UnplayableField에서 모든 타일의 타입은 OutOfField로 지정되기 때문.
+                    Explore(neighbor.x, neighbor.y, currentDistance + 2); // 장애물: 거리 2
+                else
+                    Explore(neighbor.x, neighbor.y, currentDistance + 1); // 일반 타일: 거리 1
+            }
+        }
+
+        Explore(currentX, currentZ, 0);
+
+        return visibleTiles;
     }
 
     /// <summary>
@@ -271,25 +302,7 @@ public class AreaMap
     /// </summary>
     public void RevealFogOfWar(Vector3 currentPosition, int visionRange = 2)
     {
-        List<Vector2Int> fogOfWarsToReveal = new();
-        WorldToGridPosition(currentPosition, out int currentX, out int currentZ);
-
-        // 재귀로 제거할 안개 탐색
-        void GetFogOfWarsToReveal(int x, int z, int currentDistance)
-        {
-            fogOfWarsToReveal.Add(new Vector2Int(x, z));
-
-            if (currentDistance >= visionRange) return;
-
-            foreach (var neighbor in GetNeighbors(x, z))
-            {
-                if (TileTypeMap[neighbor.y, neighbor.x] == AreaTileType.Obstacle) GetFogOfWarsToReveal(neighbor.x, neighbor.y, currentDistance + 2); // 장애물 타일: 거리 2
-                else GetFogOfWarsToReveal(neighbor.x, neighbor.y, currentDistance + 1); // 일반 타일: 거리 1
-            }
-
-        }
-
-        GetFogOfWarsToReveal(currentX, currentZ, 0);
+        var fogOfWarsToReveal = GetVisibleTilePositions(currentPosition, visionRange);
 
         foreach (var pos in fogOfWarsToReveal)
         {
@@ -303,8 +316,8 @@ public class AreaMap
                 FogOfWarMap[posz, posx] = null;
             }
 
-            // 장애물 활성화
-            if (BaseTileMap[posz, posx].IsDecorationEnabled) BaseTileMap[posz, posx].EnableDecoration();
+            // 장애물 존재하는 타일일 시 장애물 활성화
+            if (BaseTileMap[posz, posx].IsObstacleEnabled) BaseTileMap[posz, posx].EnableObstacle();
         }
     }
 
@@ -313,7 +326,7 @@ public class AreaMap
     /// </summary>
     public void RevealFogOfWarOnStart()
     {
-        RevealFogOfWar(GridToWorldPosition(PlayerStartPosition), 3); // 시작 지점에서 범위 3 반경의 전장의 안개 제거
+        RevealFogOfWar(GridToWorldPosition(PlayerStartPosition), 2); // 시작 지점에서 범위 2 반경의 전장의 안개 제거
         RevealFogOfWar(GridToWorldPosition(BossPosition), 1); // 보스 지점에서 범위 1 반경의 전장의 안개 제거
     }
 

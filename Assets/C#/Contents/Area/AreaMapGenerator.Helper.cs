@@ -150,7 +150,7 @@ public partial class AreaMapGenerator
 
     public void ShowTileTypeText()
     {
-        if (CurrentGeneratePhase != MapGeneratePhase.EventTileGenerate)
+        if (CurrentGeneratePhase < MapGeneratePhase.EventTileGenerate)
         {
             Debug.LogWarning("Map must be generated first!");
             return;
@@ -213,8 +213,7 @@ public partial class AreaMapGenerator
 
     public void ShowPathToBoss()
     {
-        if (CurrentGeneratePhase != MapGeneratePhase.PlayableFieldObstacleGenerate &&
-            CurrentGeneratePhase != MapGeneratePhase.EventTileGenerate)
+        if (CurrentGeneratePhase < MapGeneratePhase.PlayableFieldObstacleGenerate)
         {
             Debug.LogWarning("Playable Field Decoration must be generated first!");
             return;
@@ -239,7 +238,7 @@ public partial class AreaMapGenerator
                 if (Map.FogOfWarMap[z, x] != null)
                 {
                     Map.FogOfWarMap[z, x].Show();
-                    Map.BaseTileMap[z, x].DisableDecoration();
+                    Map.BaseTileMap[z, x].DisableObstacle();
                 }
             }
         }
@@ -255,23 +254,16 @@ public partial class AreaMapGenerator
                 {
                     Map.FogOfWarMap[z, x].Hide();
                 }
-                Map.BaseTileMap[z, x].EnableDecoration();
+                Map.BaseTileMap[z, x].EnableObstacle();
             }
         }
     }
 
-    public void TestGenerateMap()
-    {
-        if (!Init()) return;
-        GenerateMap();
-    }
-
     private void Start()
     {
-        if (Managers.SceneMng.CurrentScene is AreaScene)
+        if (Managers.SceneMng.FirstScene is AreaScene)
         {
             _isTestMode = true;
-
         }
     }
 

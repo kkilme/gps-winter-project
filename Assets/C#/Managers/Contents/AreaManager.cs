@@ -1,4 +1,6 @@
 using DG.Tweening;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class AreaManager
@@ -28,7 +30,7 @@ public class AreaManager
     private HeroParty _party => Managers.HeroMng.HeroParty;
 
     private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
-
+    private List<Vector2Int> _visiblePositions = new(); // 플레이어 시야 범위 내부에 있는 위치들
     private GameObject _light;
 
     #region Init
@@ -48,6 +50,7 @@ public class AreaManager
         AreaInputHandler.Init(CurrentPlayerPosition);
 
         Map.RevealFogOfWarOnStart();
+        UpdateTileBrightness();
         AreaState = AreaState.Idle;
 
         Managers.InputMng.MouseAction -= AreaInputHandler.HandleMouseInput;
@@ -95,19 +98,52 @@ public class AreaManager
         AreaState = AreaState.Moving;
         Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Reset);
 
+
+        CurrentPlayerPosition = targetPosition;
+        Map.RevealFogOfWar(CurrentPlayerPosition);
+        UpdateTileBrightness();
+
         targetPosition = Map.GetTileCenterPosition(targetPosition);
 
         Sequence moveSequence = _party.MakeMoveToSequence(targetPosition);
-
         _party.PlayMovingAnimation();
         moveSequence.Play().OnComplete(() =>
         {
-            _party.StopMovingAnimation();
-            CurrentPlayerPosition = targetPosition;
-            Map.RevealFogOfWar(CurrentPlayerPosition);
-            _currentTile = Map.GetEventTile(targetPosition);
-            _currentTile.OnTileEnter();
+            OnHeroMoved(targetPosition);
         });
+    }
+    
+    /// <summary>
+    /// 영웅 파티 이동 완료 후 실행되는 로직
+    /// </summary>
+    /// <param name="targetPosition"></param>
+    private void OnHeroMoved(Vector3 targetPosition)
+    {
+        _party.StopMovingAnimation();
+
+        _currentTile = Map.GetEventTile(CurrentPlayerPosition);
+        _currentTile.OnTileEnter();
+    }
+
+    private void UpdateTileBrightness()
+    {
+        var newVisiblePos = Map.GetVisibleTilePositions(CurrentPlayerPosition);
+        foreach(var pos in _visiblePositions)
+        {
+            if (!newVisiblePos.Contains(pos))
+            {
+                if (Map.TileTypeMap[pos.y, pos.x] != AreaTileType.OutOfField)
+                    Map.BaseTileMap[pos.y, pos.x].SetBrightness(false);
+            }
+        }
+
+        foreach (var pos in newVisiblePos)
+        {
+            if (Map.TileTypeMap[pos.y, pos.x] == AreaTileType.OutOfField) continue;
+            Map.BaseTileMap[pos.y, pos.x].SetBrightness(true);
+        }
+
+        _visiblePositions = newVisiblePos;
     }
 
     // 전투씬 전환 흐름: 카메라 정지 -> 로딩화면 Fade in 완료 ->  배틀 씬 로딩 시작 및 완료 -> Area의 빛, 카메라 비활성화 -> 로딩화면 Fade out

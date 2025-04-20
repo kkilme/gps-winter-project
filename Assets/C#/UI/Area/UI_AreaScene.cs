@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.VisualScripting;
 using UnityEngine.UI;
 
 public class UI_AreaScene : UI_Scene
@@ -29,12 +28,12 @@ public class UI_AreaScene : UI_Scene
     public override void Init()
     {
         base.Init();
-        Bind<UI_Base>(typeof(SubItemUI));
+        Bind<GameObject>(typeof(SubItemUI));
         Bind<Image>(typeof(Images));
 
-        TopBar = Get<UI_Base>(SubItemUI.UI_AreaTopBar).GetOrAddComponent<UI_AreaTopBar>();
-        AreaButtons = Get<UI_Base>(SubItemUI.UI_AreaButtons).GetOrAddComponent<UI_AreaButtons>();
-        CollapseInformer = Get<UI_Base>(SubItemUI.UI_CollapseInformer).GetOrAddComponent<UI_CollapseInformer>();
-        CoinTossDisplay = Get<UI_Base>(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
+        AreaButtons = GetGameObject(SubItemUI.UI_AreaButtons).GetOrAddComponent<UI_AreaButtons>();
+        TopBar = GetGameObject(SubItemUI.UI_AreaTopBar).GetOrAddComponent<UI_AreaTopBar>();
+        CollapseInformer = GetGameObject(SubItemUI.UI_CollapseInformer).GetOrAddComponent<UI_CollapseInformer>();
+        CoinTossDisplay = GetGameObject(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
     }
 }

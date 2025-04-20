@@ -30,7 +30,7 @@ public class AreaCollapseSystem
             return;
         }
 
-        _map.DestroyTiles(_suddendeathCount);
+        _map.CollapseTiles(_suddendeathCount);
         _suddendeathCount++;
         _areaManager.AreaState = AreaState.Idle;
     }
