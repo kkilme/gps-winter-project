@@ -30,7 +30,7 @@ public class ResourceManager
     }
 
     // Prefabs폴더를 시작 위치로 path에 해당하는 GameObject를 생성 후 부모 오브젝트를 parent 로 설정하여 반환
-    public GameObject Instantiate(string path, Transform parent = null, string name = null)
+    public GameObject Instantiate(string path, Vector3 position, Transform parent = null, string name = null)
     {
         GameObject original = Load<GameObject>($"Prefabs/{path}");
         if (original == null)
@@ -43,6 +43,7 @@ public class ResourceManager
             return Managers.PoolMng.Pop(original, parent).gameObject;
 
         GameObject go = Object.Instantiate(original, parent);
+        go.transform.position = position;
 
         if (name == null)
             go.name = original.name;
@@ -50,6 +51,11 @@ public class ResourceManager
             go.name = name;
         
         return go;
+    }
+
+    public GameObject Instantiate(string path, Transform parent = null, string name = null)
+    {
+        return Instantiate(path, Vector3.zero, parent, name);
     }
 
     // go가 poolAble일 경우 Pool에 Push한 후 제거 

@@ -17,7 +17,7 @@ public class UI_HeroProfileGroup : UI_CreatureProfileGroup
         Bind<GameObject>(typeof(HeroProfileUI));
     }
 
-    public override void BindProfileUIs()
+    public override void BindHero()
     {
         foreach (HeroProfileUI playerUI in Enum.GetValues(typeof(HeroProfileUI)))
             GetGameObject(playerUI).SetActive(false);

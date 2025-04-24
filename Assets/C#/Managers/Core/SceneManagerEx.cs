@@ -16,8 +16,6 @@ public class SceneManagerEx
   
     // 현재 씬을 T 타입으로 반환
     public T GetCurrentScene<T>() where T : BaseScene => CurrentScene as T;
-
-    public void Clear() => CurrentScene.Clear();
     
     // 전투씬 전환 흐름: Area 카메라 정지 -> 로딩화면 Fade in ->  배틀 씬 로딩 시작 및 완료 -> Area의 빛, 카메라 비활성화 -> 로딩화면 Fade out
     public IEnumerator LoadBattleScene()

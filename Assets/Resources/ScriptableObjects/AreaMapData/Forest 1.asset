@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Forest 1
   m_EditorClassIdentifier: 
   OriginPosition: {x: 0, y: 0, z: 0}
-  MapWidth: 21
-  MapHeight: 20
+  MapWidth: 31
+  MapHeight: 30
   PlayableFieldWidth: 11
   PlayableFieldHeight: 15
   UnplayableFieldDecorationProportion: 0.857

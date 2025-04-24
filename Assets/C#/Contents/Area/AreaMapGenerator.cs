@@ -2,7 +2,6 @@ using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 using Random = UnityEngine.Random;
 
 public partial class AreaMapGenerator : MonoBehaviour
@@ -316,7 +315,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                 if (Map.TileTypeMap[pos.y, pos.x] != AreaTileType.ForceEmpty)
                     Map.TileTypeMap[pos.y, pos.x] = AreaTileType.Empty;
                 Map.BaseTileMap[pos.y, pos.x].DisableObstacle();
-                Map.BaseTileMap[pos.y, pos.x].IsObstacleEnabled = false;
+                Map.BaseTileMap[pos.y, pos.x].IsObstacleGenerated = false;
             }
         }
     }
@@ -334,7 +333,7 @@ public partial class AreaMapGenerator : MonoBehaviour
             if (Map.TileTypeMap[pos.y, pos.x] == AreaTileType.ForceEmpty) continue;
 
             Map.BaseTileMap[pos.y, pos.x].EnableObstacle();
-            Map.BaseTileMap[pos.y, pos.x].IsObstacleEnabled = true; // 해당 타일이 장애물이 활성화된 타일임을 체크해주어야 함. 전장의 안개 관련 로직에 필요.
+            Map.BaseTileMap[pos.y, pos.x].IsObstacleGenerated = true; // 해당 타일이 장애물이 활성화된 타일임을 체크해주어야 함. 전장의 안개 관련 로직에 필요.
 
             if (Map.TileTypeMap[pos.y, pos.x] != AreaTileType.OutOfField)
             {

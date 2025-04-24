@@ -51,11 +51,12 @@ public class AreaCameraController : MonoBehaviour
     private const float Y_COORDINATE = 50.0f; // 본 스크립트가 부착된 오브젝트의 y좌표는 고정
     #endregion
 
-    public void Init()
+    public void Init(Vector3 position)
     {
         _camera = GetComponentInChildren<Camera>();
         _cameraRotation = _camera.transform.rotation.eulerAngles.x;
         _cameraTransform = _camera.gameObject.transform;
+        gameObject.transform.position = position;
         _newPosition = transform.position;
         _newZoom = _zoomoutLimit;
 

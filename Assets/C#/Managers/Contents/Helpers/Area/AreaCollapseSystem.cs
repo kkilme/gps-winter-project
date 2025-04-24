@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
@@ -6,32 +7,41 @@ public class AreaCollapseSystem
 {
     private AreaManager _areaManager => Managers.AreaMng;
     private AreaMap _map => Managers.AreaMng.Map;
+    private UI_CollapseInformer _collapseInformer => _areaManager.UI.CollapseInformer;
 
     private int _turnCount = 0;
-    public int TurnCount
+    private int _collapseTimer;
+    private int _collapseAmount;
+    private int _collapseCount = 0;
+
+    public void Init(int collapseTimer, int collapseAmount)
     {
-        get => _turnCount;
-        set
+        _collapseAmount = collapseAmount;
+        _collapseTimer = collapseTimer;
+        _collapseInformer.BindData(_collapseTimer, _collapseAmount);
+    }
+
+    public IEnumerator ProgressTurn()
+    {
+        _turnCount++;
+        _collapseInformer.ProgressTimer();
+        if (_turnCount % _collapseTimer == 0)
         {
-            _turnCount = value;
-            if (TurnCount != 0 && TurnCount % _suddendeathTimer == 0) ProgressSuddendeath();
-            else _areaManager.AreaState = AreaState.Idle;
+            yield return CoroutineRunner.Instance.StartCoroutine(ProgressCollapse());
         }
     }
-    private int _suddendeathTimer = 4; // timer번의 이동마다 맨 밑 타일 파괴됨. Area별로 다르게 할 수도?
-    private int _suddendeathCount = 0;
 
-    private void ProgressSuddendeath()
+    public IEnumerator ProgressCollapse()
     {
         // 보스 위치 기준 최대 2칸 아래까지만 파괴됨
-        if (_suddendeathCount == _map.BossPosition.y - _map.PlayerStartPosition.y - 2)
+        if (_collapseCount * _collapseAmount >= _map.PlayableFieldHeight - 2)
         {
-            _areaManager.AreaState = AreaState.Idle;
-            return;
+            Debug.Log("[AreaCollapseSystem] Collapse is at limit.");
+            yield break;
         }
 
-        _map.CollapseTiles(_suddendeathCount);
-        _suddendeathCount++;
-        _areaManager.AreaState = AreaState.Idle;
+        _map.CollapseTiles(_collapseCount * _collapseAmount, _collapseAmount);
+        _collapseCount++;
+        Debug.Log($"[AreaCollapseSystem] ProgressCollapse - TurnCount: {_turnCount}, CollapseCount: {_collapseCount}");
     }
 }

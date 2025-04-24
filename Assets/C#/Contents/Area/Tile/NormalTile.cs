@@ -4,7 +4,7 @@ public sealed class NormalTile : AreaEventTile
 {
     public override void OnTileEnter()
     {
-        Managers.AreaMng.OnTileEventFinish();   
+        CoroutineRunner.Instance.StartCoroutine(Managers.AreaMng.OnTileEventFinish());
     }
 
     public override void OnTileEventFinish()

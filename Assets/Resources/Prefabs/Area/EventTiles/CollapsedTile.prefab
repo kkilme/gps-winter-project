@@ -352,12 +352,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8790432770222076796}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7be3bf30e45f61a42a31694bf8e3b69c, type: 3}
+  m_Script: {fileID: 11500000, guid: 016a9b198ac5fce43bf868215ce10ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TileType: 11
   _outline: {fileID: 4549051267119369239}
   _fill: {fileID: 8883360392245292932}
   _icon: {fileID: 760169635082150372}
-  _outlineHighlightColor: {r: 1, g: 0.078431375, b: 0.078431375, a: 1}
-  _fillHighlightColor: {r: 1, g: 0, b: 0, a: 0.6666667}
+  _outlineHighlightColor: {r: 1, g: 0, b: 0, a: 1}
+  _fillHighlightColor: {r: 0.5773585, g: 0, b: 0, a: 1}

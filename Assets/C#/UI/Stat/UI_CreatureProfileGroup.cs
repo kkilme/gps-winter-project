@@ -6,7 +6,7 @@ public abstract class UI_CreatureProfileGroup : UI_Base
 {
     protected Dictionary<Creature, UI_CreatureProfile> _creatureProfiles = new Dictionary<Creature, UI_CreatureProfile>();
 
-    public abstract void BindProfileUIs();
+    public abstract void BindHero();
 
     public void StopBlinking()
     {

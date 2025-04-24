@@ -12,33 +12,24 @@ public class BattleScene : BaseScene
         SceneType = SceneType.BattleScene;
     }
 
-    public override void Clear()
+    public void InitBattle(int squadId, string battleFieldName)
     {
-        Debug.Log("BattleScene Clear!");
+        Managers.BattleMng.Init(squadId, battleFieldName);
     }
 
-    public void InitBattle(int squadId)
-    {
-        Managers.BattleMng.Init(squadId);
-    }
-
+#if UNITY_EDITOR
     private void Start()
     {
-        
-        if (Managers.SceneMng.FirstScene != null && Managers.SceneMng.FirstScene is BattleScene)
+        if (Managers.SceneMng.FirstScene is BattleScene)
         {
             // TODO: for test
             // BattleScene에서 시작하여 플레이 테스트 시에만 실행
             Managers.HeroMng.AddHeroesOnTest();
             Managers.HeroMng.SpawnHeroParty();
-            InitBattle(GlobalValues.MONSTERSQUAD_SQUAD1_ID);
-        } else
-        {
-            InitBattle(GlobalValues.MONSTERSQUAD_SQUAD1_ID);
+            InitBattle(GlobalValues.MONSTERSQUAD_SQUAD1_ID, Managers.DataMng.AreaDataDict[AreaName.Forest].BattleFieldName);
         }
     }
 
-#if UNITY_EDITOR
     // TOOD: for test
     public new void Update()
     {

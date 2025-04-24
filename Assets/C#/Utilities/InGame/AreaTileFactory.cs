@@ -4,14 +4,14 @@ using UnityEngine;
 // 타입을 받아 Area 타일(AreaEventTile) 및 FogOfWar을 생성하는 팩토리 클래스
 public static class AreaTileFactory
 {
-    private const string NORMAL_TILE_PATH = "Area/Tiles/NormalTile";
-    private const string BATTLE_TILE_PATH = "Area/Tiles/BattleTile";
-    private const string ENCOUNTER_TILE_PATH = "Area/Tiles/EncounterTile";
-    private const string BOSS_TILE_PATH = "Area/Tiles/BossTile";
-    private const string COLLAPSED_TILE_PATH = "Area/Tiles/CollapsedTile";
+    private const string NORMAL_TILE_PATH = "Area/EventTiles/NormalTile";
+    private const string BATTLE_TILE_PATH = "Area/EventTiles/BattleTile";
+    private const string ENCOUNTER_TILE_PATH = "Area/EventTiles/EncounterTile";
+    private const string BOSS_TILE_PATH = "Area/EventTiles/BossTile";
+    private const string COLLAPSED_TILE_PATH = "Area/EventTiles/CollapsedTile";
 
-    private const string FOW_PLAYABLE_FIELD_PATH = "Area/Tiles/FogOfWar_PlayableField";
-    private const string FOW_UNPLAYABLE_FIELD_PATH = "Area/Tiles/FogOfWar_UnplayableField";
+    private const string FOW_PLAYABLE_FIELD_PATH = "Area/EventTiles/FogOfWar_PlayableField";
+    private const string FOW_UNPLAYABLE_FIELD_PATH = "Area/EventTiles/FogOfWar_UnplayableField";
 
     public static AreaEventTile CreateTile(Vector3 position, AreaTileType type, Transform parent)
     {

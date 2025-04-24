@@ -9,6 +9,8 @@ public class AreaData
 {
     public string Name; // AreaName enum의 값과 같아야 함
     public string BattleFieldName; // 전투 필드의 프리팹 이름
+    public int CollapseTimer; // Collapse 주기
+    public int CollapseAmount; // Collapse 시 파괴되는 행 개수
 }
 
 [Serializable]

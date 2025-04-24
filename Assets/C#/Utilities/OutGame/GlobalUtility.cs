@@ -57,19 +57,6 @@ public static class GlobalUtility
 
         return transform.gameObject;
     }
-    
-    // Sprite로 Mesh 생성
-    public static Mesh SpriteToMesh(Sprite sprite)
-    {
-        Mesh mesh = new()
-        {
-            vertices = Array.ConvertAll(sprite.vertices, i => (Vector3)i),
-            uv = sprite.uv,
-            triangles = Array.ConvertAll(sprite.triangles, i => (int)i)
-        };
-
-        return mesh;
-    }
 
     // 2차원 정수 배열에서 최소값과 그 인덱스를 찾음. 최소값이 여러개일 시 랜덤으로 선택.
     public static void FindMinIndex(int[,] arr, out int x, out int y)

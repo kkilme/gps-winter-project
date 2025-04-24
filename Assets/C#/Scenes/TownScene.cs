@@ -31,11 +31,4 @@ public class TownScene : BaseScene
             hero.transform.LookAt(Camera.main.transform.position);
         }
     }
-
-    public override void Clear()
-    {
-        #if UNITY_EDITOR
-        Debug.Log("TownScene Clear!");
-        #endif
-    }
 }

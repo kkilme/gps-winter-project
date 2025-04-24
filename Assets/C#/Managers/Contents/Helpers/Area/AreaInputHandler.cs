@@ -16,8 +16,7 @@ public class AreaInputHandler
 
     public void Init(Vector3 playerStartPos)
     {
-        _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator");
-        _mouseoverIndicator.transform.position = playerStartPos;
+        _mouseoverIndicator = Managers.ResourceMng.Instantiate("Area/mouseover_indicator", playerStartPos);
     }
 
 

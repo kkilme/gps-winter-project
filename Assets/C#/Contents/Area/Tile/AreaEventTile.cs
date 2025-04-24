@@ -9,7 +9,7 @@ public enum TileColorChangeType
     ToNormal
 }
 
-// 플레이 가능 영역에 생성되는, 플레이어가 이동 가능한 타일.
+// 플레이 가능 영역에 생성되는, 플레이어가 이동 가능한 이벤트 타일.
 // Note: 플레이어가 밟고 서있는 육각형 블록 게임오브젝트는 AreaBaseTile
 public abstract class AreaEventTile: MonoBehaviour
 {
@@ -26,6 +26,8 @@ public abstract class AreaEventTile: MonoBehaviour
     private Tweener _outlineColorTween; // DoTween을 통해 TileObject의 스프라이트 색을 바꾸는데, Tweener는 이 작업을 의미함. 작업 도중에 취소 시 사용.
     private Tweener _fillColorTween;
 
+    private bool _willBeDestroyed = false; // 타일이 파괴될 예정인지 여부
+
     public void Init()
     {   
         _outlineColor = _outline.color;
@@ -35,6 +37,8 @@ public abstract class AreaEventTile: MonoBehaviour
 
     public void ChangeColor(TileColorChangeType changeType, float duration = 0.3f)
     {
+        if(_willBeDestroyed) return; // 타일이 파괴될 예정이라면 색을 바꾸지 않음
+
         KillColorTween();
         switch (changeType)
         {
@@ -50,7 +54,9 @@ public abstract class AreaEventTile: MonoBehaviour
 
     }
 
-    // 기존 진행중인 colorTween을 중지, 삭제
+    /// <summary>
+    /// 기존 진행중인 colorTween을 중지, 삭제
+    /// </summary>
     private void KillColorTween()
     {
         _outlineColorTween?.Kill();
@@ -60,17 +66,33 @@ public abstract class AreaEventTile: MonoBehaviour
         _fillColorTween = null;
     }
 
-    // Sprite로 Mesh를 만들고 Collider에 적용: raycast를 위해 필요
+    /// <summary>
+    /// Sprite로 Mesh를 만들고 Collider에 적용: raycast를 위해 필요
+    /// </summary>
     private void InitMesh()
     {
-        Mesh mesh = GlobalUtility.SpriteToMesh(_fill.sprite);
+        Mesh mesh = RenderUtility.SpriteToMesh(_fill.sprite);
         gameObject.transform.GetComponentInChildren<MeshCollider>().sharedMesh = mesh;
     }
 
     public void Destroy()
     {
+        if (_willBeDestroyed) return;
+
+        _willBeDestroyed = true;
+
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(_fill.DOFade(0, 0.5f));
+        sequence.Join(_outline.DOFade(0, 0.5f));
         if (_icon != null)
-            _icon.GetComponent<SpriteRenderer>().DOFade(0, 0.5f).OnComplete(() => { GameObject.Destroy(gameObject); });
+        {
+            sequence.Join(_icon.GetComponent<SpriteRenderer>().DOFade(0, 0.5f));
+        }
+
+        sequence.Play().OnComplete(() =>
+        {
+            Destroy(gameObject);
+        });
     }
 
     public abstract void OnTileEnter();

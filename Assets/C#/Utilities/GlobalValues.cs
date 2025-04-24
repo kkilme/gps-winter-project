@@ -6,7 +6,7 @@ public static class GlobalValues
     public const float BATTLEFIELD_POS_X = -1000f;
     public const float BATTLEFIELD_POS_Z = -1000f;
 
-    // 2X3을 유지할 계획이지만, 나중에 변경될 수 있으므로 변수로 선언
+    // 2X3을 유지할 계획이지만, 나중에 변경될 수 있으므로 선언
     public const int BATTLEGRID_ROW_COUNT = 2;
     public const int BATTLEGRID_COL_COUNT = 3;
 
@@ -40,6 +40,7 @@ public static class GlobalValues
 
     public const string HERO_PREFAB_PATH_PREFIX = "Heroes/";
     public const string MONSTER_PREFAB_PATH_PREFIX = "Monsters/";
+    public const string BATTLEFIELD_PATH_PREFIX = "Battle/Field/";
 
     public const string HERO_ANIMATOR_PATH_PREFIX = "Animators/Heroes/";
 

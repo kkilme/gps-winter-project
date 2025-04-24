@@ -88,7 +88,9 @@ public partial class AreaMapGenerator
         }
     }
 
-    // AreaBaseTile Init. AreaBaseTile의 Start 메소드에서 할 시 제대로 적용이 안 됨.
+    /// <summary>
+    /// AreaBaseTile Init. AreaBaseTile의 Start에서 할 시 제대로 적용이 안 됨.
+    /// </summary>
     private void InitBaseTiles()
     {
         for (int z = 0; z < Map.BaseTileMap.GetLength(0); z++)
@@ -100,7 +102,9 @@ public partial class AreaMapGenerator
         }
     }
 
-    // 전체 맵 중 빈 위치 반환
+    /// <summary>
+    /// 전체 맵 중 비어있는(AreaTileType.Empty) 위치들 반환
+    /// </summary>
     private List<Vector2Int> GetEmptyPositions()
     {
         List<Vector2Int> emptyPositions = new();
@@ -206,7 +210,7 @@ public partial class AreaMapGenerator
             for (int x = 0; x < Map.TileTypeMap.GetLength(1); x++)
             {
                 GameObject canvas = Instantiate(_infoText, Map.GridToWorldPosition(x, z, 2), Quaternion.Euler(60, 0, 0), _debugObjectParent);
-                canvas.GetComponentInChildren<TextMeshProUGUI>().SetText($"{z}, {x}");
+                canvas.GetComponentInChildren<TextMeshProUGUI>().SetText($"{x}, {z}");
             }
         }
     }

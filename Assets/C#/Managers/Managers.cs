@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
-    public static bool Initialized { get; protected set; }
+    private static bool _initialized;
     
     private static Managers s_instance;
     public static Managers Instance { get { Init(); return s_instance; } }
@@ -45,9 +45,9 @@ public class Managers : MonoBehaviour
 
     public static void Init()
     {
-        if (s_instance == null || Initialized == false)
+        if (s_instance == null || !_initialized)
         {
-            Initialized = true;
+            _initialized = true;
             
             GameObject go = GameObject.Find("@Managers");
             if (go == null)
@@ -67,7 +67,6 @@ public class Managers : MonoBehaviour
     {
         InputMng.Clear();
         SoundMng.Clear();
-        SceneMng.Clear();
         UIMng.Clear();
         PoolMng.Clear();
     }

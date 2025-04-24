@@ -7,7 +7,8 @@ using UnityEngine;
 public class AreaMap
 {
     // 맵은 2차원 배열로 표현되며, 좌측 최하단이 (0, 0).
-    // 모두 _width x _height 크기임
+    // 모두  _height x _width 크기임
+    // Map[z, x] = (x, z) 좌표의 타일 (x는 가로, z는 세로)
     public AreaTileType[,] TileTypeMap { get; }
     public AreaEventTile[,] EventTileMap { get; }
     public AreaBaseTile[,] BaseTileMap { get; }
@@ -17,11 +18,12 @@ public class AreaMap
     public Vector2Int PlayerStartPosition; // 플레이어 시작 지점의 Grid 좌표
     public Vector2Int BossPosition; // 보스 타일 지점의 Grid 좌표
 
+    public int Width { get; private set; }// Grid 단위, 전체 맵 너비
+    public int Height { get; private set; }// Grid 단위, 전체 맵 높이
+    public int PlayableFieldWidth { get; private set; } // Grid 단위, 플레이어 이동 가능 영역의 너비
+    public int PlayableFieldHeight { get; private set; }// Grid 단위, 플레이어 이동 가능 영역의 높이
+
     private Vector3 _originPosition; // 맵 원점: Grid 좌표 (0,0)의 월드 좌표
-    private int _width; // Grid 단위, 전체 맵 너비
-    private int _height; // Grid 단위, 전체 맵 높이
-    private int _playableFieldWidth; // Grid 단위, 플레이어 이동 가능 영역의 너비
-    private int _playableFieldHeight; // Grid 단위, 플레이어 이동 가능 영역의 높이
 
     private const float TILE_PREFAB_WIDTH = 4;
     private const float TILE_PREFAB_HEIGHT = 3.5f;
@@ -30,10 +32,10 @@ public class AreaMap
 
     public AreaMap(int width, int height, int playableFieldWidth, int playableFieldHeight, Vector3 originPosition)
     {
-        _width = width;
-        _height = height;
-        _playableFieldWidth = playableFieldWidth;
-        _playableFieldHeight = playableFieldHeight;
+        Width = width;
+        Height = height;
+        PlayableFieldWidth = playableFieldWidth;
+        PlayableFieldHeight = playableFieldHeight;
         _originPosition = originPosition;
 
         TileTypeMap = new AreaTileType[height, width];
@@ -51,9 +53,9 @@ public class AreaMap
             }
         }
 
-        PlayableFieldStart = new Vector2Int(_width / 2 - _playableFieldWidth / 2, _height / 2 - _playableFieldHeight / 2);
-        PlayerStartPosition = new Vector2Int(_width / 2, PlayableFieldStart.y);
-        BossPosition = new Vector2Int(_width / 2, PlayableFieldStart.y + _playableFieldHeight - 1);
+        PlayableFieldStart = new Vector2Int(Width / 2 - PlayableFieldWidth / 2, Height / 2 - PlayableFieldHeight / 2);
+        PlayerStartPosition = new Vector2Int(Width / 2, PlayableFieldStart.y);
+        BossPosition = new Vector2Int(Width / 2, PlayableFieldStart.y + PlayableFieldHeight - 1);
     }
 
     /// <summary>
@@ -91,7 +93,7 @@ public class AreaMap
     /// <summary>
     /// 플레이어 시작 지점을 월드 좌표로 반환
     /// </summary>
-    public Vector3 GetPlayerStartPosition()
+    public Vector3 GetPlayerStartWorldPosition()
     {
         return GridToWorldPosition(PlayerStartPosition.x, PlayerStartPosition.y, 1.04f);
     }
@@ -99,7 +101,7 @@ public class AreaMap
     /// <summary>
     /// 보스 지점을 월드 좌표로 반환
     /// </summary>
-    public Vector3 GetBossPosition()
+    public Vector3 GetBossWorldPosition()
     {
         return GridToWorldPosition(BossPosition.x, BossPosition.y, 1.04f);
     }
@@ -124,7 +126,7 @@ public class AreaMap
 
     private bool IsPositionValid(int x, int z)
     {
-        return x >= 0 && x < _width && z >= 0 && z < _height;
+        return x >= 0 && x < Width && z >= 0 && z < Height;
     }
 
     /// <summary>
@@ -256,14 +258,17 @@ public class AreaMap
     }
 
     /// <summary>
-    /// z행의 타일들을 CollapsedTile로 교체
+    /// row(PlayableField 기준)행부터 row + amount - 1 행까지의 타일들을 CollapsedTile로 교체
     /// </summary>
-    public void CollapseTiles(int z)
+    public void CollapseTiles(int row, int amount)
     {
-        for (int x = PlayableFieldStart.x; x < PlayableFieldStart.x + _playableFieldWidth; x++)
+        for(int z = row + PlayableFieldStart.y; z < row + PlayableFieldStart.y + amount; z++)
         {
-            if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), AreaTileType.Collapsed, true);
-            // TODO: 플레이어가 붕괴된 타일에 있을 시 효과 발동
+            if (z >= BossPosition.y - 1) break;
+            for (int x = PlayableFieldStart.x; x <= PlayableFieldStart.x + PlayableFieldWidth; x++)
+            {
+                if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), AreaTileType.Collapsed, true);
+            }
         }
     }
 
@@ -285,7 +290,7 @@ public class AreaMap
 
             foreach (var neighbor in GetNeighbors(x, z))
             {
-                if (BaseTileMap[z, x].IsObstacleEnabled) // TileTypeMap을 사용하지 않는 이유: UnplayableField에서 모든 타일의 타입은 OutOfField로 지정되기 때문.
+                if (BaseTileMap[z, x].IsObstacleGenerated) // TileTypeMap을 사용하지 않는 이유: UnplayableField에서 모든 타일의 타입은 OutOfField로 지정되기 때문.
                     Explore(neighbor.x, neighbor.y, currentDistance + 2); // 장애물: 거리 2
                 else
                     Explore(neighbor.x, neighbor.y, currentDistance + 1); // 일반 타일: 거리 1
@@ -317,7 +322,7 @@ public class AreaMap
             }
 
             // 장애물 존재하는 타일일 시 장애물 활성화
-            if (BaseTileMap[posz, posx].IsObstacleEnabled) BaseTileMap[posz, posx].EnableObstacle();
+            if (BaseTileMap[posz, posx].IsObstacleGenerated) BaseTileMap[posz, posx].EnableObstacle();
         }
     }
 
@@ -336,6 +341,6 @@ public class AreaMap
     public void CalcCameraPosLimitX(out float xmin, out float xmax)
     {
         xmin = GridToWorldPosition(PlayableFieldStart.x, 0).x;
-        xmax = GridToWorldPosition(PlayableFieldStart.x + _playableFieldWidth - 1, 0).x;
+        xmax = GridToWorldPosition(PlayableFieldStart.x + PlayableFieldWidth - 1, 0).x;
     }
 }

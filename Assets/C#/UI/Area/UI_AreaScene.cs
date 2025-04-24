@@ -11,6 +11,7 @@ public class UI_AreaScene : UI_Scene
         UI_CoinTossDisplay,
         UI_AreaButtons,
         UI_CollapseInformer,
+        UI_HeroProfileGroup_Horizontal,
     }
 
     enum Images
@@ -22,6 +23,7 @@ public class UI_AreaScene : UI_Scene
     public UI_AreaButtons AreaButtons { get; protected set; }
     public UI_CollapseInformer CollapseInformer { get; protected set; }
     public UI_CoinTossDisplay CoinTossDisplay { get; protected set; }
+    public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
 
     private AreaManager _areaManager => Managers.AreaMng;
 
@@ -35,5 +37,17 @@ public class UI_AreaScene : UI_Scene
         TopBar = GetGameObject(SubItemUI.UI_AreaTopBar).GetOrAddComponent<UI_AreaTopBar>();
         CollapseInformer = GetGameObject(SubItemUI.UI_CollapseInformer).GetOrAddComponent<UI_CollapseInformer>();
         CoinTossDisplay = GetGameObject(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
+        HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
+    }
+
+    // AreaManager의 Init 완료 후 호출
+    public void OnAreaInitComplete()
+    {
+        CoinTossDisplay.Hide();
+        AreaButtons.Show();
+        TopBar.Show();
+        CollapseInformer.Show();
+        HeroProfileGroupUI.BindHero();
+        HeroProfileGroupUI.Show();
     }
 }

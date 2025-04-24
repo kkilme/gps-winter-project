@@ -51,7 +51,7 @@ public class BattleManager
 
     #endregion
 
-    public void Init(int monsterSquadId)
+    public void Init(int monsterSquadId, string battleFieldName)
     {
         BattleState = BattleState.Starting;
         TurnSystem = new TurnSystem();
@@ -62,9 +62,7 @@ public class BattleManager
         AliveMonsters = new();
 
         // 배틀 필드 생성
-        string battleFieldname = Managers.DataMng.AreaDataDict[Managers.AreaMng.AreaName].BattleFieldName;
-        GameObject battleField = Managers.ResourceMng.Instantiate($"Battle/Field/{battleFieldname}");
-        battleField.transform.position = new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0, GlobalValues.BATTLEFIELD_POS_Z);
+        GameObject battleField = Managers.ResourceMng.Instantiate(GlobalValues.BATTLEFIELD_PATH_PREFIX + battleFieldName, new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0, GlobalValues.BATTLEFIELD_POS_Z));
 
         // BattleInputHandler 초기화 - 카메라가 배틀 필드에 포함되어 있기 때문에 반드시 배틀 필드 생성 이후에 해야함.
         BattleInputHandler.Init();

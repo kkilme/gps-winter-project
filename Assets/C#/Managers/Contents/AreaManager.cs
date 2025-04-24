@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,27 +7,16 @@ using UnityEngine;
 public class AreaManager
 {
     public AreaMap Map { get; private set; }
+    public AreaData AreaData { get; private set; }
     public Loot Loots { get; set; }
     public AreaInputHandler AreaInputHandler { get; private set; }
     public AreaCollapseSystem CollapseSystem { get; private set; }
     public AreaCameraController CameraController { get; private set; }
+    public UI_AreaScene UI { get; private set; }
+
+    public AreaState AreaState { get; set; }
+
     public Vector3 CurrentPlayerPosition { get; set; } // 현재 플레이어 WorldPosition
-    public AreaName AreaName { get; set; }
-
-    private AreaState _areaState;
-    public AreaState AreaState
-    {
-        get => _areaState;
-        set
-        {
-            _areaState = value;
-            if (value == AreaState.Idle)
-            {
-                Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
-            }
-        }
-    }
-
     private HeroParty _party => Managers.HeroMng.HeroParty;
 
     private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
@@ -34,25 +24,36 @@ public class AreaManager
     private GameObject _light;
 
     #region Init
-    public void Init(AreaMap map)
+
+    public void Init(AreaName areaName, AreaMap map)
     {
         Map = map;
+        AreaData = Managers.DataMng.AreaDataDict[areaName];
+        UI = Managers.UIMng.ShowSceneUI<UI_AreaScene>();
         Loots = new Loot();
-        AreaInputHandler = new AreaInputHandler();
-        CollapseSystem = new AreaCollapseSystem();
         _light = GameObject.FindGameObjectWithTag("AreaLight");
 
-        CurrentPlayerPosition = Map.GetPlayerStartPosition();
+        CurrentPlayerPosition = Map.GetPlayerStartWorldPosition();
         _currentTile = Map.GetEventTile(CurrentPlayerPosition);
 
-        InitHeroes();
-        InitCamera();
+        AreaInputHandler = new AreaInputHandler();
         AreaInputHandler.Init(CurrentPlayerPosition);
 
+        CollapseSystem = new AreaCollapseSystem();
+        CollapseSystem.Init(AreaData.CollapseTimer, AreaData.CollapseAmount);
+
+        // 영웅 스폰 및 카메라 초기화
+        InitHeroes();
+        InitCamera();
+
+        // 미리 밝혀야할 전장의 안개 밝히기
         Map.RevealFogOfWarOnStart();
         UpdateTileBrightness();
+        Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
         AreaState = AreaState.Idle;
 
+        UI.OnAreaInitComplete();
+        
         Managers.InputMng.MouseAction -= AreaInputHandler.HandleMouseInput;
         Managers.InputMng.MouseAction += AreaInputHandler.HandleMouseInput;
     }
@@ -76,14 +77,12 @@ public class AreaManager
     /// </summary>
     private void InitCamera()
     {
-        CameraController = Managers.ResourceMng.Instantiate("Area/AreaCamera").GetComponent<AreaCameraController>();
+        CameraController = Managers.ResourceMng.Instantiate("Area/AreaCamera").GetOrAddComponent<AreaCameraController>();
         CameraController.Freeze = true;
-        CameraController.Init();
+        CameraController.Init(new Vector3(CurrentPlayerPosition.x, 50, CurrentPlayerPosition.z - 40));
         Map.CalcCameraPosLimitX(out float xmin, out float xmax);
-        CameraController.InitPosLimit(xmin, xmax, Map.GetPlayerStartPosition().z, Map.GetBossPosition().z);
+        CameraController.InitPosLimit(xmin, xmax, Map.GetPlayerStartWorldPosition().z, Map.GetBossWorldPosition().z);
         CameraController.Freeze = false;
-
-        CameraController.transform.position = new Vector3(CurrentPlayerPosition.x, 50, CurrentPlayerPosition.z - 40);
     }
     #endregion
 
@@ -92,12 +91,13 @@ public class AreaManager
     /// </summary>
     public void MoveHeroes(Vector3 targetPosition)
     {
+        if(AreaState != AreaState.Idle) return;
+
         // 이동 가능한 타일인지 확인
         if (!Map.IsPositionMoveable(CurrentPlayerPosition, targetPosition)) return;
 
         AreaState = AreaState.Moving;
         Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Reset);
-
 
         CurrentPlayerPosition = targetPosition;
         Map.RevealFogOfWar(CurrentPlayerPosition);
@@ -168,13 +168,13 @@ public class AreaManager
         CameraController.GetComponent<AreaCameraController>().Freeze = false;
         _light.SetActive(true);
 
-        OnTileEventFinish();
+        CoroutineRunner.Instance.StartCoroutine(OnTileEventFinish());
 
         Managers.InputMng.MouseAction -= AreaInputHandler.HandleMouseInput;
         Managers.InputMng.MouseAction += AreaInputHandler.HandleMouseInput;
     }
 
-    public void OnTileEventFinish()
+    public IEnumerator OnTileEventFinish()
     {
         _currentTile.OnTileEventFinish();
 
@@ -187,7 +187,9 @@ public class AreaManager
                 break;
         }
 
+        yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressTurn());
+
         AreaState = AreaState.Idle;
-        CollapseSystem.TurnCount++;
+        Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
     }
 }

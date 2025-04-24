@@ -16,61 +16,51 @@ public class AreaBaseTile : MonoBehaviour
     private GameObject _obstacle;
     private MaterialPropertyBlock _propBlock;
 
-    public bool IsObstacleEnabled { get; set; }
+    public bool IsObstacleGenerated { get; set; } // 타일 위의 장애물 활성화 여부. 장애물 게임오브젝트의 active/inactive 상태가 아니라 맵 생성 단계에서 이 타일에 장애물을 생성하였는지 여부를 나타냄.
 
     public void Init()
     {
         _tile = gameObject;
         _propBlock = new MaterialPropertyBlock();
-        if (Application.isPlaying)
-        {
-            // Material 인스턴스화
-            // Editor상에서 실행 시 씬에 Material 인스턴스가 영구 저장되는 문제 발생
-            _tileMaterial = GetComponent<Renderer>().material; 
-        }
-        else
-        {
-            _tileMaterial = GetComponent<Renderer>().sharedMaterial;
-        }
+        _tileMaterial = Application.isPlaying ? GetComponent<Renderer>().material : GetComponent<Renderer>().sharedMaterial; // Material 인스턴스화. Editor상에서 인스턴스화 시 치명적이기 때문에 따로 처리. 
+
         _obstacle = gameObject.transform.GetChild(0).gameObject;
         _obstacle.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // 각도를 랜덤으로 하여 랜덤성 부여
+
         DisableObstacle();
     }
 
-    // 타일 밝기 변경
-    // 영웅 시야 범위 내에 있을 시 isVisible = true, 아니면 false
+    /// <summary>
+    /// 타일 & 장애물 밝기 변경
+    /// </summary>
+    /// <param name="isVisible">영웅 시야 범위 내에 있을 시 true, 아니면 false</param>
     public void SetBrightness(bool isVisible)
     {
         Color targetColor = isVisible ? Color.white : Color.gray * 0.5f;
         _tileMaterial.DOColor(targetColor, 0.5f); // 타일은 Material Instance를 사용하여 DOTween으로 색상 변경
 
         var renderers = _obstacle.GetComponentsInChildren<Renderer>();
-
-        // 장애물은 Material Property Block을 사용하여 색상 변경
-        foreach (var renderer in renderers)
-        {
-            renderer.GetPropertyBlock(_propBlock);
-
-            var baseColor = renderer.sharedMaterial.HasProperty("_Color") ?
-                renderer.sharedMaterial.GetColor("_Color") : Color.white;
-
-            targetColor = isVisible ? baseColor : baseColor * 0.4f;
-            targetColor.a = 1f; // RenderingMode가 Cutout인 Material이 있기 때문에 alpha값은 1로 고정
-            _propBlock.SetColor("_Color", targetColor);
-
-            renderer.SetPropertyBlock(_propBlock);
-        }
+        RenderUtility.SetRenderersBrightness(renderers, isVisible ? 1f : 0.4f); // 장애물은 Material Property Block을 사용하여 색상 변경
     }
 
-    // 빛의 효과를 받는 타일로 설정
+
+    public void FadeinObstacle()
+    {
+
+    }
+
+    /// <summary>
+    /// 빛의 효과를 받는 타일로 설정
+    /// </summary>
     public void EnableLight()
     {   
         _tile.SetLayerRecursively(LayerMask.NameToLayer("AreaLightTarget"));
     }
 
+
     public void EnableObstacle()
     {
-        if (!IsObstacleEnabled) return;
+        if (!IsObstacleGenerated) return;
         _obstacle.SetActive(true);
     }
 
