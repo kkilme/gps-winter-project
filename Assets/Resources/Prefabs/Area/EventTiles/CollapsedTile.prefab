@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 269549477908972617}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &396578992278137899
 SpriteRenderer:
@@ -110,12 +110,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2768538408761540134}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -108.99, y: -108.66134, z: 1.019989}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 269549477908972617}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &21500149880610020
 MeshCollider:
@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 3021401591203939339}
   - component: {fileID: 4549051267119369239}
   m_Layer: 0
-  m_Name: line
+  m_Name: outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -169,7 +169,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 269549477908972617}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &4549051267119369239
 SpriteRenderer:
@@ -253,7 +253,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 269549477908972617}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8883360392245292932
 SpriteRenderer:
@@ -336,10 +336,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6342070704108958042}
   - {fileID: 3021401591203939339}
-  - {fileID: 1630874506082338181}
+  - {fileID: 6342070704108958042}
   - {fileID: 7167534793648873419}
+  - {fileID: 1630874506082338181}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -356,8 +356,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TileType: 11
-  _outline: {fileID: 4549051267119369239}
-  _fill: {fileID: 8883360392245292932}
-  _icon: {fileID: 760169635082150372}
-  _outlineHighlightColor: {r: 1, g: 0, b: 0, a: 1}
-  _fillHighlightColor: {r: 0.5773585, g: 0, b: 0, a: 1}

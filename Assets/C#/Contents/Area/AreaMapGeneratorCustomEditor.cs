@@ -195,7 +195,7 @@ public class AreaMapGeneratorCustomEditor : Editor
                     _generator.GeneratePlayableFieldObstacles(playableFieldPos);
                     _generator.GenerateEventTiles();
                     _generator.GenerateFogOfWar();
-                    _generator.Map.RevealFogOfWarOnStart();
+                    _generator.Map.RevealFogOfWarOnAreaStart();
                 }
             }
         }

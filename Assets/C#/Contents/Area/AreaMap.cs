@@ -233,17 +233,11 @@ public class AreaMap
     }
 
     /// <summary>
-    /// 주어진 위치에 이벤트타일 생성. 게임 진행 도중 타일 타입을 바꾸는데에도 필요.
+    /// 주어진 위치에 이벤트타일 생성.
     /// </summary>
-    public void CreateEventTile(int x, int z, AreaTileType tileType, bool isReplace = false)
+    public void CreateEventTile(int x, int z, AreaTileType tileType)
     {
         Vector3 worldPosition = GridToWorldPosition(x, z, 1.02f);
-
-        if (isReplace)
-        {
-            var oldTile = EventTileMap[z, x];
-            oldTile.Destroy();
-        }
 
         AreaEventTile tile = AreaTileFactory.CreateTile(worldPosition, tileType, _eventTileParent);
 
@@ -251,10 +245,32 @@ public class AreaMap
         TileTypeMap[z, x] = tileType;
     }
 
-    public void CreateEventTile(Vector3 worldPosition, AreaTileType tileType, bool isReplace = false)
+    public void CreateEventTile(Vector3 worldPosition, AreaTileType tileType)
     {
         WorldToGridPosition(worldPosition, out int x, out int z);
-        CreateEventTile(x, z, tileType, isReplace);
+        CreateEventTile(x, z, tileType);
+    }
+
+    /// <summary>
+    /// 주어진 위치의 이벤트 타일을 파괴하고 tileType 타일로 교체.
+    /// </summary>
+    public void ReplaceEventTile(int x, int z, AreaTileType tileType)
+    {
+        var oldTile = EventTileMap[z, x];
+        if(oldTile == null)
+        {
+            CreateEventTile(x, z, tileType);
+        } else
+        {
+            oldTile.Destroy();
+            CreateEventTile(x, z, tileType);
+        }
+    }
+
+    public void ReplaceEventTile(Vector3 worldPosition, AreaTileType tileType)
+    {
+        WorldToGridPosition(worldPosition, out int x, out int z);
+        ReplaceEventTile(x, z, tileType);
     }
 
     /// <summary>
@@ -267,7 +283,9 @@ public class AreaMap
             if (z >= BossPosition.y - 1) break;
             for (int x = PlayableFieldStart.x; x <= PlayableFieldStart.x + PlayableFieldWidth; x++)
             {
-                if (IsPositionStandable(x, z)) CreateEventTile(GridToWorldPosition(x, z), AreaTileType.Collapsed, true);
+                if (TileTypeMap[z, x] != AreaTileType.OutOfField) ReplaceEventTile(GridToWorldPosition(x, z), AreaTileType.Collapsed);
+                BaseTileMap[z, x].OnCollapse();
+                RevealFogOfWar(x, z); // 전장의 안개도 함께 제거
             }
         }
     }
@@ -290,7 +308,7 @@ public class AreaMap
 
             foreach (var neighbor in GetNeighbors(x, z))
             {
-                if (BaseTileMap[z, x].IsObstacleGenerated) // TileTypeMap을 사용하지 않는 이유: UnplayableField에서 모든 타일의 타입은 OutOfField로 지정되기 때문.
+                if (BaseTileMap[z, x].IsObstacleGenerated) // TileTypeMap == Obstacle을 사용하지 않는 이유: UnplayableField에서 모든 타일의 타입은 OutOfField로 지정되기 때문에 Obstacle Type이 존재하지 않음.
                     Explore(neighbor.x, neighbor.y, currentDistance + 2); // 장애물: 거리 2
                 else
                     Explore(neighbor.x, neighbor.y, currentDistance + 1); // 일반 타일: 거리 1
@@ -303,7 +321,7 @@ public class AreaMap
     }
 
     /// <summary>
-    /// 특정 위치를 기준으로 전장의 안개 제거. 기본 시야 거리: 2
+    /// 특정 위치와 시야 범위를 사용하여 전장의 안개 제거. 기본 시야 거리: 2
     /// </summary>
     public void RevealFogOfWar(Vector3 currentPosition, int visionRange = 2)
     {
@@ -311,25 +329,30 @@ public class AreaMap
 
         foreach (var pos in fogOfWarsToReveal)
         {
-            var posx = pos.x;
-            var posz = pos.y;
-
-            // 안개 제거
-            if (FogOfWarMap[posz, posx] != null)
-            {
-                FogOfWarMap[posz, posx].Destroy();
-                FogOfWarMap[posz, posx] = null;
-            }
-
-            // 장애물 존재하는 타일일 시 장애물 활성화
-            if (BaseTileMap[posz, posx].IsObstacleGenerated) BaseTileMap[posz, posx].EnableObstacle();
+            RevealFogOfWar(pos.x, pos.y);
         }
+    }
+
+    /// <summary>
+    /// 특정 위치의 전장의 안개 제거
+    /// </summary>
+    public void RevealFogOfWar(int x, int z)
+    {
+        // 안개 제거
+        if (FogOfWarMap[z, x] != null)
+        {
+            FogOfWarMap[z, x].Destroy();
+            FogOfWarMap[z, x] = null;
+        }
+
+        // 장애물 존재하는 타일일 시 장애물 활성화
+        if (BaseTileMap[z, x].IsObstacleGenerated) BaseTileMap[z, x].EnableObstacle();
     }
 
     /// <summary>
     /// Area 시작 시 특정 전장의 안개 제거
     /// </summary>
-    public void RevealFogOfWarOnStart()
+    public void RevealFogOfWarOnAreaStart()
     {
         RevealFogOfWar(GridToWorldPosition(PlayerStartPosition), 2); // 시작 지점에서 범위 2 반경의 전장의 안개 제거
         RevealFogOfWar(GridToWorldPosition(BossPosition), 1); // 보스 지점에서 범위 1 반경의 전장의 안개 제거

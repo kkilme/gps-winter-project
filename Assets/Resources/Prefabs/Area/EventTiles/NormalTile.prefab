@@ -48,11 +48,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TileType: 7
-  _outline: {fileID: 4874108172863236575}
-  _fill: {fileID: 7984271945384350217}
-  _icon: {fileID: 0}
-  _outlineHighlightColor: {r: 0.19607843, g: 1, b: 0, a: 1}
-  _fillHighlightColor: {r: 0.19607843, g: 1, b: 0, a: 0.25490198}
 --- !u!1 &4272510492623857543
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,7 +321,7 @@ GameObject:
   - component: {fileID: 2966904238760825267}
   - component: {fileID: 4874108172863236575}
   m_Layer: 12
-  m_Name: line
+  m_Name: outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

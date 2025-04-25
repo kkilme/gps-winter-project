@@ -47,15 +47,17 @@ public class AreaManager
         InitCamera();
 
         // 미리 밝혀야할 전장의 안개 밝히기
-        Map.RevealFogOfWarOnStart();
+        Map.RevealFogOfWarOnAreaStart();
         UpdateTileBrightness();
         Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
         AreaState = AreaState.Idle;
 
         UI.OnAreaInitComplete();
-        
+
         Managers.InputMng.MouseAction -= AreaInputHandler.HandleMouseInput;
         Managers.InputMng.MouseAction += AreaInputHandler.HandleMouseInput;
+
+        CoroutineRunner.Instance.StartCoroutine(GlobalUtility.FixUISorting(UI.gameObject)); // UI의 SortingOrder를 Fix
     }
 
     /// <summary>
@@ -125,12 +127,15 @@ public class AreaManager
         _currentTile.OnTileEnter();
     }
 
+    /// <summary>
+    /// 시야 내/외의 타일 밝기 조정
+    /// </summary>
     private void UpdateTileBrightness()
     {
         var newVisiblePos = Map.GetVisibleTilePositions(CurrentPlayerPosition);
         foreach(var pos in _visiblePositions)
         {
-            if (!newVisiblePos.Contains(pos))
+            if (!newVisiblePos.Contains(pos) || Map.TileTypeMap[pos.y, pos.x] == AreaTileType.Collapsed) // 붕괴된 타일도 밝기 낮춤
             {
                 if (Map.TileTypeMap[pos.y, pos.x] != AreaTileType.OutOfField)
                     Map.BaseTileMap[pos.y, pos.x].SetBrightness(false);
@@ -139,7 +144,7 @@ public class AreaManager
 
         foreach (var pos in newVisiblePos)
         {
-            if (Map.TileTypeMap[pos.y, pos.x] == AreaTileType.OutOfField) continue;
+            if (Map.TileTypeMap[pos.y, pos.x] == AreaTileType.OutOfField || Map.TileTypeMap[pos.y, pos.x] == AreaTileType.Collapsed) continue;
             Map.BaseTileMap[pos.y, pos.x].SetBrightness(true);
         }
 
@@ -183,7 +188,7 @@ public class AreaManager
             case AreaTileType.Normal:
                 break;
             case AreaTileType.Battle:
-                Map.CreateEventTile(CurrentPlayerPosition, AreaTileType.Normal, true);
+                Map.ReplaceEventTile(CurrentPlayerPosition, AreaTileType.Normal);
                 break;
         }
 

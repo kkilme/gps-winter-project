@@ -14,25 +14,44 @@ public enum TileColorChangeType
 public abstract class AreaEventTile: MonoBehaviour
 {
     public AreaTileType TileType;
-    [SerializeField] private SpriteRenderer _outline;  // 셀 모서리 스프라이트
-    [SerializeField] private SpriteRenderer _fill;     // 셀 내부 스프라이트
-    [SerializeField] private GameObject _icon;           // 아이콘 오브젝트
 
-    private Color _outlineColor;      // 모서리 스프라이트 색
-    private Color _fillColor;         // 내부 스프라이트 색
-    [SerializeField] private Color _outlineHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 indicator 색
-    [SerializeField] private Color _fillHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 fill 색
+    protected SpriteRenderer _outline;  // 셀 모서리 스프라이트
+    protected SpriteRenderer _fill;     // 셀 내부 스프라이트
+    protected GameObject _icon;           // 아이콘 오브젝트
 
-    private Tweener _outlineColorTween; // DoTween을 통해 TileObject의 스프라이트 색을 바꾸는데, Tweener는 이 작업을 의미함. 작업 도중에 취소 시 사용.
-    private Tweener _fillColorTween;
+    protected Color _outlineColor;      // 모서리 스프라이트 색
+    protected Color _fillColor;         // 내부 스프라이트 색
+    protected Color _outlineHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 indicator 색
+    protected Color _fillHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 fill 색
 
-    private bool _willBeDestroyed = false; // 타일이 파괴될 예정인지 여부
+    protected Tweener _outlineColorTween; // DoTween을 통해 TileObject의 스프라이트 색을 바꾸는데, Tweener는 이 작업을 의미함. 작업 도중에 취소 시 사용.
+    protected Tweener _fillColorTween;
+
+    protected bool _willBeDestroyed = false; // 타일이 파괴될 예정인지 여부
 
     public void Init()
     {   
-        _outlineColor = _outline.color;
-        _fillColor = _fill.color;
+        InitSprite();
+        InitColor();
         InitMesh();
+    }
+
+    private void InitSprite()
+    {
+        _outline = transform.Find("outline")?.GetComponent<SpriteRenderer>();
+        _fill = transform.Find("fill")?.GetComponent<SpriteRenderer>();
+        _icon = transform.Find("icon")?.gameObject;
+    }
+
+    protected abstract void InitColor();
+
+    /// <summary>
+    /// Sprite로 Mesh를 만들고 Collider에 적용: raycast를 위해 필요
+    /// </summary>
+    private void InitMesh()
+    {
+        Mesh mesh = RenderUtility.SpriteToMesh(_fill.sprite);
+        gameObject.transform.GetComponentInChildren<MeshCollider>().sharedMesh = mesh;
     }
 
     public void ChangeColor(TileColorChangeType changeType, float duration = 0.3f)
@@ -66,14 +85,6 @@ public abstract class AreaEventTile: MonoBehaviour
         _fillColorTween = null;
     }
 
-    /// <summary>
-    /// Sprite로 Mesh를 만들고 Collider에 적용: raycast를 위해 필요
-    /// </summary>
-    private void InitMesh()
-    {
-        Mesh mesh = RenderUtility.SpriteToMesh(_fill.sprite);
-        gameObject.transform.GetComponentInChildren<MeshCollider>().sharedMesh = mesh;
-    }
 
     public void Destroy()
     {

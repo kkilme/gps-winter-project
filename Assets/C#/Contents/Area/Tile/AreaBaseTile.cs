@@ -43,12 +43,6 @@ public class AreaBaseTile : MonoBehaviour
         RenderUtility.SetRenderersBrightness(renderers, isVisible ? 1f : 0.4f); // 장애물은 Material Property Block을 사용하여 색상 변경
     }
 
-
-    public void FadeinObstacle()
-    {
-
-    }
-
     /// <summary>
     /// 빛의 효과를 받는 타일로 설정
     /// </summary>
@@ -57,6 +51,12 @@ public class AreaBaseTile : MonoBehaviour
         _tile.SetLayerRecursively(LayerMask.NameToLayer("AreaLightTarget"));
     }
 
+    public void OnCollapse()
+    {
+        IsObstacleGenerated = false;
+        SetBrightness(false);
+        DisableObstacle();
+    }
 
     public void EnableObstacle()
     {

@@ -66,7 +66,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         GeneratePlayableFieldObstacles(playableField);
         GenerateEventTiles();
         GenerateFogOfWar();
-        Map.RevealFogOfWarOnStart(); // 전장의 안개 일부 미리 밝힘
+        Map.RevealFogOfWarOnAreaStart(); // 전장의 안개 일부 미리 밝힘
 
         return Map;
     }

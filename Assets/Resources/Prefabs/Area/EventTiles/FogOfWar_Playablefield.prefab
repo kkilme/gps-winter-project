@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 7159491838812480186}
   - component: {fileID: 7036166595817365289}
   m_Layer: 12
-  m_Name: line
+  m_Name: outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

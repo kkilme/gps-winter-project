@@ -31,6 +31,9 @@ public static class RenderUtility
         if (renderer == null || renderer.sharedMaterial == null)
             return;
 
+        if (_block == null)
+            _block = new MaterialPropertyBlock();
+
         renderer.GetPropertyBlock(_block);
 
         var baseColor = renderer.sharedMaterial.HasProperty("_Color")
@@ -54,78 +57,4 @@ public static class RenderUtility
             SetRendererBrightness(renderer, brightness);
         }
     }
-
-    /// <summary>
-    /// Renderer의 MaterialPropertyBlock을 사용하여 alpha값을 변경
-    /// </summary>
-    private static void SetRendererAlpha(Renderer renderer, Color baseColor, float alpha)
-    {
-        if (renderer == null || renderer.sharedMaterial == null) return;
-
-        renderer.GetPropertyBlock(_block);
-
-        Color color = baseColor;
-        color.a = alpha;
-        _block.SetColor("_Color", color);
-        renderer.SetPropertyBlock(_block);
-    }
-
-    /// <summary>
-    /// Renderer의 MaterialPropertyBlock을 사용하여 Fadein/Out 효과
-    /// </summary>
-    public static IEnumerator FadeRenderer(Renderer renderer, float duration = 1f, bool fadeIn = false)
-    {
-        Color baseColor = renderer.sharedMaterial.HasProperty("_Color") ? renderer.sharedMaterial.GetColor("_Color") : Color.white;
-
-        float elapsed = 0f;
-        float from = fadeIn ? 0f : 1f;
-        float to = fadeIn ? 1f : 0f;
-
-        while (elapsed < duration)
-        {
-            float t = elapsed / duration;
-            float alpha = Mathf.Lerp(from, to, t);
-
-            SetRendererAlpha(renderer, baseColor, alpha);
-
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        SetRendererAlpha(renderer, baseColor, to);
-    }
-
-    /// <summary>
-    /// Renderer의 MaterialPropertyBlock을 사용하여 Fadein/Out 효과
-    /// </summary>
-    public static IEnumerator FadeRenderers(Renderer[] renderers, float duration = 1f, bool fadeIn = false)
-    {
-        // 렌더러별 baseColor 저장
-        List<Color> baseColors = renderers.Select(r => r.sharedMaterial.HasProperty("_Color") ? r.sharedMaterial.GetColor("_Color") : Color.white).ToList();
-
-        float elapsed = 0f;
-        float from = fadeIn ? 0f : 1f;
-        float to = fadeIn ? 1f : 0f;
-
-        while (elapsed < duration)
-        {
-            float t = elapsed / duration;
-            float alpha = Mathf.Lerp(from, to, t);
-
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                SetRendererAlpha(renderers[i], baseColors[i], alpha);
-            }
-
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        // 마지막 보정
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            SetRendererAlpha(renderers[i], baseColors[i], to);
-        }
-    }
-
 }

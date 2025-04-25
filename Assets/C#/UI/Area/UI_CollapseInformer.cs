@@ -36,7 +36,7 @@ public class UI_CollapseInformer : UI_Base
         _collapseTimer = collapseTimer;
         _leftTurn = collapseTimer;
         _leftTurnText.text = _leftTurn.ToString();
-        Get<TextMeshProUGUI>(Texts.Text_CollapseAmount).text = collapseAmount.ToString();
+        GetText(Texts.Text_CollapseAmount).text = collapseAmount.ToString();
     }
 
     public Tween ProgressTimer()
@@ -59,5 +59,13 @@ public class UI_CollapseInformer : UI_Base
         _leftTurnText.text = _leftTurn.ToString();
 
         return _leftTurnRect.DOScale(_leftTurnRect.localScale * 1.05f, 0.5f).From(true);
+    }
+
+    public void OnCollapseFinished()
+    {
+        _leftTurnText.colorGradientPreset = cg_Safe;
+        _leftTurnText.text = "-";
+        GetText(Texts.Text_CollapseAmount).text = "-";
+        GetText(Texts.Text_Desc).text = "Collapse Finished";
     }
 }
