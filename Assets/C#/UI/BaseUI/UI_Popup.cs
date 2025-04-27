@@ -10,7 +10,7 @@ public class UI_Popup : UI_Base
     }
 
     // Popup 닫기
-    public virtual void ClosePopupUI()
+    public virtual void Close()
     {
         Managers.UIMng.ClosePopupUI(this);
     }

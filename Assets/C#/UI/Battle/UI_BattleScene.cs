@@ -144,7 +144,7 @@ public class UI_BattleScene : UI_Scene
 
         void ShowNext()
         {
-            UI_Loot lootUI = Managers.UIMng.ShowPopupUI<UI_Loot>();
+            UI_Loot lootUI = Managers.UIMng.ShowPopupUI<UI_Loot>(); // TODO: popup 닫기
             lootUI.Init(loot.Items[itemCount - 1]);
             lootUI.OnLootAction -= OnLootAction;
             lootUI.OnLootAction += OnLootAction;

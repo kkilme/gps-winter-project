@@ -1,28 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
+/// <summary>
+/// UI의 생성 및 제거 역할 담당
+/// </summary>
 public class UIManager
 {
     private int _order = 10; // 현재까지 최근에 사용한 오더
+    private GameObject _root;
     
     public UI_Scene SceneUI { get; protected set; } // 현재의 고정 캔버스 UI
-    public Stack<UI_Popup> PopupStack { get; protected set; } // 팝업 캔버스 UI Stack
+    public List<UI_Popup> PopupUIs { get; protected set; }
 
     public void Init()
     {
-        PopupStack = new Stack<UI_Popup>();
+        PopupUIs = new List<UI_Popup>();
     }
     
     public GameObject Root
     {
         get
         {
-            GameObject root = GameObject.Find("@UI_Root");
-            if (root == null)
-                root = new GameObject { name = "@UI_Root" };
-
-            return root;
+            if (_root == null)
+            {
+                _root = GameObject.Find("@UI_Root");
+                if (_root == null)
+                    _root = new GameObject { name = "@UI_Root" };
+            }
+            return _root;
         }
     }
 
@@ -59,7 +66,9 @@ public class UIManager
         }
     }
 
-    // 이름이 name인 SceneUI를 생성한 후 T컴포넌트로 반환
+    /// <summary>
+    /// 이름이 name인 SceneUI를 생성한 후 T컴포넌트로 반환
+    /// </summary>
     public T ShowSceneUI<T>(string name = null) where T : UI_Scene
     {
         if (string.IsNullOrEmpty(name))
@@ -74,21 +83,9 @@ public class UIManager
         return sceneUI;
     }
 
-    // 이름이 name인 PopupUI를 생성한 후 T컴포넌트로 반환
-    public T ShowPopupUI<T>(string name = null) where T : UI_Popup
-    {
-        if (string.IsNullOrEmpty(name))
-            name = typeof(T).Name;
-
-        GameObject go = Managers.ResourceMng.Instantiate($"UI/PopupUI/{name}");
-        T popupUI = GlobalUtility.GetOrAddComponent<T>(go);
-        PopupStack.Push(popupUI);
-        
-        SetUIParent(go, Root.transform);
-        
-        return popupUI;
-    }
-
+    /// <summary>
+    /// 이름이 name인 UI를 생성한 후 T컴포넌트로 반환
+    /// </summary>
     public T MakeGeneralUI<T>(Transform parent = null, string name = null) where T : UI_Base
     {
         if (string.IsNullOrEmpty(name))
@@ -101,7 +98,9 @@ public class UIManager
         return go.GetOrAddComponent<T>();
     }
 
-    // 이름이 name인 SubItemUI를 생성한 후 T컴포넌트로 반환
+    /// <summary>
+    /// 이름이 name인 SubItemUI를 생성한 후 T컴포넌트로 반환
+    /// </summary>
     public T MakeSubItemUI<T>(Transform parent = null, string name = null) where T : UI_Base
     {
         if (string.IsNullOrEmpty(name))
@@ -114,7 +113,9 @@ public class UIManager
         return go.GetOrAddComponent<T>();
     }
 
-    // 이름이 name인 WorldSpaceUI를 생성한 후 T컴포넌트로 반환
+    /// <summary>
+    /// 이름이 name인 WorldSpaceUI를 생성한 후 T컴포넌트로 반환
+    /// </summary>
     public T MakeWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UI_Base
     {
         if (string.IsNullOrEmpty(name))
@@ -131,42 +132,83 @@ public class UIManager
         return go.GetOrAddComponent<T>();
     }
 
-    // 가장 Order가 높은 PopupUI 제거
-    public void ClosePopupUI()
+    /// <summary>
+    /// 이름이 name인 PopupUI를 생성한 후 T컴포넌트로 반환
+    /// </summary>
+    public T ShowPopupUI<T>(string name = null) where T : UI_Popup
     {
-        if (PopupStack.Count == 0)
-            return;
+        if (string.IsNullOrEmpty(name))
+            name = typeof(T).Name;
 
-        UI_Popup popupUI= PopupStack.Pop();
-        Managers.ResourceMng.Destroy(popupUI.gameObject);
-        popupUI = null;
-        _order--;
-    }
+        GameObject go = Managers.ResourceMng.Instantiate($"UI/PopupUI/{name}");
+        T popupUI = GlobalUtility.GetOrAddComponent<T>(go);
 
-    // 가장 Order가 높은 PopupUI 확인 후 제거
-    public void ClosePopupUI(UI_Popup popup)
-    {
-        if (PopupStack.Count == 0)
-            return;
-
-        if (PopupStack.Peek() != popup)
-        {
-            Debug.Log("Close Popup Failed");
-            return;
-        }
+        PopupUIs.Add(popupUI);
         
-        ClosePopupUI();
+        SetUIParent(go, Root.transform);
+        
+        return popupUI;
     }
 
-    // 모든 PopupUI 제거
+    /// <summary>
+    /// 가장 최근에 열린 PopupUI 제거
+    /// </summary>
+    public void CloseTopPopupUI()
+    {
+        if (PopupUIs.Count == 0)
+            return;
+
+        UI_Popup popupUI= PopupUIs[^1];
+        if (popupUI != null) Managers.ResourceMng.Destroy(popupUI.gameObject);
+        PopupUIs.RemoveAt(PopupUIs.Count - 1);
+
+        _order = PopupUIs.Count == 0 ? 10 : Mathf.Max(10, _order - 1);
+    }
+
+    /// <summary>
+    /// T타입 PopupUI 제거
+    /// </summary>
+    public void ClosePopupUI<T>()
+    {
+        var popup = PopupUIs.FirstOrDefault(p => p is T);
+        if (PopupUIs.Contains(popup))
+        {
+            if (PopupUIs[^1] == popup) CloseTopPopupUI();
+            else
+            {
+                PopupUIs.Remove(popup);
+                Managers.ResourceMng.Destroy(popup.gameObject);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 모든 PopupUI 제거
+    /// </summary>
     public void CloseAllPopupUI()
     {
-        while (PopupStack.Count > 0)
+        while (PopupUIs.Count > 0)
         {
-            ClosePopupUI();
+            CloseTopPopupUI();
         }
     }
-    
+
+    /// <summary>
+    /// T타입 PopupUI를 열거나 닫음 (Toggle)
+    /// </summary>
+    public void TogglePopupUI<T>() where T : UI_Popup
+    {
+        var existingPopup = PopupUIs.FirstOrDefault(p => p is T);
+        if (existingPopup != null)
+        {
+            ClosePopupUI<T>();
+        }
+        else
+        {
+            ShowPopupUI<T>();
+        }
+    }
+
     public void Clear()
     {
         CloseAllPopupUI();
