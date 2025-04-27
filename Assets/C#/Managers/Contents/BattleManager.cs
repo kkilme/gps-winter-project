@@ -84,10 +84,8 @@ public class BattleManager
     {
         BattleState = BattleState.HeroPlacement;
 
-        Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnPlacementPhase;
-        Managers.InputMng.MouseAction += BattleInputHandler.HandleMouseOnPlacementPhase;
-        Managers.InputMng.PointerOverGameObjectAction -= BattleInputHandler.OnDragEnd;
-        Managers.InputMng.PointerOverGameObjectAction += BattleInputHandler.OnDragEnd;
+        Managers.InputMng.AddMouseAction(BattleInputHandler.HandleMouseOnPlacementPhase);
+        Managers.InputMng.AddPointerOverGameObjectAction(BattleInputHandler.OnDragEnd);
 
         UI.OnPlacementPhaseStart();
         CoroutineRunner.Instance.StartCoroutine(GlobalUtility.FixUISorting(UI.gameObject)); // UI의 SortingOrder를 Fix
@@ -98,10 +96,9 @@ public class BattleManager
     {
         BattleState = BattleState.Idle;
 
-        Managers.InputMng.PointerOverGameObjectAction -= BattleInputHandler.OnDragEnd;
-        Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnPlacementPhase;
-        Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnBattlePhase;
-        Managers.InputMng.MouseAction += BattleInputHandler.HandleMouseOnBattlePhase;
+        Managers.InputMng.RemovePointerOverGameObjectAction(BattleInputHandler.OnDragEnd);
+        Managers.InputMng.RemoveMouseAction(BattleInputHandler.HandleMouseOnPlacementPhase);
+        Managers.InputMng.AddMouseAction(BattleInputHandler.HandleMouseOnBattlePhase);
 
         GridSystem.ResetAllCellColor();
         CurrentTurnCreature.StandingCell.HighlightOutline();
@@ -126,9 +123,8 @@ public class BattleManager
             BattleState = BattleState.ActionTargetSelecting;
             UI.ChooseTargetUI.Show();
 
-            Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnBattlePhase;
-            Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnTargetSelect;
-            Managers.InputMng.MouseAction += BattleInputHandler.HandleMouseOnTargetSelect;
+            Managers.InputMng.RemoveMouseAction(BattleInputHandler.HandleMouseOnBattlePhase);
+            Managers.InputMng.AddMouseAction(BattleInputHandler.HandleMouseOnTargetSelect);
 
             GridSystem.HighlightTargettableCells(action);
         }
@@ -152,9 +148,8 @@ public class BattleManager
         CurrentAction = null;
         UI.ChooseTargetUI.Hide();
 
-        Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnTargetSelect;
-        Managers.InputMng.MouseAction -= BattleInputHandler.HandleMouseOnBattlePhase;
-        Managers.InputMng.MouseAction += BattleInputHandler.HandleMouseOnBattlePhase;
+        Managers.InputMng.RemoveMouseAction(BattleInputHandler.HandleMouseOnTargetSelect);
+        Managers.InputMng.AddMouseAction(BattleInputHandler.HandleMouseOnBattlePhase);
 
         GridSystem.ResetAllCellColor();
         CurrentTurnCreature.StandingCell.HighlightOutline();

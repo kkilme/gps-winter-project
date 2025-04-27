@@ -125,7 +125,7 @@ public partial class AreaMapGenerator
     #region Debug
     private void ClearMap()
     {
-        GameObject[] parents = new GameObject[4] { GameObject.Find("@Debug"), GameObject.Find("@SubTiles"), GameObject.Find("@MainTiles"), GameObject.Find("@EventTiles") };
+        GameObject[] parents = new GameObject[5] { GameObject.Find("@Debug"), GameObject.Find("@SubTiles"), GameObject.Find("@MainTiles"), GameObject.Find("@EventTiles"), GameObject.Find("@FogOfWar") };
 
         foreach (var p in parents)
         {

@@ -14,14 +14,12 @@ public class AreaBaseTile : MonoBehaviour
 
     // 타일 위의 오브젝트
     private GameObject _obstacle;
-    private MaterialPropertyBlock _propBlock;
 
     public bool IsObstacleGenerated { get; set; } // 타일 위의 장애물 활성화 여부. 장애물 게임오브젝트의 active/inactive 상태가 아니라 맵 생성 단계에서 이 타일에 장애물을 생성하였는지 여부를 나타냄.
 
     public void Init()
     {
         _tile = gameObject;
-        _propBlock = new MaterialPropertyBlock();
         _tileMaterial = Application.isPlaying ? GetComponent<Renderer>().material : GetComponent<Renderer>().sharedMaterial; // Material 인스턴스화. Editor상에서 인스턴스화 시 치명적이기 때문에 따로 처리. 
 
         _obstacle = gameObject.transform.GetChild(0).gameObject;

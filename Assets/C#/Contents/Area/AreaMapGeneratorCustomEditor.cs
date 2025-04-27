@@ -181,6 +181,7 @@ public class AreaMapGeneratorCustomEditor : Editor
             if (_generator.CurrentGeneratePhase == AreaMapGenerator.MapGeneratePhase.EventTileGenerate)
             {
                 _generator.GenerateFogOfWar();
+                _generator.Map.RevealFogOfWarOnAreaStart();
             }
             else
             {

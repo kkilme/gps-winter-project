@@ -20,7 +20,7 @@ public class AreaManager
     private HeroParty _party => Managers.HeroMng.HeroParty;
 
     private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
-    private List<Vector2Int> _visiblePositions = new(); // 플레이어 시야 범위 내부에 있는 위치들
+    private HashSet<Vector2Int> _visiblePositions = new(); // 플레이어 시야 범위 내부에 있는 위치들
     private GameObject _light;
 
     #region Init
@@ -46,16 +46,15 @@ public class AreaManager
         InitHeroes();
         InitCamera();
 
-        // 미리 밝혀야할 전장의 안개 밝히기
-        Map.RevealFogOfWarOnAreaStart();
+        Map.OnAreaStart();
         UpdateTileBrightness();
         Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
-        AreaState = AreaState.Idle;
 
         UI.OnAreaInitComplete();
 
-        Managers.InputMng.MouseAction -= AreaInputHandler.HandleMouseInput;
-        Managers.InputMng.MouseAction += AreaInputHandler.HandleMouseInput;
+        Managers.InputMng.AddMouseAction(AreaInputHandler.HandleMouseInput);
+
+        AreaState = AreaState.Idle;
 
         CoroutineRunner.Instance.StartCoroutine(GlobalUtility.FixUISorting(UI.gameObject)); // UI의 SortingOrder를 Fix
     }
@@ -144,8 +143,8 @@ public class AreaManager
 
         foreach (var pos in newVisiblePos)
         {
-            if (Map.TileTypeMap[pos.y, pos.x] == AreaTileType.OutOfField || Map.TileTypeMap[pos.y, pos.x] == AreaTileType.Collapsed) continue;
-            Map.BaseTileMap[pos.y, pos.x].SetBrightness(true);
+            if (!_visiblePositions.Contains(pos) && Map.TileTypeMap[pos.y, pos.x] != AreaTileType.OutOfField && Map.TileTypeMap[pos.y, pos.x] != AreaTileType.Collapsed)
+                Map.BaseTileMap[pos.y, pos.x].SetBrightness(true);
         }
 
         _visiblePositions = newVisiblePos;
@@ -156,7 +155,7 @@ public class AreaManager
     {
         AreaState = AreaState.Battle;
         CameraController.Freeze = true;
-        Managers.InputMng.MouseAction -= AreaInputHandler.HandleMouseInput;
+        Managers.InputMng.RemoveMouseAction(AreaInputHandler.HandleMouseInput);
 
         CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadBattleScene());
     }
@@ -175,8 +174,7 @@ public class AreaManager
 
         CoroutineRunner.Instance.StartCoroutine(OnTileEventFinish());
 
-        Managers.InputMng.MouseAction -= AreaInputHandler.HandleMouseInput;
-        Managers.InputMng.MouseAction += AreaInputHandler.HandleMouseInput;
+        Managers.InputMng.AddMouseAction(AreaInputHandler.HandleMouseInput);
     }
 
     public IEnumerator OnTileEventFinish()

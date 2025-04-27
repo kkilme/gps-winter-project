@@ -132,7 +132,7 @@ public class BattleInputHandler
         if (CurrentMouseOverCell == null || !_currentAction.TargetSelector.IsTargettable(CurrentMouseOverCell))
             return;
 
-        Managers.InputMng.MouseAction -= HandleMouseOnTargetSelect;
+        Managers.InputMng.RemoveMouseAction(HandleMouseOnTargetSelect);
 
         _currentAction.SetTarget(CurrentMouseOverCell);
         _battleGridSystem.ResetAllCellColor();

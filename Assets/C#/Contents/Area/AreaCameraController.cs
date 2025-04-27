@@ -66,7 +66,7 @@ public class AreaCameraController : MonoBehaviour
         InitializeMoveSpeedWithZoom();
         CalculateZoomlevel();
 
-        Managers.InputMng.KeyAction += HandleKeyScreenMove;
+        Managers.InputMng.AddKeyAction(HandleKeyScreenMove);
     }
 
     void Update()

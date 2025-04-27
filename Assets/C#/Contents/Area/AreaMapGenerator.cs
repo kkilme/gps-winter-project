@@ -1,4 +1,5 @@
 using AYellowpaper.SerializedCollections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -66,7 +67,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         GeneratePlayableFieldObstacles(playableField);
         GenerateEventTiles();
         GenerateFogOfWar();
-        Map.RevealFogOfWarOnAreaStart(); // 전장의 안개 일부 미리 밝힘
+        Map.RevealFogOfWarOnAreaStart(); // 전장의 안개 일부 미리 밝힘. Debug 편의를 위해 AreaManager가 아니라 여기서 함.
 
         return Map;
     }
@@ -241,7 +242,6 @@ public partial class AreaMapGenerator : MonoBehaviour
                     continue;
                 unplayableField.Add(new Vector2Int(x, z));
                 Map.TileTypeMap[z, x] = AreaTileType.OutOfField;
-                Map.BaseTileMap[z, x].SetBrightness(false);
             }
         }
 
@@ -269,7 +269,6 @@ public partial class AreaMapGenerator : MonoBehaviour
         void SetAsPlayableFieldTile(List<Vector2Int> field, int x, int z)
         {
             Map.BaseTileMap[z, x].EnableLight();
-            Map.BaseTileMap[z, x].SetBrightness(false);
             Map.TileTypeMap[z, x] = AreaTileType.Empty;
             field.Add(new Vector2Int(x, z));
         }
@@ -376,41 +375,47 @@ public partial class AreaMapGenerator : MonoBehaviour
     // Window를 사용하여 이벤트 타일 생성. 랜덤성을 높이고자 한 시도
     private void CreateTileWithWindow(int windowSize, int tilenum, AreaTileType tileType)
     {
-        int[] zWindowStarts;
-        ResetWindowStartsArray();
+        List<int> zWindowStarts = new();
+        ResetWindowStartsList();
 
         int count = 0;
         while (count < tilenum)
         {
-            // 모든 windowstart가 한번씩 다 선택됐다면 다시 초기화
-            if (zWindowStarts.Length == 0)
-            {
-                ResetWindowStartsArray();
-            }
+            // 모든 windowStart가 한번씩 다 선택됐다면 다시 초기화
+            if (zWindowStarts.Count == 0)
+                ResetWindowStartsList();
+
             int x, z;
             int trycnt = 0;
             bool createSuccess = true;
+
             while (true)
             {
                 trycnt++;
-                int zWindowStart = zWindowStarts[Random.Range(0, zWindowStarts.Length)];
-                // z 좌표: 랜덤으로 선택된 windowstart를 시작으로 windowsize만큼의 범위에서 랜덤 선택
-                z = Random.Range(zWindowStart, zWindowStart + windowSize);
-                // x 좌표는 단순히 플레이 영역 width 범위에서 랜덤
-                x = Random.Range(_playableFieldXStart, _playableFieldXStart + _data.PlayableFieldWidth);
-                // 빈 타일이어야 하며, 인접한 이웃에 같은 종류 타일이 없어야 하며, 경로가 있어야 함
-                if (Map.TileTypeMap[z, x] == AreaTileType.Empty
-                    && !Map.HasNeighborOfType(x, z, tileType)
-                    && FindPath(new Vector2Int(x, z), out var path)) break;
+
+                // zWindowStart 선택
+                int zWindowStart = zWindowStarts[Random.Range(0, zWindowStarts.Count)];
+                z = Random.Range(zWindowStart, zWindowStart + windowSize); // z 범위
+                x = Random.Range(_playableFieldXStart, _playableFieldXStart + _data.PlayableFieldWidth); // x 범위
+
+                if (Map.TileTypeMap[z, x] == AreaTileType.Empty &&
+                    !Map.HasNeighborOfType(x, z, tileType) &&
+                    FindPath(new Vector2Int(x, z), out var path))
+                {
+                    // 사용한 zWindowStart 제거
+                    zWindowStarts.Remove(zWindowStart);
+                    break;
+                }
+
                 if (trycnt == 100)
                 {
-                    // 100번 시도했으나 생성 실패 -> all random 시도
-                    createSuccess = ChooseEventTilePositionWithAllRandom(tileType, out x, out z);
+                    // window로 생성 실패: 완전 랜덤
+                    createSuccess = ChooseTilePositionWithAllRandom(tileType, out x, out z);
                     break;
                 }
             }
 
-            // All random으로도 생성 실패 시: 생성 중단
+            // 실패 시 중단
             if (!createSuccess)
             {
                 Debug.LogWarning($"Creating {tileType}Tile stopped at count: {count}");
@@ -419,25 +424,23 @@ public partial class AreaMapGenerator : MonoBehaviour
 
             Map.CreateEventTile(x, z, tileType);
             count++;
-
-            // 한 번 선택된 windowstart는 다시 선택되지 않음 -> 한 곳에 타일이 몰리는 것을 방지
-            zWindowStarts = zWindowStarts.Where(n => n != z).ToArray();
         }
+
         return;
 
-        void ResetWindowStartsArray()
+        // zWindowStarts 초기화
+        void ResetWindowStartsList()
         {
-            zWindowStarts = new int[_data.PlayableFieldHeight - windowSize - 2];
-            // i=2부터 시작하여 플레이어 시작지점 및 그 이웃 영역은 windowStart로 지정되지 않음
+            zWindowStarts.Clear();
             for (int i = 2; i < _data.PlayableFieldHeight - windowSize; i++)
             {
-                zWindowStarts[i - 2] = i + _playableFieldZStart;
+                zWindowStarts.Add(i + _playableFieldZStart);
             }
         }
     }
 
     // 완전한 랜덤으로 이벤트 타일 생성 위치 선택 시도
-    private bool ChooseEventTilePositionWithAllRandom(AreaTileType tileType, out int x, out int z)
+    private bool ChooseTilePositionWithAllRandom(AreaTileType tileType, out int x, out int z)
     {
         int trycnt = 0;
         while (true)

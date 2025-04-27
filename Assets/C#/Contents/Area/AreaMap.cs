@@ -293,10 +293,10 @@ public class AreaMap
     /// <summary>
     /// 특정 위치를 기준으로 볼 수 있는 타일들의 위치를 계산하여 반환. 기본 시야 거리: 2
     /// </summary>
-    public List<Vector2Int> GetVisibleTilePositions(Vector3 currentPosition, int visionRange = 2)
+    public HashSet<Vector2Int> GetVisibleTilePositions(Vector3 currentPosition, int visionRange = 2)
     {
         WorldToGridPosition(currentPosition, out int currentX, out int currentZ);
-        List<Vector2Int> visibleTiles = new();
+        HashSet<Vector2Int> visibleTiles = new();
 
         void Explore(int x, int z, int currentDistance)
         {
@@ -356,6 +356,18 @@ public class AreaMap
     {
         RevealFogOfWar(GridToWorldPosition(PlayerStartPosition), 2); // 시작 지점에서 범위 2 반경의 전장의 안개 제거
         RevealFogOfWar(GridToWorldPosition(BossPosition), 1); // 보스 지점에서 범위 1 반경의 전장의 안개 제거
+    }
+
+    public void OnAreaStart()
+    {
+        for (int z = 0; z < Height; z++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                BaseTileMap[z, x].SetBrightness(false); // 모든 타일의 밝기 낮춤
+            }
+        }
+        RevealFogOfWarOnAreaStart(); // Area 시작 시 전장의 안개 제거
     }
 
     /// <summary>
