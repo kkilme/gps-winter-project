@@ -116,6 +116,7 @@ public enum AttackRangeType
 
 public enum DamageTextType
 {
+    NormalDamage,
     PhysicalDamage,
     MagicDamage,
     Heal,
@@ -179,6 +180,7 @@ public enum AnimState
 public enum AreaState
 {
     Idle,
+    Busy,
     Moving,
     Battle,
     Encounter,

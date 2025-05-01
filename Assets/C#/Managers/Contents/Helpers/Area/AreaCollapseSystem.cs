@@ -22,6 +22,9 @@ public class AreaCollapseSystem
         _collapseInformer.BindData(_collapseTimer, _collapseAmount);
     }
 
+    /// <summary>
+    /// turnCount만큼의 턴(붕괴 진척도) 진행 
+    /// </summary>
     public IEnumerator ProgressTurn(int turnCount = 1)
     {
         if (_collapseFinished)
@@ -37,17 +40,19 @@ public class AreaCollapseSystem
             {
                 ProgressCollapse();
             }
-            _collapseInformer.ProgressTimer();
-            if(turnCount > 1) yield return new WaitForSeconds(0.2f);
+            var tween = _collapseInformer.ProgressTimer();
+            if(turnCount > 1) yield return tween.WaitForCompletion();
         }
 
         // 보스 위치로부터 최대 2칸 아래까지만 파괴됨
-        if (_collapseCount * _collapseAmount >= _map.PlayableFieldHeight - 2)
+        if (_collapseCount * _collapseAmount >= _map.PlayableFieldHeight)
         {
             _collapseFinished = true;
             _collapseInformer.OnCollapseFinished();
             Debug.Log("[AreaCollapseSystem] Collapse is at limit.");
         }
+
+        _areaManager.AreaState = AreaState.Idle;
     }
 
     public void ProgressCollapse()

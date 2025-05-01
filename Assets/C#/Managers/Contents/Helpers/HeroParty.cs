@@ -20,7 +20,7 @@ public class HeroParty
     {
         if(HeroIds.Count >= GlobalValues.MAX_HERO_COUNT)
         {
-            Debug.LogError($"Cannot add more heroes. Max hero count is {GlobalValues.MAX_HERO_COUNT}");
+            Debug.LogWarning($"[HeroParty] Cannot add more heroes. Max hero count is {GlobalValues.MAX_HERO_COUNT}");
             return;
         }
         HeroIds.Add(id);
@@ -33,12 +33,34 @@ public class HeroParty
     {
         if(HeroesDict.ContainsKey(id) || Heroes.Contains(hero))
         {
+            Debug.LogWarning($"[HeroParty] Could not add RuntimeHero: {id} {hero.name}");
             return;
         }
         Heroes.Add(hero);
         HeroesDict.Add(id, hero);
     }
 
+    /// <summary>
+    /// 살아있는 영웅 리스트 반환.
+    /// </summary>
+    /// <returns></returns>
+    public List<Hero> GetAliveHeroes()
+    {
+        return Heroes.Where(hero => !hero.IsDead()).ToList();
+    }
+
+    /// <summary>
+    /// 영웅이 모두 죽었는지 확인.
+    /// </summary>
+    public bool IsAllDead()
+    {
+        bool flag = true;
+        foreach(var hero in Heroes) flag &= hero.IsDead();
+
+        return flag;
+    }
+
+    #region Battle
     /// <summary>
     /// 영웅의 BattleGrid 위치를 반환.
     /// </summary>
@@ -75,7 +97,7 @@ public class HeroParty
             }
         }
 
-        Debug.LogError($"No available battlegrid position for heroInstanceId: {heroInstanceId}");
+        Debug.LogError($"[HeroParty] No available battlegrid position for heroInstanceId: {heroInstanceId}");
         return new Vector2Int(-1, -1);
     }
 
@@ -87,35 +109,25 @@ public class HeroParty
         _battlePositions[heroInstanceId] = position;
         if(_battlePositionsCache.ContainsKey(heroInstanceId)) _battlePositionsCache[heroInstanceId] = position;
     }
+    #endregion
 
-    public List<Hero> GetAliveHeroes()
-    {
-        return Heroes.Where(hero => !hero.IsDead()).ToList();
-    }
-
-    public bool IsAllDead()
-    {
-        bool flag = true;
-        foreach(var hero in Heroes) flag &= hero.IsDead();
-
-        return flag;
-    }
-
+    #region Area
     /// <summary>
-    /// Area에서 특정 위치로 이동하는 시퀀스를 반환.
+    /// Area에서 특정 위치로 이동.
     /// </summary>
-    public Sequence MakeMoveToSequence(Vector3 destination)
+    public Tween MoveTo(Vector3 targetPos)
     {
         Sequence sequence = DOTween.Sequence();
         for (int i = 0; i < Heroes.Count; i++)
         {
-            Vector3 adjustedDestination =
-                destination + new Vector3(GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 0], 0, GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 1]);
-            Heroes[i].transform.LookAt(adjustedDestination);
-            sequence.Join(Heroes[i].transform.DOMove(adjustedDestination, 0.7f));
+            Vector3 adjustedTargetPos =
+                targetPos + new Vector3(GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 0], 0, GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 1]);
+            Heroes[i].transform.LookAt(adjustedTargetPos);
+            sequence.Join(Heroes[i].transform.DOMove(adjustedTargetPos, 0.7f));
         }
+        PlayMovingAnimation();
 
-        return sequence;
+        return sequence.Play();
     }
 
     public void PlayMovingAnimation()
@@ -133,4 +145,16 @@ public class HeroParty
             hero.Animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, false);
         }
     }
+
+    /// <summary>
+    /// Area에서의 휴식
+    /// </summary>
+    public void Rest()
+    {
+        foreach (var hero in Heroes)
+        {
+            hero.TakeHeal(0.25f);
+        }
+    }
+    #endregion
 }

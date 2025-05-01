@@ -21,6 +21,8 @@ public class AreaManager
 
     private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
     private HashSet<Vector2Int> _visiblePositions = new(); // 플레이어 시야 범위 내부에 있는 위치들
+    private int _restCount = 0; // 휴식 카운트 (턴 수와는 별개로, 휴식 시마다 증가함)
+
     private GameObject _light;
 
     #region Init
@@ -106,9 +108,7 @@ public class AreaManager
 
         targetPosition = Map.GetTileCenterPosition(targetPosition);
 
-        Sequence moveSequence = _party.MakeMoveToSequence(targetPosition);
-        _party.PlayMovingAnimation();
-        moveSequence.Play().OnComplete(() =>
+        _party.MoveTo(targetPosition).OnComplete(() =>
         {
             OnHeroMoved(targetPosition);
         });
@@ -148,6 +148,20 @@ public class AreaManager
         }
 
         _visiblePositions = newVisiblePos;
+    }
+
+    /// <summary>
+    /// 영웅들 체력 회복 및 붕괴 턴 추가 진행
+    /// </summary>
+    public IEnumerator RestParty()
+    {
+        AreaState = AreaState.Busy;
+
+        _party.Rest();
+        _restCount++;
+        yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressTurn(GlobalValues.AREA_REST_TURN_COUNT));
+
+        AreaState = AreaState.Idle;
     }
 
     // 전투씬 전환 흐름: 카메라 정지 -> 로딩화면 Fade in 완료 ->  배틀 씬 로딩 시작 및 완료 -> Area의 빛, 카메라 비활성화 -> 로딩화면 Fade out
@@ -192,7 +206,6 @@ public class AreaManager
 
         yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressTurn());
 
-        AreaState = AreaState.Idle;
         Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
     }
 }

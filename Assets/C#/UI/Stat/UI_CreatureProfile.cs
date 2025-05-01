@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,10 +8,13 @@ using UnityEngine.UI;
 public class UI_CreatureProfile : UI_Base
 {
     protected CanvasGroup _canvasGroup;
+
     private Tweener _blinkTweener;
-    private Image _bg;
-    private Color _bgOriginalColor;
-    private Creature _creature;
+    private Tweener _frameColorTweener;
+
+    private Image _creatureImageBg;
+    private Color _creatureImageBgOriginalColor;
+    private List<Image> _frameImages = new List<Image>();
 
     protected enum Texts
     {
@@ -38,6 +42,9 @@ public class UI_CreatureProfile : UI_Base
     {
         Creature_Image,
         bg,
+        Frame_Stat,
+        Frame_Main,
+        Frame_Creature_Image,
     }
 
     public override void Init()
@@ -47,13 +54,20 @@ public class UI_CreatureProfile : UI_Base
         Bind<Image>(typeof(Images));
         GetText(Texts.Text_Dead).gameObject.SetActive(false);
         _canvasGroup = GetComponent<CanvasGroup>();
-        _bg = Get<Image>(Images.bg);
-        _bgOriginalColor = _bg.color;
+        _creatureImageBg = Get<Image>(Images.bg);
+        _creatureImageBgOriginalColor = _creatureImageBg.color;
+
+        _frameImages.Add(Get<Image>(Images.Frame_Stat));
+        _frameImages.Add(Get<Image>(Images.Frame_Main));
+        _frameImages.Add(Get<Image>(Images.Frame_Creature_Image));
     }
 
+    /// <summary>
+    /// Creature를 UI에 바인딩
+    /// </summary>
     public void BindCreature(Creature creature)
     {
-        _creature = creature;
+        creature.BindProfileUI(this);
 
         var stat = creature.CreatureStat;
         stat.OnStatChanged -= UpdateStatProfile;
@@ -66,6 +80,9 @@ public class UI_CreatureProfile : UI_Base
         UpdateStatProfile(stat);
     }
 
+    /// <summary>
+    /// 바인딩된 Creature의 스탯에 변화가 있을 시 UI 업데이트
+    /// </summary>
     private void UpdateStatProfile(CreatureStat creatureStat)
     {
         var stats = new (Texts, int)[]
@@ -88,18 +105,43 @@ public class UI_CreatureProfile : UI_Base
 
     }
 
+    /// <summary>
+    /// Battle에서 현재 턴인 Creature일 시 깜빡임 효과 재생
+    /// </summary>
     public void StartBlinking()
     {
-        if (_blinkTweener != null)
-            _blinkTweener.Kill();
-        _blinkTweener = _bg.DOColor(Color.yellow, 1f).SetLoops(-1, LoopType.Yoyo);
+        _blinkTweener?.Kill();
+        _blinkTweener = _creatureImageBg.DOColor(Color.yellow, 1f).SetLoops(-1, LoopType.Yoyo);
     }
 
     public void StopBlinking()
     {
-        if (_blinkTweener != null)
-            _blinkTweener.Kill();
-        _bg.color = _bgOriginalColor;
+        _blinkTweener?.Kill();
+        _creatureImageBg.color = _creatureImageBgOriginalColor;
+    }
+
+    public void OnDamaged()
+    {
+        _frameColorTweener?.Kill();
+        foreach (var image in _frameImages)
+        {
+            image.DOColor(Color.red, 0.2f).OnComplete(() =>
+            {
+                image.DOColor(Color.white, 0.2f);
+            });
+        }
+    }
+
+    public void OnHeal()
+    {
+        _frameColorTweener?.Kill();
+        foreach (var image in _frameImages)
+        {
+            image.DOColor(Color.green, 0.2f).OnComplete(() =>
+            {
+                image.DOColor(Color.white, 0.2f);
+            });
+        }
     }
 
     public void OnDead()

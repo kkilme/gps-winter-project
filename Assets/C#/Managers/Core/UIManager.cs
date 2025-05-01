@@ -183,6 +183,23 @@ public class UIManager
     }
 
     /// <summary>
+    /// 특정 PopupUI를 제거
+    /// </summary>
+    /// <param name="popup"></param>
+    public void ClosePopupUI(UI_Popup popup)
+    {
+        if (PopupUIs.Contains(popup))
+        {
+            if (PopupUIs[^1] == popup) CloseTopPopupUI();
+            else
+            {
+                PopupUIs.Remove(popup);
+                Managers.ResourceMng.Destroy(popup.gameObject);
+            }
+        }
+    }
+
+    /// <summary>
     /// 모든 PopupUI 제거
     /// </summary>
     public void CloseAllPopupUI()

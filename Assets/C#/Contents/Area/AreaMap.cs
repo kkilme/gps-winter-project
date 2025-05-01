@@ -274,16 +274,15 @@ public class AreaMap
     }
 
     /// <summary>
-    /// row(PlayableField 기준)행부터 row + amount - 1 행까지의 타일들을 CollapsedTile로 교체
+    /// row(PlayableField 기준)행부터 row + amount - 1 행까지의 타일들을 CollapsedTile로 교체. Boss 타일은 제외.
     /// </summary>
     public void CollapseTiles(int row, int amount)
     {
         for(int z = row + PlayableFieldStart.y; z < row + PlayableFieldStart.y + amount; z++)
         {
-            if (z >= BossPosition.y - 1) break;
             for (int x = PlayableFieldStart.x; x <= PlayableFieldStart.x + PlayableFieldWidth; x++)
             {
-                if (TileTypeMap[z, x] != AreaTileType.OutOfField) ReplaceEventTile(GridToWorldPosition(x, z), AreaTileType.Collapsed);
+                if (TileTypeMap[z, x] != AreaTileType.OutOfField && TileTypeMap[z, x] != AreaTileType.Boss) ReplaceEventTile(GridToWorldPosition(x, z), AreaTileType.Collapsed);
                 BaseTileMap[z, x].OnCollapse();
                 RevealFogOfWar(x, z); // 전장의 안개도 함께 제거
             }

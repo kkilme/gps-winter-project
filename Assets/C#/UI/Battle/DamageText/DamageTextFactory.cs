@@ -13,11 +13,15 @@ public static class DamageTextFactory
     public static void Init()
     {
          _damageTextPrefab ??= Managers.ResourceMng.Load<GameObject>("Prefabs/UI/WorldSpaceUI/UI_DamageText");
+        _designCache[DamageTextType.NormalDamage] = new NormalDamageTextDesign();
         _designCache[DamageTextType.PhysicalDamage] = new PhysicalDamageTextDesign();
         _designCache[DamageTextType.MagicDamage] = new MagicDamageTextDesign();
         _designCache[DamageTextType.Heal] = new HealTextDesign();
     }
 
+    /// <summary>
+    /// DamageText UI를 생성하는 Factory.
+    /// </summary>
     public static void CreateDamageText(Creature creature, int amount, DamageTextType type)
     {
         var damageText = Managers.UIMng.MakeWorldSpaceUI<UI_DamageText>();

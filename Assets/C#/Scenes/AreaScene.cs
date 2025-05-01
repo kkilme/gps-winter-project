@@ -48,5 +48,15 @@ public class AreaScene : BaseScene
             TestInit();
         }
     }
+
+    // TOOD: for test
+    public new void Update()
+    {
+        base.Update();
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            Managers.HeroMng.HeroParty.Heroes[0].TakeDamage(1, DamageTextType.NormalDamage);
+        }
+    }
     #endregion
 }

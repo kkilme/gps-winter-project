@@ -15,6 +15,8 @@ public static class GlobalValues
     public const int MAX_COIN_COUNT = 8;
     public const int MAX_HERO_COUNT = 4;
 
+    public const int AREA_REST_TURN_COUNT = 3;
+
     public static readonly int[,] DIRECTION_4WAY = new int[4, 2] { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
     public static readonly int[,] HERO_POS_ON_AREA_TILE_OFFSET = new int[4, 2] { { 0, 1 }, { -1, 0 }, { 1, 0 }, { 0, -1 } };
 

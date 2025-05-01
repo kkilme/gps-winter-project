@@ -58,7 +58,9 @@ public class UI_CollapseInformer : UI_Base
 
         _leftTurnText.text = _leftTurn.ToString();
 
-        return _leftTurnRect.DOScale(_leftTurnRect.localScale * 1.05f, 0.5f).From(true);
+        _leftTurnRect.localScale = _leftTurnRect.localScale * 2f;
+
+        return _leftTurnRect.DOScale(Vector3.one, 0.5f);
     }
 
     public void OnCollapseFinished()

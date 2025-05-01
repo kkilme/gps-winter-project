@@ -60,8 +60,8 @@ public class UI_BattleScene : UI_Scene
         ChooseTargetUI.Hide();
         TurnstateUI.Setup();
         TurnstateUI.HideInstantly();
-        HeroProfileGroupUI.BindHero();
-        MonsterProfileGroupUI.BindHero();
+        HeroProfileGroupUI.BindCreature();
+        MonsterProfileGroupUI.BindCreature();
     }
 
     public void OnBattlePhaseStart()
@@ -129,7 +129,7 @@ public class UI_BattleScene : UI_Scene
 
         void OnLootAction(LootActionType action)
         {
-            Managers.UIMng.ClosePopupUI(lootUI);
+            lootUI.Close();
             itemCount--;
 
             if (itemCount == 0)

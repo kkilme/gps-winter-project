@@ -1,6 +1,5 @@
 public class Equipment: Item
 {
-    public int DataId { get; protected set; }
     public EquipmentType EquipmentType { get; protected set; }
     public EquipmentData EquipmentData { get; protected set; }
     public Hero Owner { get; protected set; }

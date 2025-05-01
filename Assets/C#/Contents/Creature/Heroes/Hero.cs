@@ -27,6 +27,7 @@ public class Hero : Creature
         foreach (ArmorType type in (ArmorType[])Enum.GetValues(typeof(ArmorType)))
             Armors.TryAdd(type, null);
     }
+
     public override void SetData(int dataId)
     {
         CreatureData = Managers.DataMng.HeroDataDict[dataId];
@@ -36,8 +37,7 @@ public class Hero : Creature
     {
         SetData(dataId);
 
-        // 스탯 정보 복원
-        CreatureStat = savedStat;
+        CreatureStat = savedStat; // 저장된 스탯 적용
 
         gameObject.name = $"{InstanceId}_{CreatureData.Name}";
     }
@@ -56,8 +56,9 @@ public class Hero : Creature
         }
         yield return new WaitForSeconds(5f);
 
-        Managers.ResourceMng.Destroy(gameObject);
+        //Managers.ResourceMng.Destroy(gameObject);
     }
+
     #region Weapon
 
     private void ChangeAnimator()

@@ -5,6 +5,7 @@
           "BattleFieldName": "Forest_1",
           "CollapseTimer": 4,
           "CollapseAmount": 2,
+          "MaxRestCount": 2,
       }
   ]
 }

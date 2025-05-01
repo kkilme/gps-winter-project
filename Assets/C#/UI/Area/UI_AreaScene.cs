@@ -47,7 +47,7 @@ public class UI_AreaScene : UI_Scene
         AreaButtons.Show();
         TopBar.Show();
         CollapseInformer.Show();
-        HeroProfileGroupUI.BindHero();
+        HeroProfileGroupUI.BindCreature();
         HeroProfileGroupUI.Show();
     }
 }
