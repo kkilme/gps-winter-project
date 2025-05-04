@@ -148,6 +148,7 @@ public enum GridSide
 #region State
 public enum BattleState
 {
+    BattleSceneNotLoaded,
     Starting,
     HeroPlacement,
     Idle,

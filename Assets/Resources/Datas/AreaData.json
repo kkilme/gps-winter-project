@@ -6,6 +6,10 @@
           "CollapseTimer": 4,
           "CollapseAmount": 2,
           "MaxRestCount": 2,
+          "MonsterSquadIds":[
+              501000,
+              501001
+          ],
       }
   ]
 }

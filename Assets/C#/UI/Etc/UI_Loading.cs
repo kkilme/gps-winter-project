@@ -45,7 +45,7 @@ public class UI_Loading : UI_Base
     public IEnumerator FadeOut()
     {
         _canvasGroup.alpha = 1f;
-        yield return _canvasGroup.DOFade(0f, 2f).WaitForCompletion();
+        yield return _canvasGroup.DOFade(0f, 1.5f).WaitForCompletion();
         Destroy(gameObject); // Fade out 후 오브젝트 삭제
     }
 
@@ -53,6 +53,7 @@ public class UI_Loading : UI_Base
     {
         progress = Mathf.Clamp01(progress);
         _progressBar.value = progress;
+        if (progress >= 0.99f) progress = 1f;
         _progressText.text = $"Loading... {(int)(progress * 100)}%";
     }
 }

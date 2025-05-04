@@ -18,6 +18,8 @@ public class BattleGridSystem
         {
             for (int col = 0; col < GlobalValues.BATTLEGRID_COL_COUNT; col++)
             {
+                // 현재 Grid와 각 셀들을 미리 만들어두고 사용중임.
+                // 그리드 오브젝트를 동적으로 생성해야 할 시 수정 필요.
                 var herocell = GlobalUtility.FindChild(heroGrid, $"BattleGridCell ({row}, {col})");
                 var monsterCell = GlobalUtility.FindChild(monsterGrid, $"BattleGridCell ({row}, {col})");
                 if(herocell == null || monsterCell == null)
@@ -34,6 +36,9 @@ public class BattleGridSystem
         }
     }
 
+    /// <summary>
+    /// 저장된(또는 초기) 그리드 위치에 Hero 배치
+    /// </summary>
     public void PlaceHero(List<Hero> heroes)
     {
         foreach (Hero hero in heroes)
@@ -44,6 +49,9 @@ public class BattleGridSystem
         }
     }
 
+    /// <summary>
+    /// squadId에 해당하는 몬스터들 배치
+    /// </summary>
     public void PlaceMonster(int squadId)
     {
         Managers.DataMng.MonsterSquadDataDict.TryGetValue(squadId, out MonsterSquadData squadData);
@@ -56,13 +64,16 @@ public class BattleGridSystem
         foreach (MonsterSquad_MonsterData monsterData in squadData.Monsters)
         {
             Monster monster = Managers.ObjectMng.SpawnMonster(monsterData.DataId);
-            Vector2Int pos = new Vector2Int(monsterData.x, monsterData.y);
-            MonsterGrid[pos.y, pos.x].PlaceCreature(monster);
+            MonsterGrid[monsterData.y, monsterData.x].PlaceCreature(monster);
             monster.LookFront();
             _battleManager.AliveMonsters.Add(monster);
+            _battleManager.Monsters.Add(monster);
         }
     }
 
+    /// <summary>
+    /// targetCell로 Creature 위치 변경.
+    /// </summary>
     public void MoveCreature(Creature creature, BattleGridCell targetCell)
     {
         // Creature끼리의 위치 교환을 위해 밑의 if문 필요.
@@ -73,6 +84,9 @@ public class BattleGridSystem
         if(_battleManager.BattleState == BattleState.HeroPlacement && creature is Hero hero) Managers.HeroMng.HeroParty.SaveBattlePosition(hero.InstanceId, new Vector2Int(targetCell.Column, targetCell.Row));
     }
 
+    /// <summary>
+    /// 두 Creature의 위치 교환.
+    /// </summary>
     public void SwapCreaturePosition(Creature creature1, Creature creature2)
     {
         var tempCell = creature1.StandingCell;
@@ -80,6 +94,9 @@ public class BattleGridSystem
         MoveCreature(creature2, tempCell);
     }
 
+    /// <summary>
+    /// action의 타겟 가능한 셀 하이라이트 효과.
+    /// </summary>
     public void HighlightTargettableCells(BaseAction action)
     {
         var targetables = action.TargetSelector.TargettableCells;
@@ -90,11 +107,17 @@ public class BattleGridSystem
         }
     }
 
+    /// <summary>
+    /// side에 해당하는 그리드 배열 반환.
+    /// </summary>
     public BattleGridCell[,] SideToGrid(GridSide side)
     {
         return side == GridSide.HeroSide ? HeroGrid : MonsterGrid;
     }
 
+    /// <summary>
+    /// 모든 그리드 셀의 색 초기화.
+    /// </summary>
     public void ResetAllCellColor()
     {
         foreach(var cell in HeroGrid)
@@ -107,5 +130,21 @@ public class BattleGridSystem
             cell.RevertFillColor();
             cell.RevertOutlineColor();
         }
+    }
+
+    public void Clear()
+    {
+        ResetAllCellColor();
+        for (int row = 0; row < GlobalValues.BATTLEGRID_ROW_COUNT; row++)
+        {
+            for (int col = 0; col < GlobalValues.BATTLEGRID_COL_COUNT; col++)
+            {
+                HeroGrid[row, col] = null;
+                MonsterGrid[row, col] = null;
+            }
+        }
+
+        HeroGrid = null;
+        MonsterGrid = null;
     }
 }

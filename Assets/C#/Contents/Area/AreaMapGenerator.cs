@@ -42,7 +42,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         // 데이터 오류 검증
         if (!_data.Validate())
         {
-            Debug.LogError("There is a problem in Map Data! Please refer to the error message.");
+            Debug.LogError("[AreaMapGenerator] There is a problem in Map Data! Please refer to the error message.");
             return false;
         }
 

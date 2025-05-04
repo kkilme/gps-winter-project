@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 // 전투의 턴 시스템 관리
@@ -11,7 +12,7 @@ public class TurnSystem
     public void Init()
     {
         TurnCount = 1;
-        Turns = new List<Creature>(_battleManager.Creatures);
+        Turns = new List<Creature>(_battleManager.AliveCreatures);
         Turns.Sort((a, b) => b.CreatureStat.FinalStat.Dexterity.CompareTo(a.CreatureStat.FinalStat.Dexterity)); // Dex 높은 순으로 턴 순서 정렬
         CurrentTurnCreature = Turns[0];
     }
@@ -32,5 +33,12 @@ public class TurnSystem
     public void Remove(Creature creature)
     {
         Turns.Remove(creature);
+    }
+
+    public void Clear()
+    {
+        CurrentTurnCreature = null;
+        Turns?.Clear();
+        Turns = null;
     }
 }

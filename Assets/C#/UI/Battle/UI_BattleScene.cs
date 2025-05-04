@@ -49,6 +49,11 @@ public class UI_BattleScene : UI_Scene
         ChooseTargetUI = GetGameObject(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget>();
         HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Vertical).GetOrAddComponent<UI_HeroProfileGroup>();
         MonsterProfileGroupUI = GetGameObject(SubItemUI.UI_MonsterProfileGroup).GetOrAddComponent<UI_MonsterProfileGroup>();
+        GetGameObject(SubItemUI.UI_BattleVictory).GetOrAddComponent<UI_BattleVictory>();
+        GetGameObject(SubItemUI.UI_BattleDefeat).GetOrAddComponent<UI_BattleDefeat>();
+        GetGameObject(SubItemUI.UI_BattleRetreat).GetOrAddComponent<UI_BattleRetreat>();
+
+        Bind<UI_Base>(typeof(SubItemUI));
 
         _fadeBG = GetImage(Images.FadeBG);
     }
@@ -107,10 +112,10 @@ public class UI_BattleScene : UI_Scene
                     Get<UI_Base>(SubItemUI.UI_BattleVictory).Show().OnComplete(() => { ShowLoot(); });
                     break;
                 case BattleResultType.Defeat:
-                    Get<UI_Base>(SubItemUI.UI_BattleDefeat).Show();
+                    Get<GameObject>(SubItemUI.UI_BattleDefeat).GetComponent<UI_Base>().Show();
                     break;
                 case BattleResultType.Retreat:
-                    Get<UI_Base>(SubItemUI.UI_BattleRetreat).Show();
+                    Get<GameObject>(SubItemUI.UI_BattleRetreat).GetComponent<UI_Base>().Show();
                     break;
             }
         });

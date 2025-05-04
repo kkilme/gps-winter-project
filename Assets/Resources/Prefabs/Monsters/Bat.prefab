@@ -1184,7 +1184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5122791751604887389}
   - component: {fileID: 5122791751595274401}
-  - component: {fileID: -5795243612444854825}
+  - component: {fileID: 8753376242258237531}
   - component: {fileID: 2612707496403756836}
   m_Layer: 8
   m_Name: Bat
@@ -1231,7 +1231,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-5795243612444854825
+--- !u!114 &8753376242258237531
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1240,7 +1240,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5122791751604650877}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 663e04e7014b461bb9ea89aabe7d4c6b, type: 3}
+  m_Script: {fileID: 11500000, guid: 871a379cd45f5bb4392e2f217ed238cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2612707496403756836

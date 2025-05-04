@@ -21,7 +21,31 @@
         {
           "LootType": "Item",
           "DataId": 301000,
-          "DropChance": 10,
+          "DropChance": 5,
+        },
+      ]
+    },
+    {
+      "DataId": 102001,
+      "Name": "Slime",
+      "Hp": 30,
+      "BaseDamage": 5,
+      "PhysicalDefense": 0,
+      "MagicDefense": 1,
+      "Strength": 70,
+      "Vitality": 50,
+      "Dexterity": 30,
+      "Intelligence": 10,
+      "Actions": [
+        403001,
+      ],
+      "MinGold": 5,
+      "MaxGold": 10,
+      "LootTable": [
+        {
+          "LootType": "Item",
+          "DataId": 301000,
+          "DropChance": 5,
         },
       ]
     }

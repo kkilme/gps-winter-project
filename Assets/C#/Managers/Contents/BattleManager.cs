@@ -19,24 +19,25 @@ public class BattleManager
         get => _currentAction;
         set
         {
-            if (_currentAction == value && _currentAction.Executor == CurrentTurnCreature)
-                return;
-
             if (value == null)
             {
+                if(_currentAction == null)
+                    return;
+
                 _currentAction.Unset();
                 _currentAction = null;
 
             }
-            else
+            else if(_currentAction != value || _currentAction?.Executor != CurrentTurnCreature)
             {
+                _currentAction?.Unset(); // 이전 Action 해제
                 _currentAction = value;
                 _currentAction.Set(CurrentTurnCreature);
             }
         }
     }
-    public Creature CurrentTurnCreature => TurnSystem.CurrentTurnCreature;
-    public List<Creature> Creatures // 전투에 참여중인 모든 Creature
+    public Creature CurrentTurnCreature => TurnSystem?.CurrentTurnCreature;
+    public List<Creature> AliveCreatures // 현재 전투에 참여중인 모든 Creature
     {
         get
         {
@@ -46,7 +47,10 @@ public class BattleManager
         }
     }
     public List<Hero> AliveHeroes;
-    public List<Monster> AliveMonsters;
+    public List<Monster> Monsters; // 전투에 참여한 모든 몬스터들
+    public List<Monster> AliveMonsters; // 살아있는 몬스터들
+
+
     private HeroParty _party => Managers.HeroMng.HeroParty;
 
     #endregion
@@ -60,6 +64,7 @@ public class BattleManager
         UI = Managers.UIMng.ShowSceneUI<UI_BattleScene>();
         AliveHeroes = new(_party.GetAliveHeroes());
         AliveMonsters = new();
+        Monsters = new();
 
         // 배틀 필드 생성
         GameObject battleField = Managers.ResourceMng.Instantiate(GlobalValues.BATTLEFIELD_PATH_PREFIX + battleFieldName, new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0, GlobalValues.BATTLEFIELD_POS_Z));
@@ -79,7 +84,9 @@ public class BattleManager
         StartPlacementPhase();
     }
 
-    // 히어로 배치 단계
+    /// <summary>
+    /// 히어로 배치 단계
+    /// </summary>
     private void StartPlacementPhase()
     {
         BattleState = BattleState.HeroPlacement;
@@ -88,16 +95,15 @@ public class BattleManager
         Managers.InputMng.AddPointerOverGameObjectAction(BattleInputHandler.OnDragEnd);
 
         UI.OnPlacementPhaseStart();
-        CoroutineRunner.Instance.StartCoroutine(GlobalUtility.FixUISorting(UI.gameObject)); // UI의 SortingOrder를 Fix
     }
 
-    // 전투 시작
+    /// <summary>
+    /// 전투 시작
+    /// </summary>
     public void StartBattlePhase()
     {
         BattleState = BattleState.Idle;
 
-        Managers.InputMng.RemovePointerOverGameObjectAction(BattleInputHandler.OnDragEnd);
-        Managers.InputMng.RemoveMouseAction(BattleInputHandler.HandleMouseOnPlacementPhase);
         Managers.InputMng.AddMouseAction(BattleInputHandler.HandleMouseOnBattlePhase);
 
         GridSystem.ResetAllCellColor();
@@ -111,7 +117,9 @@ public class BattleManager
         }
     }
 
-    // Hero 턴에서 Action 선택 시
+    /// <summary>
+    /// Hero 턴에서 플레이어가 Action 선택 시 호출
+    /// </summary>
     public void SetAction(BaseAction action)
     {
         CurrentAction = action;
@@ -142,6 +150,9 @@ public class BattleManager
         }
     }
 
+    /// <summary>
+    /// Action 실행이 끝나거나, Cancel 되었을 때 호출
+    /// </summary>
     public void UnsetAction()
     {
         BattleState = BattleState.Idle;
@@ -265,17 +276,49 @@ public class BattleManager
 
     public void FinishBattle(BattleResultType battleResult)
     {
-        Managers.InputMng.Clear();
         UI.OnBattleEnd(battleResult);
     }
 
     public Loot GenerateLoot()
     {
         Loot loot = new Loot();
-        foreach (var monster in AliveMonsters)
+        foreach (var monster in Monsters)
         {
             loot.Add(monster.GetLoot());
         }
         return loot;
+    }
+
+    /// <summary>
+    /// 전투 종료 후 초기화
+    /// </summary>
+    public void Clear()
+    {
+        BattleInputHandler?.Clear();
+        GridSystem?.Clear();
+        TurnSystem?.Clear();
+
+        BattleInputHandler = null;
+        GridSystem = null;
+        TurnSystem = null;
+
+        CurrentAction?.Unset();
+        _currentAction = null;
+
+        AliveHeroes?.Clear();
+        AliveHeroes = null;
+
+        AliveMonsters?.Clear();
+        AliveMonsters = null;
+
+        foreach (var monster in Monsters)
+        {
+            Managers.ResourceMng.Destroy(monster.gameObject);
+        }
+        Monsters?.Clear();
+        Monsters = null;
+
+        UI?.HideInstantly();
+        UI = null;
     }
 }

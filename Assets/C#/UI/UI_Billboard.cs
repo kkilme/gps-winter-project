@@ -5,13 +5,12 @@ using UnityEngine;
 public class UI_Billboard : MonoBehaviour
 {
     private Camera _camera;
-    // Use this for initialization
+
     void Start()
     {
         _camera = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.forward = _camera.transform.forward;

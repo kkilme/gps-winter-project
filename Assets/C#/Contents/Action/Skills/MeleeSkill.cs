@@ -58,14 +58,14 @@ public abstract class MeleeSkill : BaseSkill
 
         _animator.SetTrigger(GlobalValues.ANIMATION_PARAM_ATTACK1);
 
-        yield return DOVirtual.DelayedCall(_animator.GetCurrentAnimatorStateInfo(0).length + 0.2f, () => { }).WaitForCompletion();
+        yield return DOVirtual.DelayedCall(1f, () => { }).WaitForCompletion();
 
         var dmgTextType = attackSkillData.AttackType == AttackType.Physical ? DamageTextType.PhysicalDamage : DamageTextType.MagicDamage;
         foreach(var target in targets)
         {
             // target.PlacedCreature이 null이 아니라는 보증은 EffectRange.GetAffectedTargets에서 함
             var damage = DamageCalculator.CalculateFinalDamage(Executor, target.PlacedCreature, attackSkillData, coinHeadCount, targets.Count);
-            SelectedTargetCell.PlacedCreature.TakeDamage(damage, dmgTextType);
+            target.PlacedCreature.TakeDamage(damage, dmgTextType);
         }
     }
 

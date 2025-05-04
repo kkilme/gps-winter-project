@@ -16,6 +16,9 @@ public class UI_PlacementPhase : UI_Base
         _rectTransform = GetComponent<RectTransform>();
         GetButton(Buttons.Button_StartBattle).onClick.AddListener(() =>
         {
+            GetButton(Buttons.Button_StartBattle).interactable = false;
+            Managers.InputMng.RemovePointerOverGameObjectAction(Managers.BattleMng.BattleInputHandler.OnDragEnd);
+            Managers.InputMng.RemoveMouseAction(Managers.BattleMng.BattleInputHandler.HandleMouseOnPlacementPhase);
             Hide();
         });
     }
@@ -24,8 +27,8 @@ public class UI_PlacementPhase : UI_Base
     {
         return _rectTransform.DOAnchorPosY(500, 0.7f).SetEase(Ease.InBack).OnComplete(() =>
         {
-            gameObject.SetActive(false);
             Managers.BattleMng.StartBattlePhase();
+            gameObject.SetActive(false);
         });
     }
 }

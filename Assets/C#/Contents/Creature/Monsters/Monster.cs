@@ -3,7 +3,10 @@ using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 
-public abstract class Monster : Creature
+/// <summary>
+/// 기본 Monster 클래스. 
+/// </summary>
+public class Monster : Creature
 {
     public CreatureAI AIBrain { get; protected set; } // 자동 전투를 구현한다면 Creature로 옮겨야 할 듯
     public MonsterData MonsterData => CreatureData as MonsterData;
@@ -24,13 +27,13 @@ public abstract class Monster : Creature
     public override IEnumerator OnDead()
     {
         Animator.SetBool(GlobalValues.ANIMATION_PARAM_DEAD, true);
-        if (Managers.SceneMng.CurrentScene.SceneType == SceneType.BattleScene)
+        if (Managers.SceneMng.CurrentScene is BattleScene)
         {
             Managers.BattleMng.RemoveMonster(this);
         }
         yield return new WaitForSeconds(5f);
 
-        Managers.ResourceMng.Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     public Loot GetLoot()

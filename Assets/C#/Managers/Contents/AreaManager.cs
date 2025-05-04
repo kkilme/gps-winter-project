@@ -16,12 +16,11 @@ public class AreaManager
 
     public AreaState AreaState { get; set; }
 
-    public Vector3 CurrentPlayerPosition { get; set; } // 현재 플레이어 WorldPosition
+    public Vector3 CurrentPlayerPosition { get; set; } // 현재 영웅 파티의 WorldPosition = 타일의 중앙 위치
     private HeroParty _party => Managers.HeroMng.HeroParty;
 
-    private AreaEventTile _currentTile; // 현재 플레이어가 밟고있는 타일
-    private HashSet<Vector2Int> _visiblePositions = new(); // 플레이어 시야 범위 내부에 있는 위치들
-    private int _restCount = 0; // 휴식 카운트 (턴 수와는 별개로, 휴식 시마다 증가함)
+    private AreaEventTile _currentTile; // 현재 파티가 밟고있는 타일
+    private HashSet<Vector2Int> _visiblePositions = new(); // 파티 시야 범위 내부에 있는 위치들
 
     private GameObject _light;
 
@@ -57,8 +56,6 @@ public class AreaManager
         Managers.InputMng.AddMouseAction(AreaInputHandler.HandleMouseInput);
 
         AreaState = AreaState.Idle;
-
-        CoroutineRunner.Instance.StartCoroutine(GlobalUtility.FixUISorting(UI.gameObject)); // UI의 SortingOrder를 Fix
     }
 
     /// <summary>
@@ -67,11 +64,19 @@ public class AreaManager
     private void InitHeroes()
     {
         Managers.HeroMng.SpawnHeroParty();
+        PlaceHeroes(CurrentPlayerPosition);
+    }
+
+    /// <summary>
+    /// 영웅 파티를 targetPosition 위치의 타일 중앙을 기준으로 배치 시킴
+    /// </summary>
+    private void PlaceHeroes(Vector3 targetPosition)
+    {
         var heroes = _party.Heroes;
+        targetPosition = Map.GetTileCenterPosition(targetPosition);
         for (int i = 0; i < heroes.Count; i++)
         {
-            heroes[i].transform.LookAt(Vector3.forward);
-            heroes[i].transform.position = CurrentPlayerPosition + new Vector3(GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 0], 0, GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 1]);
+            if(!heroes[i].IsDead()) heroes[i].transform.position = targetPosition + new Vector3(GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 0], 0, GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 1]);
         }
     }
 
@@ -158,33 +163,54 @@ public class AreaManager
         AreaState = AreaState.Busy;
 
         _party.Rest();
-        _restCount++;
         yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressTurn(GlobalValues.AREA_REST_TURN_COUNT));
 
         AreaState = AreaState.Idle;
     }
 
-    // 전투씬 전환 흐름: 카메라 정지 -> 로딩화면 Fade in 완료 ->  배틀 씬 로딩 시작 및 완료 -> Area의 빛, 카메라 비활성화 -> 로딩화면 Fade out
+    /// <summary>
+    /// 전투씬 로딩 시작
+    /// 전투씬 전환 흐름: LoadBattleScene -> 로딩화면 Fade in 완료 -> OnBattleSceneLoadStart ->  배틀 씬 로딩 시작 및 완료 -> OnBattleSceneLoadFinish -> 로딩화면 Fade out
+    /// </summary>
     public void LoadBattleScene()
     {
         AreaState = AreaState.Battle;
         CameraController.Freeze = true;
         Managers.InputMng.RemoveMouseAction(AreaInputHandler.HandleMouseInput);
 
-        CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadBattleScene());
+        CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadBattleScene(this));
     }
 
-    public void OnBattleSceneLoadFinish()
+    /// <summary>
+    /// 전투씬 로딩 과정에서 로딩 UI의 Fade In 완료 시 호출
+    /// </summary>
+    public void OnBattleSceneLoadStart()
     {
         _light.SetActive(false);
-        CameraController.gameObject.SetActive(false);
+        UI.HideInstantly();
     }
 
+    /// <summary>
+    /// 전투 씬 로딩 과정에서 전투 씬이 ActiveScene으로 전환된 후 호출
+    /// </summary>
+    public void OnBattleSceneLoadFinish()
+    {
+        CameraController.gameObject.SetActive(false);
+
+        var squadId = AreaData.MonsterSquadIds[Random.Range(0, AreaData.MonsterSquadIds.Count)];
+        Managers.BattleMng.Init(squadId, AreaData.BattleFieldName);
+    }
+
+    /// <summary>
+    /// 전투 씬 언로드 및 AreaScene이 ActiveScene으로 전환 된 후 호출
+    /// </summary>
     public void OnBattleSceneUnloadFinish(BattleResultType battleResult)
     {
+        PlaceHeroes(CurrentPlayerPosition);
         CameraController.gameObject.SetActive(true);
         CameraController.GetComponent<AreaCameraController>().Freeze = false;
         _light.SetActive(true);
+        UI.ShowInstantly();
 
         CoroutineRunner.Instance.StartCoroutine(OnTileEventFinish());
 
@@ -204,6 +230,7 @@ public class AreaManager
                 break;
         }
 
+        // 붕괴 턴 진행
         yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressTurn());
 
         Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);

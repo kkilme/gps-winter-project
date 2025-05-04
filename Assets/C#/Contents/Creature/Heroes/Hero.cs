@@ -50,12 +50,13 @@ public class Hero : Creature
     public override IEnumerator OnDead()
     {
         Animator.SetBool(GlobalValues.ANIMATION_PARAM_DEAD, true);
-        if (Managers.SceneMng.CurrentScene.SceneType == SceneType.BattleScene)
+        if (Managers.SceneMng.CurrentScene is BattleScene)
         {
             Managers.BattleMng.RemoveHero(this, false);
         }
         yield return new WaitForSeconds(5f);
 
+        gameObject.SetActive(false);
         //Managers.ResourceMng.Destroy(gameObject);
     }
 

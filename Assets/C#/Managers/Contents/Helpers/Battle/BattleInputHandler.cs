@@ -17,6 +17,20 @@ public class BattleInputHandler
         _camera = Camera.main;
     }
 
+    public void Clear()
+    {
+        Managers.InputMng.RemoveMouseAction(HandleMouseOnTargetSelect);
+        Managers.InputMng.RemoveMouseAction(HandleMouseOnBattlePhase);
+        Managers.InputMng.RemoveMouseAction(HandleMouseOnPlacementPhase);
+
+        CurrentMouseOverCell?.RevertFillColor();
+        CurrentMouseOverCell?.RevertOutlineColor();
+
+        CurrentMouseOverCell = null;
+        _draggingCreature = null;
+        _dragStartCell = null;
+    }
+
     public void HandleMouseOnPlacementPhase(MouseEvent mouseEvent)
     {
         switch (mouseEvent)

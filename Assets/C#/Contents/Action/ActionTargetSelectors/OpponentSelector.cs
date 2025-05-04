@@ -34,7 +34,7 @@ public class OpponentSelector : ActionTargetSelector
                 {
                     // 근접일 시 어떤 열에서 가장 앞에 있는 적만 타게팅 가능
                     var cell = opponentGrid[row, col];
-                    if (!cell.IsEmpty())
+                    if (!cell.IsEmpty() && !cell.PlacedCreature.IsDead())
                     {
                         TargettableCells.Add(cell);
                         break;

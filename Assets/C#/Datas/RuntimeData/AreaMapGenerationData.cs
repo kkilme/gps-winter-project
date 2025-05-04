@@ -13,12 +13,12 @@ public class AreaMapGenerationData : ScriptableObject
     public int MapWidth;
     public int MapHeight;
     // 플레이 가능(이동 가능)한 영역 크기
-    [Tooltip("플레이 가능한 영역의 가로 크기, Note: 반드시 홀수여야 함")]
+    [Tooltip("이동 가능한 영역의 가로 크기, Note: 반드시 홀수여야 함")]
     public int PlayableFieldWidth;
     public int PlayableFieldHeight;
-    [Range(0, 1), Tooltip("플레이 불가능한 필드에서의 장식물 비율")]
+    [Range(0, 1), Tooltip("이동 불가능한 필드에서의 장식물 비율")]
     public float UnplayableFieldDecorationProportion;
-    [Range(0, 0.8f), Tooltip("플레이 가능한 필드에서의 장식물 비율")]
+    [Range(0, 0.8f), Tooltip("이동 가능한 필드에서의 장식물 비율")]
     public float PlayableFieldDecorationProportion;
 
     public int BattleTileNum;

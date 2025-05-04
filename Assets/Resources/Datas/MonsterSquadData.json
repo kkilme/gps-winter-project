@@ -2,7 +2,7 @@
   "monsterSquads": [
     {
       "DataId": 501000,
-      "Name": "Squad_1",
+      "Name": "ForestSquad_1",
       "Monsters": [
           {
              "DataId": 102000,
@@ -17,6 +17,27 @@
           {
              "DataId": 102000,
              "x": 2,
+             "y": 1,
+          },
+      ]
+    },
+        {
+      "DataId": 501001,
+      "Name": "ForestSquad_2",
+      "Monsters": [
+          {
+             "DataId": 102001,
+             "x": 0,
+             "y": 1,
+          },
+          {
+             "DataId": 102000,
+             "x": 0,
+             "y": 0,
+          },
+          {
+             "DataId": 102001,
+             "x": 1,
              "y": 1,
           },
       ]

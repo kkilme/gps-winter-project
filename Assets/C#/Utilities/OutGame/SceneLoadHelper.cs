@@ -33,10 +33,13 @@ public static class SceneLoadHelper
             loadingUI.UpdateProgress(progress);
             yield return null;
         }
+        loadingUI.UpdateProgress(0.9f);
+        yield return FakeProgress(loadingUI, 0.9f, 1f, 0.3f); // progress는 0.9f까지만 올라가므로 강제로 업데이트
 
-        FakeProgress(loadingUI, 0.9f, 1f, 0.3f); // progress는 0.9f까지만 올라가므로 강제로 업데이트
-        yield return new WaitForSeconds(1f); // 로딩이 끝나고 잠시 대기
+        //yield return new WaitForSeconds(1f); // 로딩이 끝나고 잠시 대기
+
         op.allowSceneActivation = true; // 씬 활성화
+        yield return op; // 씬 활성화가 끝날 때까지 대기
     }
 
 }

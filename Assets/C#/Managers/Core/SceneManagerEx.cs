@@ -7,35 +7,51 @@ using UnityEngine.SceneManagement;
 public class SceneManagerEx
 {
     public BaseScene FirstScene;
-    public BaseScene CurrentScene => GameObject.FindObjectOfType<BaseScene>();
+    public BaseScene CurrentScene
+    {
+        get
+        {
+            var activeScene = SceneManager.GetActiveScene();
+            var rootObjects = activeScene.GetRootGameObjects();
+
+            foreach (var rootObject in rootObjects)
+            {
+                var baseScene = rootObject.GetComponent<BaseScene>();
+                if (baseScene != null)
+                    return baseScene;
+            }
+
+            Debug.LogError($"[SceneManagerEx] BaseScene not found in active scene: {activeScene.name}");
+            return null;
+        }
+    }
 
     public void Init() => FirstScene = CurrentScene;
 
-    // type의 이름을 string으로 반환
-    private string GetSceneName(SceneType type) => Enum.GetName(typeof(SceneType), type);
-  
     // 현재 씬을 T 타입으로 반환
     public T GetCurrentScene<T>() where T : BaseScene => CurrentScene as T;
-    
-    // 전투씬 전환 흐름: Area 카메라 정지 -> 로딩화면 Fade in ->  배틀 씬 로딩 시작 및 완료 -> Area의 빛, 카메라 비활성화 -> 로딩화면 Fade out
-    public IEnumerator LoadBattleScene()
+
+    // 전투씬 전환 흐름: LoadBattleScene -> 로딩화면 Fade in 완료 -> OnBattleSceneLoadStart ->  배틀 씬 로딩 시작 및 완료 -> OnBattleSceneLoadFinish -> 로딩화면 Fade out
+    public IEnumerator LoadBattleScene(AreaManager areaManager)
     {
-        Debug.Log("[SceneManagerEx] Battle Scene Load Start");
+        Debug.Log("[SceneManagerEx] BattleScene Load Start");
 
         // 로딩화면 생성 및 Fade in
         var loadingUI = Managers.UIMng.MakeGeneralUI<UI_Loading>();
         yield return loadingUI.FadeIn();
 
-        // Battle 씬 로드
-        yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.BATTLE_SCENE_NAME, loadingUI, 0, LoadSceneMode.Additive);
+        areaManager.OnBattleSceneLoadStart();
 
+        // Battle 씬 로드 및 활성화
+        yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.BATTLE_SCENE_NAME, loadingUI, 0, LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.BATTLE_SCENE_NAME));
-        Managers.AreaMng.OnBattleSceneLoadFinish();
+
+        areaManager.OnBattleSceneLoadFinish();
 
         // 로딩 화면 fade out, 삭제
         yield return loadingUI.FadeOut();
 
-        Debug.Log("[SceneManagerEx] Battle Scene Load Finish");
+        Debug.Log("[SceneManagerEx] BattleScene Load Finish");
     }
 
     // 전투씬 종료 흐름
@@ -44,10 +60,11 @@ public class SceneManagerEx
     // 2-2. 승리 / 도망친 영웅 존재: Area 씬 활성화
     public IEnumerator EndBattleScene(BattleResultType result)
     {
-        Debug.Log($"[SceneManagerEx] Battle Scene End Start, Result: {result}");
+        Debug.Log($"[SceneManagerEx] BattleScene End Start, Result: {result}");
 
         var loadingUI = Managers.UIMng.MakeGeneralUI<UI_Loading>();
         yield return loadingUI.FadeIn();
+        Managers.BattleMng.Clear();
 
         // BattleScene 언로드
         yield return SceneManager.UnloadSceneAsync(GlobalValues.BATTLE_SCENE_NAME);
@@ -67,9 +84,9 @@ public class SceneManagerEx
         }
         else
         {
-            #if UNITY_EDITOR
-            
-            if(!SceneManager.GetSceneByName(GlobalValues.AREA_SCENE_NAME).isLoaded)
+#if UNITY_EDITOR
+            //////////////////////////// For Test //////////////////////////////////////////////////
+            if (!SceneManager.GetSceneByName(GlobalValues.AREA_SCENE_NAME).isLoaded)
             {
                 // AreaScene이 로드되지 않은 경우: 테스트용으로 BattleScene에서 시작 한 경우임
                 // 임의로 Area 생성
@@ -77,8 +94,8 @@ public class SceneManagerEx
                 yield return SceneManager.LoadSceneAsync(GlobalValues.AREA_SCENE_NAME);
                 GetCurrentScene<AreaScene>().InitArea(AreaName.Forest, quest);
             }
-
-            #endif
+            //////////////////////////////////////////////////////////////////////////////////////////
+#endif
 
             // AreaScene은 열려있음 → 활성화
             yield return SceneLoadHelper.FakeProgress(loadingUI, 0.3f, 1f);
@@ -87,7 +104,7 @@ public class SceneManagerEx
         }
 
         yield return loadingUI.FadeOut();
-        Debug.Log("[SceneManagerEx] Battle Scene End Finish");
+        Debug.Log("[SceneManagerEx] BattleScene End Finish");
     }
 
     public IEnumerator LoadAreaScene(AreaName areaName, Quest quest)
