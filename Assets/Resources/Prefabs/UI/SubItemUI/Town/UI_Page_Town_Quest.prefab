@@ -804,7 +804,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5454128154881834291}
-  - component: {fileID: 4163098766859403152}
   m_Layer: 5
   m_Name: UI_Page_Town_Quest
   m_TagString: Untagged
@@ -834,18 +833,6 @@ RectTransform:
   m_AnchoredPosition: {x: 5, y: 0}
   m_SizeDelta: {x: -10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4163098766859403152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8651166219520378522}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb51b3d2437bfef47a350eee2321f524, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &5452481079850535367
 PrefabInstance:
   m_ObjectHideFlags: 0

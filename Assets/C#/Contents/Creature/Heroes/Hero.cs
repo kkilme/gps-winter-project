@@ -66,6 +66,7 @@ public class Hero : Creature
     {
         string path = GlobalValues.HERO_ANIMATOR_PATH_PREFIX + Weapon.WeaponType;
         Animator.runtimeAnimatorController = Managers.ResourceMng.Load<RuntimeAnimatorController>(path);
+        Animator.SetBool(GlobalValues.ANIMATION_PARAM_TOWNSCENE, Managers.SceneMng.CurrentScene is TownScene);
     }
 
     public void EquipWeapon(int weaponDataId)

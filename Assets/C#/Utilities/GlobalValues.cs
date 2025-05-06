@@ -27,6 +27,7 @@ public static class GlobalValues
     public static readonly int ANIMATION_PARAM_MOVING = Animator.StringToHash("Moving");
     public static readonly int ANIMATION_PARAM_ONDAMAGED = Animator.StringToHash("OnDamaged");
     public static readonly int ANIMATION_PARAM_DEAD = Animator.StringToHash("Dead");
+    public static readonly int ANIMATION_PARAM_TOWNSCENE = Animator.StringToHash("TownScene");
     public static readonly int ANIMATION_PARAM_ATTACK1 = Animator.StringToHash("Attack1");
     public static readonly int ANIMATION_PARAM_ATTACK2 = Animator.StringToHash("Attack2");
     public static readonly int ANIMATION_PARAM_ATTACK3 = Animator.StringToHash("Attack3");
