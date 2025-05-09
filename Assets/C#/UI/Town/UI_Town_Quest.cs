@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_Page_Town_Quest : UI_Page
+public class UI_Town_Quest : UI_Base
 {
     //enum Buttons
     //{

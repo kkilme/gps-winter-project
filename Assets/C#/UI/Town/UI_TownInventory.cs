@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UI_Bag : UI_Base
+public class UI_TownInventory : UI_Base
 {
     enum Items
     {

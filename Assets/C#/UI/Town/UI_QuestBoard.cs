@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using TMPro;
+using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -126,7 +127,7 @@ public class UI_QuestBoard : UI_Base
         Bind<GameObject>(typeof(GameObjects));
     }
 
-    private void OnEnable()
+    public override Tween Show()
     {
         this.GetComponent<RectTransform>().DOLocalMoveX(-1000, 0.5f).From(true).SetEase(Ease.OutCirc).SetDelay(0.05f);
 
@@ -160,5 +161,7 @@ public class UI_QuestBoard : UI_Base
             #endregion
 
         }
+
+        return base.Show();
     }
 }

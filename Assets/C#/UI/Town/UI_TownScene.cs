@@ -5,74 +5,45 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-// 페이지 관리 클래스. 각 페이지들끼리 연결 시켜줌.
 public class UI_TownScene : UI_Scene
 {
-    private UI_Page _currentPage;
-
-	enum GameObjects
-	{
-        Base, // 페이지가 변경되어도 존재하는 UI들
-    }
-
-    enum Pages
+    enum SubItemUI
     {
-        UI_Page_Town_Main,
-        UI_Page_Town_Quest,
-        UI_Page_Town_Store,
+        UI_Town_TopBar,
+        UI_Town_Inventory,
+        UI_Town_Heroes,
+        UI_Town_Store,
+        UI_Town_Quest,
+        UI_HeroProfileGroup_Horizontal,
     }
 
     enum Buttons
     {
-        Button_Quest,
-        Button_ExitAtQuest,
+        Button_Inventory,
+        Button_Heroes,
         Button_Store,
-        Button_ExitAtStore,
+        Button_Quest,
+        Button_Setting,
     }
+
+    private UI_Base _currentOpenUI;
+    public UI_TownInventory InventoryUI { get; protected set; }
+    public UI_HeroList HeroesUI { get; protected set; }
+    public UI_TownStore StoreUI { get; protected set; }
+    public UI_QuestBoard QuestBoardUI { get; protected set; }
+    public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
 
     public override void Init()
     {
         base.Init();
 
-        Bind<GameObject>(typeof(GameObjects));
-        Bind<UI_Page>(typeof(Pages));
+        Bind<GameObject>(typeof(SubItemUI));
         Bind<Button>(typeof(Buttons));
 
-        void OnClickedQuestButton(PointerEventData data)
-        {
-            Get<UI_Page>(Pages.UI_Page_Town_Main).gameObject.SetActive(false);
-
-            GetButton(Buttons.Button_ExitAtQuest).GetComponent<RectTransform>().DOLocalMoveY(200, 0.5f).From(true)
-                .SetEase(Ease.OutCirc);
-
-            _currentPage = Get<UI_Page>(Pages.UI_Page_Town_Quest);
-            _currentPage.gameObject.SetActive(true);
-        }
-
-        void OnClickedStoreButton(PointerEventData data)
-        {
-            Get<UI_Page>(Pages.UI_Page_Town_Main).gameObject.SetActive(false);
-
-            GetButton(Buttons.Button_ExitAtStore).GetComponent<RectTransform>().DOLocalMoveY(200, 0.5f).From(true)
-                .SetEase(Ease.OutCirc);
-
-            _currentPage = Get<UI_Page>(Pages.UI_Page_Town_Store);
-            _currentPage.gameObject.SetActive(true);
-        }
-
-        void OnClickedExitButton(PointerEventData data)
-        {
-            _currentPage.gameObject.SetActive(false);
-
-            _currentPage = Get<UI_Page>(Pages.UI_Page_Town_Main);
-            _currentPage.gameObject.SetActive(true);
-        }
-
-        GetButton(Buttons.Button_Quest).gameObject.BindEvent(OnClickedQuestButton, UIEvent.Click);
-        GetButton(Buttons.Button_ExitAtQuest).gameObject.BindEvent(OnClickedExitButton, UIEvent.Click);
-        GetButton(Buttons.Button_Store).gameObject.BindEvent(OnClickedStoreButton, UIEvent.Click);
-        GetButton(Buttons.Button_ExitAtStore).gameObject.BindEvent(OnClickedExitButton, UIEvent.Click);
-
-        Get<UI_Page>(Pages.UI_Page_Town_Main).gameObject.SetActive(true);
+        InventoryUI = GetGameObject(SubItemUI.UI_Town_Inventory).GetOrAddComponent<UI_TownInventory>();
+        HeroesUI = GetGameObject(SubItemUI.UI_Town_Heroes).GetOrAddComponent<UI_HeroList>();
+        StoreUI = GetGameObject(SubItemUI.UI_Town_Store).GetOrAddComponent<UI_TownStore>();
+        QuestBoardUI = GetGameObject(SubItemUI.UI_Town_Quest).GetOrAddComponent<UI_QuestBoard>();
+        HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
     }
 }
