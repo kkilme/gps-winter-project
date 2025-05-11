@@ -14,8 +14,8 @@ public class Monster : Creature
     public override void SetData(int dataId)
     {
         CreatureData = Managers.DataMng.MonsterDataDict[dataId];
-        AIBrain = GetComponent<CreatureAI>();
         CreatureStat = new CreatureStat(CreatureData);
+        AIBrain = GetComponent<CreatureAI>();
         gameObject.name = $"{CreatureData.DataId}_{CreatureData.Name}";
     }
 
@@ -27,10 +27,9 @@ public class Monster : Creature
     public override IEnumerator OnDead()
     {
         Animator.SetBool(GlobalValues.ANIMATION_PARAM_DEAD, true);
-        if (Managers.SceneMng.CurrentScene is BattleScene)
-        {
-            Managers.BattleMng.RemoveMonster(this);
-        }
+
+        Managers.BattleMng.RemoveMonster(this);
+        
         yield return new WaitForSeconds(5f);
 
         gameObject.SetActive(false);

@@ -1,10 +1,9 @@
-﻿{
+{
   "items": [
     {
       "DataId": 301000,
       "Name": "HealPotion",
       "Description": "This is sample item.",
-      "Heal": 15
     }
   ]
 }

@@ -7,9 +7,8 @@ public class BattleScene : BaseScene
 {   
     protected override void Init()
     {
-        base.Init();
-      
         SceneType = SceneType.BattleScene;
+        base.Init();
     }
 
     public void InitBattle(int squadId, string battleFieldName)
@@ -20,7 +19,7 @@ public class BattleScene : BaseScene
 #if UNITY_EDITOR
     private void Start()
     {
-        if (Managers.SceneMng.FirstScene is BattleScene)
+        if (Managers.SceneMng.FirstScene == SceneType.BattleScene)
         {
             // TODO: for test
             // BattleScene에서 시작하여 플레이 테스트 시에만 실행

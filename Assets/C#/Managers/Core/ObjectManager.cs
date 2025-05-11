@@ -19,7 +19,7 @@ public class ObjectManager
     }
 
 
-    public void BindSkills()
+    private void BindSkills()
     {
         foreach (var skillData in Managers.DataMng.SkillDataDict)
         {
@@ -27,7 +27,7 @@ public class ObjectManager
             if (skillType == null)
             {
                 Debug.LogError("Failed to BindSkill: " + skillData.Value.Name);
-                return;
+                continue;
             }
 
             var skill = Activator.CreateInstance(skillType) as BaseSkill;

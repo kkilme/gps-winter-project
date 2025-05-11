@@ -10,6 +10,13 @@ public class ItemData
     public int DataId;
     public string Name;
     public ItemType ItemType;
+    public string ImagePath;
+}
+
+[Serializable]
+public class ConsumableItemData : ItemData
+{
+    public string Description;
 }
 
 [Serializable]
@@ -38,6 +45,24 @@ public class WeaponData : EquipmentData
 public class ArmorData : EquipmentData
 {
     public int ArmorIndex;
+    public ArmorType ArmorType;
+}
+
+[Serializable]
+public class ConsumableItemDataLoader : ILoader<int, ConsumableItemData>
+{
+    public List<ConsumableItemData> consumableItems = new List<ConsumableItemData>();
+    public Dictionary<int, ConsumableItemData> MakeDict()
+    {
+        var dic = new Dictionary<int, ConsumableItemData>();
+        foreach (var item in consumableItems)
+        {
+            item.ItemType = ItemType.Consumable;
+            item.ImagePath ??= "Default_Consumable";
+            dic.Add(item.DataId, item);
+        }
+        return dic;
+    }
 }
 
 [Serializable]
@@ -49,7 +74,11 @@ public class WeaponDataLoader : ILoader<int, WeaponData>
     {
         var dic = new Dictionary<int, WeaponData>();
         foreach (var weapon in weapons)
+        {
+            weapon.ItemType = ItemType.Weapon;
+            weapon.ImagePath ??= "Default_Weapon";
             dic.Add(weapon.DataId, weapon);
+        }
 
         return dic;
     }
@@ -63,8 +92,12 @@ public class ArmorDataLoader : ILoader<int, ArmorData>
     public Dictionary<int, ArmorData> MakeDict()
     {
         var dic = new Dictionary<int, ArmorData>();
-        foreach (var armor in armors)
+        foreach (var armor in armors) 
+        {
+            armor.ItemType = ItemType.Armor;
+            armor.ImagePath ??= "Default_Armor";
             dic.Add(armor.DataId, armor);
+        }
 
         return dic;
     }

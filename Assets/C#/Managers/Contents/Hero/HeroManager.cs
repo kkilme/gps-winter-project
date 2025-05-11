@@ -5,7 +5,6 @@ using UnityEngine;
 public class HeroManager
 {
     public HeroParty HeroParty { get; protected set; } = new HeroParty();
-    public List<Hero> Heroes => HeroParty.Heroes;
     private HeroStorage _heroStorage => Managers.StorageMng.HeroStorage;
     private Transform _heroRoot => GlobalUtility.FindOrCreateTransform("@Heroes");
 

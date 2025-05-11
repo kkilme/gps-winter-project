@@ -10,9 +10,9 @@ public class Armor: Equipment
 
     public override void SetData(int dataId)
     {
-        EquipmentType = EquipmentType.Armor;
-        EquipmentData = Managers.DataMng.ArmorDataDict[dataId];
-
+        ItemType = ItemType.Armor;
+        ItemData = Managers.DataMng.ArmorDataDict[dataId];
+        
         base.SetData(dataId);
     }
 }

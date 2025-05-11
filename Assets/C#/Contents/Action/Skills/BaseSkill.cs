@@ -4,11 +4,12 @@ using UnityEngine;
 
 public abstract class BaseSkill : BaseAction
 {
+    public int DataId { get; protected set; }
     public SkillData SkillData { get; protected set; }
 
-    public override void SetData(int dataId)
+    public void SetData(int dataId)
     {
-        base.SetData(dataId);
+        DataId = dataId;
         SkillData = Managers.DataMng.SkillDataDict[dataId];
     }
 }

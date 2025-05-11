@@ -2750,8 +2750,8 @@ RectTransform:
   m_Children:
   - {fileID: 1612710715611216716}
   - {fileID: 1612710715484869390}
-  - {fileID: 8332286471940277479}
   - {fileID: 7507307683944716492}
+  - {fileID: 8332286471940277479}
   m_Father: {fileID: 8332286471381948924}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7522,7 +7522,7 @@ GameObject:
   - component: {fileID: 1637255346364670889}
   - component: {fileID: 213957865083470279}
   m_Layer: 5
-  m_Name: Text_Tap
+  m_Name: Text_Equipments
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7576,7 +7576,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Equipment
+  m_text: Equipments
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
   m_sharedMaterial: {fileID: 7908499825950019370, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
@@ -9698,7 +9698,7 @@ GameObject:
   - component: {fileID: 818835718060661639}
   - component: {fileID: 6087955597953224010}
   m_Layer: 5
-  m_Name: Text_Tap
+  m_Name: Text_Weapons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9752,7 +9752,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Weapon
+  m_text: Weapons
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
   m_sharedMaterial: {fileID: 7908499825950019370, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
@@ -10196,7 +10196,7 @@ RectTransform:
   m_Children:
   - {fileID: 5421174425148568790}
   m_Father: {fileID: 1612710715094219078}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.04, y: 1}
   m_AnchorMax: {x: 0.95, y: 1}
@@ -10370,7 +10370,7 @@ GameObject:
   - component: {fileID: 8188677004066051008}
   - component: {fileID: 104751708539670812}
   m_Layer: 5
-  m_Name: Text_Tap
+  m_Name: Text_Consumables
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10424,7 +10424,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Consumable
+  m_text: Consumables
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
   m_sharedMaterial: {fileID: 7908499825950019370, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
@@ -13216,6 +13216,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8332286471381948924}
+  - component: {fileID: 3010156265587424162}
   m_Layer: 5
   m_Name: UI_Town_Inventory
   m_TagString: Untagged
@@ -13245,6 +13246,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3010156265587424162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8332286471381948925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9910dcf140cbac244acb052473641999, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8332286471411828181
 GameObject:
   m_ObjectHideFlags: 0
@@ -13431,7 +13444,7 @@ RectTransform:
   m_Children:
   - {fileID: 8332286472250546822}
   m_Father: {fileID: 1612710715094219078}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -13550,7 +13563,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 543898f7ce915744183679ae79d41f79, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 16526026a5cb16d4f9c8ff6231c7fd3d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

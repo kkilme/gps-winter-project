@@ -1,15 +1,8 @@
 public class Equipment: Item
 {
-    public EquipmentType EquipmentType { get; protected set; }
-    public EquipmentData EquipmentData { get; protected set; }
+    public EquipmentData EquipmentData => ItemData as EquipmentData;
     public Hero Owner { get; protected set; }
     
-    // 수동 실행
-    public virtual void SetData(int dataId)
-    {
-        DataId = dataId;
-    }
-
     public void Equip(Hero hero)
     {
         Owner = hero;

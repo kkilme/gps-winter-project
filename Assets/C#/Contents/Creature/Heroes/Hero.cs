@@ -56,8 +56,7 @@ public class Hero : Creature
         }
         yield return new WaitForSeconds(5f);
 
-        gameObject.SetActive(false);
-        //Managers.ResourceMng.Destroy(gameObject);
+        gameObject.SetActive(false); // 파괴하지 않음
     }
 
     #region Weapon
@@ -165,9 +164,6 @@ public class Hero : Creature
                  break; 
              case ArmorType.Cloak:
                  transform.GetChild(idx + 19).gameObject.SetActive(isActive);
-                 break;
-             case ArmorType.HeadAccessory:
-                 _head.transform.GetChild(idx - 1).gameObject.SetActive(isActive);
                  break;
              case ArmorType.Helmet:
                  _head.transform.GetChild(idx + 96).gameObject.SetActive(isActive);

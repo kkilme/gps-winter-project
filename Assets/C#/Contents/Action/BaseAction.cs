@@ -6,7 +6,6 @@ using UnityEngine;
 public abstract class BaseAction
 {
     #region Field
-    public int DataId { get; protected set; }
     public Creature Executor { get; protected set; } // 이 액션을 실행하는 Creature. 전투에서 한 턴에 한 Creature만 Action을 실행하는 것이 보장되어야 함.
     public BattleGridCell SelectedTargetCell { get; protected set; }
     public abstract ActionTargetSelector TargetSelector { get; protected set; }
@@ -14,11 +13,6 @@ public abstract class BaseAction
     protected Animator _animator => Executor.Animator;
 
     #endregion
-
-    public virtual void SetData(int dataId)
-    {
-        DataId = dataId;
-    }
 
     /// <summary>
     /// 액션 수행 로직

@@ -40,10 +40,10 @@ public class UI_TownScene : UI_Scene
         Bind<GameObject>(typeof(SubItemUI));
         Bind<Button>(typeof(Buttons));
 
-        InventoryUI = GetGameObject(SubItemUI.UI_Town_Inventory).GetOrAddComponent<UI_TownInventory>();
-        HeroesUI = GetGameObject(SubItemUI.UI_Town_Heroes).GetOrAddComponent<UI_HeroList>();
-        StoreUI = GetGameObject(SubItemUI.UI_Town_Store).GetOrAddComponent<UI_TownStore>();
-        QuestBoardUI = GetGameObject(SubItemUI.UI_Town_Quest).GetOrAddComponent<UI_QuestBoard>();
-        HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
+        //InventoryUI = GetGameObject(SubItemUI.UI_Town_Inventory).GetOrAddComponent<UI_TownInventory>();
+        //HeroesUI = GetGameObject(SubItemUI.UI_Town_Heroes).GetOrAddComponent<UI_HeroList>();
+        //StoreUI = GetGameObject(SubItemUI.UI_Town_Store).GetOrAddComponent<UI_TownStore>();
+        //QuestBoardUI = GetGameObject(SubItemUI.UI_Town_Quest).GetOrAddComponent<UI_QuestBoard>();
+        //HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
     }
 }

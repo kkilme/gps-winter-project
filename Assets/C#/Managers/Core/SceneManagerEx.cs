@@ -6,27 +6,38 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEx
 {
-    public BaseScene FirstScene;
+    public SceneType FirstScene;
+    public SceneType CurrentSceneType;
+    private BaseScene _currentScene;
     public BaseScene CurrentScene
     {
         get
         {
-            var activeScene = SceneManager.GetActiveScene();
-            var rootObjects = activeScene.GetRootGameObjects();
-
-            foreach (var rootObject in rootObjects)
+            if(_currentScene == null || _currentScene.SceneType != CurrentSceneType)
             {
-                var baseScene = rootObject.GetComponent<BaseScene>();
-                if (baseScene != null)
-                    return baseScene;
-            }
+                var activeScene = SceneManager.GetActiveScene();
+                var rootObjects = activeScene.GetRootGameObjects();
 
-            Debug.LogError($"[SceneManagerEx] BaseScene not found in active scene: {activeScene.name}");
-            return null;
+                foreach (var rootObject in rootObjects)
+                {
+                    if (rootObject.TryGetComponent<BaseScene>(out var baseScene))
+                    {
+                        _currentScene = baseScene;
+                        CurrentSceneType = _currentScene.SceneType;
+                        return _currentScene;
+                    }
+                }
+                Debug.LogError($"[SceneManagerEx] BaseScene not found in scene: {activeScene.name}");
+                return null;
+            }
+            return _currentScene;
         }
     }
 
-    public void Init() => FirstScene = CurrentScene;
+    public void Init()
+    {
+        CurrentSceneType = FirstScene = CurrentScene.SceneType;
+    }
 
     // 현재 씬을 T 타입으로 반환
     public T GetCurrentScene<T>() where T : BaseScene => CurrentScene as T;
@@ -45,6 +56,7 @@ public class SceneManagerEx
         // Battle 씬 로드 및 활성화
         yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.BATTLE_SCENE_NAME, loadingUI, 0, LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.BATTLE_SCENE_NAME));
+        CurrentSceneType = SceneType.BattleScene;
 
         areaManager.OnBattleSceneLoadFinish();
 
@@ -81,6 +93,7 @@ public class SceneManagerEx
             yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.TOWN_SCENE_NAME, loadingUI, 0.6f);
 
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.TOWN_SCENE_NAME));
+            CurrentSceneType = SceneType.TownScene;
         }
         else
         {
@@ -92,6 +105,7 @@ public class SceneManagerEx
                 // 임의로 Area 생성
                 Quest quest = new Quest(Managers.DataMng.QuestDataDict.Values.ToList()[0]);
                 yield return SceneManager.LoadSceneAsync(GlobalValues.AREA_SCENE_NAME);
+                CurrentSceneType = SceneType.AreaScene;
                 GetCurrentScene<AreaScene>().InitArea(AreaName.Forest, quest);
             }
             //////////////////////////////////////////////////////////////////////////////////////////
@@ -100,6 +114,7 @@ public class SceneManagerEx
             // AreaScene은 열려있음 → 활성화
             yield return SceneLoadHelper.FakeProgress(loadingUI, 0.3f, 1f);
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.AREA_SCENE_NAME));
+            CurrentSceneType = SceneType.AreaScene;
             Managers.AreaMng.OnBattleSceneUnloadFinish(result);
         }
 
@@ -110,6 +125,7 @@ public class SceneManagerEx
     public IEnumerator LoadAreaScene(AreaName areaName, Quest quest)
     {
         yield return SceneManager.LoadSceneAsync(GlobalValues.AREA_SCENE_NAME);
+        CurrentSceneType = SceneType.AreaScene;
         GetCurrentScene<AreaScene>().InitArea(areaName, quest);
     }
 }

@@ -11,8 +11,8 @@ public class AreaScene : BaseScene
 
     protected override void Init()
     {
-        base.Init();
         SceneType = SceneType.AreaScene;
+        base.Init();
 
         _areaMapGenerator = GetComponent<AreaMapGenerator>();
     }
@@ -43,7 +43,7 @@ public class AreaScene : BaseScene
     private void Start()
     {
         // TODO: AreaScene에서 시작하여 플레이 테스트 시에만 실행
-        if (Managers.SceneMng.FirstScene is AreaScene)
+        if (Managers.SceneMng.FirstScene == SceneType.AreaScene)
         {
             TestInit();
         }

@@ -7,13 +7,6 @@ public enum CreatureType
     Monster,
 }
 
-public enum EquipmentType
-{
-    None,
-    Weapon,
-    Armor,
-}
-
 public enum WeaponType
 {
     NoWeapon,
@@ -29,10 +22,8 @@ public enum WeaponType
 public enum ArmorType
 {
     None,
-    Accessory,
     Body,
     Cloak,
-    HeadAccessory,
     Helmet,
 }
 

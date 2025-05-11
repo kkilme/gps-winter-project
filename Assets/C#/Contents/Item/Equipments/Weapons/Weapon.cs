@@ -14,10 +14,10 @@ public class Weapon: Equipment
 
     public override void SetData(int dataId)
     {
-        EquipmentType = EquipmentType.Weapon;
+        ItemType = ItemType.Weapon;
 
         WeaponData weaponData = Managers.DataMng.WeaponDataDict[dataId];
-        EquipmentData = weaponData;
+        ItemData = weaponData;
         WeaponType = weaponData.WeaponType;
 
         base.SetData(dataId);

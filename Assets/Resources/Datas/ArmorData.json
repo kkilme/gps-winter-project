@@ -3,7 +3,7 @@
     {
       "DataId": 202000,
       "Name": "SampleBody1",
-      "ItemType": "Armor",
+      "ArmorType": "Body",
       "PhysicalDefense": 2,
       "MagicDefense": 1,
       "ArmorIndex": 5
@@ -11,7 +11,7 @@
     {
       "DataId": 202001,
       "Name": "SampleBody2",
-      "ItemType": "Armor",
+      "ArmorType": "Body",
       "Defense": 1,
       "MagicDefense": 1,
       "Dexterity": 1,
