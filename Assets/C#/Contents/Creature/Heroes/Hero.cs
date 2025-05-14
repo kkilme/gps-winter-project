@@ -87,7 +87,7 @@ public class Hero : Creature
         ChangeWeaponVisibility(true);
         ChangeAnimator();
 
-        Managers.StorageMng.HeroStorage.SaveWeapon(InstanceId, equippingWeapon.DataId);
+        Managers.HeroMng.HeroStorage.SaveWeapon(InstanceId, equippingWeapon.DataId);
     }
     
     public void UnEquipWeapon()
@@ -140,7 +140,7 @@ public class Hero : Creature
         Armors[armorType].Equip(this);
         ChangeArmorVisibility(armorType ,true);
 
-        Managers.StorageMng.HeroStorage.SaveArmor(InstanceId, armorType, equippingArmor.DataId);
+        Managers.HeroMng.HeroStorage.SaveArmor(InstanceId, armorType, equippingArmor.DataId);
     }
 
     public void UnEquipArmor(ArmorType armorType)

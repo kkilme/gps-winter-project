@@ -23,10 +23,10 @@ public class ObjectManager
     {
         foreach (var skillData in Managers.DataMng.SkillDataDict)
         {
-            Type skillType = Type.GetType(skillData.Value.Name);
+            Type skillType = Type.GetType(skillData.Value.ClassName);
             if (skillType == null)
             {
-                Debug.LogError("Failed to BindSkill: " + skillData.Value.Name);
+                Debug.LogError("Failed to BindSkill: " + skillData.Value.ClassName);
                 continue;
             }
 

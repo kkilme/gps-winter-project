@@ -9,6 +9,7 @@ public class ActionData
 {
     public int DataId;
     public string Name;
+    public string ClassName; // BaseAction을 상속받는 클래스명
     public string Description;
     public ActionDataType Type; // ActionData를 상속받는 클래스명
 }
@@ -44,6 +45,7 @@ public class SkillDataLoader : ILoader<int, SkillData>
         var dic = new Dictionary<int, SkillData>();
         foreach (var skill in skills)
         {
+            skill.ClassName ??= skill.Name;
             dic.Add(skill.DataId, skill);
         }
         return dic;

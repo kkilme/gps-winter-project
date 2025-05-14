@@ -9,8 +9,10 @@ public class ItemData
 {
     public int DataId;
     public string Name;
+    public string ClassName; // Item을 상속받는 클래스명
     public ItemType ItemType;
     public string ImagePath;
+    public int MaxStack; // 인벤토리에서 최대로 스택될 수 있는 양
 }
 
 [Serializable]
@@ -57,7 +59,9 @@ public class ConsumableItemDataLoader : ILoader<int, ConsumableItemData>
         var dic = new Dictionary<int, ConsumableItemData>();
         foreach (var item in consumableItems)
         {
+            item.ClassName ??= item.Name;
             item.ItemType = ItemType.Consumable;
+            item.MaxStack = item.MaxStack == 0 ? 99 : item.MaxStack;
             item.ImagePath ??= "Default_Consumable";
             dic.Add(item.DataId, item);
         }
@@ -75,7 +79,9 @@ public class WeaponDataLoader : ILoader<int, WeaponData>
         var dic = new Dictionary<int, WeaponData>();
         foreach (var weapon in weapons)
         {
+            weapon.ClassName ??= weapon.Name;
             weapon.ItemType = ItemType.Weapon;
+            weapon.MaxStack = 1;
             weapon.ImagePath ??= "Default_Weapon";
             dic.Add(weapon.DataId, weapon);
         }
@@ -94,7 +100,9 @@ public class ArmorDataLoader : ILoader<int, ArmorData>
         var dic = new Dictionary<int, ArmorData>();
         foreach (var armor in armors) 
         {
+            armor.ClassName ??= armor.Name;
             armor.ItemType = ItemType.Armor;
+            armor.MaxStack = 1;
             armor.ImagePath ??= "Default_Armor";
             dic.Add(armor.DataId, armor);
         }

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class TownManager
 {
+    public UI_TownScene UI { get; private set; }
+
     private Transform[] _heroPositions; // hero 스폰 위치
 
     public void Init()
@@ -16,7 +18,8 @@ public class TownManager
 
         SpawnHeroes();
 
-        Managers.UIMng.ShowSceneUI<UI_TownScene>();
+        UI = Managers.UIMng.ShowSceneUI<UI_TownScene>();
+        UI.InitUIs();
     }
 
     public void SpawnHeroes()

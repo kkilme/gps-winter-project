@@ -67,14 +67,14 @@ public class UIManager
     }
 
     /// <summary>
-    /// 이름이 name인 SceneUI를 생성한 후 T컴포넌트로 반환
+    /// UI/SceneUI/{path}의 SceneUI를 생성한 후 T컴포넌트로 반환
     /// </summary>
-    public T ShowSceneUI<T>(string name = null) where T : UI_Scene
+    public T ShowSceneUI<T>(string path = null) where T : UI_Scene
     {
-        if (string.IsNullOrEmpty(name))
-            name = typeof(T).Name;
+        if (string.IsNullOrEmpty(path))
+            path = typeof(T).Name;
 
-        GameObject go = Managers.ResourceMng.Instantiate($"UI/SceneUI/{name}");
+        GameObject go = Managers.ResourceMng.Instantiate($"UI/SceneUI/{path}");
         T sceneUI = GlobalUtility.GetOrAddComponent<T>(go);
         SceneUI = sceneUI;
 
@@ -84,14 +84,14 @@ public class UIManager
     }
 
     /// <summary>
-    /// 이름이 name인 UI를 생성한 후 T컴포넌트로 반환
+    /// UI/GeneralUI/{path}의 UI를 생성한 후 T컴포넌트로 반환
     /// </summary>
-    public T MakeGeneralUI<T>(Transform parent = null, string name = null) where T : UI_Base
+    public T MakeGeneralUI<T>(Transform parent = null, string path = null) where T : UI_Base
     {
-        if (string.IsNullOrEmpty(name))
-            name = typeof(T).Name;
+        if (string.IsNullOrEmpty(path))
+            path = typeof(T).Name;
 
-        GameObject go = Managers.ResourceMng.Instantiate($"UI/GeneralUI/{name}");
+        GameObject go = Managers.ResourceMng.Instantiate($"UI/GeneralUI/{path}");
         
         SetUIParent(go, parent, false);
 
@@ -99,14 +99,14 @@ public class UIManager
     }
 
     /// <summary>
-    /// 이름이 name인 SubItemUI를 생성한 후 T컴포넌트로 반환
+    /// UI/SubItemUI/{path}의 SubItemUI를 생성한 후 T컴포넌트로 반환
     /// </summary>
-    public T MakeSubItemUI<T>(Transform parent = null, string name = null) where T : UI_Base
+    public T MakeSubItemUI<T>(Transform parent = null, string path = null) where T : UI_Base
     {
-        if (string.IsNullOrEmpty(name))
-            name = typeof(T).Name;
+        if (string.IsNullOrEmpty(path))
+            path = typeof(T).Name;
 
-        GameObject go = Managers.ResourceMng.Instantiate($"UI/SubItemUI/{name}");
+        GameObject go = Managers.ResourceMng.Instantiate($"UI/SubItemUI/{path}");
         
         SetUIParent(go, parent);
 
@@ -114,14 +114,14 @@ public class UIManager
     }
 
     /// <summary>
-    /// 이름이 name인 WorldSpaceUI를 생성한 후 T컴포넌트로 반환
+    /// UI/WorldSpaceUI/{path}의 WorldSpaceUI를 생성한 후 T컴포넌트로 반환
     /// </summary>
-    public T MakeWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UI_Base
+    public T MakeWorldSpaceUI<T>(Transform parent = null, string path = null) where T : UI_Base
     {
-        if (string.IsNullOrEmpty(name))
-            name = typeof(T).Name;
+        if (string.IsNullOrEmpty(path))
+            path = typeof(T).Name;
 
-        GameObject go = Managers.ResourceMng.Instantiate($"UI/WorldSpaceUI/{name}");
+        GameObject go = Managers.ResourceMng.Instantiate($"UI/WorldSpaceUI/{path}");
 
         SetUIParent(go, parent);
 
@@ -133,14 +133,14 @@ public class UIManager
     }
 
     /// <summary>
-    /// 이름이 name인 PopupUI를 생성한 후 T컴포넌트로 반환
+    /// UI/PopupUI/{path}의 PopupUI를 생성한 후 T컴포넌트로 반환
     /// </summary>
-    public T ShowPopupUI<T>(string name = null) where T : UI_Popup
+    public T ShowPopupUI<T>(string path = null) where T : UI_Popup
     {
-        if (string.IsNullOrEmpty(name))
-            name = typeof(T).Name;
+        if (string.IsNullOrEmpty(path))
+            path = typeof(T).Name;
 
-        GameObject go = Managers.ResourceMng.Instantiate($"UI/PopupUI/{name}");
+        GameObject go = Managers.ResourceMng.Instantiate($"UI/PopupUI/{path}");
         T popupUI = GlobalUtility.GetOrAddComponent<T>(go);
 
         PopupUIs.Add(popupUI);

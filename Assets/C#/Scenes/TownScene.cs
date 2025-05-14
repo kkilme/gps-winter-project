@@ -13,8 +13,6 @@ public class TownScene : BaseScene
     private void Start()
     {
         // TODO: 첫 게임 시작 시의 영웅 파티 구성 
-        if(Managers.SceneMng.FirstScene == SceneType.TownScene) Managers.HeroMng.AddHeroesOnTest();
-
         Managers.TownMng.Init();
     }
 }

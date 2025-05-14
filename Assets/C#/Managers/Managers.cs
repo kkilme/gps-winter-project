@@ -15,13 +15,13 @@ public class Managers : MonoBehaviour
     private AreaManager _areaMng = new AreaManager();
     private HeroManager _heroMng = new HeroManager();
     private TownManager _townMng = new TownManager();
-    private StorageManager _storageMng = new StorageManager();
+    private InventoryManager _inventoryManager = new InventoryManager();
 
     public static BattleManager BattleMng => Instance._battleMng;
     public static AreaManager AreaMng => Instance._areaMng;
     public static TownManager TownMng => Instance._townMng;
     public static HeroManager HeroMng => Instance._heroMng;
-    public static StorageManager StorageMng => Instance._storageMng;
+    public static InventoryManager InvMng => Instance._inventoryManager;
     #endregion
 
     #region Core

@@ -1,9 +1,10 @@
 {
-  "items": [
+  "consumableItems": [
     {
       "DataId": 301000,
       "Name": "HealPotion",
-      "Description": "This is sample item.",
+      "Description": "Heals hero 20% of max HP.",
+      "MaxStack": 4
     }
   ]
 }

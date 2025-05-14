@@ -11,7 +11,7 @@ public class UI_TownScene : UI_Scene
     {
         UI_Town_TopBar,
         UI_Town_Inventory,
-        UI_Town_Heroes,
+        UI_Town_HeroList,
         UI_Town_Store,
         UI_Town_Quest,
         UI_HeroProfileGroup_Horizontal,
@@ -20,15 +20,15 @@ public class UI_TownScene : UI_Scene
     enum Buttons
     {
         Button_Inventory,
-        Button_Heroes,
+        Button_HeroList,
         Button_Store,
         Button_Quest,
         Button_Setting,
     }
 
-    private UI_Base _currentOpenUI;
+    public UI_Base CurrentOpenUI { get; set; }
     public UI_TownInventory InventoryUI { get; protected set; }
-    public UI_HeroList HeroesUI { get; protected set; }
+    public UI_HeroList HeroListUI { get; protected set; }
     public UI_TownStore StoreUI { get; protected set; }
     public UI_QuestBoard QuestBoardUI { get; protected set; }
     public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
@@ -40,10 +40,21 @@ public class UI_TownScene : UI_Scene
         Bind<GameObject>(typeof(SubItemUI));
         Bind<Button>(typeof(Buttons));
 
-        //InventoryUI = GetGameObject(SubItemUI.UI_Town_Inventory).GetOrAddComponent<UI_TownInventory>();
-        //HeroesUI = GetGameObject(SubItemUI.UI_Town_Heroes).GetOrAddComponent<UI_HeroList>();
+        InventoryUI = GetGameObject(SubItemUI.UI_Town_Inventory).GetOrAddComponent<UI_TownInventory>();
+        //HeroListUI = GetGameObject(SubItemUI.UI_Town_HeroList).GetOrAddComponent<UI_HeroList>();
         //StoreUI = GetGameObject(SubItemUI.UI_Town_Store).GetOrAddComponent<UI_TownStore>();
         //QuestBoardUI = GetGameObject(SubItemUI.UI_Town_Quest).GetOrAddComponent<UI_QuestBoard>();
         //HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
+
+        GetButton(Buttons.Button_Inventory).onClick.AddListener(() => { CurrentOpenUI?.Hide(); InventoryUI.Show(); CurrentOpenUI = InventoryUI; });
+        //GetButton(Buttons.Button_HeroList).onClick.AddListener(() => { CurrentOpenUI?.Hide(); HeroListUI.Show(); CurrentOpenUI = HeroListUI; });
+        //GetButton(Buttons.Button_Store).onClick.AddListener(() => { CurrentOpenUI?.Hide(); StoreUI.Show(); CurrentOpenUI = StoreUI; });
+        //GetButton(Buttons.Button_Quest).onClick.AddListener(() => { CurrentOpenUI?.Hide(); QuestBoardUI.Show(); CurrentOpenUI = QuestBoardUI; });
+    }
+
+    public void InitUIs()
+    {
+        InventoryUI.InitInventory();
+        InventoryUI.Hide();
     }
 }

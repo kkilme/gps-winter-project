@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class HeroManager
 {
-    public HeroParty HeroParty { get; protected set; } = new HeroParty();
-    private HeroStorage _heroStorage => Managers.StorageMng.HeroStorage;
+    public HeroParty HeroParty { get; private set; } = new HeroParty();
+    public HeroStorage HeroStorage { get; private set; } = new HeroStorage();
     private Transform _heroRoot => GlobalUtility.FindOrCreateTransform("@Heroes");
 
     /// <summary>
@@ -17,10 +17,10 @@ public class HeroManager
         HeroParty.HeroesDict.Clear();
         foreach (int heroInstanceId in HeroParty.HeroIds)
         {
-            if (_heroStorage.SavedHeroDatas.ContainsKey(heroInstanceId))
+            if (HeroStorage.SavedHeroDatas.ContainsKey(heroInstanceId))
             {
-                var data = _heroStorage.SavedHeroDatas[heroInstanceId];
-                HeroStat stat = _heroStorage.GetHeroStat(heroInstanceId);
+                var data = HeroStorage.SavedHeroDatas[heroInstanceId];
+                HeroStat stat = HeroStorage.GetHeroStat(heroInstanceId);
                 stat.ClearBonusStats(); // 영웅 스폰 시, BaseStat을 제외한 스탯 초기화
                 if (stat != null)
                 {
@@ -32,12 +32,12 @@ public class HeroManager
                     hero.SetData(data.HeroDataId, stat);
 
                     // 저장된 무기 장착
-                    int weaponDataId = _heroStorage.GetEquippedWeapon(heroInstanceId);
+                    int weaponDataId = HeroStorage.GetEquippedWeapon(heroInstanceId);
                     if (weaponDataId != -1)
                         hero.EquipWeapon(weaponDataId);
 
                     // 저장된 방어구 장착
-                    var equippedArmors = _heroStorage.GetEquippedArmors(heroInstanceId);
+                    var equippedArmors = HeroStorage.GetEquippedArmors(heroInstanceId);
                     if (equippedArmors != null)
                     {
                         foreach (var armors in equippedArmors)
@@ -50,24 +50,6 @@ public class HeroManager
                     HeroParty.AddRuntimeHero(heroInstanceId, hero);
                 }
             }
-        }
-    }
-
-    // 테스트용: Knight 2명, Wizard 2명 소환
-    public void AddHeroesOnTest()
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            _heroStorage.AddHero(GlobalValues.HERO_KNIGHT_ID);
-        }
-
-        for (int i = 0; i < 2; i++)
-        {
-            _heroStorage.AddHero(GlobalValues.HERO_WIZARD_ID);
-        }
-        foreach (var key in _heroStorage.SavedHeroDatas.Keys)
-        {
-            HeroParty.AddHero(key);
         }
     }
 }

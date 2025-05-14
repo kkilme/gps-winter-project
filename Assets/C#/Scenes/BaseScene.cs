@@ -34,6 +34,9 @@ public abstract class BaseScene : MonoBehaviour
             Managers.UIMng.Init();
             Managers.ObjectMng.Init();
             Managers.ResourceMng.Init();
+
+            GameStarter game = new();
+            game.OnGameStart();            
         }
         
         Object obj = FindObjectOfType(typeof(EventSystem));
