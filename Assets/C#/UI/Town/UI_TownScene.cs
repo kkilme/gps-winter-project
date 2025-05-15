@@ -46,7 +46,7 @@ public class UI_TownScene : UI_Scene
         //QuestBoardUI = GetGameObject(SubItemUI.UI_Town_Quest).GetOrAddComponent<UI_QuestBoard>();
         //HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
 
-        GetButton(Buttons.Button_Inventory).onClick.AddListener(() => { CurrentOpenUI?.Hide(); InventoryUI.Show(); CurrentOpenUI = InventoryUI; });
+        GetButton(Buttons.Button_Inventory).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); InventoryUI.Show(); CurrentOpenUI = InventoryUI; });
         //GetButton(Buttons.Button_HeroList).onClick.AddListener(() => { CurrentOpenUI?.Hide(); HeroListUI.Show(); CurrentOpenUI = HeroListUI; });
         //GetButton(Buttons.Button_Store).onClick.AddListener(() => { CurrentOpenUI?.Hide(); StoreUI.Show(); CurrentOpenUI = StoreUI; });
         //GetButton(Buttons.Button_Quest).onClick.AddListener(() => { CurrentOpenUI?.Hide(); QuestBoardUI.Show(); CurrentOpenUI = QuestBoardUI; });
@@ -55,6 +55,6 @@ public class UI_TownScene : UI_Scene
     public void InitUIs()
     {
         InventoryUI.InitInventory();
-        InventoryUI.Hide();
+        InventoryUI.HideInstantly();
     }
 }

@@ -17,13 +17,13 @@ public class UI_Inventory : UI_Base
 
     public override void Init()
     {
-        // 들어있는 slot들 초기화
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
             UI_InventorySlot slot = gameObject.transform.GetChild(i).GetOrAddComponent<UI_InventorySlot>();
-            slot.HideDetail();
+            slot.LateInit();
             _inventorySlots.Add(slot);
         }
+        Clear();
     }
 
     /// <summary>
@@ -81,5 +81,19 @@ public class UI_Inventory : UI_Base
             left -= toAdd;
         }
     }
- 
+
+    public override void HideInstantly()
+    {
+        Clear();
+        base.HideInstantly();
+    }
+
+    public void Clear()
+    {
+        foreach (var slot in _inventorySlots)
+        {
+            slot.UnbindItem();
+        }
+    }
+
 }

@@ -51,7 +51,7 @@ public static class GlobalValues
     public const string ITEMIMAGE_PATH_PREFIX = "Textures/ItemImages/";
     public const string ITEMICON_PATH_PREFIX = "Textures/ItemIcons/";
     public const string COLORGRADIENT_PATH_PREFIX = "Textures/TMP_ColorGradients/";
-
+    public const string TOWNTEXTURE_PATH_PREFIX = "Textures/Town/";
     #endregion
 
     #region DataId

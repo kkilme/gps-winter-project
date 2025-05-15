@@ -29,8 +29,14 @@ public class UI_InventorySlot : UI_Base
         get => _quantity; 
         set 
         {
+            if (_quantity != 0 && value == 0)
+            {
+                UnbindItem();
+            } else
+            {
+                _quantityText.text = value.ToString();
+            }
             _quantity = value;
-            _quantityText.text = _quantity.ToString();
         } 
     }
     public bool IsEmpty => ItemData == null;
@@ -40,7 +46,9 @@ public class UI_InventorySlot : UI_Base
     private GameObject _detailParent;
     private GameObject _quantityParent;
 
-    public override void Init()
+    public override void Init() {}
+
+    public void LateInit()
     {
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<Image>(typeof(Images));
@@ -64,22 +72,23 @@ public class UI_InventorySlot : UI_Base
         _detailParent.SetActive(true);
         if (itemdata.ItemType == ItemType.Consumable) // 개수 표시는 소모품에만
         {
-            _quantityParent?.SetActive(true);
+            _quantityParent.SetActive(true);
         }
         else
         {
-            _quantityParent?.SetActive(false);
+            _quantityParent.SetActive(false);
         }
     }
 
     public void UnbindItem()
     {
         ItemData = null;
+        _quantity = 0;
         HideDetail();
     }
 
     public void HideDetail()
     {
-        _detailParent?.SetActive(false);
+        _detailParent.SetActive(false);
     }
 }
