@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +28,6 @@ public class UI_Inventory : UI_Base
     /// <summary>
     /// 인벤토리별 slot의 디자인(프리팹)이 다를 수 있음. 그럴 시 외부에서 새롭게 set 필요.
     /// </summary>
-    /// <param name="path"></param>
     public void SetSlotPath(string path)
     {
         _inventorySlotPath = path;
@@ -41,7 +39,7 @@ public class UI_Inventory : UI_Base
     public void AddEmptySlot()
     {
         UI_InventorySlot slot = Managers.UIMng.MakeSubItemUI<UI_InventorySlot>(transform, _inventorySlotPath);
-        slot.HideDetail();
+        slot.LateInit();
         _inventorySlots.Add(slot);
     }
 

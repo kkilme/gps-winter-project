@@ -3,7 +3,7 @@
     {
       "DataId": 301000,
       "Name": "HealPotion",
-      "Description": "Heals hero 20% of max HP.",
+      "Description": "Recoveres 20% of max HP.",
       "MaxStack": 4
     }
   ]

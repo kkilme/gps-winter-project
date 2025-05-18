@@ -27,9 +27,9 @@ public class UI_AreaButtons : UI_Base
         Bind<Button>(typeof(Buttons));
         Bind<TextMeshProUGUI>(typeof(Texts));
 
-        BindEvent(GetButton(Buttons.Button_Rest).gameObject, OnClickRestButton);
-        BindEvent(GetButton(Buttons.Button_LootList).gameObject, OnClickLootListButton);
-        BindEvent(GetButton(Buttons.Button_ItemList).gameObject, OnClickItemListButton);
+        GetButton(Buttons.Button_Rest).onClick.AddListener(OnClickRestButton);
+        GetButton(Buttons.Button_LootList).onClick.AddListener(OnClickLootListButton);
+        GetButton(Buttons.Button_ItemList).onClick.AddListener(OnClickItemListButton);
     }
 
     public override Tween Show()
@@ -38,7 +38,7 @@ public class UI_AreaButtons : UI_Base
         return base.Show();
     }
 
-    private void OnClickRestButton(PointerEventData evt)
+    private void OnClickRestButton()
     {
         if (_areaManager.AreaState != AreaState.Idle) return;
 
@@ -56,12 +56,12 @@ public class UI_AreaButtons : UI_Base
         }
     }
 
-    private void OnClickLootListButton(PointerEventData evt)
+    private void OnClickLootListButton()
     {
         //Managers.UIMng.TogglePopupUI<UI_AreaLootList>();
     }
 
-    private void OnClickItemListButton(PointerEventData evt)
+    private void OnClickItemListButton()
     {
         //Managers.UIMng.TogglePopupUI<UI_AreaItemList>();
     }
