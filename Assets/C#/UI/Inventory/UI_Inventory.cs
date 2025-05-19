@@ -14,7 +14,9 @@ public class UI_Inventory : UI_Base
 
     private string _inventorySlotPath = "Town/UI_InventorySlot_TownInventory"; // UI/SubItemUI/ 이하 경로
 
-    public override void Init()
+    public override void Init() { }
+
+    public void LateInit()
     {
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
@@ -22,9 +24,7 @@ public class UI_Inventory : UI_Base
             slot.LateInit();
             _inventorySlots.Add(slot);
         }
-        Clear();
     }
-
     /// <summary>
     /// 인벤토리별 slot의 디자인(프리팹)이 다를 수 있음. 그럴 시 외부에서 새롭게 set 필요.
     /// </summary>
@@ -92,6 +92,7 @@ public class UI_Inventory : UI_Base
         {
             slot.UnbindItem();
         }
+        Debug.Log(gameObject.name + " Clear");
     }
 
 }

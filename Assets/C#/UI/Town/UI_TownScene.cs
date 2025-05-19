@@ -41,6 +41,7 @@ public class UI_TownScene : UI_Scene
         Bind<Button>(typeof(Buttons));
 
         InventoryUI = GetGameObject(SubItemUI.UI_Town_Inventory).GetOrAddComponent<UI_TownInventory>();
+        InventoryUI.LateInit();
         //HeroListUI = GetGameObject(SubItemUI.UI_Town_HeroList).GetOrAddComponent<UI_HeroList>();
         //StoreUI = GetGameObject(SubItemUI.UI_Town_Store).GetOrAddComponent<UI_TownStore>();
         //QuestBoardUI = GetGameObject(SubItemUI.UI_Town_Quest).GetOrAddComponent<UI_QuestBoard>();

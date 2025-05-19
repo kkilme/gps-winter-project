@@ -80,7 +80,9 @@ public class UI_TownInventory : UI_Base
 
     private ScrollRect _scrollRect;
 
-    public override void Init()
+    public override void Init() {} // InitInventory()전에 호출되지 않을 수 있어서 LateInit으로 수동 실행
+
+    public void LateInit()
     {
         Bind<Button>(typeof(Buttons));
         Bind<GameObject>(typeof(ButtonObjects));
@@ -99,8 +101,6 @@ public class UI_TownInventory : UI_Base
             button.AddListener(() => ShowInventoryTab(tab));
             _tabToButton[tab] = button;
         }
-
-        ShowInventoryTab(InventoryTab.Tab_Weapons);
     }
 
     public void InitInventory()
@@ -109,14 +109,18 @@ public class UI_TownInventory : UI_Base
         InitInventoryTab(InventoryTab.Tab_Armors);
         InitInventoryTab(InventoryTab.Tab_Consumables);
 
-        HideInventoryTab(InventoryTab.Tab_Armors);
-        HideInventoryTab(InventoryTab.Tab_Consumables);
         ShowInventoryTab(InventoryTab.Tab_Weapons);
     }
 
     private void InitInventoryTab(InventoryTab inventoryTab)
     {
-        Get<UI_Inventory>(inventoryTab).SetSlotPath("Town/UI_InventorySlot_TownInventory");
+        UI_Inventory inv = Get<UI_Inventory>(inventoryTab);
+
+        // 유니티에서 ui의 각종 초기 값을 세팅하도록 활성화 -> 초기화 -> 비활성화 과정을 거침
+        inv.ShowInstantly();
+        inv.LateInit();
+        inv.SetSlotPath("Town/UI_InventorySlot_TownInventory");
+        inv.HideInstantly();
     }
 
     private void ShowInventoryTab(InventoryTab inventoryTab)
@@ -129,9 +133,12 @@ public class UI_TownInventory : UI_Base
 
         ItemType itemType = _tabToItemType[inventoryTab];
         List<InventoryEntry> items = Managers.InvMng.GetAllItemsOfType(itemType);
-
+        Debug.Log(items.Count);
         foreach (var item in items)
+        {
+            Debug.Log(item.ItemData.Name + item.Quantity);
             inventory.AddItem(item.ItemData, item.Quantity);
+        }
 
         RectTransform rt = inventory.gameObject.transform as RectTransform;
         rt.localPosition = new Vector2(0, 0);

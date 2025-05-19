@@ -41,6 +41,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     }
     public bool IsEmpty => ItemData == null;
 
+    private RectTransform _rect;
     private TextMeshProUGUI _quantityText;
     private Image _itemImage;
     private GameObject _detailParent;
@@ -63,6 +64,8 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         _detailParent = GetGameObject(GameObjects.Detail);
         _quantityParent = GetGameObject(GameObjects.Quantity);
         _slotImage = GetComponent<Image>();
+        _rect = GetComponent<RectTransform>();
+        
 
         // TODO: 인벤토리별로 Slot의 디자인(Sprite)가 다를 수 있으므로 _slotSpriteOnMouseEnter에 대한 대처가 필요함 ////////////////////////////
         if (_slotSprite == null) _slotSprite = _slotImage.sprite;
@@ -74,13 +77,16 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     /// <summary>
     /// 아이템 데이터와 개수를 UI에 바인딩.
     /// </summary>
-    public void BindItem(ItemData itemdata, int quantity)
+    public void BindItem(ItemData itemData, int quantity)
     {
-        ItemData = itemdata;
+        ItemData = itemData;
         Quantity = quantity;
-        _itemImage.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + itemdata.ImagePath);
+
+        //_itemImage.GetComponent<RectTransform>().sizeDelta = new Vector2(_rect.sizeDelta.x - 8, _rect.sizeDelta.y - 8);
+        _itemImage.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + itemData.ImagePath);
+
         _detailParent.SetActive(true);
-        if (itemdata.ItemType == ItemType.Consumable) // 개수 표시는 소모품에만
+        if (itemData.ItemType == ItemType.Consumable) // 개수 표시는 소모품에만
         {
             _quantityParent.SetActive(true);
         }
