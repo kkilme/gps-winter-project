@@ -41,7 +41,6 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     }
     public bool IsEmpty => ItemData == null;
 
-    private RectTransform _rect;
     private TextMeshProUGUI _quantityText;
     private Image _itemImage;
     private GameObject _detailParent;

@@ -116,7 +116,7 @@ public class UI_TownInventory : UI_Base
     {
         UI_Inventory inv = Get<UI_Inventory>(inventoryTab);
 
-        // 유니티에서 ui의 각종 초기 값을 세팅하도록 활성화 -> 초기화 -> 비활성화 과정을 거침
+        // 유니티에서 ui의 각종 초기 값이 적절히 세팅되도록 활성화 -> 초기화 -> 비활성화 과정을 거침
         inv.ShowInstantly();
         inv.LateInit();
         inv.SetSlotPath("Town/UI_InventorySlot_TownInventory");
@@ -133,10 +133,8 @@ public class UI_TownInventory : UI_Base
 
         ItemType itemType = _tabToItemType[inventoryTab];
         List<InventoryEntry> items = Managers.InvMng.GetAllItemsOfType(itemType);
-        Debug.Log(items.Count);
         foreach (var item in items)
         {
-            Debug.Log(item.ItemData.Name + item.Quantity);
             inventory.AddItem(item.ItemData, item.Quantity);
         }
 

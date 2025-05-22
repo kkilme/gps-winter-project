@@ -6,9 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEx
 {
+    /// <summary>
+    /// 게임을 처음 시작한 씬. 주로 에디터상에서 테스트 용도로 사용됨.
+    /// </summary>
     public SceneType FirstScene;
     public SceneType CurrentSceneType;
     private BaseScene _currentScene;
+    /// <summary>
+    /// 현재 Active 씬의 BaseScene.
+    /// </summary>
     public BaseScene CurrentScene
     {
         get

@@ -48,7 +48,9 @@ public class HeroStat : CreatureStat
         OnStatChanged?.Invoke(this);
     }
 
-    // BaseStat만 남기고 이외 스탯 초기화
+    /// <summary>
+    /// BaseStat 이외의 스탯 초기화
+    /// </summary>
     public void ClearBonusStats()
     {
         EquipmentStat = new StatLayer();
@@ -56,7 +58,16 @@ public class HeroStat : CreatureStat
         DebuffStat = new StatLayer();
     }
 
-    public void AttachEquipment(EquipmentData equipment)
+    /// <summary>
+    /// 버프 및 디버프 스탯 초기화
+    /// </summary>
+    public void ClearBuffAndDebuffStats()
+    {
+        BuffStat = new StatLayer();
+        DebuffStat = new StatLayer();
+    }
+
+    public void AddEquipmentStat(EquipmentData equipment)
     {
         EquipmentStat.MaxHp += equipment.Hp;
         EquipmentStat.BaseDamage += equipment.Attack;
@@ -70,7 +81,7 @@ public class HeroStat : CreatureStat
         OnStatChanged?.Invoke(this);
     }
 
-    public void DetachEquipment(EquipmentData equipment)
+    public void RemoveEquipmentStat(EquipmentData equipment)
     {
         EquipmentStat.MaxHp -= equipment.Hp;
         EquipmentStat.BaseDamage -= equipment.Attack;

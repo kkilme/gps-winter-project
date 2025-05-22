@@ -11,6 +11,7 @@ public class Hero : Creature
     public Weapon Weapon { get; protected set; }
     public Dictionary<ArmorType, Armor> Armors { get; protected set; }
 
+    // 각종 장비 오브젝트의 부모 오브젝트들
     private GameObject _head;
     private GameObject _leftHand;
     private GameObject _rightHand;
@@ -61,6 +62,9 @@ public class Hero : Creature
 
     #region Weapon
 
+    /// <summary>
+    /// Hero의 애니메이터 변경. 무기에 따라 애니메이터가 다름.
+    /// </summary>
     private void ChangeAnimator()
     {
         string path = GlobalValues.HERO_ANIMATOR_PATH_PREFIX + Weapon.WeaponType;
@@ -82,12 +86,8 @@ public class Hero : Creature
         UnEquipWeapon();
 
         Weapon = equippingWeapon;
-        HeroStat.AttachEquipment(Weapon.EquipmentData);
-        Weapon.Equip(this);
-        ChangeWeaponVisibility(true);
+        SetWeaponVisibility(true);
         ChangeAnimator();
-
-        Managers.HeroMng.HeroStorage.SaveWeapon(InstanceId, equippingWeapon.DataId);
     }
     
     public void UnEquipWeapon()
@@ -95,13 +95,11 @@ public class Hero : Creature
         if (Weapon == null)
             return;
 
-        HeroStat.DetachEquipment(Weapon.EquipmentData);
-        Weapon.UnEquip();
-        ChangeWeaponVisibility(false);
+        SetWeaponVisibility(false);
         Weapon = null;
     }
     
-    public void ChangeWeaponVisibility(bool isVisible)
+    public void SetWeaponVisibility(bool isVisible)
     {
         int leftIndex = Weapon.WeaponData.LeftIndex;
         int rightIndex = Weapon.WeaponData.RightIndex;
@@ -136,11 +134,7 @@ public class Hero : Creature
         UnEquipArmor(armorType);
         
         Armors[armorType] = equippingArmor;
-        HeroStat.AttachEquipment(Armors[armorType].EquipmentData);
-        Armors[armorType].Equip(this);
         ChangeArmorVisibility(armorType ,true);
-
-        Managers.HeroMng.HeroStorage.SaveArmor(InstanceId, armorType, equippingArmor.DataId);
     }
 
     public void UnEquipArmor(ArmorType armorType)
@@ -148,8 +142,6 @@ public class Hero : Creature
         if (Armors[armorType] == null)
             return;
 
-        HeroStat.DetachEquipment(Armors[armorType].EquipmentData);
-        Armors[armorType].UnEquip();
         ChangeArmorVisibility(armorType, false);
         Armors[armorType] = null;
     }
@@ -170,6 +162,11 @@ public class Hero : Creature
                  break;
         }
     }
-    
+
     #endregion
+
+    private void OnDestroy()
+    {
+        HeroStat.ClearBuffAndDebuffStats();
+    }
 }

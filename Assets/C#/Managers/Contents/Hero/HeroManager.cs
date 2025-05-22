@@ -21,7 +21,7 @@ public class HeroManager
             {
                 var data = HeroStorage.SavedHeroDatas[heroInstanceId];
                 HeroStat stat = HeroStorage.GetHeroStat(heroInstanceId);
-                stat.ClearBonusStats(); // 영웅 스폰 시, BaseStat을 제외한 스탯 초기화
+                stat.ClearBuffAndDebuffStats();
                 if (stat != null)
                 {
                     GameObject go = Managers.ResourceMng.Instantiate(GlobalValues.HERO_PREFAB_PATH_PREFIX + data.ClassName, _heroRoot);

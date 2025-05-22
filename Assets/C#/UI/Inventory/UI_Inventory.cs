@@ -92,7 +92,6 @@ public class UI_Inventory : UI_Base
         {
             slot.UnbindItem();
         }
-        Debug.Log(gameObject.name + " Clear");
     }
 
 }
