@@ -76,11 +76,11 @@ public class UI_TownInventory : UI_Base
     };
 
     private RectTransform _rectTransform;
-    private float _offscreenY;
+    private float _offscreenY; // 화면에서 UI를 숨길 때 이동할 Y좌표
 
     private ScrollRect _scrollRect;
 
-    public override void Init() {} // InitInventory()전에 호출되지 않을 수 있어서 LateInit으로 수동 실행
+    public override void Init() {}
 
     public void LateInit()
     {
@@ -100,11 +100,9 @@ public class UI_TownInventory : UI_Base
             button.Init();
             button.AddListener(() => ShowInventoryTab(tab));
             _tabToButton[tab] = button;
+            button.SetInactive();
         }
-    }
 
-    public void InitInventory()
-    {
         InitInventoryTab(InventoryTab.Tab_Weapons);
         InitInventoryTab(InventoryTab.Tab_Armors);
         InitInventoryTab(InventoryTab.Tab_Consumables);
@@ -117,6 +115,7 @@ public class UI_TownInventory : UI_Base
         UI_Inventory inv = Get<UI_Inventory>(inventoryTab);
 
         // 유니티에서 ui의 각종 초기 값이 적절히 세팅되도록 활성화 -> 초기화 -> 비활성화 과정을 거침
+        // 효과가 있는지는 의문임
         inv.ShowInstantly();
         inv.LateInit();
         inv.SetSlotPath("Town/UI_InventorySlot_TownInventory");
@@ -144,6 +143,10 @@ public class UI_TownInventory : UI_Base
 
         _tabToButton[inventoryTab].SetActive();
         _activeTab = inventoryTab;
+        //Canvas.ForceUpdateCanvases(); // scrollbar의 size가 제대로 계산되도록 강제 업데이트
+
+        // 스크롤 위치를 맨 위로 초기화
+         _scrollRect.verticalNormalizedPosition = 1f;
     }
 
     private void HideInventoryTab(InventoryTab inventoryTab)

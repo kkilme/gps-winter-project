@@ -788,7 +788,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 28
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: -2
@@ -834,6 +834,7 @@ GameObject:
   - component: {fileID: 1613795322583330350}
   - component: {fileID: 4412910623378540449}
   - component: {fileID: 8636574269716649006}
+  - component: {fileID: 6065123134773079693}
   m_Layer: 5
   m_Name: HelmetSlot
   m_TagString: Untagged
@@ -901,6 +902,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6065123134773079693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144046762669117836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c39b81c92af2fea49a03e027f9d5470f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1265825525364538016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1796,7 +1809,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 28
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: -2
@@ -2590,6 +2603,7 @@ GameObject:
   - component: {fileID: 7487406584383804600}
   - component: {fileID: 5980081612099561766}
   - component: {fileID: 7310252689973291258}
+  - component: {fileID: 2886741230965408528}
   m_Layer: 5
   m_Name: CloakSlot
   m_TagString: Untagged
@@ -2657,6 +2671,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2886741230965408528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4212021688583415530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c39b81c92af2fea49a03e027f9d5470f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4403229123300629143
 GameObject:
   m_ObjectHideFlags: 0
@@ -2914,7 +2940,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 28
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: -2
@@ -3904,7 +3930,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5609914321038979345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c386657babb98746bb001f46cc33de6, type: 3}
+  m_Script: {fileID: 11500000, guid: 80bbe8f869d925e4289dc4cb2aab558c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5623206018989838910
@@ -4180,7 +4206,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 28
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: -2
@@ -4407,7 +4433,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 28
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: -2
@@ -4542,7 +4568,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 28
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: -2
@@ -4802,7 +4828,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 56.605, y: 0}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3518351060139759614
@@ -4927,6 +4953,7 @@ GameObject:
   - component: {fileID: 4518627948786568126}
   - component: {fileID: 4233494907401776886}
   - component: {fileID: 4056721228675406677}
+  - component: {fileID: 5226234229880761308}
   m_Layer: 5
   m_Name: BodySlot
   m_TagString: Untagged
@@ -4994,6 +5021,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5226234229880761308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8168817609908415043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c39b81c92af2fea49a03e027f9d5470f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8645068537275209343
 GameObject:
   m_ObjectHideFlags: 0
@@ -5094,7 +5133,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 28
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: -2
@@ -5140,6 +5179,7 @@ GameObject:
   - component: {fileID: 8741012986977544541}
   - component: {fileID: 8741012986977544531}
   - component: {fileID: 8741012986977544530}
+  - component: {fileID: 189328130118359808}
   m_Layer: 5
   m_Name: WeaponSlot
   m_TagString: Untagged
@@ -5207,6 +5247,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &189328130118359808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8741012986977544540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c39b81c92af2fea49a03e027f9d5470f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8741012987066672380
 GameObject:
   m_ObjectHideFlags: 0
@@ -5399,7 +5451,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 28
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: -2
