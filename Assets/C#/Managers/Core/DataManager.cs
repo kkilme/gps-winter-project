@@ -17,6 +17,7 @@ public class DataManager
 
     public Dictionary<int, ItemData> ItemDataDict { get; private set; }
     public Dictionary<int, ConsumableItemData> ConsumableItemDataDict { get; private set; }
+    public Dictionary<int, EquipmentData> EquipmentDataDict { get; private set; }
     public Dictionary<int, WeaponData> WeaponDataDict { get; private set; }
     public Dictionary<int, ArmorData> ArmorDataDict { get; private set; }
 
@@ -43,6 +44,7 @@ public class DataManager
     private void InitItemDataDict()
     {
         ItemDataDict = new Dictionary<int, ItemData>();
+        EquipmentDataDict = new Dictionary<int, EquipmentData>();
 
         foreach (var kvp in ConsumableItemDataDict)
         {
@@ -52,11 +54,13 @@ public class DataManager
         foreach (var kvp in WeaponDataDict)
         {
             ItemDataDict[kvp.Key] = kvp.Value;
+            EquipmentDataDict[kvp.Key] = kvp.Value;
         }
 
         foreach (var kvp in ArmorDataDict)
         {
             ItemDataDict[kvp.Key] = kvp.Value;
+            EquipmentDataDict[kvp.Key] = kvp.Value;
         }
     }
 

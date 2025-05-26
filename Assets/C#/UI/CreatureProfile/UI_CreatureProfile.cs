@@ -74,7 +74,7 @@ public class UI_CreatureProfile : UI_Base
         stat.OnStatChanged += UpdateStatProfile;
 
         GetText(Texts.Text_Name).text = creature.CreatureData.Name;
-        Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>($"Textures/Model_Sprites/{creature.CreatureData.Name}_Front");
+        Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.CREATURE_IMAGE_PATH_PREFIX + $"{creature.CreatureData.Name}_Front");
 
         // init
         UpdateStatProfile(stat);

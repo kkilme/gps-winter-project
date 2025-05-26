@@ -29,13 +29,13 @@ public class UI_ItemDetail : UI_Popup
 
     public void ApplyDesign(ItemData itemData, int quantity = 0)
     {
-        var design = ItemDetailUIDesigner.GetDesign(itemData.ItemType);
+        ItemDetailDesign design = ItemDetailUIDesigner.GetDesign(itemData.ItemType);
         design.Apply(this, itemData, quantity);
     }
 
     public void ApplyGoldDesign(int goldAmount)
     {
-        var design = ItemDetailUIDesigner.GetGoldDesign();
+        ItemDetailDesign design = ItemDetailUIDesigner.GetGoldDesign();
         design.Apply(this, null, goldAmount);
     }
 

@@ -159,7 +159,7 @@ public class UIManager
             return;
 
         UI_Popup popupUI= PopupUIs[^1];
-        if (popupUI != null) Managers.ResourceMng.Destroy(popupUI.gameObject);
+        Managers.ResourceMng.Destroy(popupUI.gameObject);
         PopupUIs.RemoveAt(PopupUIs.Count - 1);
 
         _order = PopupUIs.Count == 0 ? 10 : Mathf.Max(10, _order - 1);
@@ -168,7 +168,7 @@ public class UIManager
     /// <summary>
     /// T타입 PopupUI 제거
     /// </summary>
-    public void ClosePopupUI<T>()
+    public void ClosePopupUI<T>() where T : UI_Popup
     {
         var popup = PopupUIs.FirstOrDefault(p => p is T);
         if (PopupUIs.Contains(popup))

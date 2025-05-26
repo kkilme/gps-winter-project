@@ -41,21 +41,21 @@ public class UI_TownScene : UI_Scene
         Bind<Button>(typeof(Buttons));
 
         InventoryUI = GetGameObject(SubItemUI.UI_Town_Inventory).GetOrAddComponent<UI_TownInventory>();
-        InventoryUI.LateInit();
-        //HeroListUI = GetGameObject(SubItemUI.UI_Town_HeroList).GetOrAddComponent<UI_HeroList>();
+        HeroListUI = GetGameObject(SubItemUI.UI_Town_HeroList).GetOrAddComponent<UI_HeroList>();
         //StoreUI = GetGameObject(SubItemUI.UI_Town_Store).GetOrAddComponent<UI_TownStore>();
         //QuestBoardUI = GetGameObject(SubItemUI.UI_Town_Quest).GetOrAddComponent<UI_QuestBoard>();
         //HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
 
         GetButton(Buttons.Button_Inventory).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); InventoryUI.Show(); CurrentOpenUI = InventoryUI; });
-        //GetButton(Buttons.Button_HeroList).onClick.AddListener(() => { CurrentOpenUI?.Hide(); HeroListUI.Show(); CurrentOpenUI = HeroListUI; });
+        GetButton(Buttons.Button_HeroList).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); HeroListUI.Show(); CurrentOpenUI = HeroListUI; });
         //GetButton(Buttons.Button_Store).onClick.AddListener(() => { CurrentOpenUI?.Hide(); StoreUI.Show(); CurrentOpenUI = StoreUI; });
         //GetButton(Buttons.Button_Quest).onClick.AddListener(() => { CurrentOpenUI?.Hide(); QuestBoardUI.Show(); CurrentOpenUI = QuestBoardUI; });
     }
 
     public void InitUIs()
     {
-        InventoryUI.InitInventory();
+        InventoryUI.LateInit();
         InventoryUI.HideInstantly();
+        HeroListUI.HideInstantly();
     }
 }

@@ -42,6 +42,7 @@ public class HeroManager
                     {
                         foreach (var armors in equippedArmors)
                         {
+                            if(armors.Value == -1) continue;
                             Armor armor = new Armor(armors.Value);
                             hero.EquipArmor(armor);
                         }
@@ -51,6 +52,19 @@ public class HeroManager
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// 보유한 모든 영웅의 데이터 반환.
+    /// </summary>
+    public List<SavedHeroData> GetSavedHeroDatas()
+    {
+        List<SavedHeroData> savedHeroDatas = new List<SavedHeroData>();
+        foreach (var data in HeroStorage.SavedHeroDatas)
+        {
+            savedHeroDatas.Add(data.Value);
+        }
+        return savedHeroDatas;
     }
 }
 

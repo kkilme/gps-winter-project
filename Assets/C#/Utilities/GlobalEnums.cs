@@ -1,10 +1,12 @@
 #region Type
 
-public enum CreatureType
+public enum EquipmentType
 {
     None,
-    Hero,
-    Monster,
+    Weapon,
+    Helmet,
+    Body,
+    Cloak,
 }
 
 public enum WeaponType
@@ -22,9 +24,9 @@ public enum WeaponType
 public enum ArmorType
 {
     None,
+    Helmet,
     Body,
     Cloak,
-    Helmet,
 }
 
 public enum ItemType
@@ -71,12 +73,9 @@ public enum LootActionType
 public enum SceneType
 {
     UnknownScene,
+    TownScene,
     AreaScene,
     BattleScene,
-    TestGameScene,
-    TestTitleScene,
-    TitleScene,
-    TownScene,
 }
 
 public enum SoundType

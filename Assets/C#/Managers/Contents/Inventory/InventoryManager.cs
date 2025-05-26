@@ -35,6 +35,13 @@ public class InventoryManager
             .ToList();
     }
 
+    public List<InventoryEntry> GetAllEquipmentOfType(EquipmentType equipmentType)
+    {
+        return ItemEntries
+            .Where(entry => entry.ItemData is EquipmentData equipmentData && equipmentData.EquipmentType == equipmentType)
+            .ToList();
+    }
+
     public bool HaveItem(int dataId, int quantity = 1)
     {
         return ItemEntries.Any(entry => entry.DataId == dataId && entry.Quantity >= quantity);

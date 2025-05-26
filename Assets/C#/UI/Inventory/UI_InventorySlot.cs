@@ -3,9 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System;
 
-
-public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandler
+public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     enum Texts
     {
@@ -41,6 +41,8 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     }
     public bool IsEmpty => ItemData == null;
 
+    public Action<UI_InventorySlot> OnClickAction;
+
     private TextMeshProUGUI _quantityText;
     private Image _itemImage;
     private GameObject _detailParent;
@@ -50,9 +52,9 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     private static Sprite _slotSprite;
     private static Sprite _slotSpriteOnMouseEnter;
 
-    public override void Init() {}
+    public override void Init() { }
 
-    public void LateInit()
+    public void LateInit(string slotSpriteOnMouseEnterPath, Action<UI_InventorySlot> onClickAction)
     {
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<Image>(typeof(Images));
@@ -63,14 +65,23 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         _detailParent = GetGameObject(GameObjects.Detail);
         _quantityParent = GetGameObject(GameObjects.Quantity);
         _slotImage = GetComponent<Image>();
-        _rect = GetComponent<RectTransform>();
-        
 
-        // TODO: 인벤토리별로 Slot의 디자인(Sprite)가 다를 수 있으므로 _slotSpriteOnMouseEnter에 대한 대처가 필요함 ////////////////////////////
         if (_slotSprite == null) _slotSprite = _slotImage.sprite;
-        if (_slotSpriteOnMouseEnter == null) _slotSpriteOnMouseEnter = Managers.ResourceMng.Load<Sprite>("Textures/Others/Item_Slot_Selected");
-        ////////////////////////////////////////////////////////////////////////////////////////////
+        if (_slotSpriteOnMouseEnter == null) _slotSpriteOnMouseEnter = Managers.ResourceMng.Load<Sprite>(slotSpriteOnMouseEnterPath);
+        OnClickAction = onClickAction;
+
+        AdjustQuantityRectSize();
         HideDetail();
+    }
+
+    /// <summary>
+    /// Quantity 표시를 위한 RectTransform 크기 조정.
+    /// </summary>
+    private void AdjustQuantityRectSize()
+    {
+        RectTransform qualityRect = _quantityParent.GetComponent<RectTransform>();
+        RectTransform parentRect = GetComponent<RectTransform>();
+        qualityRect.sizeDelta = new Vector2(parentRect.sizeDelta.x / 3, parentRect.sizeDelta.y / 3);
     }
 
     /// <summary>
@@ -109,7 +120,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _slotImage.sprite = _slotSpriteOnMouseEnter;
+        if (_slotSpriteOnMouseEnter) _slotImage.sprite = _slotSpriteOnMouseEnter;
         if (ItemData != null)
         {
             var detailUI = Managers.UIMng.ShowPopupUI<UI_ItemDetail>();
@@ -123,5 +134,14 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     {
         _slotImage.sprite = _slotSprite;
         Managers.UIMng.ClosePopupUI<UI_ItemDetail>();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Managers.UIMng.ClosePopupUI<UI_ItemDetail>();
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnClickAction?.Invoke(this);
+        }
     }
 }

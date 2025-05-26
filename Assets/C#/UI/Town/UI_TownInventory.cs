@@ -114,11 +114,9 @@ public class UI_TownInventory : UI_Base
     {
         UI_Inventory inv = Get<UI_Inventory>(inventoryTab);
 
-        // 유니티에서 ui의 각종 초기 값이 적절히 세팅되도록 활성화 -> 초기화 -> 비활성화 과정을 거침
-        // 효과가 있는지는 의문임
+        // ui의 각종 초기 값이 적절히 세팅되도록 활성화 -> 초기화 -> 비활성화 과정을 거침
         inv.ShowInstantly();
         inv.LateInit();
-        inv.SetSlotPath("Town/UI_InventorySlot_TownInventory");
         inv.HideInstantly();
     }
 
@@ -143,7 +141,6 @@ public class UI_TownInventory : UI_Base
 
         _tabToButton[inventoryTab].SetActive();
         _activeTab = inventoryTab;
-        //Canvas.ForceUpdateCanvases(); // scrollbar의 size가 제대로 계산되도록 강제 업데이트
 
         // 스크롤 위치를 맨 위로 초기화
          _scrollRect.verticalNormalizedPosition = 1f;

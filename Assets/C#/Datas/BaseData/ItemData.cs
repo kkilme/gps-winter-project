@@ -24,6 +24,7 @@ public class ConsumableItemData : ItemData
 [Serializable]
 public class EquipmentData : ItemData
 {
+    public EquipmentType EquipmentType;
     public int Hp;
     public int Attack;
     public int PhysicalDefense;
@@ -81,6 +82,7 @@ public class WeaponDataLoader : ILoader<int, WeaponData>
         {
             weapon.ClassName ??= weapon.Name;
             weapon.ItemType = ItemType.Weapon;
+            weapon.EquipmentType = EquipmentType.Weapon;
             weapon.MaxStack = 1;
             weapon.ImagePath ??= "Default_Weapon";
             dic.Add(weapon.DataId, weapon);
@@ -102,6 +104,13 @@ public class ArmorDataLoader : ILoader<int, ArmorData>
         {
             armor.ClassName ??= armor.Name;
             armor.ItemType = ItemType.Armor;
+            armor.EquipmentType = armor.ArmorType switch
+            {
+                ArmorType.Helmet => EquipmentType.Helmet,
+                ArmorType.Body => EquipmentType.Body,
+                ArmorType.Cloak => EquipmentType.Cloak,
+                _ => EquipmentType.None
+            };
             armor.MaxStack = 1;
             armor.ImagePath ??= "Default_Armor";
             dic.Add(armor.DataId, armor);

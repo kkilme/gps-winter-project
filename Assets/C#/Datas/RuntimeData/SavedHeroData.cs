@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
+
 
 public class SavedHeroData
 {
@@ -12,12 +14,16 @@ public class SavedHeroData
     public int Weapon { get; set; } // 장착한 무기의 DataId // 무기나 장비가 강화나 내구도 등 '상태'를 저장해야 할 시 DataId가 아닌 다른 방식으로 저장할 필요가 있음.
     public Dictionary<ArmorType, int> Armors { get; set; } // 장착한 ArmorType별 DataId
 
+    public Action<SavedHeroData> OnStatChanged { get; set; } // 스탯이 변경될 때 호출되는 이벤트
+
     public SavedHeroData(int heroDataId, int instanceId)
     {
         HeroDataId = heroDataId;
         InstanceId = instanceId;
         CustomName = ClassName;
         Stat = new HeroStat(Managers.DataMng.HeroDataDict[heroDataId], instanceId);
+
+        // 시작 무기
         Weapon = Managers.DataMng.HeroDataDict[heroDataId].StartWeapon;
         if (Managers.DataMng.WeaponDataDict.TryGetValue(Weapon, out WeaponData weaponData))
         {
@@ -26,6 +32,13 @@ public class SavedHeroData
         {
             Debug.LogWarning($"[SavedHeroData] Start Weapon Data not found. InstanceId: {InstanceId}, ClassName: {ClassName}, Weapon Data Id: {Weapon}");
         }
-        Armors = new();
+
+        // 시작 방어구 (없음)
+        Armors = new Dictionary<ArmorType, int>
+        {
+            { ArmorType.Helmet, -1},
+            { ArmorType.Body, -1},
+            { ArmorType.Cloak, -1}
+        };
     }
 }

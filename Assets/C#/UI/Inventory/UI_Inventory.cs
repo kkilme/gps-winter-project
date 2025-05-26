@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 /// <summary>
 /// 게임에서 사용되는 모든 인벤토리 형식 UI에 사용
@@ -10,27 +11,30 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class UI_Inventory : UI_Base
 {
-    private List<UI_InventorySlot> _inventorySlots = new(); // slot의 제한(인벤토리 크기)은 현재 없음
+    public List<UI_InventorySlot> InventorySlots { get; private set; } = new(); // slot의 제한(인벤토리 크기)은 현재 없음
 
-    private string _inventorySlotPath = "Town/UI_InventorySlot_TownInventory"; // UI/SubItemUI/ 이하 경로
+    private Action<UI_InventorySlot> _onSlotClickAction; // 슬롯 클릭 시 호출되는 액션
+
+    private string _inventorySlotPath; // UI/SubItemUI/ 이하의 인벤토리 슬롯 프리팹 경로
+    private string _slotSpriteOnMouseEnterPath; // 슬롯 마우스 오버 시 이미지 경로
 
     public override void Init() { }
 
-    public void LateInit()
+    public void LateInit(Action<UI_InventorySlot> onSlotClickAction = null,
+                        string slotPrefabPath = "Town/UI_InventorySlot_TownInventory", 
+                        string slotSpriteOnMouseEnterPath = "Textures/Others/ItemSlot_Selected")
     {
+        _onSlotClickAction = onSlotClickAction;
+        _inventorySlotPath = slotPrefabPath;
+        _slotSpriteOnMouseEnterPath = slotSpriteOnMouseEnterPath;
+
+        // 이미 존재하는 슬롯들 할당 및 초기화
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
             UI_InventorySlot slot = gameObject.transform.GetChild(i).GetOrAddComponent<UI_InventorySlot>();
-            slot.LateInit();
-            _inventorySlots.Add(slot);
+            slot.LateInit(slotSpriteOnMouseEnterPath, onSlotClickAction);
+            InventorySlots.Add(slot);
         }
-    }
-    /// <summary>
-    /// 인벤토리별 slot의 디자인(프리팹)이 다를 수 있음. 그럴 시 외부에서 새롭게 set 필요.
-    /// </summary>
-    public void SetSlotPath(string path)
-    {
-        _inventorySlotPath = path;
     }
 
     /// <summary>
@@ -39,8 +43,8 @@ public class UI_Inventory : UI_Base
     public void AddEmptySlot()
     {
         UI_InventorySlot slot = Managers.UIMng.MakeSubItemUI<UI_InventorySlot>(transform, _inventorySlotPath);
-        slot.LateInit();
-        _inventorySlots.Add(slot);
+        slot.LateInit(_slotSpriteOnMouseEnterPath, _onSlotClickAction);
+        InventorySlots.Add(slot);
     }
 
     /// <summary>
@@ -51,7 +55,7 @@ public class UI_Inventory : UI_Base
         int left = quantity;
 
         // 먼저 스택 가능한 슬롯을 찾고 추가
-        foreach (var slot in _inventorySlots)
+        foreach (var slot in InventorySlots)
         {
             if (!slot.IsEmpty && slot.ItemData == item && slot.Quantity < slot.ItemData.MaxStack)
             {
@@ -67,16 +71,24 @@ public class UI_Inventory : UI_Base
         // 남은 수량이 있으면 빈 슬롯을 찾거나 만들어서 추가
         while (left > 0)
         {
-            UI_InventorySlot emptySlot = _inventorySlots.Find(s => s.IsEmpty);
+            UI_InventorySlot emptySlot = InventorySlots.Find(s => s.IsEmpty);
             if (emptySlot == null)
             {
                 AddEmptySlot();
-                emptySlot = _inventorySlots[^1];
+                emptySlot = InventorySlots[^1];
             }
 
             int toAdd = Mathf.Min(item.MaxStack, left);
             emptySlot.BindItem(item, toAdd);
             left -= toAdd;
+        }
+    }
+
+    public void RemoveActionCallbackOnSlots(Action<UI_InventorySlot> action)
+    {
+        foreach (var slot in InventorySlots)
+        {
+            slot.OnClickAction -= action;
         }
     }
 
@@ -88,7 +100,7 @@ public class UI_Inventory : UI_Base
 
     public void Clear()
     {
-        foreach (var slot in _inventorySlots)
+        foreach (var slot in InventorySlots)
         {
             slot.UnbindItem();
         }
