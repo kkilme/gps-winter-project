@@ -54,7 +54,7 @@ public class AreaScene : BaseScene
         base.Update();
         if (Input.GetKeyDown(KeyCode.D))
         {
-            Managers.HeroMng.HeroParty.Heroes[0].TakeDamage(1, DamageTextType.NormalDamage);
+            Managers.HeroMng.HeroParty.RuntimeHeroes[0].TakeDamage(1, DamageTextType.NormalDamage);
         }
     }
     #endregion

@@ -11,8 +11,9 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         Image_Equipment,
     }
 
-    private int _heroInstanceId;
-    private int _equipmentDataId;
+    private HeroInstanceData _heroInstance;
+    private int _heroInstanceId => _heroInstance?.InstanceId ?? -1;
+    private EquipmentInstanceData _equipmentInstance;
     private EquipmentType _equipmentType;
 
     private bool _isSelectingEquipment = false;
@@ -33,18 +34,32 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
             _slotSpriteOnMouseEnter = Managers.ResourceMng.Load<Sprite>("Textures/Others/ItemSlot_Selected");
     }
 
-    public void LateInit(int heroInstanceId, EquipmentType type)
+    public void LateInit(HeroInstanceData heroInstance, EquipmentType type)
     {
-        _heroInstanceId = heroInstanceId;
+        _heroInstance = heroInstance;
         _equipmentType = type;
+        _heroInstance.OnEquipmentChanged -= BindEquipment;
+        _heroInstance.OnEquipmentChanged += BindEquipment; // 영웅의 장비가 변경될 때마다 BindEquipment 호출
 
         BindEquipment(Managers.HeroMng.HeroStorage.GetEquippedEquipment(_heroInstanceId, _equipmentType));
     }
 
-    public void BindEquipment(int equipmentDataId)
+    public void BindEquipment(HeroInstanceData heroInstanceData)
     {
-        _equipmentDataId = equipmentDataId;
-        if (Managers.DataMng.EquipmentDataDict.TryGetValue(equipmentDataId, out EquipmentData equipmentData))
+        if (_heroInstance != null && Managers.HeroMng.HeroStorage.GetEquippedEquipment(_heroInstanceId, _equipmentType) is EquipmentInstanceData equipmentInstance)
+        {
+            BindEquipment(equipmentInstance);
+        }
+        else
+        {
+            UnbindEquipment();
+        }
+    }
+
+    public void BindEquipment(EquipmentInstanceData equipmentInstance)
+    {
+        _equipmentInstance = equipmentInstance;
+        if (equipmentInstance != null && Managers.DataMng.EquipmentDataDict.TryGetValue(equipmentInstance.ItemDataId, out EquipmentData equipmentData))
         {
             GetImage(Images.Image_Equipment).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + equipmentData.ImagePath);
         }
@@ -56,18 +71,18 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
     public void UnbindEquipment()
     {
-        _equipmentDataId = -1;
+        _equipmentInstance = null;
         GetImage(Images.Image_Equipment).sprite = _defaultSprite;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (_slotSpriteOnMouseEnter) _slotImage.sprite = _slotSpriteOnMouseEnter;
-        if (_equipmentDataId != -1 && !_isSelectingEquipment)
+        if (_equipmentInstance != null && !_isSelectingEquipment)
         {
             UI_ItemDetail itemDetail = Managers.UIMng.ShowPopupUI<UI_ItemDetail>();
             itemDetail.HideInstantly();
-            itemDetail.ApplyDesign(Managers.DataMng.EquipmentDataDict[_equipmentDataId]);
+            itemDetail.ApplyDesign(Managers.DataMng.EquipmentDataDict[_equipmentInstance.ItemDataId]);
             itemDetail.ShowInstantly();
         }
     }
@@ -93,18 +108,18 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         _isSelectingEquipment = false;
         if (selectedSlot == null || selectedSlot.IsEmpty)
         {
-            return;
-        }
-        int equipmentDataId = selectedSlot.ItemData.DataId;
-        if (equipmentDataId == -1) // 선택 취소
-        {
             UnbindEquipment();
             Managers.HeroMng.HeroStorage.UnEquipEquipment(_heroInstanceId, _equipmentType);
+            return;
         }
-        else // 장비 선택
-        {
-            BindEquipment(equipmentDataId);
-            Managers.HeroMng.HeroStorage.EquipEquipment(_heroInstanceId, _equipmentType, equipmentDataId);
-        }
+
+        EquipmentInstanceData selectedEquipment = selectedSlot.ItemInstanceData as EquipmentInstanceData;
+        BindEquipment(selectedEquipment);
+        Managers.HeroMng.HeroStorage.EquipEquipment(_heroInstanceId, _equipmentType, selectedEquipment.InstanceId);
+    }
+
+    private void OnDestroy()
+    {
+        if(_heroInstance != null) _heroInstance.OnEquipmentChanged -= BindEquipment;
     }
 }

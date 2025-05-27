@@ -34,9 +34,7 @@ public class GameStarter
 
     public void AddStartItems()
     {
-        Managers.InvMng.AddItem(GlobalValues.ITEM_HEALPOTION_ID, 10);
-        Managers.InvMng.AddItem(GlobalValues.KNIGHT_START_WEAPON_ID, 2);
-        Managers.InvMng.AddItem(GlobalValues.WIZARD_START_WEAPON_ID, 2);
+        Managers.InvMng.AddItem(GlobalValues.ITEM_HEALPOTION_ID, 13);
         Managers.InvMng.AddItem(GlobalValues.ARMOR_SAMPLEBODY1_ID, 2);
     }
     

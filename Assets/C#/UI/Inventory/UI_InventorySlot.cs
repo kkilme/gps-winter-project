@@ -23,7 +23,8 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         Quantity
     }
 
-    public ItemData ItemData { get; private set; }
+    public ItemInstanceData ItemInstanceData { get; private set; }
+    public ItemData ItemData => ItemInstanceData?.ItemData;
     private int _quantity;
     public int Quantity { 
         get => _quantity; 
@@ -75,7 +76,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     }
 
     /// <summary>
-    /// Quantity 표시를 위한 RectTransform 크기 조정.
+    /// Quantity RectTransform 크기 조정.
     /// </summary>
     private void AdjustQuantityRectSize()
     {
@@ -87,16 +88,16 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     /// <summary>
     /// 아이템 데이터와 개수를 UI에 바인딩.
     /// </summary>
-    public void BindItem(ItemData itemData, int quantity)
+    public void BindItem(ItemInstanceData itemInstanceData, int quantity)
     {
-        ItemData = itemData;
+        ItemInstanceData = itemInstanceData;
         Quantity = quantity;
 
         //_itemImage.GetComponent<RectTransform>().sizeDelta = new Vector2(_rect.sizeDelta.x - 8, _rect.sizeDelta.y - 8);
-        _itemImage.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + itemData.ImagePath);
+        _itemImage.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + ItemData.ImagePath);
 
         _detailParent.SetActive(true);
-        if (itemData.ItemType == ItemType.Consumable) // 개수 표시는 소모품에만
+        if (ItemInstanceData.ItemType == ItemType.Consumable) // 개수 표시는 소모품에만
         {
             _quantityParent.SetActive(true);
         }
@@ -108,7 +109,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
     public void UnbindItem()
     {
-        ItemData = null;
+        ItemInstanceData = null;
         _quantity = 0;
         HideDetail();
     }

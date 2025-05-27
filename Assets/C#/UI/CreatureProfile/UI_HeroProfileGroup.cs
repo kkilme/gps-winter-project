@@ -23,7 +23,7 @@ public class UI_HeroProfileGroup : UI_CreatureProfileGroup
             GetGameObject(playerUI).SetActive(false);
 
         int index = 0;
-        foreach (var hero in Managers.HeroMng.HeroParty.Heroes)
+        foreach (var hero in Managers.HeroMng.HeroParty.RuntimeHeroes)
         {   
             var profile = GetGameObject((HeroProfileUI)index++).GetOrAddComponent<UI_HeroProfile>();
             _creatureProfiles.Add(hero, profile);

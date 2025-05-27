@@ -38,7 +38,7 @@ public class UI_HeroList : UI_Base
     /// </summary>
     private void FillHeroDetailUI()
     {
-        List<SavedHeroData> savedHeroDatas = Managers.HeroMng.GetSavedHeroDatas();
+        List<HeroInstanceData> savedHeroDatas = Managers.HeroMng.GetSavedHeroDatas();
         foreach (var heroData in savedHeroDatas)
         {
             UI_HeroDetail heroDetail = Managers.UIMng.MakeSubItemUI<UI_HeroDetail>(_heroDetailParent, "Town/" + nameof(UI_HeroDetail));

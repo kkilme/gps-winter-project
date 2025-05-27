@@ -50,14 +50,18 @@ public class UI_Inventory : UI_Base
     /// <summary>
     /// 적절한 슬롯을 찾거나 생성하여 인벤토리 슬롯에 아이템을 바인딩.
     /// </summary>
-    public void AddItem(ItemData item, int quantity = 1)
+    public void AddItem(ItemInstanceData itemInstanceData)
     {
-        int left = quantity;
+        int left = 1;
+        if(itemInstanceData is ConsumableItemInstanceData consumableItemData)
+        {
+            left = consumableItemData.Quantity;
+        }
 
         // 먼저 스택 가능한 슬롯을 찾고 추가
         foreach (var slot in InventorySlots)
         {
-            if (!slot.IsEmpty && slot.ItemData == item && slot.Quantity < slot.ItemData.MaxStack)
+            if (!slot.IsEmpty && slot.ItemInstanceData == itemInstanceData && slot.Quantity < slot.ItemData.MaxStack)
             {
                 int canAdd = slot.ItemData.MaxStack - slot.Quantity;
                 int toAdd = Mathf.Min(canAdd, left);
@@ -78,8 +82,8 @@ public class UI_Inventory : UI_Base
                 emptySlot = InventorySlots[^1];
             }
 
-            int toAdd = Mathf.Min(item.MaxStack, left);
-            emptySlot.BindItem(item, toAdd);
+            int toAdd = Mathf.Min(itemInstanceData.ItemData.MaxStack, left);
+            emptySlot.BindItem(itemInstanceData, toAdd);
             left -= toAdd;
         }
     }

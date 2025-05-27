@@ -72,7 +72,7 @@ public class AreaManager
     /// </summary>
     private void PlaceHeroes(Vector3 targetPosition)
     {
-        var heroes = _party.Heroes;
+        var heroes = _party.RuntimeHeroes;
         targetPosition = Map.GetTileCenterPosition(targetPosition);
         for (int i = 0; i < heroes.Count; i++)
         {

@@ -13,17 +13,17 @@ public class HeroManager
     /// </summary>
     public void SpawnHeroParty()
     {
-        HeroParty.Heroes.Clear();
-        HeroParty.HeroesDict.Clear();
+        HeroParty.RuntimeHeroes.Clear();
+        HeroParty.RuntimeHeroesDict.Clear();
         foreach (int heroInstanceId in HeroParty.HeroIds)
         {
-            if (HeroStorage.SavedHeroDatas.ContainsKey(heroInstanceId))
+            if (HeroStorage.SavedHeroDatas.TryGetValue(heroInstanceId, out HeroInstanceData data))
             {
-                var data = HeroStorage.SavedHeroDatas[heroInstanceId];
-                HeroStat stat = HeroStorage.GetHeroStat(heroInstanceId);
-                stat.ClearBuffAndDebuffStats();
+                HeroStat stat = data.Stat;
+
                 if (stat != null)
                 {
+                    stat.ClearBuffAndDebuffStats();
                     GameObject go = Managers.ResourceMng.Instantiate(GlobalValues.HERO_PREFAB_PATH_PREFIX + data.ClassName, _heroRoot);
 
                     Hero hero = go.GetOrAddComponent<Hero>();
@@ -32,7 +32,7 @@ public class HeroManager
                     hero.SetData(data.HeroDataId, stat);
 
                     // 저장된 무기 장착
-                    int weaponDataId = HeroStorage.GetEquippedWeapon(heroInstanceId);
+                    int weaponDataId = HeroStorage.GetEquippedWeapon(heroInstanceId)?.ItemDataId ?? -1;
                     if (weaponDataId != -1)
                         hero.EquipWeapon(weaponDataId);
 
@@ -42,8 +42,8 @@ public class HeroManager
                     {
                         foreach (var armors in equippedArmors)
                         {
-                            if(armors.Value == -1) continue;
-                            Armor armor = new Armor(armors.Value);
+                            if(armors.Value == null) continue;
+                            Armor armor = new Armor(armors.Value.ItemDataId);
                             hero.EquipArmor(armor);
                         }
                     }
@@ -57,9 +57,9 @@ public class HeroManager
     /// <summary>
     /// 보유한 모든 영웅의 데이터 반환.
     /// </summary>
-    public List<SavedHeroData> GetSavedHeroDatas()
+    public List<HeroInstanceData> GetSavedHeroDatas()
     {
-        List<SavedHeroData> savedHeroDatas = new List<SavedHeroData>();
+        List<HeroInstanceData> savedHeroDatas = new List<HeroInstanceData>();
         foreach (var data in HeroStorage.SavedHeroDatas)
         {
             savedHeroDatas.Add(data.Value);

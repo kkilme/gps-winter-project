@@ -4,7 +4,7 @@
       "DataId": 301000,
       "Name": "HealPotion",
       "Description": "Recoveres 20% of max HP.",
-      "MaxStack": 4
+      "MaxStack": 5
     }
   ]
 }

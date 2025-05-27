@@ -1,7 +1,8 @@
-using System.Collections;
-using UnityEngine;
-using System.Collections.Generic;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 
 /// <summary>
 /// 플레이어가 소유한 모든 영웅의 데이터를 저장 및 관리
@@ -9,7 +10,7 @@ using System;
 public class HeroStorage
 {
     private int _nextHeroInstanceId = 0;
-    public Dictionary<int, SavedHeroData> SavedHeroDatas { get; private set; } = new(); // key: heroInstanceId, value: SavedHeroData
+    public Dictionary<int, HeroInstanceData> SavedHeroDatas { get; private set; } = new(); // key: heroInstanceId, value: HeroInstanceData
 
 
     /// <summary>
@@ -19,7 +20,7 @@ public class HeroStorage
     {
         int heroInstanceId = _nextHeroInstanceId++;
 
-        SavedHeroDatas[heroInstanceId] = new SavedHeroData(heroDataId, heroInstanceId);
+        SavedHeroDatas[heroInstanceId] = new HeroInstanceData(heroDataId, heroInstanceId);
 
         return heroInstanceId;
     }
@@ -37,36 +38,36 @@ public class HeroStorage
     /// <summary>
     /// 영웅에게 장비 장착 및 스탯 적용.
     /// </summary>
-    public void EquipEquipment(int heroInstanceId, EquipmentType type, int equipmentDataId)
+    public void EquipEquipment(int heroInstanceId, EquipmentType type, int equipmentInstanceId)
     {
-        if (SavedHeroDatas.TryGetValue(heroInstanceId, out SavedHeroData savedHeroData))
+        if (SavedHeroDatas.TryGetValue(heroInstanceId, out HeroInstanceData savedHeroData)
+            && Managers.InvMng.IsValidEquipment(equipmentInstanceId, type))
         {
+            EquipmentInstanceData equipmentInstance = Managers.InvMng.SavedItemDatas[equipmentInstanceId] as EquipmentInstanceData;
+            if (equipmentInstance.EquippedHeroId != -1)
+            {
+                UnEquipEquipment(equipmentInstance.EquippedHeroId, type); // 이미 다른 영웅이 장착중인 경우 해당 영웅에서 해제
+            }
+
             switch (type)
             {
                 case EquipmentType.Weapon:
-                    EquipWeapon(heroInstanceId, equipmentDataId);
+                    EquipWeapon(heroInstanceId, equipmentInstanceId);
                     break;
                 case EquipmentType.Helmet:
-                    EquipArmor(heroInstanceId, ArmorType.Helmet, equipmentDataId);
+                    EquipArmor(heroInstanceId, ArmorType.Helmet, equipmentInstanceId);
                     break;
                 case EquipmentType.Body:
-                    EquipArmor(heroInstanceId, ArmorType.Body, equipmentDataId);
+                    EquipArmor(heroInstanceId, ArmorType.Body, equipmentInstanceId);
                     break;
                 case EquipmentType.Cloak:
-                    EquipArmor(heroInstanceId, ArmorType.Cloak, equipmentDataId);
+                    EquipArmor(heroInstanceId, ArmorType.Cloak, equipmentInstanceId);
                     break;
             }
-        }
-    }
 
-    public void EquipEquipment(int heroInstanceId, UI_InventorySlot slot)
-    {
-        if(slot.IsEmpty || slot.ItemData is not EquipmentData equipmentData)
-        {
-            return;
+            equipmentInstance.EquippedHeroId = heroInstanceId;
+            savedHeroData.OnEquipmentChanged?.Invoke(savedHeroData);
         }
-
-        EquipEquipment(heroInstanceId, equipmentData.EquipmentType, equipmentData.DataId);
     }
 
     /// <summary>
@@ -74,7 +75,7 @@ public class HeroStorage
     /// </summary>
     public void UnEquipEquipment(int heroInstanceId, EquipmentType type)
     {
-        if (SavedHeroDatas.TryGetValue(heroInstanceId, out SavedHeroData savedHeroData))
+        if (SavedHeroDatas.TryGetValue(heroInstanceId, out HeroInstanceData savedHeroData))
         {
             switch (type)
             {
@@ -91,10 +92,12 @@ public class HeroStorage
                     UnEquipArmor(heroInstanceId, ArmorType.Cloak);
                     break;
             }
+
+            savedHeroData.OnEquipmentChanged?.Invoke(savedHeroData);
         }
     }
 
-    public int GetEquippedEquipment(int heroInstanceId, EquipmentType type)
+    public EquipmentInstanceData GetEquippedEquipment(int heroInstanceId, EquipmentType type)
     {
         if (SavedHeroDatas.TryGetValue(heroInstanceId, out var data))
         {
@@ -103,29 +106,29 @@ public class HeroStorage
                 case EquipmentType.Weapon:
                     return data.Weapon;
                 case EquipmentType.Helmet:
-                    return data.Armors != null && data.Armors.TryGetValue(ArmorType.Helmet, out int helmet) ? helmet : -1;
+                    return data.Armors != null && data.Armors.TryGetValue(ArmorType.Helmet, out EquipmentInstanceData helmet) ? helmet : null;
                 case EquipmentType.Body:
-                    return data.Armors != null && data.Armors.TryGetValue(ArmorType.Body, out int body) ? body : -1;
+                    return data.Armors != null && data.Armors.TryGetValue(ArmorType.Body, out EquipmentInstanceData body) ? body : null;
                 case EquipmentType.Cloak:
-                    return data.Armors != null && data.Armors.TryGetValue(ArmorType.Cloak, out int cloak) ? cloak : -1;
+                    return data.Armors != null && data.Armors.TryGetValue(ArmorType.Cloak, out EquipmentInstanceData cloak) ? cloak : null;
             }
         }
-        return -1;
+        return null;
     }
-
 
     /// <summary>
     /// 영웅에게 무기 장착 및 스탯 적용.
     /// </summary>
-    public void EquipWeapon(int heroInstanceId, int weaponDataId)
+    private void EquipWeapon(int heroInstanceId, int weaponInstanceId)
     {
-        if (SavedHeroDatas.TryGetValue(heroInstanceId, out SavedHeroData savedHeroData))
+        if (SavedHeroDatas.TryGetValue(heroInstanceId, out HeroInstanceData savedHeroData)
+            && Managers.InvMng.IsValidEquipment(weaponInstanceId, EquipmentType.Weapon))
         {
             UnEquipWeapon(heroInstanceId); // 기존 무기 해제
 
-            savedHeroData.Weapon = weaponDataId;
-            savedHeroData.Stat.AddEquipmentStat(Managers.DataMng.WeaponDataDict[weaponDataId]);
-            savedHeroData.OnStatChanged?.Invoke(savedHeroData);
+            EquipmentInstanceData weaponInstance = Managers.InvMng.SavedItemDatas[weaponInstanceId] as EquipmentInstanceData;
+            savedHeroData.Weapon = weaponInstance;
+            savedHeroData.Stat.AddEquipmentStat(weaponInstance.EquipmentData);
         }
     }
 
@@ -133,53 +136,55 @@ public class HeroStorage
     /// 영웅이 착용중인 무기 해제.
     /// </summary>
     /// <param name="heroInstanceId"></param>
-    public void UnEquipWeapon(int heroInstanceId)
+    private void UnEquipWeapon(int heroInstanceId)
     {
-        if (SavedHeroDatas.TryGetValue(heroInstanceId, out SavedHeroData savedHeroData) && savedHeroData.Weapon != -1)
+        if (SavedHeroDatas.TryGetValue(heroInstanceId, out HeroInstanceData savedHeroData) && savedHeroData.Weapon != null)
         {
-            int weaponDataId = savedHeroData.Weapon;
+            EquipmentInstanceData weaponInstance = savedHeroData.Weapon;
+            WeaponData weaponData = weaponInstance.EquipmentData as WeaponData;
 
-            savedHeroData.Stat.RemoveEquipmentStat(Managers.DataMng.WeaponDataDict[weaponDataId]);
-            savedHeroData.OnStatChanged?.Invoke(savedHeroData);
-            savedHeroData.Weapon = -1;
+            savedHeroData.Stat.RemoveEquipmentStat(weaponData);
+            savedHeroData.Weapon = null;
+            weaponInstance.EquippedHeroId = -1;
         }
     }
 
-    public int GetEquippedWeapon(int heroInstanceId)
+    public EquipmentInstanceData GetEquippedWeapon(int heroInstanceId)
     {
-        return SavedHeroDatas.TryGetValue(heroInstanceId, out var data) ? data.Weapon : -1;
+        return SavedHeroDatas.TryGetValue(heroInstanceId, out var data) ? data.Weapon : null;
     }
 
     /// <summary>
     /// 영웅에게 방어구 장착 및 스탯 적용.
     /// </summary>
-    public void EquipArmor(int heroInstanceId, ArmorType type, int armorDataId)
+    private void EquipArmor(int heroInstanceId, ArmorType type, int armorInstanceId)
     {
-        if (SavedHeroDatas.TryGetValue(heroInstanceId, out SavedHeroData savedHeroData))
+        if (SavedHeroDatas.TryGetValue(heroInstanceId, out HeroInstanceData savedHeroData))
         {
             UnEquipArmor(heroInstanceId, type); // 기존 방어구 해제
 
-            savedHeroData.Armors[type] = armorDataId;
-            savedHeroData.Stat.AddEquipmentStat(Managers.DataMng.ArmorDataDict[armorDataId]);
-            savedHeroData.OnStatChanged?.Invoke(savedHeroData);
+            EquipmentInstanceData armorInstance = Managers.InvMng.SavedItemDatas[armorInstanceId] as EquipmentInstanceData;
+            savedHeroData.Armors[type] = armorInstance;
+            savedHeroData.Stat.AddEquipmentStat(armorInstance.EquipmentData);
         }
     }
 
     /// <summary>
     /// 영웅이 착용중인 방어구 해제.
     /// </summary>
-    public void UnEquipArmor(int heroInstanceId, ArmorType type)
+    private void UnEquipArmor(int heroInstanceId, ArmorType type)
     {
-        if (SavedHeroDatas.TryGetValue(heroInstanceId, out SavedHeroData savedHeroData) && savedHeroData.Armors[type] != -1)
+        if (SavedHeroDatas.TryGetValue(heroInstanceId, out HeroInstanceData savedHeroData) && savedHeroData.Armors[type] != null)
         {
-            int armorDataId = savedHeroData.Armors[type];
-            savedHeroData.Stat.RemoveEquipmentStat(Managers.DataMng.ArmorDataDict[armorDataId]);
-            savedHeroData.OnStatChanged?.Invoke(savedHeroData);
-            savedHeroData.Armors[type] = -1;
+            EquipmentInstanceData armorInstance = savedHeroData.Armors[type];
+            EquipmentData armorData = armorInstance.EquipmentData;
+            savedHeroData.Stat.RemoveEquipmentStat(armorData);
+            savedHeroData.Armors[type] = null;
+            armorInstance.EquippedHeroId = -1;
         }
     }
 
-    public Dictionary<ArmorType, int> GetEquippedArmors(int heroInstanceId)
+    public Dictionary<ArmorType, EquipmentInstanceData> GetEquippedArmors(int heroInstanceId)
     {
         return SavedHeroDatas.TryGetValue(heroInstanceId, out var data) ? data.Armors : null;
     }

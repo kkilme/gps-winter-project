@@ -35,7 +35,7 @@ public class UI_HeroDetail : UI_Base
         CloakSlot,
     }
 
-    private SavedHeroData _bindingHeroData;
+    private HeroInstanceData _bindingHeroData;
 
     public override void Init()
     {
@@ -44,37 +44,42 @@ public class UI_HeroDetail : UI_Base
         Bind<GameObject>(typeof(GameObjects));
     }
 
-    public void LateInit(SavedHeroData heroData)
+    public void LateInit(HeroInstanceData heroData)
     {
         _bindingHeroData = heroData;
         UpdateUI(heroData);
 
-        GetGameObject(GameObjects.WeaponSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData.InstanceId, EquipmentType.Weapon);
-        GetGameObject(GameObjects.HelmetSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData.InstanceId, EquipmentType.Helmet);
-        GetGameObject(GameObjects.BodySlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData.InstanceId, EquipmentType.Body);
-        GetGameObject(GameObjects.CloakSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData.InstanceId, EquipmentType.Cloak);
+        GetGameObject(GameObjects.WeaponSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Weapon);
+        GetGameObject(GameObjects.HelmetSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Helmet);
+        GetGameObject(GameObjects.BodySlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Body);
+        GetGameObject(GameObjects.CloakSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Cloak);
 
-        heroData.OnStatChanged -= UpdateUI;
-        heroData.OnStatChanged += UpdateUI;
+        heroData.Stat.OnStatChanged -= UpdateStatUI;
+        heroData.Stat.OnStatChanged += UpdateStatUI;
     }
 
-    public void UpdateUI(SavedHeroData heroData)
+    public void UpdateUI(HeroInstanceData heroData)
     {
         GetImage(Images.Image_Hero).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.CREATURE_IMAGE_PATH_PREFIX + $"{heroData.ClassName}_Front");
         GetText(Texts.Text_HeroName).text = heroData.CustomName;
-        GetText(Texts.Text_BaseDamage).text = heroData.Stat.BaseDamage.ToString();
-        GetText(Texts.Text_HP).text = heroData.Stat.MaxHp.ToString();
-        GetText(Texts.Text_PhysicalDefense).text = heroData.Stat.PhysicalDefense.ToString();
-        GetText(Texts.Text_MagicDefense).text = heroData.Stat.MagicDefense.ToString();
-        GetText(Texts.Text_Strength).text = heroData.Stat.Strength.ToString();
-        GetText(Texts.Text_Vitality).text = heroData.Stat.Vitality.ToString();
-        GetText(Texts.Text_Dexterity).text = heroData.Stat.Dexterity.ToString();
-        GetText(Texts.Text_Intelligence).text = heroData.Stat.Intelligence.ToString();
+        UpdateStatUI(heroData.Stat);
+    }
+
+    private void UpdateStatUI(CreatureStat stat)
+    {
+        GetText(Texts.Text_BaseDamage).text = stat.BaseDamage.ToString();
+        GetText(Texts.Text_HP).text = stat.MaxHp.ToString();
+        GetText(Texts.Text_PhysicalDefense).text = stat.PhysicalDefense.ToString();
+        GetText(Texts.Text_MagicDefense).text = stat.MagicDefense.ToString();
+        GetText(Texts.Text_Strength).text = stat.Strength.ToString();
+        GetText(Texts.Text_Vitality).text = stat.Vitality.ToString();
+        GetText(Texts.Text_Dexterity).text = stat.Dexterity.ToString();
+        GetText(Texts.Text_Intelligence).text = stat.Intelligence.ToString();
     }
 
     private void OnDestroy()
     {
-        if(_bindingHeroData != null) _bindingHeroData.OnStatChanged -= UpdateUI;
+        if(_bindingHeroData != null) _bindingHeroData.Stat.OnStatChanged -= UpdateStatUI;
     }
 
 }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 영웅 장비 장착 UI
+/// </summary>
 public class UI_EquipmentSelectWindow : UI_Popup
 {
     enum GameObjects
@@ -16,7 +19,7 @@ public class UI_EquipmentSelectWindow : UI_Popup
     }
 
     private UI_Inventory _inventory;
-    private UI_HeroEquipmentSlot _bindedEquipmentSlot;
+    private UI_HeroEquipmentSlot _bindingEquipmentSlot;
 
     public override void Init()
     {
@@ -32,18 +35,21 @@ public class UI_EquipmentSelectWindow : UI_Popup
         inventory.LateInit(OnEquipmentSelected);
         _inventory = inventory;
 
-        _bindedEquipmentSlot = equipmentSlot;
+        _bindingEquipmentSlot = equipmentSlot;
 
-        List<InventoryEntry> items = Managers.InvMng.GetAllEquipmentOfType(equipmentType);
+        List<ItemInstanceData> items = Managers.InvMng.GetAllEquipmentOfType(equipmentType);
         foreach (var item in items)
         {
-            inventory.AddItem(item.ItemData, item.Quantity);
+            inventory.AddItem(item);
         }
     }
 
+    /// <summary>
+    /// 유저가 Window에서 장비를 선택했을 때 호출되는 콜백 함수.
+    /// </summary>
     private void OnEquipmentSelected(UI_InventorySlot selectedSlot)
     {
-        _bindedEquipmentSlot.OnEquipmentSelected(selectedSlot);
+        _bindingEquipmentSlot.OnEquipmentSelected(selectedSlot);
         _inventory.RemoveActionCallbackOnSlots(OnEquipmentSelected);
         Close();
     }

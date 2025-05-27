@@ -26,7 +26,7 @@ public class TownManager
     {
         int i = 0;
         Managers.HeroMng.SpawnHeroParty();
-        foreach (var hero in Managers.HeroMng.HeroParty.Heroes)
+        foreach (var hero in Managers.HeroMng.HeroParty.RuntimeHeroes)
         {
             hero.gameObject.transform.position = _heroPositions[i++].position;
             hero.transform.LookAt(Camera.main.transform.position);
