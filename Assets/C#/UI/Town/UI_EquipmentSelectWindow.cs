@@ -56,12 +56,14 @@ public class UI_EquipmentSelectWindow : UI_Popup
 
     public override void Close()
     {
+        _bindingEquipmentSlot.IsSelectingEquipment = false;
         _inventory.RemoveActionCallbackOnSlots(OnEquipmentSelected);
         base.Close();
     }
 
     private void OnDestroy()
     {
+        _bindingEquipmentSlot.IsSelectingEquipment = false;
         _inventory.RemoveActionCallbackOnSlots(OnEquipmentSelected);
     }
 }

@@ -16,7 +16,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
     private EquipmentInstanceData _equipmentInstance;
     private EquipmentType _equipmentType;
 
-    private bool _isSelectingEquipment = false;
+    public bool IsSelectingEquipment { get; set; } = false;
 
     private static Sprite _defaultSprite; // 빈 장비 슬롯에 들어갈 기본 스프라이트
     private Image _slotImage;
@@ -78,7 +78,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (_slotSpriteOnMouseEnter) _slotImage.sprite = _slotSpriteOnMouseEnter;
-        if (_equipmentInstance != null && !_isSelectingEquipment)
+        if (_equipmentInstance != null && !IsSelectingEquipment)
         {
             UI_ItemDetail itemDetail = Managers.UIMng.ShowPopupUI<UI_ItemDetail>();
             itemDetail.HideInstantly();
@@ -95,7 +95,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        _isSelectingEquipment = true;
+        IsSelectingEquipment = true;
         Managers.UIMng.ClosePopupUI<UI_EquipmentSelectWindow>();
         UI_EquipmentSelectWindow equipmentSelectWindow = Managers.UIMng.ShowPopupUI<UI_EquipmentSelectWindow>();
         equipmentSelectWindow.LateInit(this, _equipmentType);
@@ -105,7 +105,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
     public void OnEquipmentSelected(UI_InventorySlot selectedSlot)
     {
-        _isSelectingEquipment = false;
+        IsSelectingEquipment = false;
         if (selectedSlot == null || selectedSlot.IsEmpty)
         {
             UnbindEquipment();
