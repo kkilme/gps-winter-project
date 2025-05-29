@@ -2,44 +2,68 @@ using System;
 using System.Collections;
 using System.Text;
 using UnityEngine;
+using DG.Tweening;
 
 
 public abstract class ItemDetailDesign
 {
-    public virtual void Apply(UI_ItemDetail ui, ItemData itemData, int quantity = 0)
+    public void Apply(UI_ItemDetail ui, ItemInstanceData itemInstanceData, int quantity = 0)
     {
-        ApplyName(ui, itemData);
-        ApplyItemImage(ui, itemData);
-        ApplyDescription(ui, itemData);
-        ApplyItemTypeIconImage(ui, itemData);
+        // UI_ForceInsideScreen는 ItemDetailUI의 위치를 계속 설정하는데, 디자인 적용이 끝나야만 ItemDetailUI의 RectTransform 값이 제대로 설정되어 올바른 위치가 결정됨.
+        // CanvasGroup을 통해 Design 적용이 끝났을 때 자연스럽게 보이도록 함.
+        CanvasGroup canvasGroup = ui.gameObject.GetOrAddComponent<CanvasGroup>();
+        canvasGroup.alpha = 0f;
+
+        ApplyDesign(ui, itemInstanceData, quantity);
+
+        canvasGroup.DOFade(1f, 0.2f).SetEase(Ease.OutSine);
+    }
+
+    protected virtual void ApplyDesign(UI_ItemDetail ui, ItemInstanceData itemInstanceData, int quantity = 0)
+    {
+        ApplyName(ui, itemInstanceData);
+        ApplyItemImage(ui, itemInstanceData);
+        ApplyDescription(ui, itemInstanceData);
+        ApplyItemTypeIconImage(ui, itemInstanceData);
         ui.SetQuantity(quantity);
+        ui.DisableEquippedHeroInfo();
     }
 
-    protected virtual void ApplyName(UI_ItemDetail ui, ItemData itemData)
+    protected virtual void ApplyName(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
     {
-        ui.SetName(itemData.Name);
+        ui.SetName(itemInstanceData.ItemData.Name);
     }
 
-    protected virtual void ApplyItemImage(UI_ItemDetail ui, ItemData itemData)
+    protected virtual void ApplyItemImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
     {
-        ui.SetImage(itemData.ImagePath);
+        ui.SetImage(itemInstanceData.ItemData.ImagePath);
     }
 
-    protected abstract void ApplyDescription(UI_ItemDetail ui, ItemData itemData);
+    protected abstract void ApplyDescription(UI_ItemDetail ui, ItemInstanceData itemInstanceData);
 
-    protected abstract void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemData itemData);   
+    protected abstract void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData);
 }
 
 public abstract class EquipmentItemDetailDesign : ItemDetailDesign
 {
-    protected override void ApplyDescription(UI_ItemDetail ui, ItemData itemData)
+    protected override void ApplyDesign(UI_ItemDetail ui, ItemInstanceData itemInstanceData, int quantity = 0)
     {
-        if (itemData is not EquipmentData equipmentData)
+        base.ApplyDesign(ui, itemInstanceData, quantity);
+        ApplyEquippedHeroInfo(ui, itemInstanceData as EquipmentInstanceData);
+    }
+
+    protected override void ApplyDescription(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
+    {
+        if (itemInstanceData is not EquipmentInstanceData equipmentInstanceData)
         {
             ui.SetDescription("");
             return;
         }
 
+        EquipmentData equipmentData = equipmentInstanceData.EquipmentData;
+
+        // 스탯별 증감 정보 서술
+        // equipmentData가 같아도 강화 등을 통해 equipmentInstanceData별로 스탯이 다르게 된다면 코드 수정 필요
         (string statName, Func<EquipmentData, int> getter)[] stats = new (string, Func<EquipmentData, int>)[]
         {
             ("MaxHp", e => e.Hp),
@@ -68,15 +92,27 @@ public abstract class EquipmentItemDetailDesign : ItemDetailDesign
 
         ui.SetDescription(sb.ToString().TrimEnd());
     }
+
+    protected void ApplyEquippedHeroInfo(UI_ItemDetail ui, EquipmentInstanceData equipmentInstanceData)
+    {
+        if (equipmentInstanceData == null) return;
+
+        if (equipmentInstanceData.EquippedHeroId != -1)
+        {
+            ui.SetEquippedHeroInfo(equipmentInstanceData.EquippedHeroId);
+        }
+    }
 }
 
 public class WeaponItemDetailDesign : EquipmentItemDetailDesign
 {
-    protected override void ApplyDescription(UI_ItemDetail ui, ItemData itemData)
+    protected override void ApplyDescription(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
     {
-        base.ApplyDescription(ui, itemData);
-        if(itemData is not WeaponData weaponData) return;
+        base.ApplyDescription(ui, itemInstanceData);
+        if(itemInstanceData is not EquipmentInstanceData equipmentInstanceData) return;
+        if(equipmentInstanceData.EquipmentData is not WeaponData weaponData) return;
 
+        // 무기 스킬 정보 서술
         StringBuilder sb = new StringBuilder(ui.GetDescription());
         sb.Append("\nSkills: \n");
         foreach (var skill in weaponData.Skills)
@@ -87,7 +123,7 @@ public class WeaponItemDetailDesign : EquipmentItemDetailDesign
         ui.SetDescription(sb.ToString().TrimEnd());
     }
 
-    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemData itemData)
+    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
     {
         ui.SetItemTypeIcon("Default_Weapon"); // 무기 타입 별 다른 이미지 지정 가능
     }
@@ -95,7 +131,7 @@ public class WeaponItemDetailDesign : EquipmentItemDetailDesign
 
 public class ArmorItemDetailDesign : EquipmentItemDetailDesign
 {
-    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemData itemData)
+    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
     {
         ui.SetItemTypeIcon("Default_Armor"); // 방어구 부위별 다른 이미지 지정 가능. 맞는 애셋이 없어서 보류.
     }
@@ -103,18 +139,18 @@ public class ArmorItemDetailDesign : EquipmentItemDetailDesign
 
 public class ConsumableItemDetailDesign : ItemDetailDesign
 {
-    protected override void ApplyDescription(UI_ItemDetail ui, ItemData itemData)
+    protected override void ApplyDescription(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
     {
-        if(itemData is not ConsumableItemData consumableItemData)
+        if(itemInstanceData is not ConsumableItemInstanceData consumableItemInstanceData)
         {
             ui.SetDescription("");
             return;
         }
 
-        ui.SetDescription(consumableItemData.Description);
+        ui.SetDescription(consumableItemInstanceData.ConsumableItemData.Description);
     }
 
-    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemData itemData)
+    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
     {
         ui.SetItemTypeIcon("Default_Consumable");
     }
@@ -123,7 +159,7 @@ public class ConsumableItemDetailDesign : ItemDetailDesign
 // 골드만을 위한 특수 디자인
 public class GoldDetailDesign : ItemDetailDesign
 {
-    public override void Apply(UI_ItemDetail ui, ItemData itemData, int quantity = 0)
+    protected override void ApplyDesign(UI_ItemDetail ui, ItemInstanceData itemInstanceData, int quantity = 0)
     {
         ui.SetName("Gold");
         ui.SetImage("Gold");
@@ -132,7 +168,7 @@ public class GoldDetailDesign : ItemDetailDesign
         ui.SetQuantity(quantity);
     }
 
-    // 골드는 itemData가 없으므로 아래 메서드는 사용하지 않음
-    protected override void ApplyDescription(UI_ItemDetail ui, ItemData itemData) { }
-    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemData itemData) { }
+    // 골드는 itemInstanceData가 없으므로 아래 메서드는 사용하지 않음
+    protected override void ApplyDescription(UI_ItemDetail ui, ItemInstanceData itemInstanceData) { }
+    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData) { }
 }

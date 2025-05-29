@@ -34,11 +34,11 @@ public class UI_HeroList : UI_Base
     }
 
     /// <summary>
-    /// HeroList UI에 저장된 영웅 데이터를 기반으로 HeroDetail UI를 채움.
+    /// 보유한 모든 영웅의 데이터를 기반으로 HeroDetail UI를 생성 및 초기화하고 GridLayout에 채움.
     /// </summary>
     private void FillHeroDetailUI()
     {
-        List<HeroInstanceData> savedHeroDatas = Managers.HeroMng.GetSavedHeroDatas();
+        List<HeroInstanceData> savedHeroDatas = Managers.HeroMng.HeroStorage.GetAllOwnedHeroDatas();
         foreach (var heroData in savedHeroDatas)
         {
             UI_HeroDetail heroDetail = Managers.UIMng.MakeSubItemUI<UI_HeroDetail>(_heroDetailParent, "Town/" + nameof(UI_HeroDetail));

@@ -12,6 +12,8 @@ public class UI_ItemDetail : UI_Popup
     {
         Image_ItemImage,
         Image_ItemTypeIcon,
+
+        Image_Hero,
     }
 
     enum Texts
@@ -19,18 +21,26 @@ public class UI_ItemDetail : UI_Popup
         Text_ItemName,
         Text_ItemQuantity,
         Text_ItemDescription,
+
+        Text_EquippedHero,
+    }
+
+    enum GameObjects
+    {
+        EquippedHeroFrame
     }
 
     public override void Init()
     {
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<Image>(typeof(Images));
+        Bind<GameObject>(typeof(GameObjects));
     }
 
-    public void ApplyDesign(ItemData itemData, int quantity = 0)
+    public void ApplyDesign(ItemInstanceData itemInstanceData, int quantity = 0)
     {
-        ItemDetailDesign design = ItemDetailUIDesigner.GetDesign(itemData.ItemType);
-        design.Apply(this, itemData, quantity);
+        ItemDetailDesign design = ItemDetailUIDesigner.GetDesign(itemInstanceData.ItemType);
+        design.Apply(this, itemInstanceData, quantity);
     }
 
     public void ApplyGoldDesign(int goldAmount)
@@ -48,5 +58,14 @@ public class UI_ItemDetail : UI_Popup
     {
         if (quantity <= 0) GetText(Texts.Text_ItemQuantity).text = "";
         else GetText(Texts.Text_ItemQuantity).text = "x" + quantity.ToString();
+    }
+    public void DisableEquippedHeroInfo() => GetGameObject(GameObjects.EquippedHeroFrame).SetActive(false);
+    public void SetEquippedHeroInfo(int heroInstanceId)
+    {
+        HeroInstanceData heroInstanceData = Managers.HeroMng.HeroStorage.GetHeroInstanceData(heroInstanceId);
+
+        GetGameObject(GameObjects.EquippedHeroFrame).SetActive(true);
+        GetImage(Images.Image_Hero).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.CREATURE_IMAGE_PATH_PREFIX + heroInstanceData.ClassName +"_front");
+        GetText(Texts.Text_EquippedHero).text = "Equipped By " + heroInstanceData.CustomName;
     }
 }

@@ -49,7 +49,7 @@ public class UI_EquipmentSelectWindow : UI_Popup
     /// </summary>
     private void OnEquipmentSelected(UI_InventorySlot selectedSlot)
     {
-        _bindingEquipmentSlot.OnEquipmentSelected(selectedSlot);
+        _bindingEquipmentSlot.ChangeEquipment(selectedSlot);
         _inventory.RemoveActionCallbackOnSlots(OnEquipmentSelected);
         Close();
     }

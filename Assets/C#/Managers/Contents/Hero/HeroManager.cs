@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HeroManager
@@ -17,7 +18,8 @@ public class HeroManager
         HeroParty.RuntimeHeroesDict.Clear();
         foreach (int heroInstanceId in HeroParty.HeroIds)
         {
-            if (HeroStorage.SavedHeroDatas.TryGetValue(heroInstanceId, out HeroInstanceData data))
+            HeroInstanceData data = HeroStorage.GetHeroInstanceData(heroInstanceId);
+            if (data != null)
             {
                 HeroStat stat = data.Stat;
 
@@ -52,19 +54,6 @@ public class HeroManager
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// 보유한 모든 영웅의 데이터 반환.
-    /// </summary>
-    public List<HeroInstanceData> GetSavedHeroDatas()
-    {
-        List<HeroInstanceData> savedHeroDatas = new List<HeroInstanceData>();
-        foreach (var data in HeroStorage.SavedHeroDatas)
-        {
-            savedHeroDatas.Add(data.Value);
-        }
-        return savedHeroDatas;
     }
 }
 

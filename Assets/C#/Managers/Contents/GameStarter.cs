@@ -26,7 +26,7 @@ public class GameStarter
             Managers.HeroMng.HeroStorage.AddHero(GlobalValues.HERO_WIZARD_ID);
         }
 
-        foreach (var key in Managers.HeroMng.HeroStorage.SavedHeroDatas.Keys)
+        foreach (var key in Managers.HeroMng.HeroStorage.GetAllOwnedHeroInstanceIds())
         {
             Managers.HeroMng.HeroParty.AddHero(key);
         }

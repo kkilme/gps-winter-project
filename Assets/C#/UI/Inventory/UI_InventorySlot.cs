@@ -20,7 +20,8 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     enum GameObjects
     {
         Detail,
-        Quantity
+        Quantity,
+        Flag_Equipped
     }
 
     public ItemInstanceData ItemInstanceData { get; private set; }
@@ -40,7 +41,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
             _quantity = value;
         } 
     }
-    public bool IsEmpty => ItemData == null;
+    public bool IsEmpty => ItemInstanceData == null;
 
     public Action<UI_InventorySlot> OnClickAction;
 
@@ -48,6 +49,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     private Image _itemImage;
     private GameObject _detailParent;
     private GameObject _quantityParent;
+    private GameObject _equippedFlag;
 
     private Image _slotImage;
     private static Sprite _slotSprite;
@@ -65,6 +67,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         _itemImage = GetImage(Images.Image_Item);
         _detailParent = GetGameObject(GameObjects.Detail);
         _quantityParent = GetGameObject(GameObjects.Quantity);
+        _equippedFlag = GetGameObject(GameObjects.Flag_Equipped);
         _slotImage = GetComponent<Image>();
 
         if (_slotSprite == null) _slotSprite = _slotImage.sprite;
@@ -76,13 +79,18 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     }
 
     /// <summary>
-    /// Quantity RectTransform 크기 조정.
+    /// Quantity/equippedFlag RectTransform 크기 조정.
     /// </summary>
     private void AdjustQuantityRectSize()
     {
         RectTransform qualityRect = _quantityParent.GetComponent<RectTransform>();
-        RectTransform parentRect = GetComponent<RectTransform>();
-        qualityRect.sizeDelta = new Vector2(parentRect.sizeDelta.x / 3, parentRect.sizeDelta.y / 3);
+        RectTransform equippedFlagRect = _equippedFlag.GetComponent<RectTransform>();
+
+        GridLayoutGroup gridLayout = GetComponentInParent<GridLayoutGroup>();
+        float cellWidth = gridLayout.cellSize.x;
+        float cellHeight = gridLayout.cellSize.y;
+        qualityRect.sizeDelta = new Vector2(cellWidth / 3, cellHeight / 3);
+        equippedFlagRect.sizeDelta = new Vector2(cellWidth / 3, cellHeight / 3);
     }
 
     /// <summary>
@@ -105,6 +113,15 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         {
             _quantityParent.SetActive(false);
         }
+
+        if(itemInstanceData is EquipmentInstanceData equipmentInstanceData)
+        {
+            _equippedFlag.SetActive(equipmentInstanceData.IsEquipped);
+        }
+        else
+        {
+            _equippedFlag.SetActive(false);
+        }
     }
 
     public void UnbindItem()
@@ -126,7 +143,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         {
             var detailUI = Managers.UIMng.ShowPopupUI<UI_ItemDetail>();
             detailUI.HideInstantly();
-            detailUI.ApplyDesign(ItemData);
+            detailUI.ApplyDesign(ItemInstanceData);
             detailUI.ShowInstantly();
         }
     }

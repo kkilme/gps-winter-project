@@ -14,7 +14,7 @@ public class HeroParty
     private Dictionary<int, Vector2Int> _battlePositionsCache = new(); // key: heroInstanceId, value: 좌표. 현재 파티에 포함되어 있는 영웅의 battlePosition만 저장되는 딕셔너리. - 최대 Length 4
 
     /// <summary>
-    /// 파티에 영웅(Id) 추가. 최대 인원 초과 시 추가하지 못함.
+    /// 파티에 영웅(HeroInstanceId) 추가. 최대 인원 초과 시 추가하지 못함.
     /// </summary>
     public void AddHero(int id)
     {

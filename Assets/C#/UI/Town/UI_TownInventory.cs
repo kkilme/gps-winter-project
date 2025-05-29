@@ -84,6 +84,7 @@ public class UI_TownInventory : UI_Base
 
     public void LateInit()
     {
+        ShowInstantly();
         Bind<Button>(typeof(Buttons));
         Bind<GameObject>(typeof(ButtonObjects));
         Bind<UI_Inventory>(typeof(InventoryTab));
@@ -108,6 +109,7 @@ public class UI_TownInventory : UI_Base
         InitInventoryTab(InventoryTab.Tab_Consumables);
 
         ShowInventoryTab(InventoryTab.Tab_Weapons);
+        HideInstantly();
     }
 
     private void InitInventoryTab(InventoryTab inventoryTab)

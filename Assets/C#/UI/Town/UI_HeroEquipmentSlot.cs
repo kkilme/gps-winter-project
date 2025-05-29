@@ -82,7 +82,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         {
             UI_ItemDetail itemDetail = Managers.UIMng.ShowPopupUI<UI_ItemDetail>();
             itemDetail.HideInstantly();
-            itemDetail.ApplyDesign(Managers.DataMng.EquipmentDataDict[_equipmentInstance.ItemDataId]);
+            itemDetail.ApplyDesign(_equipmentInstance);
             itemDetail.ShowInstantly();
         }
     }
@@ -103,9 +103,10 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         Managers.UIMng.ClosePopupUI<UI_ItemDetail>();
     }
 
-    public void OnEquipmentSelected(UI_InventorySlot selectedSlot)
+    public void ChangeEquipment(UI_InventorySlot selectedSlot)
     {
         IsSelectingEquipment = false;
+        //TODO: 장비 해제 슬롯 추가
         if (selectedSlot == null || selectedSlot.IsEmpty)
         {
             UnbindEquipment();
