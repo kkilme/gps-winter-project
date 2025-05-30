@@ -45,7 +45,6 @@ public class UI_HeroDetail : UI_Base
     private HeroInstanceData _bindingHeroData;
     private TMP_InputField _heroNameInputField;
 
-
     public override void Init()
     {
         Bind<Image>(typeof(Images));

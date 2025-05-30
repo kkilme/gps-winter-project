@@ -32,38 +32,52 @@ public class UI_EquipmentSelectWindow : UI_Popup
     public void LateInit(UI_HeroEquipmentSlot equipmentSlot, EquipmentType equipmentType)
     {
         UI_Inventory inventory = GetGameObject(GameObjects.Inventory).GetOrAddComponent<UI_Inventory>();
-        inventory.LateInit(OnEquipmentSelected);
+        inventory.LateInit(OnSlotSelected);
         _inventory = inventory;
 
         _bindingEquipmentSlot = equipmentSlot;
 
+        inventory.AddCustomSlot(OnUnequipSelected, Managers.ResourceMng.Load<Sprite>("Textures/PictoIcons/PictoIcon_X"));
+
         List<ItemInstanceData> items = Managers.InvMng.GetAllEquipmentOfType(equipmentType);
         foreach (var item in items)
         {
-            inventory.AddItem(item);
+            inventory.AddItemSlot(item);
         }
     }
 
     /// <summary>
-    /// 유저가 Window에서 장비를 선택했을 때 호출되는 콜백 함수.
+    /// 장비 해제 커스텀 슬롯을 선택했을 때 호출되는 콜백 함수
     /// </summary>
-    private void OnEquipmentSelected(UI_InventorySlot selectedSlot)
+    private void OnUnequipSelected(UI_InventorySlot selectedSlot)
     {
-        _bindingEquipmentSlot.ChangeEquipment(selectedSlot);
-        _inventory.RemoveActionCallbackOnSlots(OnEquipmentSelected);
+        _bindingEquipmentSlot.ChangeEquipment(null); // 장비 해제
+        _inventory.ClearActionCallbackOnSlots();
+        Close();
+    }
+
+    /// <summary>
+    /// 유저가 Window에서 슬롯을 선택했을 때 호출되는 콜백 함수.
+    /// </summary>
+    private void OnSlotSelected(UI_InventorySlot selectedSlot)
+    {
+        if (selectedSlot.ItemInstanceData == null) return;
+
+        if (selectedSlot.ItemInstanceData is not EquipmentInstanceData equipmentInstanceData) return;
+        
+        _bindingEquipmentSlot.ChangeEquipment(equipmentInstanceData);
+        _inventory.ClearActionCallbackOnSlots();
         Close();
     }
 
     public override void Close()
     {
-        _bindingEquipmentSlot.IsSelectingEquipment = false;
-        _inventory.RemoveActionCallbackOnSlots(OnEquipmentSelected);
+        _inventory.ClearActionCallbackOnSlots();
         base.Close();
     }
 
     private void OnDestroy()
     {
-        _bindingEquipmentSlot.IsSelectingEquipment = false;
-        _inventory.RemoveActionCallbackOnSlots(OnEquipmentSelected);
+        _inventory.ClearActionCallbackOnSlots();
     }
 }

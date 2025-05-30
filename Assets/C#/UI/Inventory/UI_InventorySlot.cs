@@ -41,41 +41,46 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
             _quantity = value;
         } 
     }
-    public bool IsEmpty => ItemInstanceData == null;
+    public bool IsEmpty => ItemInstanceData == null && !_isCustomSlot;
+    private bool _isCustomSlot;
 
     public Action<UI_InventorySlot> OnClickAction;
 
     private TextMeshProUGUI _quantityText;
-    private Image _itemImage;
+    private Image _contentImage;
     private GameObject _detailParent;
     private GameObject _quantityParent;
     private GameObject _equippedFlag;
 
-    private Image _slotImage;
-    private static Sprite _slotSprite;
-    private static Sprite _slotSpriteOnMouseEnter;
+    private Image _slotDesign;
+    private static Sprite _slotDesignSprite;
+    private static Sprite _slotDesignSpriteOnMouseEnter;
 
     public override void Init() { }
 
-    public void LateInit(string slotSpriteOnMouseEnterPath, Action<UI_InventorySlot> onClickAction)
+    public void LateInit(string slotSpriteOnMouseEnterPath, Action<UI_InventorySlot> onClickAction, Sprite defaultSprite = null, bool isCustomSlot = false)
     {
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<Image>(typeof(Images));
         Bind<GameObject>(typeof(GameObjects));
 
         _quantityText = GetText(Texts.Text_Quantity);
-        _itemImage = GetImage(Images.Image_Item);
+        _contentImage = GetImage(Images.Image_Item);
         _detailParent = GetGameObject(GameObjects.Detail);
         _quantityParent = GetGameObject(GameObjects.Quantity);
         _equippedFlag = GetGameObject(GameObjects.Flag_Equipped);
-        _slotImage = GetComponent<Image>();
+        _slotDesign = GetComponent<Image>();
 
-        if (_slotSprite == null) _slotSprite = _slotImage.sprite;
-        if (_slotSpriteOnMouseEnter == null) _slotSpriteOnMouseEnter = Managers.ResourceMng.Load<Sprite>(slotSpriteOnMouseEnterPath);
-        OnClickAction = onClickAction;
+        if (_slotDesignSprite == null) _slotDesignSprite = _slotDesign.sprite;
+        if (_slotDesignSpriteOnMouseEnter == null) _slotDesignSpriteOnMouseEnter = Managers.ResourceMng.Load<Sprite>(slotSpriteOnMouseEnterPath);
+        OnClickAction -= onClickAction;
+        OnClickAction += onClickAction;
+        _isCustomSlot = isCustomSlot;
 
         AdjustQuantityRectSize();
         HideDetail();
+
+        if (defaultSprite != null) ShowContentImageOnly(); _contentImage.sprite = defaultSprite;
     }
 
     /// <summary>
@@ -102,7 +107,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         Quantity = quantity;
 
         //_itemImage.GetComponent<RectTransform>().sizeDelta = new Vector2(_rect.sizeDelta.x - 8, _rect.sizeDelta.y - 8);
-        _itemImage.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + ItemData.ImagePath);
+        _contentImage.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + ItemData.ImagePath);
 
         _detailParent.SetActive(true);
         if (ItemInstanceData.ItemType == ItemType.Consumable) // 개수 표시는 소모품에만
@@ -131,15 +136,22 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         HideDetail();
     }
 
-    public void HideDetail()
+    private void ShowContentImageOnly()
+    {
+        _detailParent.SetActive(true);
+        _quantityParent.SetActive(false);
+        _equippedFlag.SetActive(false);
+    }
+
+    private void HideDetail()
     {
         _detailParent.SetActive(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (_slotSpriteOnMouseEnter) _slotImage.sprite = _slotSpriteOnMouseEnter;
-        if (ItemData != null)
+        if (_slotDesignSpriteOnMouseEnter) _slotDesign.sprite = _slotDesignSpriteOnMouseEnter;
+        if (ItemInstanceData != null)
         {
             var detailUI = Managers.UIMng.ShowPopupUI<UI_ItemDetail>();
             detailUI.HideInstantly();
@@ -150,7 +162,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _slotImage.sprite = _slotSprite;
+        _slotDesign.sprite = _slotDesignSprite;
         Managers.UIMng.ClosePopupUI<UI_ItemDetail>();
     }
 

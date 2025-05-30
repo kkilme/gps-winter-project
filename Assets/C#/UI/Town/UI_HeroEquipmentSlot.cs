@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// HeroDetail UI에서 영웅의 장비 슬롯 하나를 담당하는 클래스.
+/// </summary>
 public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     enum Images
@@ -13,10 +16,9 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
     private HeroInstanceData _heroInstance;
     private int _heroInstanceId => _heroInstance?.InstanceId ?? -1;
+
     private EquipmentInstanceData _equipmentInstance;
     private EquipmentType _equipmentType;
-
-    public bool IsSelectingEquipment { get; set; } = false;
 
     private static Sprite _defaultSprite; // 빈 장비 슬롯에 들어갈 기본 스프라이트
     private Image _slotImage;
@@ -25,7 +27,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
     public override void Init()
     {
-        _defaultSprite = Managers.ResourceMng.Load<Sprite>("Textures/Others/PictoIcon_Plus");
+        _defaultSprite = Managers.ResourceMng.Load<Sprite>("Textures/PictoIcons/PictoIcon_Plus");
         Bind<Image>(typeof(Images));
 
         _slotImage = GetComponent<Image>();
@@ -44,6 +46,9 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         BindEquipment(Managers.HeroMng.HeroStorage.GetEquippedEquipment(_heroInstanceId, _equipmentType));
     }
 
+    /// <summary>
+    /// 장비 슬롯에 heroInstanceData의 _equipmentType에 해당하는 장비 바인딩
+    /// </summary>
     public void BindEquipment(HeroInstanceData heroInstanceData)
     {
         if (_heroInstance != null && Managers.HeroMng.HeroStorage.GetEquippedEquipment(_heroInstanceId, _equipmentType) is EquipmentInstanceData equipmentInstance)
@@ -56,6 +61,10 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         }
     }
 
+    /// <summary>
+    /// 장비 슬롯에 equipmentInstanceData 바인딩
+    /// </summary>
+    /// <param name="equipmentInstance"></param>
     public void BindEquipment(EquipmentInstanceData equipmentInstance)
     {
         _equipmentInstance = equipmentInstance;
@@ -78,7 +87,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (_slotSpriteOnMouseEnter) _slotImage.sprite = _slotSpriteOnMouseEnter;
-        if (_equipmentInstance != null && !IsSelectingEquipment)
+        if (_equipmentInstance != null)
         {
             UI_ItemDetail itemDetail = Managers.UIMng.ShowPopupUI<UI_ItemDetail>();
             itemDetail.HideInstantly();
@@ -95,28 +104,29 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        IsSelectingEquipment = true;
+        // 이미 열린 장비 선택 창이 있다면 닫기
         Managers.UIMng.ClosePopupUI<UI_EquipmentSelectWindow>();
+
+        // 장비 선택 창 띄우기
         UI_EquipmentSelectWindow equipmentSelectWindow = Managers.UIMng.ShowPopupUI<UI_EquipmentSelectWindow>();
         equipmentSelectWindow.LateInit(this, _equipmentType);
 
         Managers.UIMng.ClosePopupUI<UI_ItemDetail>();
     }
 
-    public void ChangeEquipment(UI_InventorySlot selectedSlot)
+    // 장비 선택 창에서 장비를 선택하면 호출됨
+    public void ChangeEquipment(EquipmentInstanceData equipment)
     {
-        IsSelectingEquipment = false;
-        //TODO: 장비 해제 슬롯 추가
-        if (selectedSlot == null || selectedSlot.IsEmpty)
+        // 장비 해제
+        if (equipment == null)
         {
             UnbindEquipment();
             Managers.HeroMng.HeroStorage.UnEquipEquipment(_heroInstanceId, _equipmentType);
             return;
         }
 
-        EquipmentInstanceData selectedEquipment = selectedSlot.ItemInstanceData as EquipmentInstanceData;
-        BindEquipment(selectedEquipment);
-        Managers.HeroMng.HeroStorage.EquipEquipment(_heroInstanceId, _equipmentType, selectedEquipment.InstanceId);
+        BindEquipment(equipment);
+        Managers.HeroMng.HeroStorage.EquipEquipment(_heroInstanceId, _equipmentType, equipment.InstanceId);
     }
 
     private void OnDestroy()

@@ -136,7 +136,7 @@ public class UI_TownInventory : UI_Base
         List<ItemInstanceData> items = Managers.InvMng.GetAllItemsOfType(itemType);
         foreach (var item in items)
         {
-            inventory.AddItem(item);
+            inventory.AddItemSlot(item);
         }
 
         // ScrollRect의 컨텐츠를 현재 인벤토리로 설정

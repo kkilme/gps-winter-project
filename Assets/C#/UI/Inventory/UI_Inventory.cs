@@ -13,7 +13,7 @@ public class UI_Inventory : UI_Base
 {
     public List<UI_InventorySlot> InventorySlots { get; private set; } = new(); // slot의 제한(인벤토리 크기)은 현재 없음
 
-    private Action<UI_InventorySlot> _onSlotClickAction; // 슬롯 클릭 시 호출되는 액션
+    private Action<UI_InventorySlot> _onSlotClickAction; // 기본적으로 슬롯 클릭 시 호출되는 액션
 
     private string _inventorySlotPath; // UI/SubItemUI/ 이하의 인벤토리 슬롯 프리팹 경로
     private string _slotSpriteOnMouseEnterPath; // 슬롯 마우스 오버 시 이미지 경로
@@ -48,9 +48,26 @@ public class UI_Inventory : UI_Base
     }
 
     /// <summary>
+    /// Item이 아닌 커스텀 슬롯을 추가.
+    /// </summary>
+    /// <param name="onClickAction">커스텀 슬롯 클릭 시 실행 될 Action</param>
+    /// <param name="contentSprite">커스텀 슬롯의 Sprite</param>
+    public void AddCustomSlot(Action<UI_InventorySlot> onClickAction, Sprite contentSprite = null)
+    {
+        UI_InventorySlot emptySlot = InventorySlots.Find(s => s.IsEmpty);
+        if (emptySlot == null)
+        {
+            AddEmptySlot();
+            emptySlot = InventorySlots[^1];
+        }
+
+        emptySlot.LateInit(_slotSpriteOnMouseEnterPath, onClickAction, contentSprite, true);
+    }
+
+    /// <summary>
     /// 적절한 슬롯을 찾거나 생성하여 인벤토리 슬롯에 아이템을 바인딩.
     /// </summary>
-    public void AddItem(ItemInstanceData itemInstanceData)
+    public void AddItemSlot(ItemInstanceData itemInstanceData)
     {
         int left = 1;
         if(itemInstanceData is ConsumableItemInstanceData consumableItemData)
@@ -85,6 +102,14 @@ public class UI_Inventory : UI_Base
             int toAdd = Mathf.Min(itemInstanceData.ItemData.MaxStack, left);
             emptySlot.BindItem(itemInstanceData, toAdd);
             left -= toAdd;
+        }
+    }
+
+    public void ClearActionCallbackOnSlots()
+    {
+        foreach (var slot in InventorySlots)
+        {
+            slot.OnClickAction = null;
         }
     }
 
