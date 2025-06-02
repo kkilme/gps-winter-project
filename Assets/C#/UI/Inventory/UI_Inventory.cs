@@ -22,7 +22,7 @@ public class UI_Inventory : UI_Base
 
     public void LateInit(Action<UI_InventorySlot> onSlotClickAction = null,
                         string slotPrefabPath = "Town/UI_InventorySlot_TownInventory", 
-                        string slotSpriteOnMouseEnterPath = "Textures/Others/ItemSlot_Selected")
+                        string slotSpriteOnMouseEnterPath = "Textures/Others/ItemSlot_Selected") // 인벤토리 디자인이 다양해지면 슬롯 디자인을 따로 클래스로 분리하는 게 나아보임
     {
         _onSlotClickAction = onSlotClickAction;
         _inventorySlotPath = slotPrefabPath;

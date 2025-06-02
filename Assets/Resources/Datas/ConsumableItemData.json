@@ -2,7 +2,7 @@
   "consumableItems": [
     {
       "DataId": 301000,
-      "Name": "HealPotion",
+      "Name": "Low Heal Potion",
       "Description": "Recoveres 20% of max HP.",
       "MaxStack": 5
     }

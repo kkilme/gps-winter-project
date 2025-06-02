@@ -2,7 +2,7 @@
   "armors": [
     {
       "DataId": 202000,
-      "Name": "SampleBody1",
+      "Name": "Basic Body Armor",
       "ArmorType": "Body",
       "PhysicalDefense": 2,
       "MagicDefense": 1,

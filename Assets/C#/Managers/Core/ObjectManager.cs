@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+// TODO: ObjectManager 제거
 public class ObjectManager
 {
     public bool Initialized { get; protected set; }

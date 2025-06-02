@@ -28,6 +28,7 @@ public class UI_HeroList : UI_Base
         Bind<GameObject>(typeof(GameObjects));
         _rectTransform = GetComponent<RectTransform>();
         _offscreenY = _rectTransform.rect.height;
+        _rectTransform.anchoredPosition = new Vector2(0, _offscreenY);
 
         GetButton(Buttons.Button_Close).onClick.AddListener(Close);
         _heroDetailParent = GetGameObject(GameObjects.Contents).transform;

@@ -25,6 +25,7 @@ public class DataManager
 
     public Dictionary<AreaName, AreaData> AreaDataDict { get; private set; }
     public Dictionary<int, QuestData> QuestDataDict { get; private set; }
+    public Dictionary<ItemType, StoreData> StoreDataDict { get; private set; }
 
     public void Init()
     {
@@ -37,6 +38,7 @@ public class DataManager
         ArmorDataDict = LoadJson<ArmorDataLoader, int, ArmorData>("ArmorData").MakeDict();
         AreaDataDict = LoadJson<AreaDataSet, AreaName, AreaData>("AreaData").MakeDict();
         QuestDataDict = LoadJson<QuestDataLoader, int, QuestData>("QuestData").MakeDict();
+        StoreDataDict = LoadJson<StoreDataLoader, ItemType, StoreData>("StoreData").MakeDict();
 
         InitItemDataDict();
     }
