@@ -153,7 +153,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         if (_slotDesignSpriteOnMouseEnter) _slotDesign.sprite = _slotDesignSpriteOnMouseEnter;
         if (ItemInstanceData != null)
         {
-            var detailUI = Managers.UIMng.ShowPopupUI<UI_ItemDetail>();
+            var detailUI = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
             detailUI.HideInstantly();
             detailUI.ApplyDesign(ItemInstanceData);
             detailUI.ShowInstantly();
@@ -163,12 +163,12 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerExit(PointerEventData eventData)
     {
         _slotDesign.sprite = _slotDesignSprite;
-        Managers.UIMng.ClosePopupUI<UI_ItemDetail>();
+        Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Managers.UIMng.ClosePopupUI<UI_ItemDetail>();
+        Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             OnClickAction?.Invoke(this);

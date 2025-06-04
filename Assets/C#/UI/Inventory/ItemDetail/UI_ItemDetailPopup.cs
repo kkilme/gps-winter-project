@@ -5,8 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
 
-
-public class UI_ItemDetail : UI_Popup
+/// <summary>
+/// 인벤토리 등에서 아이템의 상세 정보를 보여주는 팝업 UI.
+/// </summary>
+public class UI_ItemDetailPopup : UI_Popup
 {
     enum Images
     {

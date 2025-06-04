@@ -74,7 +74,7 @@ public class UI_HeroList : UI_Base
     public void Close()
     {
         Managers.TownMng.UI.CurrentOpenUI = null;
-        Managers.UIMng.ClosePopupUI<UI_EquipmentSelectWindow>();
+        Managers.UIMng.ClosePopupUI<UI_EquipmentSelectPopup>();
         Hide();
     }
 

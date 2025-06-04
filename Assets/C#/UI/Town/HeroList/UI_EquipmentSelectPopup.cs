@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 영웅 장비 장착 UI
+/// 영웅에게 장착할 장비 선택에 사용되는 인벤토리형 팝업 UI.
 /// </summary>
-public class UI_EquipmentSelectWindow : UI_Popup
+public class UI_EquipmentSelectPopup : UI_Popup
 {
     enum GameObjects
     {

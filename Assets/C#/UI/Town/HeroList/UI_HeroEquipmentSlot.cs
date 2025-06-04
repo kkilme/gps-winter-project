@@ -89,7 +89,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         if (_slotSpriteOnMouseEnter) _slotImage.sprite = _slotSpriteOnMouseEnter;
         if (_equipmentInstance != null)
         {
-            UI_ItemDetail itemDetail = Managers.UIMng.ShowPopupUI<UI_ItemDetail>();
+            UI_ItemDetailPopup itemDetail = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
             itemDetail.HideInstantly();
             itemDetail.ApplyDesign(_equipmentInstance);
             itemDetail.ShowInstantly();
@@ -99,19 +99,19 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
     public void OnPointerExit(PointerEventData eventData)
     {
         if (_slotSpriteOnMouseEnter) _slotImage.sprite = _slotSprite;
-        Managers.UIMng.ClosePopupUI<UI_ItemDetail>();
+        Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         // 이미 열린 장비 선택 창이 있다면 닫기
-        Managers.UIMng.ClosePopupUI<UI_EquipmentSelectWindow>();
+        Managers.UIMng.ClosePopupUI<UI_EquipmentSelectPopup>();
 
         // 장비 선택 창 띄우기
-        UI_EquipmentSelectWindow equipmentSelectWindow = Managers.UIMng.ShowPopupUI<UI_EquipmentSelectWindow>();
+        UI_EquipmentSelectPopup equipmentSelectWindow = Managers.UIMng.ShowPopupUI<UI_EquipmentSelectPopup>();
         equipmentSelectWindow.LateInit(this, _equipmentType);
 
-        Managers.UIMng.ClosePopupUI<UI_ItemDetail>();
+        Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
     }
 
     // 장비 선택 창에서 장비를 선택하면 호출됨

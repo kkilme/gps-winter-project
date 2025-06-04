@@ -7,7 +7,7 @@ using DG.Tweening;
 
 public abstract class ItemDetailDesign
 {
-    public void Apply(UI_ItemDetail ui, ItemInstanceData itemInstanceData, int quantity = 0)
+    public void Apply(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)
     {
         // UI_ForceInsideScreen는 ItemDetailUI의 위치를 계속 설정하는데, 디자인 적용이 끝나야만 ItemDetailUI의 RectTransform 값이 제대로 설정되어 올바른 위치가 결정됨.
         // CanvasGroup을 통해 Design 적용이 끝났을 때 자연스럽게 보이도록 함.
@@ -19,7 +19,7 @@ public abstract class ItemDetailDesign
         canvasGroup.DOFade(1f, 0.2f).SetEase(Ease.OutSine);
     }
 
-    protected virtual void ApplyDesign(UI_ItemDetail ui, ItemInstanceData itemInstanceData, int quantity = 0)
+    protected virtual void ApplyDesign(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)
     {
         ApplyName(ui, itemInstanceData);
         ApplyItemImage(ui, itemInstanceData);
@@ -29,30 +29,30 @@ public abstract class ItemDetailDesign
         ui.DisableEquippedHeroInfo();
     }
 
-    protected virtual void ApplyName(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
+    protected virtual void ApplyName(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData)
     {
         ui.SetName(itemInstanceData.ItemData.Name);
     }
 
-    protected virtual void ApplyItemImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
+    protected virtual void ApplyItemImage(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData)
     {
         ui.SetImage(itemInstanceData.ItemData.ImagePath);
     }
 
-    protected abstract void ApplyDescription(UI_ItemDetail ui, ItemInstanceData itemInstanceData);
+    protected abstract void ApplyDescription(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData);
 
-    protected abstract void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData);
+    protected abstract void ApplyItemTypeIconImage(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData);
 }
 
 public abstract class EquipmentItemDetailDesign : ItemDetailDesign
 {
-    protected override void ApplyDesign(UI_ItemDetail ui, ItemInstanceData itemInstanceData, int quantity = 0)
+    protected override void ApplyDesign(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)
     {
         base.ApplyDesign(ui, itemInstanceData, quantity);
         ApplyEquippedHeroInfo(ui, itemInstanceData as EquipmentInstanceData);
     }
 
-    protected override void ApplyDescription(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
+    protected override void ApplyDescription(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData)
     {
         if (itemInstanceData is not EquipmentInstanceData equipmentInstanceData)
         {
@@ -93,7 +93,7 @@ public abstract class EquipmentItemDetailDesign : ItemDetailDesign
         ui.SetDescription(sb.ToString().TrimEnd());
     }
 
-    protected void ApplyEquippedHeroInfo(UI_ItemDetail ui, EquipmentInstanceData equipmentInstanceData)
+    protected void ApplyEquippedHeroInfo(UI_ItemDetailPopup ui, EquipmentInstanceData equipmentInstanceData)
     {
         if (equipmentInstanceData == null) return;
 
@@ -106,7 +106,7 @@ public abstract class EquipmentItemDetailDesign : ItemDetailDesign
 
 public class WeaponItemDetailDesign : EquipmentItemDetailDesign
 {
-    protected override void ApplyDescription(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
+    protected override void ApplyDescription(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData)
     {
         base.ApplyDescription(ui, itemInstanceData);
         if(itemInstanceData is not EquipmentInstanceData equipmentInstanceData) return;
@@ -123,7 +123,7 @@ public class WeaponItemDetailDesign : EquipmentItemDetailDesign
         ui.SetDescription(sb.ToString().TrimEnd());
     }
 
-    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
+    protected override void ApplyItemTypeIconImage(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData)
     {
         ui.SetItemTypeIcon("Default_Weapon"); // 무기 타입 별 다른 이미지 지정 가능
     }
@@ -131,7 +131,7 @@ public class WeaponItemDetailDesign : EquipmentItemDetailDesign
 
 public class ArmorItemDetailDesign : EquipmentItemDetailDesign
 {
-    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
+    protected override void ApplyItemTypeIconImage(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData)
     {
         ui.SetItemTypeIcon("Default_Armor"); // 방어구 부위별 다른 이미지 지정 가능. 맞는 애셋이 없어서 보류.
     }
@@ -139,7 +139,7 @@ public class ArmorItemDetailDesign : EquipmentItemDetailDesign
 
 public class ConsumableItemDetailDesign : ItemDetailDesign
 {
-    protected override void ApplyDescription(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
+    protected override void ApplyDescription(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData)
     {
         if(itemInstanceData is not ConsumableItemInstanceData consumableItemInstanceData)
         {
@@ -150,7 +150,7 @@ public class ConsumableItemDetailDesign : ItemDetailDesign
         ui.SetDescription(consumableItemInstanceData.ConsumableItemData.Description);
     }
 
-    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData)
+    protected override void ApplyItemTypeIconImage(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData)
     {
         ui.SetItemTypeIcon("Default_Consumable");
     }
@@ -159,7 +159,7 @@ public class ConsumableItemDetailDesign : ItemDetailDesign
 // 골드만을 위한 특수 디자인
 public class GoldDetailDesign : ItemDetailDesign
 {
-    protected override void ApplyDesign(UI_ItemDetail ui, ItemInstanceData itemInstanceData, int quantity = 0)
+    protected override void ApplyDesign(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)
     {
         ui.SetName("Gold");
         ui.SetImage("Gold");
@@ -169,6 +169,6 @@ public class GoldDetailDesign : ItemDetailDesign
     }
 
     // 골드는 itemInstanceData가 없으므로 아래 메서드는 사용하지 않음
-    protected override void ApplyDescription(UI_ItemDetail ui, ItemInstanceData itemInstanceData) { }
-    protected override void ApplyItemTypeIconImage(UI_ItemDetail ui, ItemInstanceData itemInstanceData) { }
+    protected override void ApplyDescription(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData) { }
+    protected override void ApplyItemTypeIconImage(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData) { }
 }
