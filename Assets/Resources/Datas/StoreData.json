@@ -3,20 +3,20 @@
     {
       "ItemType": "Weapon",
       "StoreEntries": [
-        { "ItemDataId": 201000, "Price": 100, "Stock": -1 },
-        { "ItemDataId": 201002, "Price": 100, "Stock": -1 }
+        { "ItemDataId": 201000, "Price": 100, "HasStockLimit": false },
+        { "ItemDataId": 201002, "Price": 100, "HasStockLimit": false }
       ]
     },
     {
       "ItemType": "Armor",
       "StoreEntries": [
-        { "ItemDataId": 202000, "Price": 300, "Stock": -1 }
+        { "ItemDataId": 202000, "Price": 300, "HasStockLimit": false }
       ]
     },
     {
       "ItemType": "Consumable",
       "StoreEntries": [
-        { "ItemDataId": 301000, "Price": 50, "Stock": 10 },
+        { "ItemDataId": 301000, "Price": 50, "HasStockLimit": true, "Stock": 10 },
       ]
     },
   ]

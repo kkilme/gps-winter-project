@@ -143,6 +143,8 @@ public class UIManager
         GameObject go = Managers.ResourceMng.Instantiate($"UI/PopupUI/{path}");
         T popupUI = GlobalUtility.GetOrAddComponent<T>(go);
 
+        Canvas canvas = GlobalUtility.GetOrAddComponent<Canvas>(go);
+        canvas.sortingOrder = _order++;
         PopupUIs.Add(popupUI);
         
         SetUIParent(go, Root.transform);

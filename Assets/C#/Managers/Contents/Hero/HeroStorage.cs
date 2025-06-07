@@ -59,7 +59,7 @@ public class HeroStorage
         if (_ownedHeroes.TryGetValue(heroInstanceId, out HeroInstanceData savedHeroData)
             && Managers.InvMng.IsValidEquipment(equipmentInstanceId, type))
         {
-            EquipmentInstanceData equipmentInstance = Managers.InvMng.SavedItemDatas[equipmentInstanceId] as EquipmentInstanceData;
+            EquipmentInstanceData equipmentInstance = Managers.InvMng.ItemDict[equipmentInstanceId] as EquipmentInstanceData;
             if (equipmentInstance.IsEquipped)
             {
                 UnEquipEquipment(equipmentInstance.EquippedHeroId, type); // 이미 다른 영웅이 장착중인 경우 해당 영웅에서 해제
@@ -142,7 +142,7 @@ public class HeroStorage
         {
             UnEquipWeapon(heroInstanceId); // 기존 무기 해제
 
-            EquipmentInstanceData weaponInstance = Managers.InvMng.SavedItemDatas[weaponInstanceId] as EquipmentInstanceData;
+            EquipmentInstanceData weaponInstance = Managers.InvMng.ItemDict[weaponInstanceId] as EquipmentInstanceData;
             savedHeroData.Weapon = weaponInstance;
             savedHeroData.Stat.AddEquipmentStat(weaponInstance.EquipmentData);
         }
@@ -179,7 +179,7 @@ public class HeroStorage
         {
             UnEquipArmor(heroInstanceId, type); // 기존 방어구 해제
 
-            EquipmentInstanceData armorInstance = Managers.InvMng.SavedItemDatas[armorInstanceId] as EquipmentInstanceData;
+            EquipmentInstanceData armorInstance = Managers.InvMng.ItemDict[armorInstanceId] as EquipmentInstanceData;
             savedHeroData.Armors[type] = armorInstance;
             savedHeroData.Stat.AddEquipmentStat(armorInstance.EquipmentData);
         }

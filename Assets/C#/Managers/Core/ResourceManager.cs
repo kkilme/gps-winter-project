@@ -9,7 +9,7 @@ public class ResourceManager
     {
         // 각종 static 클래스의 init
         DamageTextFactory.Init();
-        ItemDetailUIDesigner.Init();
+        ItemDetailUIFactory.Init();
     }
 
     // Resources폴더를 시작 위치로 path에 해당하는 에셋 파일을 로드하여 T 타입으로 반환

@@ -12,9 +12,10 @@ public class GameStarter
     {
         AddStartHeroes();
         AddStartItems();
+        AddStartGold();
     }
 
-    public void AddStartHeroes()
+    private void AddStartHeroes()
     {
         for (int i = 0; i < 2; i++)
         {
@@ -32,10 +33,15 @@ public class GameStarter
         }
     }
 
-    public void AddStartItems()
+    private void AddStartItems()
     {
         Managers.InvMng.AddItem(GlobalValues.ITEM_HEALPOTION_ID, 13);
         Managers.InvMng.AddItem(GlobalValues.ARMOR_SAMPLEBODY1_ID, 2);
     }
-    
+
+    private void AddStartGold()
+    {
+        Managers.InvMng.AddGold(3000);
+    }
+
 }

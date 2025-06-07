@@ -15,7 +15,8 @@ public class StoreEntryData
 {
     public int ItemDataId; // 아이템의 DataId
     public int Price; // 상점에서의 가격
-    public int Stock; // 재고량
+    public bool HasStockLimit = false; // 재고 제한이 있는지 여부 (무제한 재고는 false로 설정)
+    public int Stock; // (재고가 무제한이 아닐 시)재고량
 }
 
 [Serializable]

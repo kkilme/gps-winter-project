@@ -4,23 +4,25 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// 플레이어가 소유한 모든 아이템 관리.
+/// 플레이어가 소유한 모든 아이템, 재화 관리.
 /// </summary>
 public class InventoryManager
 {
     private int _nextInstanceId = 0;
-    public Dictionary<int, ItemInstanceData> SavedItemDatas { get; private set; } = new Dictionary<int, ItemInstanceData>();
-    public List<ItemInstanceData> SavedItemDataList => SavedItemDatas.Values.ToList();
+    public int Gold { get; private set; } = 0; // 플레이어가 소유한 골드
+    public Dictionary<int, ItemInstanceData> ItemDict { get; private set; } = new Dictionary<int, ItemInstanceData>(); // key: instanceId, value: ItemData
+    public List<ItemInstanceData> ItemList => ItemDict.Values.ToList();
 
-    public void AddItem(int dataId, int quantity = 1)
+    #region Item
+    public void AddItem(int itemDataId, int quantity = 1)
     {
-        if(!Managers.DataMng.ItemDataDict.TryGetValue(dataId, out ItemData itemData))
+        if(!Managers.DataMng.ItemDataDict.TryGetValue(itemDataId, out ItemData itemData))
         {
-            Debug.LogError($"[InventoryManager] Could not add item with dataId: {dataId}. No such item data exists.");
+            Debug.LogError($"[InventoryManager] Could not add item with itemDataId: {itemDataId}. No such item data exists.");
             return;
         }
 
-        ItemInstanceData savedItemData = SavedItemDataList.Find(e => e.ItemDataId == dataId);
+        ItemInstanceData savedItemData = ItemList.Find(e => e.ItemDataId == itemDataId);
 
         if (savedItemData != null && savedItemData is ConsumableItemInstanceData consumableItemData)
         {
@@ -31,52 +33,81 @@ public class InventoryManager
             switch(itemData.ItemType)
             {
                 case ItemType.Consumable:
-                    SavedItemDatas.Add(_nextInstanceId, new ConsumableItemInstanceData(dataId, _nextInstanceId++, quantity));
+                    ItemDict.Add(_nextInstanceId, new ConsumableItemInstanceData(itemDataId, _nextInstanceId++, quantity));
                     break;
                 case ItemType.Weapon:
                 case ItemType.Armor:
                     for(int i = 0; i < quantity; i++)
                     {
-                        SavedItemDatas.Add(_nextInstanceId, new EquipmentInstanceData(dataId, _nextInstanceId++));
+                        ItemDict.Add(_nextInstanceId, new EquipmentInstanceData(itemDataId, _nextInstanceId++));
                     }
                     break;
                 default:
-                    Debug.LogError($"[InventoryManager] Could not add item with dataId: {dataId}. Unknown item type: {itemData.ItemType}.");
+                    Debug.LogError($"[InventoryManager] Could not add item with itemDataId: {itemDataId}. Unknown item type: {itemData.ItemType}.");
                     return;
             }
         }
     }
 
+    public void RemoveItem(int instanceId, int quantity = 1)
+    {
+        if (!ItemDict.TryGetValue(instanceId, out ItemInstanceData itemData))
+        {
+            Debug.LogError($"[InventoryManager] Could not remove item with instanceId: {instanceId}. No such item exists.");
+            return;
+        }
+
+        if (itemData is ConsumableItemInstanceData consumableItemData)
+        {
+            if(consumableItemData.Quantity < quantity)
+            {
+                Debug.LogError($"[InventoryManager] Not enough quantity to remove. Requested: {quantity}, Available: {consumableItemData.Quantity}");
+                return;
+            }
+
+            consumableItemData.Quantity -= quantity;
+            if (consumableItemData.Quantity <= 0)
+            {
+                ItemDict.Remove(instanceId);
+            }
+        }
+        else
+        {
+            ItemDict.Remove(instanceId);
+        }
+    }
+
     public ItemInstanceData GetItemByDataId(int dataId)
     {
-        return SavedItemDataList.FirstOrDefault(e => e.ItemDataId == dataId);
+        return ItemList.FirstOrDefault(e => e.ItemDataId == dataId);
     }
 
     public EquipmentInstanceData GetUnequippedEquipment(int dataId)
     {
-        return SavedItemDataList
+        return ItemList
             .Where(e => e is EquipmentInstanceData equipment && equipment.EquippedHeroId == -1 && e.ItemDataId == dataId)
             .Select(e => (EquipmentInstanceData)e)
             .FirstOrDefault();
     }
 
+    /// <summary>
+    /// 특정 아이템 타입에 해당하는 모든 아이템을 반환.
+    /// </summary>
     public List<ItemInstanceData> GetAllItemsOfType(ItemType itemType)
     {
-        return SavedItemDataList
+        return ItemList
             .Where(e => e.ItemType == itemType)
             .ToList();
     }
 
+    /// <summary>
+    /// 특정 장비 타입에 해당하는 모든 장비 아이템을 반환.
+    /// </summary>
     public List<ItemInstanceData> GetAllEquipmentOfType(EquipmentType equipmentType)
     {
-        return SavedItemDataList
+        return ItemList
             .Where(e => e is EquipmentInstanceData equipment && equipment.EquipmentType == equipmentType)
             .ToList();
-    }
-
-    public bool HaveItem(int dataId, int quantity = 1)
-    {
-       return SavedItemDataList.Any(e => e.ItemDataId == dataId && (e is ConsumableItemInstanceData consumable ? consumable.Quantity >= quantity : true));
     }
 
     /// <summary>
@@ -84,7 +115,7 @@ public class InventoryManager
     /// </summary>
     public bool IsValidEquipment(int instanceId, EquipmentType type)
     {
-        if(!SavedItemDatas.TryGetValue(instanceId, out ItemInstanceData itemData))
+        if(!ItemDict.TryGetValue(instanceId, out ItemInstanceData itemData))
         {
             Debug.LogError($"[InventoryManager] Invalid instanceId: {instanceId}");
             return false;
@@ -104,4 +135,31 @@ public class InventoryManager
 
         return true;
     }
+    #endregion
+    #region Currency
+    public void AddGold(int amount)
+    {
+        if(amount < 0)
+        {
+            Debug.LogError("[InventoryManager] Cannot add negative gold amount.");
+            return;
+        }
+        Gold += amount;
+    }
+
+    public void RemoveGold(int amount)
+    {
+        if(amount < 0)
+        {
+            Debug.LogError("[InventoryManager] Cannot remove negative gold amount.");
+            return;
+        }
+        if(Gold < amount)
+        {
+            Debug.LogError("[InventoryManager] Not enough gold to remove.");
+            return;
+        }
+        Gold -= amount;
+    }
+    #endregion
 }

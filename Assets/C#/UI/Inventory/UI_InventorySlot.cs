@@ -5,6 +5,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
+/// <summary>
+/// 인벤토리에서 한 칸의 슬롯 UI를 담당.
+/// </summary>
 public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     enum Texts
@@ -47,18 +50,18 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     public Action<UI_InventorySlot> OnClickAction;
 
     private TextMeshProUGUI _quantityText;
-    private Image _contentImage;
-    private GameObject _detailParent;
-    private GameObject _quantityParent;
-    private GameObject _equippedFlag;
+    private Image _contentImage; // 실제 아이템 또는 내용물 이미지
+    private GameObject go_detailParent;
+    private GameObject go_quantityParent;
+    private GameObject go_equippedFlag;
 
-    private Image _slotDesign;
-    private static Sprite _slotDesignSprite;
-    private static Sprite _slotDesignSpriteOnMouseEnter;
+    private Image _slotImage; // 슬롯의 배경 이미지
+    private static Sprite sp_slotImage;
+    private static Sprite sp_slotImageOnMouseEnter;
 
     public override void Init() { }
 
-    public void LateInit(string slotSpriteOnMouseEnterPath, Action<UI_InventorySlot> onClickAction, Sprite defaultSprite = null, bool isCustomSlot = false)
+    public void LateInit(string slotSpriteOnMouseEnterPath, Action<UI_InventorySlot> onClickAction, Sprite defaultContentSprite = null, bool isCustomSlot = false)
     {
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<Image>(typeof(Images));
@@ -66,13 +69,13 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
         _quantityText = GetText(Texts.Text_Quantity);
         _contentImage = GetImage(Images.Image_Item);
-        _detailParent = GetGameObject(GameObjects.Detail);
-        _quantityParent = GetGameObject(GameObjects.Quantity);
-        _equippedFlag = GetGameObject(GameObjects.Flag_Equipped);
-        _slotDesign = GetComponent<Image>();
+        go_detailParent = GetGameObject(GameObjects.Detail);
+        go_quantityParent = GetGameObject(GameObjects.Quantity);
+        go_equippedFlag = GetGameObject(GameObjects.Flag_Equipped);
+        _slotImage = GetComponent<Image>();
 
-        if (_slotDesignSprite == null) _slotDesignSprite = _slotDesign.sprite;
-        if (_slotDesignSpriteOnMouseEnter == null) _slotDesignSpriteOnMouseEnter = Managers.ResourceMng.Load<Sprite>(slotSpriteOnMouseEnterPath);
+        if (sp_slotImage == null) sp_slotImage = _slotImage.sprite;
+        if (sp_slotImageOnMouseEnter == null) sp_slotImageOnMouseEnter = Managers.ResourceMng.Load<Sprite>(slotSpriteOnMouseEnterPath);
         OnClickAction -= onClickAction;
         OnClickAction += onClickAction;
         _isCustomSlot = isCustomSlot;
@@ -80,7 +83,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         AdjustQuantityRectSize();
         HideDetail();
 
-        if (defaultSprite != null) ShowContentImageOnly(); _contentImage.sprite = defaultSprite;
+        if (defaultContentSprite != null) ShowContentImageOnly(); _contentImage.sprite = defaultContentSprite;
     }
 
     /// <summary>
@@ -88,8 +91,8 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     private void AdjustQuantityRectSize()
     {
-        RectTransform qualityRect = _quantityParent.GetComponent<RectTransform>();
-        RectTransform equippedFlagRect = _equippedFlag.GetComponent<RectTransform>();
+        RectTransform qualityRect = go_quantityParent.GetComponent<RectTransform>();
+        RectTransform equippedFlagRect = go_equippedFlag.GetComponent<RectTransform>();
 
         GridLayoutGroup gridLayout = GetComponentInParent<GridLayoutGroup>();
         float cellWidth = gridLayout.cellSize.x;
@@ -106,26 +109,25 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         ItemInstanceData = itemInstanceData;
         Quantity = quantity;
 
-        //_itemImage.GetComponent<RectTransform>().sizeDelta = new Vector2(_rect.sizeDelta.x - 8, _rect.sizeDelta.y - 8);
         _contentImage.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + ItemData.ImagePath);
 
-        _detailParent.SetActive(true);
-        if (ItemInstanceData.ItemType == ItemType.Consumable) // 개수 표시는 소모품에만
+        go_detailParent.SetActive(true);
+        if (ItemInstanceData.ItemType == ItemType.Consumable) // 개수 표시는 현재 소모품에만
         {
-            _quantityParent.SetActive(true);
+            go_quantityParent.SetActive(true);
         }
         else
         {
-            _quantityParent.SetActive(false);
+            go_quantityParent.SetActive(false);
         }
 
         if(itemInstanceData is EquipmentInstanceData equipmentInstanceData)
         {
-            _equippedFlag.SetActive(equipmentInstanceData.IsEquipped);
+            go_equippedFlag.SetActive(equipmentInstanceData.IsEquipped);
         }
         else
         {
-            _equippedFlag.SetActive(false);
+            go_equippedFlag.SetActive(false);
         }
     }
 
@@ -138,31 +140,28 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
     private void ShowContentImageOnly()
     {
-        _detailParent.SetActive(true);
-        _quantityParent.SetActive(false);
-        _equippedFlag.SetActive(false);
+        go_detailParent.SetActive(true);
+        go_quantityParent.SetActive(false);
+        go_equippedFlag.SetActive(false);
     }
 
     private void HideDetail()
     {
-        _detailParent.SetActive(false);
+        go_detailParent.SetActive(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (_slotDesignSpriteOnMouseEnter) _slotDesign.sprite = _slotDesignSpriteOnMouseEnter;
+        if (sp_slotImageOnMouseEnter) _slotImage.sprite = sp_slotImageOnMouseEnter;
         if (ItemInstanceData != null)
         {
-            var detailUI = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
-            detailUI.HideInstantly();
-            detailUI.ApplyDesign(ItemInstanceData);
-            detailUI.ShowInstantly();
+            ItemDetailUIFactory.CreateItemDetailUI(ItemInstanceData);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _slotDesign.sprite = _slotDesignSprite;
+        _slotImage.sprite = sp_slotImage;
         Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
     }
 

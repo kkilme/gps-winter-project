@@ -39,18 +39,6 @@ public class UI_ItemDetailPopup : UI_Popup
         Bind<GameObject>(typeof(GameObjects));
     }
 
-    public void ApplyDesign(ItemInstanceData itemInstanceData, int quantity = 0)
-    {
-        ItemDetailDesign design = ItemDetailUIDesigner.GetDesign(itemInstanceData.ItemType);
-        design.Apply(this, itemInstanceData, quantity);
-    }
-
-    public void ApplyGoldDesign(int goldAmount)
-    {
-        ItemDetailDesign design = ItemDetailUIDesigner.GetGoldDesign();
-        design.Apply(this, null, goldAmount);
-    }
-
     public void SetName(string name) => GetText(Texts.Text_ItemName).text = name;
     public void SetItemTypeIcon(string iconPath) => GetImage(Images.Image_ItemTypeIcon).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMICON_PATH_PREFIX + iconPath);
     public void SetImage(string imagePath) => GetImage(Images.Image_ItemImage).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + imagePath);

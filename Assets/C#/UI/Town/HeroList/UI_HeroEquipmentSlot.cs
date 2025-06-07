@@ -89,10 +89,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         if (_slotSpriteOnMouseEnter) _slotImage.sprite = _slotSpriteOnMouseEnter;
         if (_equipmentInstance != null)
         {
-            UI_ItemDetailPopup itemDetail = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
-            itemDetail.HideInstantly();
-            itemDetail.ApplyDesign(_equipmentInstance);
-            itemDetail.ShowInstantly();
+            ItemDetailUIFactory.CreateItemDetailUI(_equipmentInstance);
         }
     }
 

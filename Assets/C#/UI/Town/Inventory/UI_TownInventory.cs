@@ -121,6 +121,7 @@ public class UI_TownInventory : UI_Base
     public override Tween Show()
     {
         gameObject.SetActive(true);
+        ShowTab(InventoryTab.Tab_Weapons);
         return _rectTransform.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutCubic).OnComplete(() => { GetButton(Buttons.Button_Close).interactable = true; });
     }
 
