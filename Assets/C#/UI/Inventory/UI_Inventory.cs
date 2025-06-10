@@ -11,28 +11,26 @@ using System;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class UI_Inventory : UI_Base
 {
-    public List<UI_InventorySlot> InventorySlots { get; private set; } = new(); // slot의 제한(인벤토리 크기)은 현재 없음
+    public List<UI_InventorySlot> InventorySlots { get; private set; } = new(); // 인벤토리 크기 제한은 현재 없음
 
-    private Action<UI_InventorySlot> _onSlotClickAction; // 기본적으로 슬롯 클릭 시 호출되는 액션
-
-    private string _inventorySlotPath; // UI/SubItemUI/ 이하의 인벤토리 슬롯 프리팹 경로
-    private string _slotSpriteOnMouseEnterPath; // 슬롯 마우스 오버 시 이미지 경로
+    private Action<UI_InventorySlot> _onSlotClickAction; // 슬롯 클릭 시 호출되는 액션. 새 슬롯 추가될 때 사용할 수 있도록 저장해둠.
+    private InventorySlotDesign _slotDesign; // 슬롯의 디자인 정보. 기본적으로는 DefaultInventorySlotDesign 사용.
 
     public override void Init() { }
 
-    public void LateInit(Action<UI_InventorySlot> onSlotClickAction = null,
-                        string slotPrefabPath = "Town/UI_InventorySlot_TownInventory", 
-                        string slotSpriteOnMouseEnterPath = "Textures/Others/ItemSlot_Selected") // 인벤토리 디자인이 다양해지면 슬롯 디자인을 따로 클래스로 분리하는 게 나아보임
+    public void LateInit(Action<UI_InventorySlot> onSlotClickAction = null, InventorySlotDesign slotDesign = null) 
     {
         _onSlotClickAction = onSlotClickAction;
-        _inventorySlotPath = slotPrefabPath;
-        _slotSpriteOnMouseEnterPath = slotSpriteOnMouseEnterPath;
+
+        slotDesign ??= new DefaultInventorySlotDesign(); // 디자인을 지정하지 않을 시 기본 슬롯 디자인 사용
+        _slotDesign = slotDesign;
+
 
         // 이미 존재하는 슬롯들 할당 및 초기화
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
             UI_InventorySlot slot = gameObject.transform.GetChild(i).GetOrAddComponent<UI_InventorySlot>();
-            slot.LateInit(slotSpriteOnMouseEnterPath, onSlotClickAction);
+            slot.LateInit(onSlotClickAction, slotDesign);
             InventorySlots.Add(slot);
         }
     }
@@ -42,16 +40,16 @@ public class UI_Inventory : UI_Base
     /// </summary>
     public void AddEmptySlot()
     {
-        UI_InventorySlot slot = Managers.UIMng.MakeSubItemUI<UI_InventorySlot>(transform, _inventorySlotPath);
-        slot.LateInit(_slotSpriteOnMouseEnterPath, _onSlotClickAction);
+        UI_InventorySlot slot = Managers.UIMng.MakeSubItemUI<UI_InventorySlot>(transform, _slotDesign.GetSlotPrefabPath());
+        slot.LateInit(_onSlotClickAction, _slotDesign);
         InventorySlots.Add(slot);
     }
 
     /// <summary>
-    /// Item이 아닌 커스텀 슬롯을 추가.
+    /// 커스텀 슬롯 추가. 주로 아이템이 아닌 요소를 슬롯에 할당하기 위해 사용.
     /// </summary>
     /// <param name="onClickAction">커스텀 슬롯 클릭 시 실행 될 Action</param>
-    /// <param name="contentSprite">커스텀 슬롯의 Sprite</param>
+    /// <param name="contentSprite">커스텀 슬롯(내용물) 이미지의 Sprite</param>
     public void AddCustomSlot(Action<UI_InventorySlot> onClickAction, Sprite contentSprite = null)
     {
         UI_InventorySlot emptySlot = InventorySlots.Find(s => s.IsEmpty);
@@ -61,11 +59,12 @@ public class UI_Inventory : UI_Base
             emptySlot = InventorySlots[^1];
         }
 
-        emptySlot.LateInit(_slotSpriteOnMouseEnterPath, onClickAction, contentSprite, true);
+        emptySlot.LateInit(onClickAction, _slotDesign, true);
+        emptySlot.ForceSetContentSprite(contentSprite);
     }
 
     /// <summary>
-    /// 적절한 슬롯을 찾거나 생성하여 인벤토리 슬롯에 아이템을 바인딩.
+    /// 적절한 슬롯을 찾거나 생성하여 인벤토리 슬롯에 아이템 인스턴스를 바인딩.
     /// </summary>
     public void AddItemSlot(ItemInstanceData itemInstanceData)
     {
@@ -105,6 +104,9 @@ public class UI_Inventory : UI_Base
         }
     }
 
+    /// <summary>
+    /// 모든 인벤토리 슬롯에서 바인딩된 클릭 액션 모두 제거.
+    /// </summary>
     public void ClearActionCallbackOnSlots()
     {
         foreach (var slot in InventorySlots)
@@ -113,6 +115,9 @@ public class UI_Inventory : UI_Base
         }
     }
 
+    /// <summary>
+    /// 모든 인벤토리 슬롯에서 바인딩 된 특정 클릭 액션 제거.
+    /// </summary>
     public void RemoveActionCallbackOnSlots(Action<UI_InventorySlot> action)
     {
         foreach (var slot in InventorySlots)

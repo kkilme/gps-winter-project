@@ -44,6 +44,9 @@ public class UI_EquipmentSelectPopup : UI_Popup
         {
             inventory.AddItemSlot(item);
         }
+
+        ScrollRect scrollRect = GetComponentInChildren<ScrollRect>();
+        scrollRect.verticalNormalizedPosition = 1f; // 스크롤을 맨 위로 이동
     }
 
     /// <summary>

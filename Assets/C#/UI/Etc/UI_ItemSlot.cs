@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 
 /// <summary>
-/// UI_InventorySlot과 달리, 단순히 아이템을 바인딩하여 표시하는 UI. ItemInstanceData가 아닌 ItemData를 바인딩한다.
+/// UI_InventorySlot과 달리, 단순히 아이템 하나를 바인딩하여 표시하는 UI. ItemInstanceData가 아닌 ItemData를 바인딩한다.
 /// </summary>
 public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler
 {
@@ -23,6 +23,9 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler
         GetImage(Images.Image_Item).gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// ItemData 바인딩 및 해당 아이템의 이미지 표시.
+    /// </summary>
     public void BindItem(ItemData itemData)
     {
         _itemData = itemData;

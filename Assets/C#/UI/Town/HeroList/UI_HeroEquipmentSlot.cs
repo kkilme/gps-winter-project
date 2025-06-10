@@ -14,26 +14,21 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         Image_Equipment,
     }
 
-    private HeroInstanceData _heroInstance;
+    private HeroInstanceData _heroInstance; // 이 장비 슬롯을 소유한 영웅 인스턴스 데이터
     private int _heroInstanceId => _heroInstance?.InstanceId ?? -1;
 
-    private EquipmentInstanceData _equipmentInstance;
-    private EquipmentType _equipmentType;
+    private EquipmentInstanceData _equipmentInstance; // 이 장비 슬롯에 장착된 장비 인스턴스 데이터
+    private EquipmentType _equipmentType; // 이 장비 슬롯이 담당하는 장비 타입
 
-    private static Sprite _defaultSprite; // 빈 장비 슬롯에 들어갈 기본 스프라이트
+    private static InventorySlotDesign _slotDesign = new HeroEquipmentSlotDesign(); // 슬롯 디자인 정보. HeroEquipmentSlotDesign 사용
     private Image _slotImage;
-    private static Sprite _slotSprite;
-    private static Sprite _slotSpriteOnMouseEnter;
 
     public override void Init()
     {
-        _defaultSprite = Managers.ResourceMng.Load<Sprite>("Textures/PictoIcons/PictoIcon_Plus");
         Bind<Image>(typeof(Images));
 
         _slotImage = GetComponent<Image>();
-        if (_slotSprite == null) _slotSprite = _slotImage.sprite;
-        if (_slotSpriteOnMouseEnter == null) 
-            _slotSpriteOnMouseEnter = Managers.ResourceMng.Load<Sprite>("Textures/Others/ItemSlot_Selected");
+        _slotImage.sprite = _slotDesign.GetDefaultSlotSprite();
     }
 
     public void LateInit(HeroInstanceData heroInstance, EquipmentType type)
@@ -74,19 +69,18 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         }
         else
         {
-            GetImage(Images.Image_Equipment).sprite = _defaultSprite;
+            GetImage(Images.Image_Equipment).sprite = _slotDesign.GetDefaultContentSprite();
         }
     }
 
     public void UnbindEquipment()
     {
-        _equipmentInstance = null;
-        GetImage(Images.Image_Equipment).sprite = _defaultSprite;
+        BindEquipment(equipmentInstance: null);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (_slotSpriteOnMouseEnter) _slotImage.sprite = _slotSpriteOnMouseEnter;
+        _slotImage.sprite = _slotDesign.GetSlotSpriteOnMouseOver();
         if (_equipmentInstance != null)
         {
             ItemDetailUIFactory.CreateItemDetailUI(_equipmentInstance);
@@ -95,7 +89,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (_slotSpriteOnMouseEnter) _slotImage.sprite = _slotSprite;
+        _slotImage.sprite = _slotDesign.GetDefaultSlotSprite();
         Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
     }
 

@@ -49,7 +49,7 @@ public static class GlobalValues
     public const string HERO_ANIMATOR_PATH_PREFIX = "Animators/Heroes/";
 
     public const string ACTIONICON_PATH_PREFIX = "Textures/ActionIcons/";
-    public const string CREATURE_IMAGE_PATH_PREFIX = "Textures/Model_Sprites/";
+    public const string CREATURE_IMAGE_PATH_PREFIX = "Textures/ModelSprites/";
     public const string ITEMIMAGE_PATH_PREFIX = "Textures/ItemImages/";
     public const string ITEMICON_PATH_PREFIX = "Textures/ItemIcons/";
     public const string COLORGRADIENT_PATH_PREFIX = "Textures/TMP_ColorGradients/";

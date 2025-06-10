@@ -29,7 +29,11 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
     public ItemInstanceData ItemInstanceData { get; private set; }
     public ItemData ItemData => ItemInstanceData?.ItemData;
+
+    private InventorySlotDesign _slotDesign; // 슬롯 디자인 정보
+
     private int _quantity;
+    private TextMeshProUGUI _quantityText;
     public int Quantity { 
         get => _quantity; 
         set 
@@ -44,24 +48,22 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
             _quantity = value;
         } 
     }
+
     public bool IsEmpty => ItemInstanceData == null && !_isCustomSlot;
     private bool _isCustomSlot;
 
     public Action<UI_InventorySlot> OnClickAction;
 
-    private TextMeshProUGUI _quantityText;
-    private Image _contentImage; // 실제 아이템 또는 내용물 이미지
     private GameObject go_detailParent;
     private GameObject go_quantityParent;
     private GameObject go_equippedFlag;
 
+    private Image _contentImage; // 실제 아이템 또는 내용물 이미지
     private Image _slotImage; // 슬롯의 배경 이미지
-    private static Sprite sp_slotImage;
-    private static Sprite sp_slotImageOnMouseEnter;
 
     public override void Init() { }
 
-    public void LateInit(string slotSpriteOnMouseEnterPath, Action<UI_InventorySlot> onClickAction, Sprite defaultContentSprite = null, bool isCustomSlot = false)
+    public void LateInit(Action<UI_InventorySlot> onClickAction, InventorySlotDesign slotDesign, bool isCustomSlot = false)
     {
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<Image>(typeof(Images));
@@ -74,16 +76,30 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         go_equippedFlag = GetGameObject(GameObjects.Flag_Equipped);
         _slotImage = GetComponent<Image>();
 
-        if (sp_slotImage == null) sp_slotImage = _slotImage.sprite;
-        if (sp_slotImageOnMouseEnter == null) sp_slotImageOnMouseEnter = Managers.ResourceMng.Load<Sprite>(slotSpriteOnMouseEnterPath);
         OnClickAction -= onClickAction;
         OnClickAction += onClickAction;
+        _slotDesign = slotDesign;
         _isCustomSlot = isCustomSlot;
 
         AdjustQuantityRectSize();
         HideDetail();
 
-        if (defaultContentSprite != null) ShowContentImageOnly(); _contentImage.sprite = defaultContentSprite;
+        Sprite defaultContentSprite = _slotDesign.GetDefaultContentSprite();
+        if(defaultContentSprite != null)
+        {
+            _contentImage.sprite = defaultContentSprite;
+            ShowContentImageOnly();
+        }
+    }
+
+    /// <summary>
+    /// Content 이미지 강제 설정. 커스텀 슬롯에서 InventorySlotDesign의 DefaultContentSprite를 무시하기 위해 사용.
+    /// </summary>
+    public void ForceSetContentSprite(Sprite contentSprite)
+    {
+        if (contentSprite == null) return;
+        _contentImage.sprite = contentSprite;
+        ShowContentImageOnly();
     }
 
     /// <summary>
@@ -152,7 +168,8 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (sp_slotImageOnMouseEnter) _slotImage.sprite = sp_slotImageOnMouseEnter;
+        Sprite mouseOverSprite = _slotDesign.GetSlotSpriteOnMouseOver();
+        if (mouseOverSprite) _slotImage.sprite = mouseOverSprite;
         if (ItemInstanceData != null)
         {
             ItemDetailUIFactory.CreateItemDetailUI(ItemInstanceData);
@@ -161,7 +178,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _slotImage.sprite = sp_slotImage;
+        _slotImage.sprite = _slotDesign.GetDefaultSlotSprite();
         Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
     }
 
