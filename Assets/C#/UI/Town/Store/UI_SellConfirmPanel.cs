@@ -75,7 +75,6 @@ public class UI_SellConfirmPanel : UI_Base
         _itemInstanceData = itemInstanceData;
         SetQuantity(1);
         GetText(Texts.Text_ItemName).text = itemInstanceData.ItemData.Name;
-        Debug.Log(itemInstanceData.ItemData.Name);
         Get<UI_ItemSlot>(ItemSlot.UI_ItemSlot).BindItem(itemInstanceData.ItemData);
         GetText(Texts.Text_Stock).text = "Stock: " + itemInstanceData.Quantity.ToString("N0");
 

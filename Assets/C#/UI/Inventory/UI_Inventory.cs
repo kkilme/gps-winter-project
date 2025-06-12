@@ -24,7 +24,7 @@ public class UI_Inventory : UI_Base
     {
         _scrollRect = GetComponentInParent<ScrollRect>();
 
-        ShowInstantly(); // 일부 요소는 게임 오브젝트가 비활성화 상태일 시 초기화가 실패하므로 꼭 활성화해주어야 함
+        ShowInstantly(); // 일부 요소는 게임 오브젝트가 비활성화 상태일 시 초기화가 실패하므로 꼭 활성화해주어야 함. 비활성화는 LateInit을 호출하는 클래스의 몫임.
         _onSlotClickAction = onSlotClickAction;
 
         slotDesign ??= new DefaultInventorySlotDesign(); // 디자인을 지정하지 않을 시 기본 슬롯 디자인 사용
@@ -38,8 +38,6 @@ public class UI_Inventory : UI_Base
             slot.LateInit(onSlotClickAction, slotDesign);
             InventorySlots.Add(slot);
         }
-
-        HideInstantly();
     }
 
     /// <summary>

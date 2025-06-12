@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;   
 
+/// <summary>
+/// HeroList UI에서 한 영웅의 상세 정보를 보여주는 UI
+/// </summary>
 public class UI_HeroDetail : UI_Base
 {
     enum Images
@@ -13,6 +16,8 @@ public class UI_HeroDetail : UI_Base
 
     enum Texts
     {
+        Text_HeroName,
+
         Text_BaseDamage,
         Text_HP,
         Text_PhysicalDefense,
@@ -22,9 +27,9 @@ public class UI_HeroDetail : UI_Base
         Text_Dexterity,
         Text_Intelligence,
     }
-    enum TextInputs
+    enum InputField
     {
-        Text_HeroName,
+        InputField_HeroName,
     }
 
     enum Buttons
@@ -49,7 +54,7 @@ public class UI_HeroDetail : UI_Base
     {
         Bind<Image>(typeof(Images));
         Bind<TextMeshProUGUI>(typeof(Texts));
-        Bind<TMP_InputField>(typeof(TextInputs));
+        Bind<TMP_InputField>(typeof(InputField));
         Bind<Button>(typeof(Buttons));
         Bind<GameObject>(typeof(GameObjects));
     }
@@ -59,8 +64,10 @@ public class UI_HeroDetail : UI_Base
         _bindingHeroData = heroData;
 
         // 이름 입력 필드 관련 초기화
-        _heroNameInputField = Get<TMP_InputField>(TextInputs.Text_HeroName);
-        _heroNameInputField.enabled = false;
+        GetText(Texts.Text_HeroName).text = heroData.CustomName;
+        _heroNameInputField = Get<TMP_InputField>(InputField.InputField_HeroName);
+        _heroNameInputField.text = "";
+        _heroNameInputField.gameObject.SetActive(false);
         GetButton(Buttons.Button_ChangeName).onClick.AddListener(EnableNameEdit);
         _heroNameInputField.onEndEdit.AddListener(FinishNameEdit);
 
@@ -98,16 +105,21 @@ public class UI_HeroDetail : UI_Base
 
     private void EnableNameEdit()
     {
-        _heroNameInputField.enabled = true;
-        _heroNameInputField.Select();
+        GetText(Texts.Text_HeroName).gameObject.SetActive(false);
         GetButton(Buttons.Button_ChangeName).gameObject.SetActive(false);
+        _heroNameInputField.gameObject.SetActive(true);
+        _heroNameInputField.text = _bindingHeroData.CustomName;
+        _heroNameInputField.Select();
     }
 
     private void FinishNameEdit(string changedName)
     {
-        _heroNameInputField.enabled = false;
+        if(changedName != "") _bindingHeroData.CustomName = changedName.Trim(); // 이름 변경
+
+        _heroNameInputField.gameObject.SetActive(false);
         GetButton(Buttons.Button_ChangeName).gameObject.SetActive(true);
-        _bindingHeroData.CustomName = changedName.Trim();
+        GetText(Texts.Text_HeroName).text = _bindingHeroData.CustomName;
+        GetText(Texts.Text_HeroName).gameObject.SetActive(true);
     }
 
     private void OnDestroy()

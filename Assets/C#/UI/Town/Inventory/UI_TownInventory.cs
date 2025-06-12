@@ -25,7 +25,7 @@ public class UI_TownInventory : UI_Base
         Tab_Consumables,
     }
 
-    private InventoryTab _activeTab;
+    private InventoryTab _activeTab; // 현재 활성화중인 인벤토리 탭
 
     private Dictionary<InventoryTab, UI_InventoryTabSwitchButton> _tabToButton = new();
     private readonly Dictionary<InventoryTab, ItemType> _tabToItemType = new()
@@ -38,8 +38,6 @@ public class UI_TownInventory : UI_Base
     private RectTransform _rectTransform;
     private float _offscreenY; // 화면에서 UI를 숨길 때 이동할 Y좌표
 
-    private ScrollRect _scrollRect;
-
     public override void Init() {}
 
     public void LateInit()
@@ -50,7 +48,6 @@ public class UI_TownInventory : UI_Base
         Bind<UI_Inventory>(typeof(InventoryTab));
         _rectTransform = GetComponent<RectTransform>();
         _offscreenY = _rectTransform.rect.height;
-        _scrollRect = GetComponentInChildren<ScrollRect>();
 
         GetButton(Buttons.Button_Close).onClick.AddListener(Close);
 
@@ -76,6 +73,7 @@ public class UI_TownInventory : UI_Base
     {
         UI_Inventory inv = Get<UI_Inventory>(tabName);
         inv.LateInit();
+        inv.HideInstantly();
     }
 
     private void ShowTab(InventoryTab tabName)
@@ -95,17 +93,9 @@ public class UI_TownInventory : UI_Base
             inventory.AddItem(item);
         }
 
-        //// ScrollRect의 컨텐츠를 현재 인벤토리로 설정
-        //RectTransform rt = inventory.gameObject.transform as RectTransform;
-        //rt.localPosition = new Vector2(0, 0);
-        //_scrollRect.content = rt;
-
         // 현재 탭 버튼을 활성화
         _tabToButton[tabName].SetActive();
         _activeTab = tabName;
-
-        //// 스크롤 위치를 맨 위로 초기화
-        // _scrollRect.verticalNormalizedPosition = 1f;
     }
 
     private void HideTab(InventoryTab tabName)

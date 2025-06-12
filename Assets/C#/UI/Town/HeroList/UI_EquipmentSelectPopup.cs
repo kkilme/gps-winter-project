@@ -29,6 +29,11 @@ public class UI_EquipmentSelectPopup : UI_Popup
         GetButton(Buttons.Button_Close).onClick.AddListener(Close);
     }
 
+    /// <summary>
+    /// 장비 선택용 인벤토리 창을 초기화.
+    /// </summary>
+    /// <param name="equipmentSlot">플레이어가 누른 장비 슬롯.</param>
+    /// <param name="equipmentType">장비 슬롯의 장비 타입.</param>
     public void LateInit(UI_HeroEquipmentSlot equipmentSlot, EquipmentType equipmentType)
     {
         UI_Inventory inventory = GetGameObject(GameObjects.Inventory).GetOrAddComponent<UI_Inventory>();
@@ -37,6 +42,7 @@ public class UI_EquipmentSelectPopup : UI_Popup
 
         _bindingEquipmentSlot = equipmentSlot;
 
+        // 장비 해제용 커스텀 슬롯을 인벤토리 첫 슬롯 위치에 추가.
         inventory.AddCustomSlot(OnUnequipSelected, Managers.ResourceMng.Load<Sprite>("Textures/PictoIcons/PictoIcon_X"));
 
         List<ItemInstanceData> items = Managers.InvMng.GetAllEquipmentOfType(equipmentType);
