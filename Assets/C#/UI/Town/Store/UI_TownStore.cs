@@ -63,6 +63,7 @@ public class UI_TownStore : UI_Base
         InitPanel(StorePanel.UI_TownStore_BuyPanel);
         InitPanel(StorePanel.UI_TownStore_SellPanel);
 
+        HidePanel(StorePanel.UI_TownStore_SellPanel);
         ShowPanel(StorePanel.UI_TownStore_BuyPanel);
         HideInstantly();
     }

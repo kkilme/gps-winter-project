@@ -81,7 +81,7 @@ public class UI_BuyConfirmPopup : UI_Popup
 
     private void SetQuantity(int quantity)
     {
-        quantity = Mathf.Clamp(quantity, 1, 99); // 수량은 최소 1, 최대 99개
+        quantity = Mathf.Clamp(quantity, 1, 99); // 한번에 구매할 수 있는 수량은 최소 1, 최대 99개
         if (_storeEntryData.HasStockLimit) quantity = Mathf.Min(quantity, _storeEntryData.Stock);
         _quantity = quantity;
 

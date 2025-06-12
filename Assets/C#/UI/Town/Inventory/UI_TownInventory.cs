@@ -75,11 +75,7 @@ public class UI_TownInventory : UI_Base
     private void InitTab(InventoryTab tabName)
     {
         UI_Inventory inv = Get<UI_Inventory>(tabName);
-
-        // ui의 각종 초기 값이 세팅되도록 활성화 -> 초기화 -> 비활성화 과정을 거침
-        inv.ShowInstantly();
         inv.LateInit();
-        inv.HideInstantly();
     }
 
     private void ShowTab(InventoryTab tabName)
@@ -96,20 +92,20 @@ public class UI_TownInventory : UI_Base
         List<ItemInstanceData> items = Managers.InvMng.GetAllItemsOfType(itemType);
         foreach (var item in items)
         {
-            inventory.AddItemSlot(item);
+            inventory.AddItem(item);
         }
 
-        // ScrollRect의 컨텐츠를 현재 인벤토리로 설정
-        RectTransform rt = inventory.gameObject.transform as RectTransform;
-        rt.localPosition = new Vector2(0, 0);
-        _scrollRect.content = rt;
+        //// ScrollRect의 컨텐츠를 현재 인벤토리로 설정
+        //RectTransform rt = inventory.gameObject.transform as RectTransform;
+        //rt.localPosition = new Vector2(0, 0);
+        //_scrollRect.content = rt;
 
         // 현재 탭 버튼을 활성화
         _tabToButton[tabName].SetActive();
         _activeTab = tabName;
 
-        // 스크롤 위치를 맨 위로 초기화
-         _scrollRect.verticalNormalizedPosition = 1f;
+        //// 스크롤 위치를 맨 위로 초기화
+        // _scrollRect.verticalNormalizedPosition = 1f;
     }
 
     private void HideTab(InventoryTab tabName)

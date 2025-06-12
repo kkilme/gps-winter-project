@@ -8,7 +8,8 @@
       "WeaponType": "SingleSword",
       "Skills": [
         402000,
-      ]
+      ],
+      "SellPrice": 50,
     },
     {
       "DataId": 201001,
@@ -19,7 +20,8 @@
       "WeaponType": "SwordAndShield",
       "Skills": [
         402000,
-      ]
+      ],
+      "SellPrice": 50,
     },
     {
        "DataId": 201002,
@@ -29,7 +31,8 @@
        "WeaponType": "Wand",
 	   "Skills": [
 		 402001,
-	   ]
+	   ],
+       "SellPrice": 50,
     }
   ]
 }

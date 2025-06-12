@@ -6,7 +6,8 @@
       "ArmorType": "Body",
       "PhysicalDefense": 2,
       "MagicDefense": 1,
-      "ArmorIndex": 5
+      "ArmorIndex": 5,
+      "SellPrice": 50,
     },
     {
       "DataId": 202001,
@@ -15,7 +16,8 @@
       "Defense": 1,
       "MagicDefense": 1,
       "Dexterity": 1,
-      "ArmorIndex": 6
+      "ArmorIndex": 6,
+      "SellPrice": 50,
     }
   ]
 }

@@ -16,10 +16,15 @@ public class UI_Inventory : UI_Base
     private Action<UI_InventorySlot> _onSlotClickAction; // 슬롯 클릭 시 호출되는 액션. 새 슬롯 추가될 때 사용할 수 있도록 저장해둠.
     private InventorySlotDesign _slotDesign; // 슬롯의 디자인 정보. 기본적으로는 DefaultInventorySlotDesign 사용.
 
+    private ScrollRect _scrollRect; // 이 인벤토리를 컨텐츠로 가지는 ScrollRect
+
     public override void Init() { }
 
     public void LateInit(Action<UI_InventorySlot> onSlotClickAction = null, InventorySlotDesign slotDesign = null) 
     {
+        _scrollRect = GetComponentInParent<ScrollRect>();
+
+        ShowInstantly(); // 일부 요소는 게임 오브젝트가 비활성화 상태일 시 초기화가 실패하므로 꼭 활성화해주어야 함
         _onSlotClickAction = onSlotClickAction;
 
         slotDesign ??= new DefaultInventorySlotDesign(); // 디자인을 지정하지 않을 시 기본 슬롯 디자인 사용
@@ -33,6 +38,8 @@ public class UI_Inventory : UI_Base
             slot.LateInit(onSlotClickAction, slotDesign);
             InventorySlots.Add(slot);
         }
+
+        HideInstantly();
     }
 
     /// <summary>
@@ -66,13 +73,9 @@ public class UI_Inventory : UI_Base
     /// <summary>
     /// 적절한 슬롯을 찾거나 생성하여 인벤토리 슬롯에 아이템 인스턴스를 바인딩.
     /// </summary>
-    public void AddItemSlot(ItemInstanceData itemInstanceData)
+    public void AddItem(ItemInstanceData itemInstanceData)
     {
-        int left = 1;
-        if(itemInstanceData is ConsumableItemInstanceData consumableItemData)
-        {
-            left = consumableItemData.Quantity;
-        }
+        int left = itemInstanceData.Quantity; // 장비의 경우 1로 고정
 
         // 먼저 스택 가능한 슬롯을 찾고 추가
         foreach (var slot in InventorySlots)
@@ -102,6 +105,62 @@ public class UI_Inventory : UI_Base
             emptySlot.BindItem(itemInstanceData, toAdd);
             left -= toAdd;
         }
+
+        ValidateInventory(); // 아이템 추가 후 인벤토리 검증
+    }
+
+    /// <summary>
+    /// 인벤토리 슬롯 UI의 각 아이템 인스턴스별로, 실제 인벤토리 매니저의 데이터와 수량이 일치하는지 검증하고, 초과 시 UI의 수량을 조정.
+    /// </summary>
+    public void ValidateInventory()
+    {
+        // 인벤토리 슬롯에 바인딩된 모든 아이템을 인스턴스별로 그룹화
+        Dictionary<int, List<UI_InventorySlot>> slotsByInstanceId = new(); // key: ItemInstanceData의 InstanceId, value: UI_InventorySlot 리스트
+        foreach (var slot in InventorySlots)
+        {
+            if (slot.IsEmpty || slot.ItemInstanceData == null)
+                continue;
+
+            int instanceId = slot.ItemInstanceData.InstanceId;
+            if (!slotsByInstanceId.ContainsKey(instanceId))
+                slotsByInstanceId[instanceId] = new List<UI_InventorySlot>();
+            slotsByInstanceId[instanceId].Add(slot);
+        }
+
+        // 각 인스턴스별로 실제 인벤토리 매니저의 수량과 비교
+        foreach (var kvp in slotsByInstanceId)
+        {
+            int instanceId = kvp.Key;
+            List<UI_InventorySlot> slots = kvp.Value;
+
+            // 실제 인벤토리 매니저의 데이터에서 해당 인스턴스의 수량을 가져옴
+            if (!Managers.InvMng.ItemDict.TryGetValue(instanceId, out ItemInstanceData realData))
+            {
+                // 매니저에 없는 인스턴스는 UI에서 언바인드
+                foreach (var slot in slots)
+                    slot.UnbindItem();
+                continue;
+            }
+
+            int realQuantity = realData.Quantity;
+            int uiQuantitySum = 0;
+            foreach (var slot in slots)
+                uiQuantitySum += slot.Quantity;
+
+            // UI에 바인딩된 총 수량이 실제보다 많으면, 초과분만큼 UI에서 차감
+            if (uiQuantitySum > realQuantity)
+            {
+                int over = uiQuantitySum - realQuantity;
+                // 뒤에서부터(마지막 슬롯부터) 차감
+                for (int i = slots.Count - 1; i >= 0 && over > 0; i--)
+                {
+                    var slot = slots[i];
+                    int reduce = Math.Min(slot.Quantity, over);
+                    slot.Quantity -= reduce;
+                    over -= reduce;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -124,6 +183,15 @@ public class UI_Inventory : UI_Base
         {
             slot.OnClickAction -= action;
         }
+    }
+
+    public override void ShowInstantly()
+    {
+        base.ShowInstantly();
+        _scrollRect.content = gameObject.transform as RectTransform;
+
+        // 스크롤 위치를 맨 위로 초기화
+        _scrollRect.verticalNormalizedPosition = 1f;
     }
 
     public override void HideInstantly()

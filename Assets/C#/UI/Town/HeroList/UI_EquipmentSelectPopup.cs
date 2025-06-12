@@ -42,7 +42,7 @@ public class UI_EquipmentSelectPopup : UI_Popup
         List<ItemInstanceData> items = Managers.InvMng.GetAllEquipmentOfType(equipmentType);
         foreach (var item in items)
         {
-            inventory.AddItemSlot(item);
+            inventory.AddItem(item);
         }
 
         ScrollRect scrollRect = GetComponentInChildren<ScrollRect>();

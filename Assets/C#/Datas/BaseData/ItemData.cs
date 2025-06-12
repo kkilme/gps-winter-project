@@ -12,7 +12,8 @@ public class ItemData
     public string ClassName; // Item을 상속받는 클래스명
     public ItemType ItemType;
     public string ImagePath;
-    public int MaxStack; // 인벤토리에서 최대로 스택될 수 있는 양
+    public int MaxStack; // 인벤토리에서 최대로 스택될 수 있는 양. 모든 장비는 이 수치가 1로 고정됨.
+    public int SellPrice; // 상점에서 판매할 때의 가격
 }
 
 [Serializable]
