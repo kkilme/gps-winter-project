@@ -28,11 +28,6 @@ public class UI_TownStore : UI_Base
     private StorePanel _activePanel;
 
     private Dictionary<StorePanel, UI_StorePanelSwitchButton> _panelToButton = new();
-    private readonly Dictionary<StorePanel, Type> _tabToUIType = new()
-    {
-        { StorePanel.UI_TownStore_BuyPanel, typeof(UI_TownStore_BuyPanel) },
-        { StorePanel.UI_TownStore_SellPanel, typeof(UI_TownStore_BuyPanel) },
-    };
 
     private RectTransform _rectTransform;
     private float _offscreenY; // 화면에서 UI를 숨길 때 이동할 Y좌표

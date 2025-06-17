@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class QuestReward
 {
-    public int RewardDataId;
+    public int ItemDataId;
     public int Quantity;
 }
 
@@ -15,14 +15,16 @@ public class QuestReward
 public class QuestData
 {
     public int DataId;
+    public int Chapter;
+    public int Stage;
+
     public string Name;
-    public string Description;
+    public string Objective;
 
     public string AreaName; // 퀘스트 수락 시 이동되는 Area. AreaName enum의 값과 같아야함.
     public QuestReward[] Rewards;
     public int[] UnlockQuestDataId; // 해당 퀘스트 완료 시 열리는 퀘스트의 DataId
 
-    public bool IsRepeatable; // 퀘스트 반복 가능 여부
     public bool IsUnlocked; // 퀘스트 개방 여부
     public bool IsComplete; // 퀘스트 완료 여부. 처음은 무조건 false.
 }

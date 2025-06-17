@@ -2,33 +2,35 @@
   "quests": [
       {
           "DataId": 601000,
+          "Chapter": 1,
+          "Stage": 1,
           "Name": "Exploring the forest",
-          "Description": "Defeat boss in Forest area.",
+          "Objective": "Defeat the area boss.",
           "AreaName": "Forest",
           "Rewards": [
             {
-                "RewardDataId": 301000,
+                "ItemDataId": 301000,
                 "Quantity": 2
             }
           ],
           "UnlockQuestDataId": [601001],
-          "IsRepeatable": true,
           "IsUnlocked": true,
           "IsComplete": false
       },
       {
           "DataId": 601001,
+          "Chapter": 1,
+          "Stage": 2,
           "Name": "Going deeper into the forest",
-          "Description": "Defeat boss in forest area.",
+          "Objective": "Defeat the area boss.",
           "AreaName": "Forest",
           "Rewards": [
             {
-                "RewardDataId": 301000,
+                "ItemDataId": 301000,
                 "Quantity": 2
             }
           ],
           "UnlockQuestDataId": [],
-          "IsRepeatable": true,
           "IsUnlocked": false,
           "IsComplete": false
       }

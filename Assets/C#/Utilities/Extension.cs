@@ -34,7 +34,7 @@ public static class Extension
 
         foreach (var reward in rewards)
         {
-            toString += $"{Managers.DataMng.ItemDataDict[reward.RewardDataId].Name} x{reward.Quantity} ";
+            toString += $"{Managers.DataMng.ItemDataDict[reward.ItemDataId].Name} x{reward.Quantity} ";
         }
 
         return toString;

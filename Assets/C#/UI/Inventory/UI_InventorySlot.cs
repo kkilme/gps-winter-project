@@ -97,7 +97,6 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     public void ForceSetContentSprite(Sprite contentSprite)
     {
-        if (contentSprite == null) return;
         _contentImage.sprite = contentSprite;
         ShowContentImageOnly();
     }
@@ -111,6 +110,11 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         RectTransform equippedFlagRect = go_equippedFlag.GetComponent<RectTransform>();
 
         GridLayoutGroup gridLayout = GetComponentInParent<GridLayoutGroup>();
+        if(gridLayout == null)
+        {
+            Debug.LogError("[UI_InventorySlot] No GridLayoutGroup found in parent!"); 
+            return;
+        }
         float cellWidth = gridLayout.cellSize.x;
         float cellHeight = gridLayout.cellSize.y;
         qualityRect.sizeDelta = new Vector2(cellWidth / 3, cellHeight / 3);
@@ -164,12 +168,18 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     private void HideDetail()
     {
         go_detailParent.SetActive(false);
+        go_quantityParent.SetActive(false);
+        go_equippedFlag.SetActive(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Sprite mouseOverSprite = _slotDesign.GetSlotSpriteOnMouseOver();
-        if (mouseOverSprite) _slotImage.sprite = mouseOverSprite;
+        if (_slotDesign != null)
+        {
+            Sprite mouseOverSprite = _slotDesign.GetSlotSpriteOnMouseOver();
+            if (mouseOverSprite) _slotImage.sprite = mouseOverSprite;
+        }
+
         if (ItemInstanceData != null)
         {
             ItemDetailUIFactory.CreateItemDetailUI(ItemInstanceData);
@@ -178,7 +188,7 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _slotImage.sprite = _slotDesign.GetDefaultSlotSprite();
+        if(_slotDesign != null) _slotImage.sprite = _slotDesign.GetDefaultSlotSprite();
         Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
     }
 

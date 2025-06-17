@@ -186,10 +186,10 @@ public class UI_Inventory : UI_Base
     public override void ShowInstantly()
     {
         base.ShowInstantly();
-        _scrollRect.content = gameObject.transform as RectTransform;
+        if (_scrollRect) _scrollRect.content = gameObject.transform as RectTransform;
 
         // 스크롤 위치를 맨 위로 초기화
-        _scrollRect.verticalNormalizedPosition = 1f;
+        if (_scrollRect) _scrollRect.verticalNormalizedPosition = 1f;
     }
 
     public override void HideInstantly()

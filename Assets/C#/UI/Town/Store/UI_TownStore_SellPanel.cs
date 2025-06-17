@@ -14,24 +14,27 @@ public class UI_TownStore_SellPanel : UI_Base, IStorePanel
     }
 
     private UI_Inventory _inventory; // 판매할 아이템을 담는 인벤토리 UI
-    private UI_SellConfirmPanel _sellPanel; // 판매 개수 설정 및 실제 판매 버튼이 있는 패널
+    private UI_SellConfirmPanel _sellConfirmPanel; // 판매 개수 설정 및 실제 판매 버튼이 있는 패널
 
     public override void Init()
     {
         Bind<GameObject>(typeof(GameObjects));
 
         _inventory = GetGameObject(GameObjects.Content_Inventory).GetOrAddComponent<UI_Inventory>();
-        _sellPanel = GetGameObject(GameObjects.UI_SellConfirmPanel).GetOrAddComponent<UI_SellConfirmPanel>();
-        _sellPanel.OnSell -= ShowInventory;
-        _sellPanel.OnSell += ShowInventory;
+        _sellConfirmPanel = GetGameObject(GameObjects.UI_SellConfirmPanel).GetOrAddComponent<UI_SellConfirmPanel>();
+        _sellConfirmPanel.OnSell -= ShowInventory;
+        _sellConfirmPanel.OnSell += ShowInventory;
     }
 
     public void LateInit()
     {
         _inventory.LateInit(ShowSellPanel);
-        _sellPanel.LateInit();
+        _sellConfirmPanel.LateInit();
     }
 
+    /// <summary>
+    /// 판매 가능한 아이템으로 인벤토리를 채움.
+    /// </summary>
     private void ShowInventory()
     {
         _inventory.Clear();
@@ -47,15 +50,15 @@ public class UI_TownStore_SellPanel : UI_Base, IStorePanel
 
         // TODO?: 인벤토리 정렬 기능
 
-        _sellPanel.HideInstantly();
+        _sellConfirmPanel.HideInstantly();
     }
 
     private void ShowSellPanel(UI_InventorySlot selectedSlot)
     {
         if(selectedSlot.IsEmpty) return;
 
-        _sellPanel.ShowInstantly();
-        _sellPanel.BindItem(selectedSlot.ItemInstanceData);
+        _sellConfirmPanel.ShowInstantly();
+        _sellConfirmPanel.BindItem(selectedSlot.ItemInstanceData);
     }
 
     public override void ShowInstantly()
