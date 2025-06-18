@@ -53,7 +53,7 @@ public class UI_TownStore_SellPanel : UI_Base, IStorePanel
         _sellConfirmPanel.HideInstantly();
     }
 
-    private void ShowSellPanel(UI_InventorySlot selectedSlot)
+    private void ShowSellPanel(UI_ItemSlot selectedSlot)
     {
         if(selectedSlot.IsEmpty) return;
 

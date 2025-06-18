@@ -42,12 +42,17 @@ public class UI_EquipmentSelectPopup : UI_Popup
 
         _bindingEquipmentSlot = equipmentSlot;
 
+        inventory.HardClear();
         // 장비 해제용 커스텀 슬롯을 인벤토리 첫 슬롯 위치에 추가.
-        inventory.AddCustomSlot(OnUnequipSelected, Managers.ResourceMng.Load<Sprite>("Textures/PictoIcons/PictoIcon_X"));
+        EquipmentUnequipSlotDesign equipmentUnequipSlotDesign = new();
+        UI_ItemSlot slot = equipmentUnequipSlotDesign.CreateItemSlot(inventory.transform);
+        inventory.AddSlot(slot);
+        slot.OnClickAction += OnUnequipSelected;
 
         List<ItemInstanceData> items = Managers.InvMng.GetAllEquipmentOfType(equipmentType);
         foreach (var item in items)
         {
+            Debug.Log("Adding item " + item.ItemData.Name);
             inventory.AddItem(item);
         }
 
@@ -58,7 +63,7 @@ public class UI_EquipmentSelectPopup : UI_Popup
     /// <summary>
     /// 장비 해제 커스텀 슬롯을 선택했을 때 호출되는 콜백 함수
     /// </summary>
-    private void OnUnequipSelected(UI_InventorySlot selectedSlot)
+    private void OnUnequipSelected(UI_ItemSlot selectedSlot)
     {
         _bindingEquipmentSlot.ChangeEquipment(null); // 장비 해제
         _inventory.ClearActionCallbackOnSlots();
@@ -68,7 +73,7 @@ public class UI_EquipmentSelectPopup : UI_Popup
     /// <summary>
     /// 유저가 Window에서 슬롯을 선택했을 때 호출되는 콜백 함수.
     /// </summary>
-    private void OnSlotSelected(UI_InventorySlot selectedSlot)
+    private void OnSlotSelected(UI_ItemSlot selectedSlot)
     {
         if (selectedSlot.ItemInstanceData == null) return;
 

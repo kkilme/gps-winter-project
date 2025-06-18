@@ -47,6 +47,8 @@ public class UI_BuyConfirmPopup : UI_Popup
         Bind<UI_ItemSlot>(typeof(ItemSlot));
         Bind<TMP_InputField>(typeof(InputField));
 
+        Get<UI_ItemSlot>(ItemSlot.UI_ItemSlot).LateInit(new DefaultItemSlotDesign());
+
         Get<Button>(Buttons.Button_Close).onClick.AddListener(Close);
 
         Get<Button>(Buttons.Button_MultipleMinus).onClick.AddListener(() => AddQuantity(-5));
@@ -57,10 +59,10 @@ public class UI_BuyConfirmPopup : UI_Popup
         Get<Button>(Buttons.Button_Buy).onClick.AddListener(Buy);
     }
 
-    public void LateInit(StoreEntryData storeEntryData, UI_StoreEntry uI_StoreEntry)
+    public void LateInit(StoreEntryData storeEntryData, UI_StoreEntry ui_StoreEntry)
     {
         _storeEntryData = storeEntryData;
-        ui_StoreEntry = uI_StoreEntry;
+        this.ui_StoreEntry = ui_StoreEntry;
 
         ItemData itemData = Managers.DataMng.ItemDataDict[storeEntryData.ItemDataId];
         GetText(Texts.Text_ItemName).text = itemData.Name;

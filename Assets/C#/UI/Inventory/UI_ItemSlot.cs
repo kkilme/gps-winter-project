@@ -8,7 +8,7 @@ using System;
 /// <summary>
 /// 인벤토리에서 한 칸의 슬롯 UI를 담당.
 /// </summary>
-public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     enum Texts
     {
@@ -17,20 +17,20 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
     enum Images
     {
-        Image_Item
+        Image_Content
     }
 
     enum GameObjects
     {
-        Detail,
+        Image_Content,
         Quantity,
         Flag_Equipped
     }
 
     public ItemInstanceData ItemInstanceData { get; private set; }
-    public ItemData ItemData => ItemInstanceData?.ItemData;
+    public ItemData ItemData { get; private set; }
 
-    private InventorySlotDesign _slotDesign; // 슬롯 디자인 정보
+    private ItemSlotDesign _slotDesign; // 슬롯 디자인 정보
 
     private int _quantity;
     private TextMeshProUGUI _quantityText;
@@ -41,21 +41,30 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
             if (_quantity != 0 && value == 0)
             {
                 UnbindItem();
-            } else
+            } 
+            else if (value > 0 && ItemData != null && ItemData is ConsumableItemData) // 개수 표시는 현재 소모품에만
             {
+                go_quantity.SetActive(true);
                 _quantityText.text = value.ToString();
+            }
+            else
+            {
+                go_quantity.SetActive(false);
             }
             _quantity = value;
         } 
     }
 
+    /// <summary>
+    /// 새 아이템이 들어갈 수 있는 슬롯인지 여부
+    /// </summary>
     public bool IsEmpty => ItemInstanceData == null && !_isCustomSlot;
     private bool _isCustomSlot;
 
-    public Action<UI_InventorySlot> OnClickAction;
+    public Action<UI_ItemSlot> OnClickAction { get; set; }
 
-    private GameObject go_detailParent;
-    private GameObject go_quantityParent;
+    private GameObject go_imageObject;
+    private GameObject go_quantity;
     private GameObject go_equippedFlag;
 
     private Image _contentImage; // 실제 아이템 또는 내용물 이미지
@@ -63,42 +72,30 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
 
     public override void Init() { }
 
-    public void LateInit(Action<UI_InventorySlot> onClickAction, InventorySlotDesign slotDesign, bool isCustomSlot = false)
+    public void LateInit(ItemSlotDesign slotDesign, bool isCustomSlot = false)
     {
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<Image>(typeof(Images));
         Bind<GameObject>(typeof(GameObjects));
 
-        _quantityText = GetText(Texts.Text_Quantity);
-        _contentImage = GetImage(Images.Image_Item);
-        go_detailParent = GetGameObject(GameObjects.Detail);
-        go_quantityParent = GetGameObject(GameObjects.Quantity);
+        go_imageObject = GetGameObject(GameObjects.Image_Content);
+        go_quantity = GetGameObject(GameObjects.Quantity);
         go_equippedFlag = GetGameObject(GameObjects.Flag_Equipped);
-        _slotImage = GetComponent<Image>();
-
-        OnClickAction -= onClickAction;
-        OnClickAction += onClickAction;
         _slotDesign = slotDesign;
         _isCustomSlot = isCustomSlot;
 
         AdjustQuantityRectSize();
-        HideDetail();
+        HideDetails();
 
-        Sprite defaultContentSprite = _slotDesign.GetDefaultContentSprite();
-        if(defaultContentSprite != null)
-        {
-            _contentImage.sprite = defaultContentSprite;
-            ShowContentImageOnly();
-        }
-    }
+        _quantityText = GetText(Texts.Text_Quantity);
 
-    /// <summary>
-    /// Content 이미지 강제 설정. 커스텀 슬롯에서 InventorySlotDesign의 DefaultContentSprite를 무시하기 위해 사용.
-    /// </summary>
-    public void ForceSetContentSprite(Sprite contentSprite)
-    {
-        _contentImage.sprite = contentSprite;
-        ShowContentImageOnly();
+        _slotImage = GetComponent<Image>();
+        _slotImage.sprite = slotDesign.GetDefaultSlotSprite();
+
+        _contentImage = GetImage(Images.Image_Content);
+        SetContentImage(_slotDesign.GetDefaultContentSprite());
+
+
     }
 
     /// <summary>
@@ -106,42 +103,39 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     private void AdjustQuantityRectSize()
     {
-        RectTransform qualityRect = go_quantityParent.GetComponent<RectTransform>();
+        RectTransform qualityRect = go_quantity.GetComponent<RectTransform>();
         RectTransform equippedFlagRect = go_equippedFlag.GetComponent<RectTransform>();
 
-        GridLayoutGroup gridLayout = GetComponentInParent<GridLayoutGroup>();
+        float width, height;
+
+        GridLayoutGroup gridLayout = transform.parent.GetComponent<GridLayoutGroup>();
         if(gridLayout == null)
         {
-            Debug.LogError("[UI_InventorySlot] No GridLayoutGroup found in parent!"); 
-            return;
+            RectTransform rect = GetComponent<RectTransform>();
+            width = rect.rect.width;
+            height = rect.rect.height;
+        } 
+        else
+        {
+            width = gridLayout.cellSize.x;
+            height = gridLayout.cellSize.y;
         }
-        float cellWidth = gridLayout.cellSize.x;
-        float cellHeight = gridLayout.cellSize.y;
-        qualityRect.sizeDelta = new Vector2(cellWidth / 3, cellHeight / 3);
-        equippedFlagRect.sizeDelta = new Vector2(cellWidth / 3, cellHeight / 3);
+        qualityRect.sizeDelta = new Vector2(width / 3, height / 3);
+        equippedFlagRect.sizeDelta = new Vector2(width / 3, height / 3);
     }
 
     /// <summary>
-    /// 아이템 데이터와 개수를 UI에 바인딩.
+    /// ItemInstanceData와 개수를 UI에 바인딩.
     /// </summary>
-    public void BindItem(ItemInstanceData itemInstanceData, int quantity)
+    public void BindItem(ItemInstanceData itemInstanceData, int quantity = -1)
     {
         ItemInstanceData = itemInstanceData;
+        ItemData = itemInstanceData.ItemData;
         Quantity = quantity;
 
-        _contentImage.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + ItemData.ImagePath);
+        SetContentImage(ItemData);
 
-        go_detailParent.SetActive(true);
-        if (ItemInstanceData.ItemType == ItemType.Consumable) // 개수 표시는 현재 소모품에만
-        {
-            go_quantityParent.SetActive(true);
-        }
-        else
-        {
-            go_quantityParent.SetActive(false);
-        }
-
-        if(itemInstanceData is EquipmentInstanceData equipmentInstanceData)
+        if (itemInstanceData is EquipmentInstanceData equipmentInstanceData)
         {
             go_equippedFlag.SetActive(equipmentInstanceData.IsEquipped);
         }
@@ -151,24 +145,39 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
+    public void BindItem(ItemData itemData, int quantity = -1)
+    {
+        ItemData = itemData;
+        Quantity = quantity;
+        SetContentImage(itemData);
+        go_equippedFlag.SetActive(false);
+    }
+
     public void UnbindItem()
     {
         ItemInstanceData = null;
         _quantity = 0;
-        HideDetail();
+        HideDetails();
     }
 
-    private void ShowContentImageOnly()
+    private void SetContentImage(ItemData itemData)
     {
-        go_detailParent.SetActive(true);
-        go_quantityParent.SetActive(false);
-        go_equippedFlag.SetActive(false);
+        Sprite sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + ItemData.ImagePath);
+        SetContentImage(sprite);
     }
 
-    private void HideDetail()
+    private void SetContentImage(Sprite sprite)
     {
-        go_detailParent.SetActive(false);
-        go_quantityParent.SetActive(false);
+        if (sprite == null) return;
+
+        go_imageObject.SetActive(true);
+        _contentImage.sprite = sprite;
+    }
+
+    private void HideDetails()
+    {
+        go_imageObject.SetActive(false);
+        go_quantity.SetActive(false);
         go_equippedFlag.SetActive(false);
     }
 
@@ -183,6 +192,10 @@ public class UI_InventorySlot : UI_Base, IPointerEnterHandler, IPointerExitHandl
         if (ItemInstanceData != null)
         {
             ItemDetailUIFactory.CreateItemDetailUI(ItemInstanceData);
+        } 
+        else if(ItemData != null)
+        {
+            ItemDetailUIFactory.CreateItemDetailUI(ItemData);
         }
     }
 

@@ -11,31 +11,33 @@ using System;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class UI_Inventory : UI_Base
 {
-    public List<UI_InventorySlot> InventorySlots { get; private set; } = new(); // 인벤토리 크기 제한은 현재 없음
+    public List<UI_ItemSlot> InventorySlots { get; private set; } = new(); // 인벤토리 크기 제한은 현재 없음
 
-    private Action<UI_InventorySlot> _onSlotClickAction; // 슬롯 클릭 시 호출되는 액션. 새 슬롯 추가될 때 사용할 수 있도록 저장해둠.
-    private InventorySlotDesign _slotDesign; // 슬롯의 디자인 정보. 기본적으로는 DefaultInventorySlotDesign 사용.
+    private Action<UI_ItemSlot> _onSlotClickAction; // 슬롯 클릭 시 호출되는 액션. 새 슬롯 추가될 때 재사용할 수 있도록 저장해둠.
+    private ItemSlotDesign _slotDesign; // 슬롯의 디자인 정보. 기본적으로는 DefaultItemSlotDesign 사용.
 
     private ScrollRect _scrollRect; // 이 인벤토리를 컨텐츠로 가지는 ScrollRect
 
     public override void Init() { }
 
-    public void LateInit(Action<UI_InventorySlot> onSlotClickAction = null, InventorySlotDesign slotDesign = null) 
+    public void LateInit(Action<UI_ItemSlot> onSlotClickAction = null, ItemSlotDesign slotDesign = null) 
     {
         _scrollRect = GetComponentInParent<ScrollRect>();
 
         ShowInstantly(); // 일부 요소는 게임 오브젝트가 비활성화 상태일 시 초기화가 실패하므로 꼭 활성화해주어야 함. 비활성화는 LateInit을 호출하는 클래스의 몫임.
         _onSlotClickAction = onSlotClickAction;
 
-        slotDesign ??= new DefaultInventorySlotDesign(); // 디자인을 지정하지 않을 시 기본 슬롯 디자인 사용
+        slotDesign ??= new DefaultItemSlotDesign(); // 디자인을 지정하지 않을 시 기본 슬롯 디자인 사용
         _slotDesign = slotDesign;
 
 
         // 이미 존재하는 슬롯들 할당 및 초기화
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
-            UI_InventorySlot slot = gameObject.transform.GetChild(i).GetOrAddComponent<UI_InventorySlot>();
-            slot.LateInit(onSlotClickAction, slotDesign);
+            UI_ItemSlot slot = gameObject.transform.GetChild(i).GetOrAddComponent<UI_ItemSlot>();
+            slot.LateInit(slotDesign);
+            slot.OnClickAction -= _onSlotClickAction;
+            slot.OnClickAction += _onSlotClickAction;
             InventorySlots.Add(slot);
         }
     }
@@ -45,27 +47,23 @@ public class UI_Inventory : UI_Base
     /// </summary>
     public void AddEmptySlot()
     {
-        UI_InventorySlot slot = Managers.UIMng.MakeSubItemUI<UI_InventorySlot>(transform, _slotDesign.GetSlotPrefabPath());
-        slot.LateInit(_onSlotClickAction, _slotDesign);
+        UI_ItemSlot slot = _slotDesign.CreateItemSlot(transform);
+        slot.OnClickAction -= _onSlotClickAction;
+        slot.OnClickAction += _onSlotClickAction;
         InventorySlots.Add(slot);
     }
 
     /// <summary>
-    /// 커스텀 슬롯 추가. 주로 아이템이 아닌 요소를 슬롯에 할당하기 위해 사용.
+    /// 외부에서 생성한 슬롯 추가. 주로 아이템이 아닌 요소를 슬롯에 할당하기 위해 사용.
     /// </summary>
-    /// <param name="onClickAction">커스텀 슬롯 클릭 시 실행 될 Action</param>
-    /// <param name="contentSprite">커스텀 슬롯(내용물) 이미지의 Sprite</param>
-    public void AddCustomSlot(Action<UI_InventorySlot> onClickAction, Sprite contentSprite = null)
+    public void AddSlot(UI_ItemSlot itemSlot, bool addDefaultActionCallback = false)
     {
-        UI_InventorySlot emptySlot = InventorySlots.Find(s => s.IsEmpty);
-        if (emptySlot == null)
+        if (addDefaultActionCallback)
         {
-            AddEmptySlot();
-            emptySlot = InventorySlots[^1];
+            itemSlot.OnClickAction -= _onSlotClickAction;
+            itemSlot.OnClickAction += _onSlotClickAction;
         }
-
-        emptySlot.LateInit(onClickAction, _slotDesign, true);
-        emptySlot.ForceSetContentSprite(contentSprite);
+        InventorySlots.Add(itemSlot);
     }
 
     /// <summary>
@@ -88,11 +86,10 @@ public class UI_Inventory : UI_Base
                     return;
             }
         }
-
         // 남은 수량이 있으면 빈 슬롯을 찾거나 만들어서 추가
         while (left > 0)
         {
-            UI_InventorySlot emptySlot = InventorySlots.Find(s => s.IsEmpty);
+            UI_ItemSlot emptySlot = InventorySlots.Find(s => s.IsEmpty);
             if (emptySlot == null)
             {
                 AddEmptySlot();
@@ -113,7 +110,7 @@ public class UI_Inventory : UI_Base
     public void ValidateInventory()
     {
         // 인벤토리 슬롯에 바인딩된 모든 아이템을 인스턴스별로 그룹화
-        Dictionary<int, List<UI_InventorySlot>> slotsByInstanceId = new(); // key: ItemInstanceData의 InstanceId, value: UI_InventorySlot 리스트
+        Dictionary<int, List<UI_ItemSlot>> slotsByInstanceId = new(); // key: ItemInstanceData의 InstanceId, value: UI_ItemSlot 리스트
         foreach (var slot in InventorySlots)
         {
             if (slot.IsEmpty || slot.ItemInstanceData == null)
@@ -121,7 +118,7 @@ public class UI_Inventory : UI_Base
 
             int instanceId = slot.ItemInstanceData.InstanceId;
             if (!slotsByInstanceId.ContainsKey(instanceId))
-                slotsByInstanceId[instanceId] = new List<UI_InventorySlot>();
+                slotsByInstanceId[instanceId] = new List<UI_ItemSlot>();
             slotsByInstanceId[instanceId].Add(slot);
         }
 
@@ -129,7 +126,7 @@ public class UI_Inventory : UI_Base
         foreach (var kvp in slotsByInstanceId)
         {
             int instanceId = kvp.Key;
-            List<UI_InventorySlot> slots = kvp.Value;
+            List<UI_ItemSlot> slots = kvp.Value;
 
             // 실제 인벤토리 매니저의 데이터에서 해당 인스턴스의 수량을 가져옴
             if (!Managers.InvMng.ItemDict.TryGetValue(instanceId, out ItemInstanceData realData))
@@ -175,7 +172,7 @@ public class UI_Inventory : UI_Base
     /// <summary>
     /// 모든 인벤토리 슬롯에서 바인딩 된 특정 클릭 액션 제거.
     /// </summary>
-    public void RemoveActionCallbackOnSlots(Action<UI_InventorySlot> action)
+    public void RemoveActionCallbackOnSlots(Action<UI_ItemSlot> action)
     {
         foreach (var slot in InventorySlots)
         {
@@ -198,6 +195,9 @@ public class UI_Inventory : UI_Base
         base.HideInstantly();
     }
 
+    /// <summary>
+    /// 인벤토리의 모든 아이템 슬롯을 Unbind.
+    /// </summary>
     public void Clear()
     {
         foreach (var slot in InventorySlots)
@@ -206,4 +206,15 @@ public class UI_Inventory : UI_Base
         }
     }
 
+    /// <summary>
+    /// 인벤토리의 모든 아이템 슬롯 오브젝트를 파괴.
+    /// </summary>
+    public void HardClear()
+    {
+        for(int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+        InventorySlots.Clear();
+    }
 }

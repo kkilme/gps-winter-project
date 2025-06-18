@@ -56,6 +56,8 @@ public class UI_SellConfirmPanel : UI_Base
         Bind<TMP_InputField>(typeof(InputField));
         _rect = GetComponent<RectTransform>();
 
+        Get<UI_ItemSlot>(ItemSlot.UI_ItemSlot).LateInit(new DefaultItemSlotDesign());
+
         Get<Button>(Buttons.Button_Close).onClick.AddListener(HideInstantly);
 
         Get<Button>(Buttons.Button_MultipleMinus).onClick.AddListener(() => AddQuantity(-5));
@@ -70,6 +72,9 @@ public class UI_SellConfirmPanel : UI_Base
         HideInstantly();
     }
 
+    /// <summary>
+    /// 판매할 아이템을 바인딩.
+    /// </summary>
     public void BindItem(ItemInstanceData itemInstanceData)
     {
         _itemInstanceData = itemInstanceData;

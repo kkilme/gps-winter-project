@@ -48,6 +48,7 @@ public class UI_StoreEntry : UI_Base
             _entryData = entryData;
             Get<TextMeshProUGUI>(Texts.Text_ItemName).text = itemData.Name;
             Get<TextMeshProUGUI>(Texts.Text_Price).text = entryData.Price.ToString();
+            Get<UI_ItemSlot>(ItemSlot.UI_ItemSlot).LateInit(new DefaultItemSlotDesign());
             Get<UI_ItemSlot>(ItemSlot.UI_ItemSlot).BindItem(itemData);
             Get<Button>(Buttons.Button_Buy).onClick.AddListener(ShowBuyConfirmPopup);
 

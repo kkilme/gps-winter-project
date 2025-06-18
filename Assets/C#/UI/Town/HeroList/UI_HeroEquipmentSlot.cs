@@ -20,7 +20,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
     private EquipmentInstanceData _equipmentInstance; // 이 장비 슬롯에 장착된 장비 인스턴스 데이터
     private EquipmentType _equipmentType; // 이 장비 슬롯이 담당하는 장비 타입
 
-    private static InventorySlotDesign _slotDesign = new HeroEquipmentSlotDesign(); // 슬롯 디자인 정보. HeroEquipmentSlotDesign 사용
+    private static ItemSlotDesign _slotDesign = new HeroEquipmentSlotDesign(); // 슬롯 디자인 정보. HeroEquipmentSlotDesign 사용
     private Image _slotImage;
 
     public override void Init()
