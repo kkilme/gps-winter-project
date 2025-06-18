@@ -43,7 +43,7 @@ public class UI_QuestBoard : UI_Base
 
     public void ShowQuestDetailPanel(Quest quest)
     {
-        _questDetailPanel.Show(quest);
+        _questDetailPanel.BindQuest(quest);
     }
 
     public override Tween Show()

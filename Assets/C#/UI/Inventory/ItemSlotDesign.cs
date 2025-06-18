@@ -124,3 +124,28 @@ public class EquipmentUnequipSlotDesign : ItemSlotDesign
         return _defaultContentSprite;
     }
 }
+
+public class QuestRewardSlotDesign : ItemSlotDesign
+{
+    protected override bool IsCustomSlot { get; set; } = true;
+    protected static Sprite _defaultSlotSprite;
+    protected static Sprite _slotSpriteOnMouseOver;
+    protected static Sprite _defaultContentSprite;
+
+    public override Sprite GetDefaultSlotSprite()
+    {
+        if (_defaultSlotSprite == null)
+            _defaultSlotSprite = Managers.ResourceMng.Load<Sprite>("Textures/Inventory/ItemSlot_GreenFrame");
+        return _defaultSlotSprite;
+    }
+
+    public override Sprite GetSlotSpriteOnMouseOver()
+    {
+        return null;
+    }
+
+    public override Sprite GetDefaultContentSprite()
+    {
+        return null;
+    }
+}

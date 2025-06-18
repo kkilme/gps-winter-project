@@ -67,7 +67,7 @@ public class UI_Inventory : UI_Base
     }
 
     /// <summary>
-    /// 적절한 슬롯을 찾거나 생성하여 인벤토리 슬롯에 아이템 인스턴스를 바인딩.
+    /// 적절한 슬롯을 찾거나 생성하여 인벤토리 슬롯에 아이템 인스턴스 데이터를 바인딩.
     /// </summary>
     public void AddItem(ItemInstanceData itemInstanceData)
     {
@@ -102,6 +102,21 @@ public class UI_Inventory : UI_Base
         }
 
         ValidateInventory(); // 아이템 추가 후 인벤토리 검증
+    }
+
+    /// <summary>
+    /// 적절한 슬롯을 찾거나 생성하여 인벤토리 슬롯에 아이템 데이터를 바인딩.
+    /// </summary>
+    public void AddItem(ItemData itemData, int quantity = -1)
+    {
+        UI_ItemSlot emptySlot = InventorySlots.Find(s => s.IsEmpty);
+        if (emptySlot == null)
+        {
+            AddEmptySlot();
+            emptySlot = InventorySlots[^1];
+        }
+
+        emptySlot.BindItem(itemData, quantity);
     }
 
     /// <summary>

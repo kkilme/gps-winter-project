@@ -42,7 +42,7 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
             {
                 UnbindItem();
             } 
-            else if (value > 0 && ItemData != null && ItemData is ConsumableItemData) // 개수 표시는 현재 소모품에만
+            else if (value > 1)
             {
                 go_quantity.SetActive(true);
                 _quantityText.text = value.ToString();
@@ -93,9 +93,7 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
         _slotImage.sprite = slotDesign.GetDefaultSlotSprite();
 
         _contentImage = GetImage(Images.Image_Content);
-        SetContentImage(_slotDesign.GetDefaultContentSprite());
-
-
+        SetContentImage(slotDesign.GetDefaultContentSprite());
     }
 
     /// <summary>

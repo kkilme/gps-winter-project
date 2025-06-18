@@ -207,7 +207,7 @@ public class AreaMapGeneratorCustomEditor : Editor
     private void DrawGridPositionTextButton()
     {
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Show Grid Position"))
+        if (GUILayout.Button("BindQuest Grid Position"))
         {
             _generator.ShowGridPositionText();
         }
@@ -217,7 +217,7 @@ public class AreaMapGeneratorCustomEditor : Editor
     private void DrawTileTypeTextButton()
     {
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Show Tile Type"))
+        if (GUILayout.Button("BindQuest Tile Type"))
         {
             _generator.ShowTileTypeText();
         }
@@ -226,7 +226,7 @@ public class AreaMapGeneratorCustomEditor : Editor
     private void DrawPathToBossButton()
     {
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Show path to boss"))
+        if (GUILayout.Button("BindQuest path to boss"))
         {
             _generator.ShowPathToBoss();
         }
@@ -246,7 +246,7 @@ public class AreaMapGeneratorCustomEditor : Editor
     private void DrawShowFogOfWarButton()
     {
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Show Fog of War"))
+        if (GUILayout.Button("BindQuest Fog of War"))
         {
             _generator.ShowFogOfWar();
         }

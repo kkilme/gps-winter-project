@@ -46,6 +46,7 @@ public class UI_QuestList_Quest : UI_Base
             GetGameObject(GameObjects.Detail_Unlocked).SetActive(true);
             GetGameObject(GameObjects.Detail_Locked).SetActive(false);
             GetText(Texts.Text_ChapterStage).text = quest.QuestData.Chapter + "-" + quest.QuestData.Stage;
+            if (quest.QuestData.IsComplete) GetText(Texts.Text_ChapterStage).color = Color.green; // 한 번 완료한 퀘스트일 시
             GetText(Texts.Text_QuestName).text = quest.QuestData.Name;
             GetButton(Buttons.Button_OpenDetail).onClick.AddListener(() => questBoardUI.ShowQuestDetailPanel(quest));
         }
