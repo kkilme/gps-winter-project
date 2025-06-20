@@ -18,8 +18,8 @@ public class UI_EquipmentSelectPopup : UI_Popup
         Button_Close
     }
 
-    private UI_Inventory _inventory;
-    private UI_HeroEquipmentSlot _bindingEquipmentSlot;
+    private UI_Inventory _inventory; // 장착할 수 있는 장비가 담긴 인벤토리 (이 팝업 UI의 인벤토리)
+    private UI_HeroEquipmentSlot _bindingEquipmentSlot; // 장착할 장비 슬롯
 
     public override void Init()
     {
@@ -52,7 +52,6 @@ public class UI_EquipmentSelectPopup : UI_Popup
         List<ItemInstanceData> items = Managers.InvMng.GetAllEquipmentOfType(equipmentType);
         foreach (var item in items)
         {
-            Debug.Log("Adding item " + item.ItemData.Name);
             inventory.AddItem(item);
         }
 
@@ -71,7 +70,7 @@ public class UI_EquipmentSelectPopup : UI_Popup
     }
 
     /// <summary>
-    /// 유저가 Window에서 슬롯을 선택했을 때 호출되는 콜백 함수.
+    /// 유저가 _inventory에서 슬롯을 선택했을 때 호출되는 콜백 함수.
     /// </summary>
     private void OnSlotSelected(UI_ItemSlot selectedSlot)
     {

@@ -107,6 +107,9 @@ public class InventoryManager
         return ItemList.FirstOrDefault(e => e.ItemDataId == dataId);
     }
 
+    /// <summary>
+    /// dataId를 데이터로 하는 장비 중, 영웅에게 장착되지 않은 첫 장비의 Instance를 반환.
+    /// </summary>
     public EquipmentInstanceData GetUnequippedEquipment(int dataId)
     {
         return ItemList

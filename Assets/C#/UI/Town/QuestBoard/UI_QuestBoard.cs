@@ -34,7 +34,7 @@ public class UI_QuestBoard : UI_Base
         _questList = GetGameObject(Panels.UI_QuestList).GetOrAddComponent<UI_QuestList>();
         _questList.LateInit(this);
         _questDetailPanel = GetGameObject(Panels.UI_QuestDetailPanel).GetOrAddComponent<UI_QuestDetailPanel>();
-        _questDetailPanel.LateInit(this);
+        _questDetailPanel.LateInit();
         _rectTransform = GetComponent<RectTransform>();
         _offscreenY = _rectTransform.rect.height;
 
@@ -72,6 +72,7 @@ public class UI_QuestBoard : UI_Base
 
     public void Close()
     {
+        Managers.UIMng.ClosePopupUI<UI_QuestItemSelectPopup>();
         Managers.TownMng.UI.CurrentOpenUI = null;
         Hide();
     }

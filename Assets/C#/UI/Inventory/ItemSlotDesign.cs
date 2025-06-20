@@ -66,7 +66,7 @@ public class DefaultItemSlotDesign : ItemSlotDesign
     }
 }
 
-public class HeroEquipmentSlotDesign : ItemSlotDesign
+public class PlusIconItemSlotDesign : ItemSlotDesign
 {
     protected override bool IsCustomSlot { get; set; } = false;
     protected static Sprite _defaultSlotSprite;

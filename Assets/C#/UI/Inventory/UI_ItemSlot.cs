@@ -58,7 +58,7 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
     /// <summary>
     /// 새 아이템이 들어갈 수 있는 슬롯인지 여부
     /// </summary>
-    public bool IsEmpty => ItemInstanceData == null && !_isCustomSlot;
+    public bool IsEmpty => ItemInstanceData == null && ItemData == null && !_isCustomSlot;
     private bool _isCustomSlot;
 
     public Action<UI_ItemSlot> OnClickAction { get; set; }
@@ -125,7 +125,7 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
     /// <summary>
     /// ItemInstanceData와 개수를 UI에 바인딩.
     /// </summary>
-    public void BindItem(ItemInstanceData itemInstanceData, int quantity = -1)
+    public void BindItem(ItemInstanceData itemInstanceData, int quantity = 1)
     {
         ItemInstanceData = itemInstanceData;
         ItemData = itemInstanceData.ItemData;
@@ -143,7 +143,10 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
         }
     }
 
-    public void BindItem(ItemData itemData, int quantity = -1)
+    /// <summary>
+    /// ItemData와 개수를 UI에 바인딩.
+    /// </summary>
+    public void BindItem(ItemData itemData, int quantity = 1)
     {
         ItemData = itemData;
         Quantity = quantity;
@@ -151,19 +154,30 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
         go_equippedFlag.SetActive(false);
     }
 
+    /// <summary>
+    /// 바인딩된 ItemInstanceData 및 ItemData 해제.
+    /// </summary>
     public void UnbindItem()
     {
         ItemInstanceData = null;
+        ItemData = null;
         _quantity = 0;
         HideDetails();
+        SetContentImage(_slotDesign.GetDefaultContentSprite());
     }
 
+    /// <summary>
+    /// itemData에 해당하는 이미지를 Content 이미지로 표시.
+    /// </summary>
     private void SetContentImage(ItemData itemData)
     {
-        Sprite sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + ItemData.ImagePath);
+        Sprite sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + itemData.ImagePath);
         SetContentImage(sprite);
     }
 
+    /// <summary>
+    /// 슬롯 Content 이미지의 스프라이트를 sprite로 설정.
+    /// </summary>
     private void SetContentImage(Sprite sprite)
     {
         if (sprite == null) return;
@@ -181,12 +195,14 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // 마우스 진입 시 slotDesign에 따른 UI 변화
         if (_slotDesign != null)
         {
             Sprite mouseOverSprite = _slotDesign.GetSlotSpriteOnMouseOver();
             if (mouseOverSprite) _slotImage.sprite = mouseOverSprite;
         }
 
+        // 바인딩된 아이템의 상세 정보 UI 생성
         if (ItemInstanceData != null)
         {
             ItemDetailUIFactory.CreateItemDetailUI(ItemInstanceData);
