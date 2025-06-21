@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Padding: {x: 0, y: 0, z: 0, w: -10}
   m_Softness: {x: 0, y: 0}
 --- !u!1 &1125671059784351640
 GameObject:
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1203852199668165362}
   m_HandleRect: {fileID: 5672832412980329971}
   m_Direction: 2
-  m_Value: 0.9999997
+  m_Value: 1.0000004
   m_Size: 0.62189806
   m_NumberOfSteps: 1
   m_OnValueChanged:
@@ -598,7 +598,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: 0.000015258789}
+  m_AnchoredPosition: {x: -0.00012207031, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &8495907475261039010
@@ -2604,6 +2604,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4437542734869376539, guid: 72c16e0b6b36d9944a8d80fdf405a2cc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6150081301796142665, guid: 72c16e0b6b36d9944a8d80fdf405a2cc, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

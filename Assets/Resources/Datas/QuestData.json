@@ -9,13 +9,6 @@
           "AreaName": "Forest",
           "Rewards": [
             {"ItemDataId": 301000, "Quantity": 2},
-            {"ItemDataId": 301000, "Quantity": 3},
-            {"ItemDataId": 301000, "Quantity": 4},
-            {"ItemDataId": 301000, "Quantity": 5},
-                        {"ItemDataId": 301000, "Quantity": 2},
-            {"ItemDataId": 301000, "Quantity": 3},
-            {"ItemDataId": 301000, "Quantity": 4},
-            {"ItemDataId": 301000, "Quantity": 5},
           ],
           "UnlockQuestDataId": [601001],
           "IsUnlocked": true,
@@ -32,8 +25,8 @@
             {"ItemDataId": 301000, "Quantity": 2},
           ],
           "UnlockQuestDataId": [],
-          "IsUnlocked": true,
-          "IsComplete": true
+          "IsUnlocked": false,
+          "IsComplete": false
       }
   ]
 }
