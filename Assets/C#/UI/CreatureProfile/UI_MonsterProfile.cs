@@ -5,10 +5,28 @@ using UnityEngine.UI;
 
 public class UI_MonsterProfile : UI_CreatureProfile
 {
-    // 아직은 UI_CreatureProfile과 동일하지만, 추후에 다른 기능이 추가될 수 있으므로 따로 분리함
     public override void Init()
     {
         base.Init();
+    }
+
+    /// <summary>
+    /// Creature를 UI에 바인딩
+    /// </summary>
+    public virtual void BindMonster(Monster monster)
+    {
+        _bindingCreature = monster;
+        monster.BindProfileUI(this);
+
+        var stat = monster.CreatureStat;
+        stat.OnStatChanged -= UpdateStatProfile;
+        stat.OnStatChanged += UpdateStatProfile;
+
+        GetText(Texts.Text_Name).text = monster.CreatureData.Name;
+        Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.CREATURE_IMAGE_PATH_PREFIX + $"{monster.CreatureData.Name}_Front");
+
+        // init
+        UpdateStatProfile(stat);
     }
 
 }

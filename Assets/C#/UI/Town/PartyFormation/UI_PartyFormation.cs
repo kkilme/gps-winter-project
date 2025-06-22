@@ -8,6 +8,8 @@ public class UI_PartyFormation : UI_Base
     enum Buttons
     {
         Button_Close,
+
+        Button_Confirm,
     }
 
     enum GameObjects
@@ -30,8 +32,10 @@ public class UI_PartyFormation : UI_Base
         _offscreenY = _rectTransform.rect.height;
         _rectTransform.anchoredPosition = new Vector2(0, _offscreenY);
 
-        GetButton(Buttons.Button_Close).onClick.AddListener(Close);
         _heroDetailParent = GetGameObject(GameObjects.Contents).transform;
+
+        GetButton(Buttons.Button_Close).onClick.AddListener(Close);
+        GetButton(Buttons.Button_Confirm).onClick.AddListener(ApplyParty);
     }
 
     /// <summary>
@@ -46,7 +50,7 @@ public class UI_PartyFormation : UI_Base
             heroDetail.LateInit(this, heroData);
 
             // 파티에 속해 있는 영웅인지 확인하고, UI에 반영
-            if (Managers.HeroMng.HeroParty.ContainsHero(heroData.InstanceId))
+            if (Managers.HeroMng.IsHeroInParty(heroData))
             {
                 _selectedHeroDetailUIs.Add(heroDetail);
             }
@@ -58,6 +62,9 @@ public class UI_PartyFormation : UI_Base
         }
     }
 
+    /// <summary>
+    /// UI_SimpleHeroDetail UI가 클릭되었을 때 호출되는 메서드.
+    /// </summary>
     public void OnHeroDetailUIClicked(UI_SimpleHeroDetail heroDetailUI)
     {
         if(_selectedHeroDetailUIs.Contains(heroDetailUI))
@@ -82,6 +89,20 @@ public class UI_PartyFormation : UI_Base
         }
     }
 
+    /// <summary>
+    /// 선택된 영웅들을 실제로 파티에 적용하는 메서드.
+    /// </summary>
+    private void ApplyParty()
+    {
+        if (_selectedHeroDetailUIs.Count == 0) return; // TODO: 선택한 영웅이 없을 시 경고 메시지 표시 등의 처리
+
+        Managers.HeroMng.SetHeroParty(_selectedHeroDetailUIs.ConvertAll(ui => ui.BindingHeroData.InstanceId));
+        Managers.TownMng.SpawnHeroes(); // 영웅을 다시 Town에 스폰
+
+        Close();
+    }
+
+    
     public override Tween Show()
     {
         gameObject.SetActive(true);

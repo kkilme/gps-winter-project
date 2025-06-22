@@ -9,7 +9,7 @@ public class UI_TownScene : UI_Scene
 {
     enum SubItemUI
     {
-        UI_Town_TopBar,
+        UI_TownTopBar,
         UI_Town_Inventory,
         UI_Town_HeroList,
         UI_Town_Store,
@@ -53,7 +53,7 @@ public class UI_TownScene : UI_Scene
         StoreUI = GetGameObject(SubItemUI.UI_Town_Store).GetOrAddComponent<UI_TownStore>();
         QuestBoardUI = GetGameObject(SubItemUI.UI_QuestBoard).GetOrAddComponent<UI_QuestBoard>();
         PartyFormationUI = GetGameObject(SubItemUI.UI_PartyFormation).GetOrAddComponent<UI_PartyFormation>();
-        //HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
+        HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
 
         GetButton(Buttons.Button_Inventory).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); InventoryUI.Show(); CurrentOpenUI = InventoryUI; });
         GetButton(Buttons.Button_HeroList).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); HeroListUI.Show(); CurrentOpenUI = HeroListUI; });

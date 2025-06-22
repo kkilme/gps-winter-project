@@ -33,12 +33,16 @@ public abstract class Creature : MonoBehaviour
     /// </summary>
     public abstract Tween LookFront(float duration = 0f);
     
+    /// <summary>
+    /// damage만큼 체력 감소
+    /// </summary>
     public void TakeDamage(int damage, DamageTextType damageTextType)
     {
         if(damage > 0) Animator.SetTrigger("OnDamaged");
-        CreatureStat.TakeDamage(damage);
-        ProfileUI.OnDamaged();
-        DamageTextFactory.CreateDamageText(this, damage, damageTextType);
+        if (ProfileUI) ProfileUI.OnDamaged();
+
+        CreatureStat.TakeDamage(damage); // 실제 데미지 적용
+        DamageTextFactory.CreateDamageText(this, damage, damageTextType); // 데미지 텍스트 생성
 
         if (IsDead())
         {
@@ -46,12 +50,15 @@ public abstract class Creature : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// heal만큼 체력 회복
+    /// </summary>
     public void TakeHeal(int heal)
     {
         var finalHeal = Mathf.Min(heal, CreatureStat.FinalStat.MaxHp - CreatureStat.Hp);
 
         CreatureStat.TakeHeal(finalHeal);
-        ProfileUI.OnHeal();
+        if (ProfileUI) ProfileUI.OnHeal();
         DamageTextFactory.CreateDamageText(this, finalHeal, DamageTextType.Heal);
     }
 

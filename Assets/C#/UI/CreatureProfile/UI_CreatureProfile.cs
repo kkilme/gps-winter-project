@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class UI_CreatureProfile : UI_Base
 {
+    protected Creature _bindingCreature; // 바인딩된 Creature 인스턴스
     protected CanvasGroup _canvasGroup;
 
     private Tweener _blinkTweener;
@@ -38,13 +39,12 @@ public class UI_CreatureProfile : UI_Base
         Slider_HP,
     }
 
-    enum Images
+    protected enum Images
     {
         Creature_Image,
         bg,
         Frame_Stat,
         Frame_Main,
-        Frame_Creature_Image,
     }
 
     public override void Init()
@@ -59,31 +59,13 @@ public class UI_CreatureProfile : UI_Base
 
         _frameImages.Add(Get<Image>(Images.Frame_Stat));
         _frameImages.Add(Get<Image>(Images.Frame_Main));
-        _frameImages.Add(Get<Image>(Images.Frame_Creature_Image));
-    }
-
-    /// <summary>
-    /// Creature를 UI에 바인딩
-    /// </summary>
-    public void BindCreature(Creature creature)
-    {
-        creature.BindProfileUI(this);
-
-        var stat = creature.CreatureStat;
-        stat.OnStatChanged -= UpdateStatProfile;
-        stat.OnStatChanged += UpdateStatProfile;
-
-        GetText(Texts.Text_Name).text = creature.CreatureData.Name;
-        Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.CREATURE_IMAGE_PATH_PREFIX + $"{creature.CreatureData.Name}_Front");
-
-        // init
-        UpdateStatProfile(stat);
+        _frameImages.Add(Get<Image>(Images.bg));
     }
 
     /// <summary>
     /// 바인딩된 Creature의 스탯에 변화가 있을 시 UI 업데이트
     /// </summary>
-    private void UpdateStatProfile(CreatureStat creatureStat)
+    protected virtual void UpdateStatProfile(CreatureStat creatureStat)
     {
         var stats = new (Texts, int)[]
         {
@@ -120,6 +102,9 @@ public class UI_CreatureProfile : UI_Base
         _creatureImageBg.color = _creatureImageBgOriginalColor;
     }
 
+    /// <summary>
+    /// 바인딩된 Creature가 피해를 입었을 때 프레임이 빨간색으로 깜빡이게 함
+    /// </summary>
     public void OnDamaged()
     {
         _frameColorTweener?.Kill();
@@ -132,6 +117,9 @@ public class UI_CreatureProfile : UI_Base
         }
     }
 
+    /// <summary>
+    /// 바인딩된 Creature가 치유를 받았을 때 프레임이 초록색으로 깜빡이게 함
+    /// </summary>
     public void OnHeal()
     {
         _frameColorTweener?.Kill();
@@ -144,9 +132,22 @@ public class UI_CreatureProfile : UI_Base
         }
     }
 
+    /// <summary>
+    /// 바인딩된 Creature가 사망했을 때의 UI 업데이트
+    /// </summary>
     public void OnDead()
     {
         GetText(Texts.Text_Dead).gameObject.SetActive(true);
         _canvasGroup.DOFade(0.33f, 1f).OnComplete(() => GetText(Texts.Text_Dead).gameObject.SetActive(true));
+    }
+
+    private void OnDestroy()
+    {
+        if(_bindingCreature != null)
+        {
+            var stat = _bindingCreature.CreatureStat;
+            stat.OnStatChanged -= UpdateStatProfile;
+            _bindingCreature.BindProfileUI(null);
+        }
     }
 }

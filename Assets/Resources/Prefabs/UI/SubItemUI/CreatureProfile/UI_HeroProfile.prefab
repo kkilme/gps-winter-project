@@ -1854,6 +1854,7 @@ GameObject:
   - component: {fileID: 3873356424598273891}
   - component: {fileID: 6944843186229170042}
   - component: {fileID: 1239448243670252583}
+  - component: {fileID: 5246253029675999103}
   m_Layer: 5
   m_Name: UI_HeroProfile
   m_TagString: Untagged
@@ -1906,6 +1907,26 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &5246253029675999103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3873356424598273890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 560
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &3873356424704805576
 GameObject:
   m_ObjectHideFlags: 0

@@ -55,6 +55,9 @@ public class HeroManager
         }
     }
 
+    /// <summary>
+    /// 게임 오브젝트로 스폰된 영웅들을 파괴하고, HeroParty의 런타임 영웅 리스트를 초기화.
+    /// </summary>
     public void DestroyHeroParty()
     {
         foreach (var hero in HeroParty.RuntimeHeroes)
@@ -65,6 +68,45 @@ public class HeroManager
             }
         }
         HeroParty.ClearRuntimeHeroes();
+    }
+
+    /// <summary>
+    /// 영웅 인스턴스 ID 리스트를 받아 파티로 설정.
+    /// </summary>
+    /// <remarks>
+    /// 리스트의 크기는 1 이상, GlobalValues.MAX_PARTY_SIZE 이하여야한다. 영웅 스폰은 따로 해주어야 한다.
+    /// </remarks>
+    public void SetHeroParty(List<int> heroInstanceIds)
+    {
+        if(heroInstanceIds == null || heroInstanceIds.Count == 0)
+        {
+            Debug.LogWarning("[HeroManager] Cannot set empty hero party.");
+            return;
+        }
+
+        if(heroInstanceIds.Count > GlobalValues.MAX_PARTY_SIZE)
+        {
+            Debug.LogWarning($"[HeroManager] Cannot set hero party with more than {GlobalValues.MAX_PARTY_SIZE} heroes.");
+            return;
+        }
+
+        DestroyHeroParty();
+        HeroParty.HeroIds.Clear();
+
+        foreach(int heroInstanceId in heroInstanceIds)
+        {
+            HeroParty.AddHero(heroInstanceId);
+        }
+    }
+
+    public bool IsHeroInParty(int heroInstanceId)
+    {
+        return HeroParty.HeroIds.Contains(heroInstanceId);
+    }
+
+    public bool IsHeroInParty(HeroInstanceData heroInstanceData)
+    {
+        return IsHeroInParty(heroInstanceData.InstanceId);
     }
 }
 

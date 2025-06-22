@@ -16,10 +16,10 @@ public class TownManager
             _heroPositions[heroSpawnPoints.Length - i - 1] = heroSpawnPoints[i].transform;
         }
 
-        SpawnHeroes();
-
         UI = Managers.UIMng.ShowSceneUI<UI_TownScene>();
         UI.InitUIs();
+
+        SpawnHeroes();
     }
 
     public void SpawnHeroes()
@@ -32,5 +32,7 @@ public class TownManager
             hero.transform.LookAt(Camera.main.transform.position);
             hero.transform.rotation = Quaternion.Euler(0, hero.transform.rotation.eulerAngles.y, 0);
         }
+
+        UI.HeroProfileGroupUI.BindCreature();
     }
 }

@@ -8,7 +8,7 @@ public class HeroParty
 {
     public List<int> HeroIds { get; private set; } = new(); // 파티에 속한 heroInstanceId 리스트
     public Dictionary<int, Hero> RuntimeHeroesDict { get; private set; } = new(); // key: heroInstanceId, value: Hero
-    public List<Hero> RuntimeHeroes { get; private set; } = new(); // Area/Battle에서 사용되는 Hero객체 리스트
+    public List<Hero> RuntimeHeroes => RuntimeHeroesDict.Values.ToList(); // Area/Battle에서 사용되는 Hero객체 리스트
 
     private Dictionary<int, Vector2Int> _battlePositions = new(); // key: heroInstanceId, value: Battle에서 배치되는 위치(col, row). 현재 파티에 포함되어 있지 않은 영웅의 위치 정보도 저장되어있음. 
     private Dictionary<int, Vector2Int> _battlePositionsCache = new(); // key: heroInstanceId, value: 좌표. 현재 파티에 포함되어 있는 영웅의 battlePosition만 저장되는 딕셔너리. - 최대 Length 4
@@ -36,7 +36,6 @@ public class HeroParty
             Debug.LogWarning($"[HeroParty] Could not add RuntimeHero: {id} {hero.name}");
             return;
         }
-        RuntimeHeroes.Add(hero);
         RuntimeHeroesDict.Add(id, hero);
     }
 
@@ -45,18 +44,10 @@ public class HeroParty
     /// </summary>
     public void ClearRuntimeHeroes()
     {
-        RuntimeHeroes.Clear();
         RuntimeHeroesDict.Clear();
         _battlePositionsCache.Clear();
     }
 
-    /// <summary>
-    /// 특정 영웅이 파티에 포함되어 있는지 확인.
-    /// </summary>
-    public bool ContainsHero(int heroInstanceId)
-    {
-        return HeroIds.Contains(heroInstanceId);
-    }
 
     /// <summary>
     /// 특정 영웅의 인덱스를 반환. 파티에 포함되어 있지 않은 경우 -1 반환.

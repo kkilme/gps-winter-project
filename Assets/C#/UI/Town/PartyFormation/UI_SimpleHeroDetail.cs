@@ -41,8 +41,8 @@ public class UI_SimpleHeroDetail : UI_Base, IPointerClickHandler
         CloakSlot,
     }
 
+    public HeroInstanceData BindingHeroData;
     private UI_PartyFormation _partyFormationUI;
-    private HeroInstanceData _bindingHeroData;
 
     public override void Init() {}
 
@@ -53,7 +53,7 @@ public class UI_SimpleHeroDetail : UI_Base, IPointerClickHandler
         Bind<GameObject>(typeof(GameObjects));
 
         _partyFormationUI = partyFormationUI;
-        _bindingHeroData = heroData;
+        BindingHeroData = heroData;
 
         // 히어로 Stat 및 기본 정보 UI에 반영
         UpdateUI(heroData);
@@ -100,7 +100,7 @@ public class UI_SimpleHeroDetail : UI_Base, IPointerClickHandler
 
     private void OnDestroy()
     {
-        if (_bindingHeroData != null) _bindingHeroData.Stat.OnStatChanged -= UpdateStatUI;
+        if (BindingHeroData != null) BindingHeroData.Stat.OnStatChanged -= UpdateStatUI;
     }
 
     public void OnPointerClick(PointerEventData eventData)

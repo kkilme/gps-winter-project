@@ -30,7 +30,7 @@ public class UI_MonsterProfileGroup : UI_CreatureProfileGroup
         {
             var profile = GetGameObject((MonsterProfileUI)index++).GetOrAddComponent<UI_MonsterProfile>();
             _creatureProfiles.Add(monster, profile);
-            profile.BindCreature(monster);
+            profile.BindMonster(monster);
             profile.Show();
         }
     }

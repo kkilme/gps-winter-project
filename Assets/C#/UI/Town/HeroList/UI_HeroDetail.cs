@@ -62,6 +62,9 @@ public class UI_HeroDetail : UI_Base
 
         _bindingHeroData = heroData;
 
+        // 영웅이 파티에 속해 있는지 여부에 따라 Indicator UI 표시
+        GetGameObject(GameObjects.Indicator_InParty).SetActive(Managers.HeroMng.IsHeroInParty(heroData));
+
         // 이름 입력 필드 관련 초기화
         GetText(Texts.Text_HeroName).text = heroData.CustomName;
         _heroNameInputField = Get<TMP_InputField>(InputField.InputField_HeroName);
@@ -70,7 +73,7 @@ public class UI_HeroDetail : UI_Base
         GetButton(Buttons.Button_ChangeName).onClick.AddListener(EnableNameEdit);
         _heroNameInputField.onEndEdit.AddListener(FinishNameEdit);
 
-        // 히어로 Stat 및 기본 정보 UI에 반영
+        // 영웅 Stat 및 기본 정보 UI에 반영
         UpdateUI(heroData);
 
         // 장비 UI 초기화
@@ -79,6 +82,7 @@ public class UI_HeroDetail : UI_Base
         GetGameObject(GameObjects.BodySlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Body, new PlusIconItemSlotDesign());
         GetGameObject(GameObjects.CloakSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Cloak, new PlusIconItemSlotDesign());
 
+        // 영웅 Stat 변화에 따라 UI 업데이트
         heroData.Stat.OnStatChanged -= UpdateStatUI;
         heroData.Stat.OnStatChanged += UpdateStatUI;
     }

@@ -31,6 +31,12 @@ public class GameStarter
         {
             Managers.HeroMng.HeroParty.AddHero(key);
         }
+
+        Managers.HeroMng.HeroStorage.AddHero(GlobalValues.HERO_KNIGHT_ID);
+        Managers.HeroMng.HeroStorage.AddHero(GlobalValues.HERO_KNIGHT_ID);
+        Managers.HeroMng.HeroStorage.AddHero(GlobalValues.HERO_WIZARD_ID);
+        Managers.HeroMng.HeroStorage.AddHero(GlobalValues.HERO_WIZARD_ID);
+
     }
 
     private void AddStartItems()

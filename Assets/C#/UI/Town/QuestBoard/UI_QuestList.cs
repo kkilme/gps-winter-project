@@ -9,12 +9,6 @@ public class UI_QuestList : UI_Base
         Button_Close
     }
 
-    enum GameObjects
-    {
-        QuestBoard,
-        UI_Quest,
-    }
-
     private UI_QuestBoard _questBoard;
 
     private ScrollRect _scrollRect;
@@ -23,7 +17,6 @@ public class UI_QuestList : UI_Base
     public override void Init()
     {
         Bind<Button>(typeof(Buttons));
-        Bind<GameObject>(typeof(GameObjects));
         GetButton(Buttons.Button_Close).onClick.AddListener(Close);
 
         _scrollRect = GetComponentInChildren<ScrollRect>();
