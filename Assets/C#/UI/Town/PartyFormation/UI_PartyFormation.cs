@@ -1,11 +1,9 @@
 using DG.Tweening;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_HeroList : UI_Base
+public class UI_PartyFormation : UI_Base
 {
     enum Buttons
     {
@@ -16,6 +14,8 @@ public class UI_HeroList : UI_Base
     {
         Contents,
     }
+
+    private List<UI_SimpleHeroDetail> _selectedHeroDetailUIs = new List<UI_SimpleHeroDetail>();
 
     private RectTransform _rectTransform;
     private float _offscreenY; // 화면에서 UI를 숨길 때 이동할 Y좌표
@@ -35,15 +35,50 @@ public class UI_HeroList : UI_Base
     }
 
     /// <summary>
-    /// 보유한 모든 영웅의 데이터를 기반으로 HeroDetail UI를 생성 및 초기화하고 GridLayout에 채움.
+    /// 보유한 모든 영웅의 데이터를 기반으로 SimpleHeroDetail UI를 생성 및 초기화하고 GridLayout에 채움.
     /// </summary>
-    private void FillHeroDetailUI()
+    private void FillSimpleHeroDetailUI()
     {
         List<HeroInstanceData> savedHeroDatas = Managers.HeroMng.HeroStorage.GetAllOwnedHeroDatas();
         foreach (var heroData in savedHeroDatas)
         {
-            UI_HeroDetail heroDetail = Managers.UIMng.MakeSubItemUI<UI_HeroDetail>(_heroDetailParent, "Town/" + nameof(UI_HeroDetail));
-            heroDetail.BindHero(heroData);
+            UI_SimpleHeroDetail heroDetail = Managers.UIMng.MakeSubItemUI<UI_SimpleHeroDetail>(_heroDetailParent, "Town/" + nameof(UI_SimpleHeroDetail));
+            heroDetail.LateInit(this, heroData);
+
+            // 파티에 속해 있는 영웅인지 확인하고, UI에 반영
+            if (Managers.HeroMng.HeroParty.ContainsHero(heroData.InstanceId))
+            {
+                _selectedHeroDetailUIs.Add(heroDetail);
+            }
+            else
+            {
+                heroDetail.DisableOrderInParty();
+            }
+            UpdateHeroDetailUIOrder();
+        }
+    }
+
+    public void OnHeroDetailUIClicked(UI_SimpleHeroDetail heroDetailUI)
+    {
+        if(_selectedHeroDetailUIs.Contains(heroDetailUI))
+        {
+            // 이미 선택된 영웅을 클릭한 경우, 선택 해제
+            _selectedHeroDetailUIs.Remove(heroDetailUI);
+            heroDetailUI.DisableOrderInParty();
+        }
+        else if (_selectedHeroDetailUIs.Count < GlobalValues.MAX_PARTY_SIZE)
+        {
+            // 새 영웅을 선택한 경우, 선택된 영웅 목록에 추가
+            _selectedHeroDetailUIs.Add(heroDetailUI);
+        }
+        UpdateHeroDetailUIOrder();
+    }
+
+    private void UpdateHeroDetailUIOrder()
+    {
+        for (int i = 1; i <= _selectedHeroDetailUIs.Count; i++)
+        {
+            _selectedHeroDetailUIs[i-1].SetOrderInParty(i);
         }
     }
 
@@ -51,7 +86,7 @@ public class UI_HeroList : UI_Base
     {
         gameObject.SetActive(true);
         Clear();
-        FillHeroDetailUI();
+        FillSimpleHeroDetailUI();
         _heroDetailParent.localPosition = new Vector3(0, 0, 0);
         Canvas.ForceUpdateCanvases(); // scrollbar의 size가 제대로 계산되도록 강제 업데이트
         return _rectTransform.DOAnchorPosY(0, 0.5f).SetEase(Ease.OutCubic).OnComplete(() => { GetButton(Buttons.Button_Close).interactable = true; });
@@ -80,6 +115,7 @@ public class UI_HeroList : UI_Base
 
     public void Clear()
     {
+        _selectedHeroDetailUIs.Clear();
         for (int i = _heroDetailParent.childCount - 1; i >= 0; i--)
         {
             Destroy(_heroDetailParent.GetChild(i).gameObject);

@@ -1,8 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
+/* NOTE:
+ * 현재 디자인이 필요할 때마다 new()로 생성하는데, 디자인을 캐시하여 재사용할 수 있도록 개선 가능할 것으로 보임.
+ */
 /// <summary>
-/// 아이템 슬롯의 디자인 정보를 보유하며, 아이템 슬롯을 생성하는 클래스.
+/// 아이템 슬롯의 디자인 정보를 보유하며, 디자인을 적용한 아이템 슬롯을 생성도 하는 클래스.
 /// </summary>
 public abstract class ItemSlotDesign
 {
@@ -36,7 +39,6 @@ public abstract class ItemSlotDesign
     /// 기본적으로 사용될 슬롯 내용물 이미지 스프라이트를 반환. 존재하지 않는 경우 null을 반환.
     /// </summary>
     public abstract Sprite GetDefaultContentSprite();
-
 }
 
 public class DefaultItemSlotDesign : ItemSlotDesign

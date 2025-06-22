@@ -50,17 +50,16 @@ public class UI_HeroDetail : UI_Base
     private HeroInstanceData _bindingHeroData;
     private TMP_InputField _heroNameInputField;
 
-    public override void Init()
+    public override void Init() {}
+
+    public void BindHero(HeroInstanceData heroData)
     {
         Bind<Image>(typeof(Images));
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<TMP_InputField>(typeof(InputField));
         Bind<Button>(typeof(Buttons));
         Bind<GameObject>(typeof(GameObjects));
-    }
 
-    public void LateInit(HeroInstanceData heroData)
-    {
         _bindingHeroData = heroData;
 
         // 이름 입력 필드 관련 초기화
@@ -75,10 +74,10 @@ public class UI_HeroDetail : UI_Base
         UpdateUI(heroData);
 
         // 장비 UI 초기화
-        GetGameObject(GameObjects.WeaponSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Weapon);
-        GetGameObject(GameObjects.HelmetSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Helmet);
-        GetGameObject(GameObjects.BodySlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Body);
-        GetGameObject(GameObjects.CloakSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Cloak);
+        GetGameObject(GameObjects.WeaponSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Weapon, new PlusIconItemSlotDesign());
+        GetGameObject(GameObjects.HelmetSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Helmet, new PlusIconItemSlotDesign());
+        GetGameObject(GameObjects.BodySlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Body, new PlusIconItemSlotDesign());
+        GetGameObject(GameObjects.CloakSlot).GetOrAddComponent<UI_HeroEquipmentSlot>().LateInit(heroData, EquipmentType.Cloak, new PlusIconItemSlotDesign());
 
         heroData.Stat.OnStatChanged -= UpdateStatUI;
         heroData.Stat.OnStatChanged += UpdateStatUI;

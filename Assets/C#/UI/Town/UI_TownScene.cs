@@ -15,15 +15,21 @@ public class UI_TownScene : UI_Scene
         UI_Town_Store,
         UI_QuestBoard,
         UI_HeroProfileGroup_Horizontal,
+
+        UI_PartyFormation
     }
 
     enum Buttons
     {
+        // TopBar Buttons
         Button_Inventory,
         Button_HeroList,
         Button_Store,
         Button_Quest,
         Button_Setting,
+
+        // SideBar Buttons
+        Button_PartyFormation,
     }
 
     public UI_Base CurrentOpenUI { get; set; }
@@ -32,6 +38,8 @@ public class UI_TownScene : UI_Scene
     public UI_TownStore StoreUI { get; protected set; }
     public UI_QuestBoard QuestBoardUI { get; protected set; }
     public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
+
+    public UI_PartyFormation PartyFormationUI { get; protected set; }
 
     public override void Init()
     {
@@ -44,12 +52,15 @@ public class UI_TownScene : UI_Scene
         HeroListUI = GetGameObject(SubItemUI.UI_Town_HeroList).GetOrAddComponent<UI_HeroList>();
         StoreUI = GetGameObject(SubItemUI.UI_Town_Store).GetOrAddComponent<UI_TownStore>();
         QuestBoardUI = GetGameObject(SubItemUI.UI_QuestBoard).GetOrAddComponent<UI_QuestBoard>();
+        PartyFormationUI = GetGameObject(SubItemUI.UI_PartyFormation).GetOrAddComponent<UI_PartyFormation>();
         //HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
 
         GetButton(Buttons.Button_Inventory).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); InventoryUI.Show(); CurrentOpenUI = InventoryUI; });
         GetButton(Buttons.Button_HeroList).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); HeroListUI.Show(); CurrentOpenUI = HeroListUI; });
         GetButton(Buttons.Button_Store).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); StoreUI.Show(); CurrentOpenUI = StoreUI; });
         GetButton(Buttons.Button_Quest).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); QuestBoardUI.Show(); CurrentOpenUI = QuestBoardUI; });
+        GetButton(Buttons.Button_PartyFormation).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly();  PartyFormationUI.Show(); CurrentOpenUI = PartyFormationUI; });
+
     }
 
     public void InitUIs()

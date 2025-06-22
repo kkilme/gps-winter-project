@@ -14,7 +14,7 @@ public static class GlobalValues
     public const float CREATURE_BATTLE_VELOCITY = 5f;
 
     public const int MAX_COIN_COUNT = 8;
-    public const int MAX_HERO_COUNT = 4;
+    public const int MAX_PARTY_SIZE = 4;
 
     public const int AREA_REST_TURN_COUNT = 3;
 

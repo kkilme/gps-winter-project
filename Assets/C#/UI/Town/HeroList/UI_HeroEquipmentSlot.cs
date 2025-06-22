@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 /// <summary>
@@ -20,21 +21,26 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
     private EquipmentInstanceData _equipmentInstance; // 이 장비 슬롯에 장착된 장비 인스턴스 데이터
     private EquipmentType _equipmentType; // 이 장비 슬롯이 담당하는 장비 타입
 
-    private static ItemSlotDesign _slotDesign = new PlusIconItemSlotDesign(); // 슬롯 디자인 정보. PlusIconItemSlotDesign 사용
+    private ItemSlotDesign _slotDesign; // 슬롯 디자인 정보. PlusIconItemSlotDesign 사용
     private Image _slotImage;
+
+    private bool _enableEquipmentChange = true; // 장비 변경 가능 여부. 기본값은 true.
 
     public override void Init()
     {
         Bind<Image>(typeof(Images));
-
-        _slotImage = GetComponent<Image>();
-        _slotImage.sprite = _slotDesign.GetDefaultSlotSprite();
     }
 
-    public void LateInit(HeroInstanceData heroInstance, EquipmentType type)
+    public void LateInit(HeroInstanceData heroInstance, EquipmentType type, ItemSlotDesign slotDesign, bool enableEquipmentChange = true)
     {
         _heroInstance = heroInstance;
         _equipmentType = type;
+        _slotDesign = slotDesign;
+        _enableEquipmentChange = enableEquipmentChange;
+
+        _slotImage = GetComponent<Image>();
+        _slotImage.sprite = slotDesign.GetDefaultSlotSprite();
+        
         _heroInstance.OnEquipmentChanged -= BindEquipment;
         _heroInstance.OnEquipmentChanged += BindEquipment; // 영웅의 장비가 변경될 때마다 BindEquipment 호출
 
@@ -59,17 +65,28 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
     /// <summary>
     /// 장비 슬롯에 equipmentInstanceData 바인딩
     /// </summary>
-    /// <param name="equipmentInstance"></param>
     public void BindEquipment(EquipmentInstanceData equipmentInstance)
     {
         _equipmentInstance = equipmentInstance;
         if (equipmentInstance != null && Managers.DataMng.EquipmentDataDict.TryGetValue(equipmentInstance.ItemDataId, out EquipmentData equipmentData))
         {
-            GetImage(Images.Image_Equipment).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + equipmentData.ImagePath);
+            Image contentImage = GetImage(Images.Image_Equipment);
+            contentImage.gameObject.SetActive(true);
+            contentImage.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ITEMIMAGE_PATH_PREFIX + equipmentData.ImagePath);
         }
         else
         {
-            GetImage(Images.Image_Equipment).sprite = _slotDesign.GetDefaultContentSprite();
+            Image contentImage = GetImage(Images.Image_Equipment);
+            Sprite defaultSprite = _slotDesign.GetDefaultContentSprite();
+            if(defaultSprite != null)
+            {
+                contentImage.gameObject.SetActive(true);
+                contentImage.sprite = defaultSprite;
+            }
+            else
+            {
+                contentImage.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -95,6 +112,8 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if(!_enableEquipmentChange) return; // 장비 변경이 비활성화된 경우 아무 동작도 하지 않음
+
         // 이미 열린 장비 선택 창이 있다면 닫기
         Managers.UIMng.ClosePopupUI<UI_EquipmentSelectPopup>();
 

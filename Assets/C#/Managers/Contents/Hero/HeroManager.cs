@@ -14,8 +14,7 @@ public class HeroManager
     /// </summary>
     public void SpawnHeroParty()
     {
-        HeroParty.RuntimeHeroes.Clear();
-        HeroParty.RuntimeHeroesDict.Clear();
+        DestroyHeroParty();
         foreach (int heroInstanceId in HeroParty.HeroIds)
         {
             HeroInstanceData data = HeroStorage.GetHeroInstanceData(heroInstanceId);
@@ -54,6 +53,18 @@ public class HeroManager
                 }
             }
         }
+    }
+
+    public void DestroyHeroParty()
+    {
+        foreach (var hero in HeroParty.RuntimeHeroes)
+        {
+            if (hero != null)
+            {
+                Managers.ResourceMng.Destroy(hero.gameObject);
+            }
+        }
+        HeroParty.ClearRuntimeHeroes();
     }
 }
 

@@ -16,7 +16,7 @@ public abstract class ItemDetailDesign
 
         ApplyDesign(ui, itemInstanceData, quantity);
 
-        canvasGroup.DOFade(1f, 0.2f).SetEase(Ease.OutSine);
+        canvasGroup.DOFade(1f, 0.4f).SetEase(Ease.OutSine);
     }
     public void Apply(UI_ItemDetailPopup ui, ItemData itemData, int quantity = 0)
     {
@@ -25,7 +25,7 @@ public abstract class ItemDetailDesign
 
         ApplyDesign(ui, itemData, quantity);
 
-        canvasGroup.DOFade(1f, 0.2f).SetEase(Ease.OutSine);
+        canvasGroup.DOFade(1f, 0.4f).SetEase(Ease.OutSine);
     }
 
     protected virtual void ApplyDesign(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)

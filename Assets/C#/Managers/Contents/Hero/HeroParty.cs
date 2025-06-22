@@ -18,16 +18,16 @@ public class HeroParty
     /// </summary>
     public void AddHero(int id)
     {
-        if(HeroIds.Count >= GlobalValues.MAX_HERO_COUNT)
+        if(HeroIds.Count >= GlobalValues.MAX_PARTY_SIZE)
         {
-            Debug.LogWarning($"[HeroParty] Cannot add more heroes. Max hero count is {GlobalValues.MAX_HERO_COUNT}");
+            Debug.LogWarning($"[HeroParty] Cannot add more heroes. Max hero count is {GlobalValues.MAX_PARTY_SIZE}");
             return;
         }
         HeroIds.Add(id);
     }
 
     /// <summary>
-    /// 실제 게임에서 사용될 Hero 객체를 딕셔너리에 추가.
+    /// 게임에서 사용되는 Hero 객체를 딕셔너리에 추가.
     /// </summary>
     public void AddRuntimeHero(int id, Hero hero)
     {
@@ -38,6 +38,32 @@ public class HeroParty
         }
         RuntimeHeroes.Add(hero);
         RuntimeHeroesDict.Add(id, hero);
+    }
+
+    /// <summary>
+    /// 런타임 영웅 관련 자료구조 초기화.
+    /// </summary>
+    public void ClearRuntimeHeroes()
+    {
+        RuntimeHeroes.Clear();
+        RuntimeHeroesDict.Clear();
+        _battlePositionsCache.Clear();
+    }
+
+    /// <summary>
+    /// 특정 영웅이 파티에 포함되어 있는지 확인.
+    /// </summary>
+    public bool ContainsHero(int heroInstanceId)
+    {
+        return HeroIds.Contains(heroInstanceId);
+    }
+
+    /// <summary>
+    /// 특정 영웅의 인덱스를 반환. 파티에 포함되어 있지 않은 경우 -1 반환.
+    /// </summary>
+    public int GetHeroIndex(int heroInstanceId)
+    {
+        return HeroIds.IndexOf(heroInstanceId);
     }
 
     /// <summary>
@@ -62,7 +88,7 @@ public class HeroParty
 
     #region Battle
     /// <summary>
-    /// 영웅의 BattleGrid 위치를 반환.
+    /// 전투에서 영웅이 배치될 BattleGrid 좌표를 반환.
     /// </summary>
     public Vector2Int GetBattlePosition(int heroInstanceId)
     {
@@ -86,7 +112,7 @@ public class HeroParty
                 for (int j = 0; j < GlobalValues.BATTLEGRID_COL_COUNT; j++)
                 {
                     Vector2Int pos = new Vector2Int(j, i);
-                    if (!usedPos.Contains(pos)) // BattleGrid 칸의 수(6)는 파티 최대 인원 수(4)보다 크므로, 반드시 빈 위치가 존재함
+                    if (!usedPos.Contains(pos)) // 현재 구현상 BattleGrid 칸의 수(6)는 파티 최대 인원 수(4)보다 크므로, 반드시 빈 위치가 존재함
                     {
                         _battlePositionsCache.Add(heroInstanceId, pos);
                         if(!_battlePositions.ContainsKey(heroInstanceId))
