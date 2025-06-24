@@ -32,7 +32,7 @@ public class UI_TownScene : UI_Scene
         Button_PartyFormation,
     }
 
-    public UI_Base CurrentOpenUI { get; set; }
+    public UI_Base CurrentOpenUI { get; set; } // 각종 마을 씬의 UI중 현재 열린 UI
     public UI_TownInventory InventoryUI { get; protected set; }
     public UI_HeroList HeroListUI { get; protected set; }
     public UI_TownStore StoreUI { get; protected set; }
@@ -60,7 +60,6 @@ public class UI_TownScene : UI_Scene
         GetButton(Buttons.Button_Store).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); StoreUI.Show(); CurrentOpenUI = StoreUI; });
         GetButton(Buttons.Button_Quest).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly(); QuestBoardUI.Show(); CurrentOpenUI = QuestBoardUI; });
         GetButton(Buttons.Button_PartyFormation).onClick.AddListener(() => { CurrentOpenUI?.HideInstantly();  PartyFormationUI.Show(); CurrentOpenUI = PartyFormationUI; });
-
     }
 
     public void InitUIs()

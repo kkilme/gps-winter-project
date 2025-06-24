@@ -8,14 +8,17 @@ public class AreaManager
 {
     public AreaMap Map { get; private set; }
     public AreaData AreaData { get; private set; }
-    public Loot Loots { get; set; }
+    public Loot Loots { get; set; } // Area에서 획득한 아이템들
+    public List<ItemData> Items { get; set; } // Area에서 사용하고자 가져온 아이템들
+
+    // Area 시스템 관련 헬퍼 클래스들 ///////////////////////////
     public AreaInputHandler AreaInputHandler { get; private set; }
     public AreaCollapseSystem CollapseSystem { get; private set; }
     public AreaCameraController CameraController { get; private set; }
     public UI_AreaScene UI { get; private set; }
+    /////////////////////////////////////////////////////////////////////////////////
 
     public AreaState AreaState { get; set; }
-
     public Vector3 CurrentPlayerPosition { get; set; } // 현재 영웅 파티의 WorldPosition = 타일의 중앙 위치
     private HeroParty _party => Managers.HeroMng.HeroParty;
 
@@ -26,20 +29,25 @@ public class AreaManager
 
     #region Init
 
-    public void Init(AreaName areaName, AreaMap map)
+    public void Init(AreaMap map, AreaInitContext areaInitContext)
     {
+        Debug.Log("[AreaManager] Init AreaManager");
+        // 각종 필드 초기화
         Map = map;
-        AreaData = Managers.DataMng.AreaDataDict[areaName];
+        AreaData = Managers.DataMng.AreaDataDict[areaInitContext.AreaName];
         UI = Managers.UIMng.ShowSceneUI<UI_AreaScene>();
         Loots = new Loot();
+        Items = new List<ItemData>(areaInitContext.Items);
         _light = GameObject.FindGameObjectWithTag("AreaLight");
 
         CurrentPlayerPosition = Map.GetPlayerStartWorldPosition();
         _currentTile = Map.GetEventTile(CurrentPlayerPosition);
 
+        // AreaInputHandler 초기화
         AreaInputHandler = new AreaInputHandler();
         AreaInputHandler.Init(CurrentPlayerPosition);
 
+        // CollapseSystem 초기화
         CollapseSystem = new AreaCollapseSystem();
         CollapseSystem.Init(AreaData.CollapseTimer, AreaData.CollapseAmount);
 
@@ -47,12 +55,14 @@ public class AreaManager
         InitHeroes();
         InitCamera();
 
-        Map.OnAreaStart();
+        Map.OnAreaStart(); // 일부 지역(보스 타일 등)의 전장의 안개를 미리 밝힘
         UpdateTileBrightness();
         Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
 
+        // 각종 초기화 완료 후, UI 초기화
         UI.OnAreaInitComplete();
 
+        // 모든 초기화 완료 후 마우스 이벤트 핸들러 등록
         Managers.InputMng.AddMouseAction(AreaInputHandler.HandleMouseInput);
 
         AreaState = AreaState.Idle;
@@ -217,6 +227,9 @@ public class AreaManager
         Managers.InputMng.AddMouseAction(AreaInputHandler.HandleMouseInput);
     }
 
+    /// <summary>
+    /// 어떤 타일의 이벤트가 끝났을 때 호출되는 메서드
+    /// </summary>
     public IEnumerator OnTileEventFinish()
     {
         _currentTile.OnTileEventFinish();

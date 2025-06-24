@@ -60,6 +60,8 @@ public partial class AreaMapGenerator : MonoBehaviour
 
     public AreaMap GenerateMap()
     {
+        Debug.Log($"[AreaMapGenerator.GenerateMap] Start generating map.");
+
         GenerateSubtiles();
         GenerateMainTile();
         SetupPlayableField(out List<Vector2Int> playableField, out List<Vector2Int> unplayableField);
@@ -69,10 +71,13 @@ public partial class AreaMapGenerator : MonoBehaviour
         GenerateFogOfWar();
         Map.RevealFogOfWarOnAreaStart(); // 전장의 안개 일부 미리 밝힘. Debug 편의를 위해 AreaManager가 아니라 여기서 함.
 
+        Debug.Log($"[AreaMapGenerator.GenerateMap] Finished generating map.");
         return Map;
     }
 
-    // Subtile 생성 알고리즘
+    /// <summary>
+    /// Subtile 생성 알고리즘
+    /// </summary>
     public void GenerateSubtiles()
     {
         AreaSubTileGroupData[] subTileGroupDatas = _data.SubTileGroupData;

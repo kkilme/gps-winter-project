@@ -357,6 +357,10 @@ public class AreaMap
         RevealFogOfWar(GridToWorldPosition(BossPosition), 1); // 보스 지점에서 범위 1 반경의 전장의 안개 제거
     }
 
+    /// <summary>
+    /// Area 시작 시 모든 타일의 밝기를 낮추고 정해진 위치의 전장의 안개 제거
+    /// </summary>
+    /// <remarks>타일 밝기를 여기서 낮추는 이유는 맵 생성만 테스트할 시에 편의를 위함</remarks>
     public void OnAreaStart()
     {
         for (int z = 0; z < Height; z++)

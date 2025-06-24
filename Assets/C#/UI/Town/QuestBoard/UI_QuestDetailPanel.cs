@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -84,6 +85,9 @@ public class UI_QuestDetailPanel : UI_Base
         GetText(Texts.Text_ItemCount).text = $"<color=#F8913F>0</color> / 8";
     }
 
+    /// <summary>
+    /// ItemInventory의 슬롯을 클릭했을 때 호출되는 콜백 함수.
+    /// </summary>
     private void OnItemInventorySlotClicked(UI_ItemSlot selectedSlot)
     {
         if (selectedSlot.IsEmpty)
@@ -110,6 +114,9 @@ public class UI_QuestDetailPanel : UI_Base
         }
     }
 
+    /// <summary>
+    /// ItemInventory에 itemData를 추가하는 메서드.
+    /// </summary>
     public void AddItem(ItemData itemData)
     {
         ItemInventory.AddItem(itemData);
@@ -117,9 +124,24 @@ public class UI_QuestDetailPanel : UI_Base
         GetText(Texts.Text_ItemCount).text = $"<color=#F8913F>{notEmptySlotCnt}</color> / 8";
     }
 
+    /// <summary>
+    /// 선택된 퀘스트를 시작하는 메서드. AreaScene을 로드하는 메소드를 호출한다.
+    /// </summary>
     private void StartQuest(Quest quest)
     {
-        
+        if (quest == null || !quest.QuestData.IsUnlocked)
+        {
+            Debug.LogError("[UI_QuestDetailPanel] Attempted to start an invalid or locked quest.");
+            return;
+        }
+
+        List<ItemData> itemDatas = ItemInventory.InventorySlots
+            .FindAll(slot => !slot.IsEmpty)
+            .ConvertAll(slot => slot.ItemData);
+
+        AreaInitContext areaInitContext = new(quest, itemDatas);
+
+        CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadAreaScene(areaInitContext)); // Area 씬 로드 시작
     }
 
     public void Close()

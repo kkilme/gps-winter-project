@@ -110,9 +110,10 @@ public class UI_CreatureProfile : UI_Base
         _frameColorTweener?.Kill();
         foreach (var image in _frameImages)
         {
+            Color originalColor = image.color;
             image.DOColor(Color.red, 0.2f).OnComplete(() =>
             {
-                image.DOColor(Color.white, 0.2f);
+                image.DOColor(originalColor, 0.2f);
             });
         }
     }
@@ -125,9 +126,10 @@ public class UI_CreatureProfile : UI_Base
         _frameColorTweener?.Kill();
         foreach (var image in _frameImages)
         {
+            Color originalColor = image.color;
             image.DOColor(Color.green, 0.2f).OnComplete(() =>
             {
-                image.DOColor(Color.white, 0.2f);
+                image.DOColor(originalColor, 0.2f);
             });
         }
     }

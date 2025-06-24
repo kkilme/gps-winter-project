@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -17,34 +18,26 @@ public class AreaScene : BaseScene
         _areaMapGenerator = GetComponent<AreaMapGenerator>();
     }
 
-    public void InitArea(AreaName areaName, Quest quest)
+    public void InitArea(AreaInitContext areaInitContext)
     {
-        Quest = quest;
-
-        _areaMapGenerator.Init(areaName);
+        Quest = areaInitContext.Quest;
+        
+        // AreaMapGenerator 초기화 및 맵 생성
+        _areaMapGenerator.Init(areaInitContext.AreaName);
         AreaMap map = _areaMapGenerator.GenerateMap();
 
-        AreaManager.Init(areaName, map);
+        // AreaManager 초기화
+        AreaManager.Init(map, areaInitContext);
     }
 
     #region Test
-    private void TestInit()
-    {
-        Quest testQuest = new Quest(Managers.DataMng.QuestDataDict.Values.ToList()[0]);
-        if (!Enum.TryParse(testQuest.QuestData.AreaName, out AreaName areaName))
-        {
-            areaName = AreaName.Forest;
-        }
-
-        InitArea(areaName, testQuest);
-    }
-
     private void Start()
     {
         // TODO: AreaScene에서 시작하여 플레이 테스트 시에만 실행
         if (Managers.SceneMng.FirstScene == SceneType.AreaScene)
         {
-            TestInit();
+            AreaInitContext testContext = new TestAreaInitContext();
+            InitArea(testContext);
         }
     }
 
@@ -54,7 +47,7 @@ public class AreaScene : BaseScene
         base.Update();
         if (Input.GetKeyDown(KeyCode.D))
         {
-            Managers.HeroMng.HeroParty.RuntimeHeroes[0].TakeDamage(1, DamageTextType.NormalDamage);
+            
         }
     }
     #endregion
