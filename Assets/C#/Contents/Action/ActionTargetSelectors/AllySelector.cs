@@ -4,7 +4,7 @@ using UnityEngine;
 public class AllySelector : ActionTargetSelector
 {
     public override bool NeedTargetSelection { get; protected set; } = true;
-    public override void CalculateTargettableCells()
+    public override void CalculateTargetableCells()
     {
         //TODO
     }

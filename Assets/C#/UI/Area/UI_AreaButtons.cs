@@ -21,6 +21,7 @@ public class UI_AreaButtons : UI_Base
     }
 
     private AreaManager _areaManager => Managers.AreaMng;
+    private UI_Popup _openPopup;
 
     public override void Init()
     {
@@ -38,17 +39,23 @@ public class UI_AreaButtons : UI_Base
         return base.Show();
     }
 
+    /// <summary>
+    /// 회복 버튼 누를 시의 콜백 함수. 영웅 파티를 회복시키고 회복 횟수를 감소시킨다.
+    /// </summary>
     private void OnClickRestButton()
     {
         if (_areaManager.AreaState != AreaState.Idle) return;
 
         int restCount = int.Parse(GetText(Texts.Text_RestCount).text);
 
+        // 회복
         CoroutineRunner.Instance.StartCoroutine(_areaManager.RestParty());
 
+        // 남은 회복 횟수 감소
         restCount -= 1;
         GetText(Texts.Text_RestCount).text = restCount.ToString();
 
+        // 회복 횟수가 0이 되면 버튼 비활성화
         if (restCount == 0)
         {
             GetButton(Buttons.Button_Rest).interactable = false;

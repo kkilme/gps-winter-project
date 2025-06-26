@@ -13,8 +13,8 @@ public class BattleManager
     public BattleGridSystem GridSystem { get; private set; }
     public BattleInputHandler BattleInputHandler { get; private set; }
 
-    private BaseAction _currentAction;
-    public BaseAction CurrentAction // 현재 선택된 Action
+    private BattleAction _currentAction;
+    public BattleAction CurrentAction // 현재 선택된 Action
     {
         get => _currentAction;
         set
@@ -120,7 +120,7 @@ public class BattleManager
     /// <summary>
     /// Hero 턴에서 플레이어가 Action 선택 시 호출
     /// </summary>
-    public void SetAction(BaseAction action)
+    public void SetAction(BattleAction action)
     {
         CurrentAction = action;
         UI.ActionPanel.Hide();

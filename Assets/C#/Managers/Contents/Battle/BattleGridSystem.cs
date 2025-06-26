@@ -97,9 +97,9 @@ public class BattleGridSystem
     /// <summary>
     /// action의 타겟 가능한 셀 하이라이트 효과.
     /// </summary>
-    public void HighlightTargettableCells(BaseAction action)
+    public void HighlightTargettableCells(BattleAction action)
     {
-        var targetables = action.TargetSelector.TargettableCells;
+        var targetables = action.TargetSelector.TargetableCells;
 
         foreach (var targetable in targetables)
         {

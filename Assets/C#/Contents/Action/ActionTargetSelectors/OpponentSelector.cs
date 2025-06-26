@@ -11,9 +11,9 @@ public class OpponentSelector : ActionTargetSelector
         _rangeType = rangeType;
     }
 
-    public override void CalculateTargettableCells()
+    public override void CalculateTargetableCells()
     {
-        TargettableCells.Clear();
+        TargetableCells.Clear();
         var currentcell = Managers.BattleMng.CurrentTurnCreature.StandingCell;
         var opponentGrid = Managers.BattleMng.GridSystem.SideToGrid(currentcell.GridSide == GridSide.HeroSide ? GridSide.MonsterSide : GridSide.HeroSide);
 
@@ -23,7 +23,7 @@ public class OpponentSelector : ActionTargetSelector
             {
                 if (!cell.IsEmpty())
                 {
-                    TargettableCells.Add(cell);
+                    TargetableCells.Add(cell);
                 }
             }
         } else if (_rangeType == AttackRangeType.Melee)
@@ -36,7 +36,7 @@ public class OpponentSelector : ActionTargetSelector
                     var cell = opponentGrid[row, col];
                     if (!cell.IsEmpty() && !cell.PlacedCreature.IsDead())
                     {
-                        TargettableCells.Add(cell);
+                        TargetableCells.Add(cell);
                         break;
                     }
                 }

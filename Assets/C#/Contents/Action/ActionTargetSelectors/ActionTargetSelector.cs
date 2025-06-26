@@ -10,7 +10,7 @@ public abstract class ActionTargetSelector
     /// <summary>
     /// Action의 대상이 될 수 있는 모든 BattleGridCell
     /// </summary>
-    public HashSet<BattleGridCell> TargettableCells { get; protected set; } = new();
+    public HashSet<BattleGridCell> TargetableCells { get; protected set; } = new();
     /// <summary>
     /// 플레이어가 Action의 대상을 지정해 줄 필요가 있는지 여부
     /// </summary>
@@ -18,7 +18,7 @@ public abstract class ActionTargetSelector
     /// <summary>
     /// Action의 대상이 될 수 있는 Cell 계산
     /// </summary>
-    public abstract void CalculateTargettableCells();
+    public abstract void CalculateTargetableCells();
 
     /// <summary>
     /// 가능한 대상들 중 랜덤 대상 선택. 
@@ -26,18 +26,18 @@ public abstract class ActionTargetSelector
     /// </summary>
     public BattleGridCell GetRandomTarget()
     {
-        if (TargettableCells.Count == 0) return null;
+        if (TargetableCells.Count == 0) return null;
 
-        return TargettableCells.ElementAt(Random.Range(0, TargettableCells.Count));
+        return TargetableCells.ElementAt(Random.Range(0, TargetableCells.Count));
     }
 
-    public bool IsTargettable(BattleGridCell cell)
+    public bool IsTargetable(BattleGridCell cell)
     {
-        return cell != null && TargettableCells.Contains(cell);
+        return cell != null && TargetableCells.Contains(cell);
     }
 
     public virtual void OnActionUnset()
     {
-        TargettableCells.Clear();
+        TargetableCells.Clear();
     }
 }

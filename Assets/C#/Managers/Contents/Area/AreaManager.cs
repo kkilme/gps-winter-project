@@ -9,17 +9,16 @@ public class AreaManager
     public AreaMap Map { get; private set; }
     public AreaData AreaData { get; private set; }
     public Loot Loots { get; set; } // Area에서 획득한 아이템들
-    public List<ItemData> Items { get; set; } // Area에서 사용하고자 가져온 아이템들
+    public List<Item> Items { get; set; } = new(); // Area에서 사용하고자 가져온 아이템들: 현재는 ConsumableItem만 사용 가능
 
-    // Area 시스템 관련 헬퍼 클래스들 ///////////////////////////
     public AreaInputHandler AreaInputHandler { get; private set; }
     public AreaCollapseSystem CollapseSystem { get; private set; }
     public AreaCameraController CameraController { get; private set; }
     public UI_AreaScene UI { get; private set; }
-    /////////////////////////////////////////////////////////////////////////////////
+
 
     public AreaState AreaState { get; set; }
-    public Vector3 CurrentPlayerPosition { get; set; } // 현재 영웅 파티의 WorldPosition = 타일의 중앙 위치
+    public Vector3 CurrentPlayerPosition { get; set; } // 현재 영웅 파티의 WorldPosition = 서 있는 타일의 중앙 위치
     private HeroParty _party => Managers.HeroMng.HeroParty;
 
     private AreaEventTile _currentTile; // 현재 파티가 밟고있는 타일
@@ -32,12 +31,16 @@ public class AreaManager
     public void Init(AreaMap map, AreaInitContext areaInitContext)
     {
         Debug.Log("[AreaManager] Init AreaManager");
+
         // 각종 필드 초기화
         Map = map;
         AreaData = Managers.DataMng.AreaDataDict[areaInitContext.AreaName];
         UI = Managers.UIMng.ShowSceneUI<UI_AreaScene>();
         Loots = new Loot();
-        Items = new List<ItemData>(areaInitContext.Items);
+        foreach(var itemData in areaInitContext.Items)
+        {
+            Items.Add(ItemFactory.CreateItemById(itemData.DataId));
+        }
         _light = GameObject.FindGameObjectWithTag("AreaLight");
 
         CurrentPlayerPosition = Map.GetPlayerStartWorldPosition();
@@ -51,8 +54,11 @@ public class AreaManager
         CollapseSystem = new AreaCollapseSystem();
         CollapseSystem.Init(AreaData.CollapseTimer, AreaData.CollapseAmount);
 
-        // 영웅 스폰 및 카메라 초기화
-        InitHeroes();
+        // 영웅 스폰 및 시작지점에 배치
+        Managers.HeroMng.SpawnHeroParty();
+        PlaceHeroes(CurrentPlayerPosition);
+
+        // 카메라 초기화
         InitCamera();
 
         Map.OnAreaStart(); // 일부 지역(보스 타일 등)의 전장의 안개를 미리 밝힘
@@ -66,15 +72,8 @@ public class AreaManager
         Managers.InputMng.AddMouseAction(AreaInputHandler.HandleMouseInput);
 
         AreaState = AreaState.Idle;
-    }
 
-    /// <summary>
-    /// 영웅 스폰 및 위치 초기화
-    /// </summary>
-    private void InitHeroes()
-    {
-        Managers.HeroMng.SpawnHeroParty();
-        PlaceHeroes(CurrentPlayerPosition);
+        Debug.Log("[AreaManager] AreaManager Init Complete.");
     }
 
     /// <summary>
@@ -98,12 +97,13 @@ public class AreaManager
         CameraController = Managers.ResourceMng.Instantiate("Area/AreaCamera").GetOrAddComponent<AreaCameraController>();
         CameraController.Freeze = true;
         CameraController.Init(new Vector3(CurrentPlayerPosition.x, 50, CurrentPlayerPosition.z - 40));
-        Map.CalcCameraPosLimitX(out float xmin, out float xmax);
+        (float xmin, float xmax) = Map.CalculateCameraXPositionLimit();
         CameraController.InitPosLimit(xmin, xmax, Map.GetPlayerStartWorldPosition().z, Map.GetBossWorldPosition().z);
         CameraController.Freeze = false;
     }
     #endregion
 
+    #region HeroMovement
     /// <summary>
     /// 대상 위치의 타일로 영웅 파티 이동
     /// </summary>
@@ -166,6 +166,30 @@ public class AreaManager
     }
 
     /// <summary>
+    /// 어떤 타일의 이벤트가 끝났을 때 호출되는 메서드
+    /// </summary>
+    public IEnumerator OnTileEventFinish()
+    {
+        _currentTile.OnTileEventFinish();
+
+        switch (_currentTile.TileType)
+        {
+            case AreaTileType.Normal:
+                break;
+            case AreaTileType.Battle:
+                Map.ReplaceEventTile(CurrentPlayerPosition, AreaTileType.Normal);
+                break;
+        }
+
+        // 붕괴 턴 진행
+        yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressTurn());
+
+        Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
+    }
+    #endregion
+
+    #region AreaActions
+    /// <summary>
     /// 영웅들 체력 회복 및 붕괴 턴 추가 진행
     /// </summary>
     public IEnumerator RestParty()
@@ -178,6 +202,26 @@ public class AreaManager
         AreaState = AreaState.Idle;
     }
 
+    /// <summary>
+    /// Area에서 아이템을 사용하는 메서드.
+    /// </summary>
+    public void UseItem(ItemData itemData)
+    {
+        if (AreaState != AreaState.Idle) return;
+
+        // itemData에 해당하는 Item을 Items 리스트에서 찾음.
+        Item item = Items.Find(i => i.DataId == itemData.DataId);
+
+        if (item == null) return; // 아이템이 Items 리스트에 존재하는지 확인
+
+        if (item is not IUsableInArea areaItem) return; // Area에서 사용 가능한 아이템인지 확인
+
+        areaItem.UseInArea();
+    }
+
+    #endregion
+
+    #region SceneTransition
     /// <summary>
     /// 전투씬 로딩 시작
     /// 전투씬 전환 흐름: LoadBattleScene -> 로딩화면 Fade in 완료 -> OnBattleSceneLoadStart ->  배틀 씬 로딩 시작 및 완료 -> OnBattleSceneLoadFinish -> 로딩화면 Fade out
@@ -227,25 +271,6 @@ public class AreaManager
         Managers.InputMng.AddMouseAction(AreaInputHandler.HandleMouseInput);
     }
 
-    /// <summary>
-    /// 어떤 타일의 이벤트가 끝났을 때 호출되는 메서드
-    /// </summary>
-    public IEnumerator OnTileEventFinish()
-    {
-        _currentTile.OnTileEventFinish();
+    #endregion
 
-        switch (_currentTile.TileType)
-        {
-            case AreaTileType.Normal:
-                break;
-            case AreaTileType.Battle:
-                Map.ReplaceEventTile(CurrentPlayerPosition, AreaTileType.Normal);
-                break;
-        }
-
-        // 붕괴 턴 진행
-        yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressTurn());
-
-        Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
-    }
 }

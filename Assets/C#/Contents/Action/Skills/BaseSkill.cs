@@ -2,7 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
-public abstract class BaseSkill : BaseAction
+public abstract class BaseSkill : BattleAction
 {
     public int DataId { get; protected set; }
     public SkillData SkillData { get; protected set; }

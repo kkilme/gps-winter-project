@@ -5,7 +5,7 @@ public class BattleInputHandler
 {
     public BattleGridCell CurrentMouseOverCell { get; private set; } // 현재 마우스를 올리고 있는 Cell
     private BattleGridSystem _battleGridSystem => Managers.BattleMng.GridSystem;
-    private BaseAction _currentAction => Managers.BattleMng.CurrentAction;
+    private BattleAction _currentAction => Managers.BattleMng.CurrentAction;
 
     private Camera _camera;
 
@@ -125,7 +125,7 @@ public class BattleInputHandler
                 return;
 
             if (CurrentMouseOverCell != null) CurrentMouseOverCell.RevertFillColor();
-            if (!_currentAction.TargetSelector.IsTargettable(cell))
+            if (!_currentAction.TargetSelector.IsTargetable(cell))
             {
                 CurrentMouseOverCell = null;
                 return;
@@ -143,7 +143,7 @@ public class BattleInputHandler
 
     private void OnClickGridCell()
     {   
-        if (CurrentMouseOverCell == null || !_currentAction.TargetSelector.IsTargettable(CurrentMouseOverCell))
+        if (CurrentMouseOverCell == null || !_currentAction.TargetSelector.IsTargetable(CurrentMouseOverCell))
             return;
 
         Managers.InputMng.RemoveMouseAction(HandleMouseOnTargetSelect);

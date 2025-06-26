@@ -15,6 +15,7 @@ public static class GlobalValues
 
     public const int MAX_COIN_COUNT = 8;
     public const int MAX_PARTY_SIZE = 4;
+    public const int MAX_AREAITEM_COUNT = 8; // Area에 가져갈 수 있는 아이템의 최대 개수. 수정 시 관련 UI(UI_QuestDetailPanel, UI_AreaItemListPopup)프리팹도 수정 필요.
 
     public const int AREA_REST_TURN_COUNT = 3;
 

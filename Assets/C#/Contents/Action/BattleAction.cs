@@ -3,12 +3,12 @@ using System.Collections;
 using UnityEngine;
 
 // 전투에서 Creature가 자신의 턴에 취할 수 있는 행동
-public abstract class BaseAction
+public abstract class BattleAction
 {
     #region Field
     public Creature Executor { get; protected set; } // 이 액션을 실행하는 Creature. 전투에서 한 턴에 한 Creature만 Action을 실행하는 것이 보장되어야 함.
     public BattleGridCell SelectedTargetCell { get; protected set; }
-    public abstract ActionTargetSelector TargetSelector { get; protected set; }
+    public abstract ActionTargetSelector TargetSelector { get; protected set; } // TODO: 자식 구현 강제화
     public abstract ActionEffectRange EffectRange { get; protected set; }
     protected Animator _animator => Executor.Animator;
 
@@ -23,7 +23,7 @@ public abstract class BaseAction
     {
         Executor = creature;
 
-        TargetSelector.CalculateTargettableCells();
+        TargetSelector.CalculateTargetableCells();
         if(!TargetSelector.NeedTargetSelection)
         {
             SetRandomTarget();
@@ -56,7 +56,7 @@ public abstract class BaseAction
     /// </summary>
     public bool IsExecutable()
     {
-        return TargetSelector.TargettableCells.Count > 0 || TargetSelector is DummySelector;
+        return TargetSelector.TargetableCells.Count > 0 || TargetSelector is DummySelector;
     }
 
     /// <summary>

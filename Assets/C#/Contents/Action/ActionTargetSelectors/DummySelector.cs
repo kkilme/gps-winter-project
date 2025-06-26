@@ -6,5 +6,5 @@
 public class DummySelector : ActionTargetSelector
 {
     public override bool NeedTargetSelection { get; protected set; } = false;
-    public override void CalculateTargettableCells() { }
+    public override void CalculateTargetableCells() { }
 }

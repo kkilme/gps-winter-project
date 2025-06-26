@@ -50,7 +50,7 @@ public class UI_QuestDetailPanel : UI_Base
         Bind<GridLayoutGroup>(typeof(GridLayoutGroups));
 
         ItemInventory = Get<GridLayoutGroup>(GridLayoutGroups.ItemInventory).GetComponent<UI_Inventory>();
-        ItemInventory.LateInit(onSlotClickAction: OnItemInventorySlotClicked, slotDesign: new PlusIconItemSlotDesign(), maxSize: 8);
+        ItemInventory.LateInit(onSlotClickAction: OnItemInventorySlotClicked, slotDesign: new PlusIconItemSlotDesign(), maxSize: GlobalValues.MAX_AREAITEM_COUNT);
         _rewardInventory = Get<GridLayoutGroup>(GridLayoutGroups.RewardInventory).GetComponent<UI_Inventory>();
         _rewardInventory.LateInit(onSlotClickAction: null, slotDesign: new QuestRewardSlotDesign());
 

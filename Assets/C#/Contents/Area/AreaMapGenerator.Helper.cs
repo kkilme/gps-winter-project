@@ -265,7 +265,7 @@ public partial class AreaMapGenerator
 
     private void Start()
     {
-        if (Managers.SceneMng.FirstScene is AreaScene)
+        if (Managers.SceneMng.FirstScene == SceneType.AreaScene)
         {
             _isTestMode = true;
         }

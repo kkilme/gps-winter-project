@@ -25,8 +25,6 @@ public class UI_AreaScene : UI_Scene
     public UI_CoinTossDisplay CoinTossDisplay { get; protected set; }
     public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
 
-    private AreaManager _areaManager => Managers.AreaMng;
-
     public override void Init()
     {
         base.Init();

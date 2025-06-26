@@ -13,12 +13,12 @@ using System.Linq;
 public class UI_Inventory : UI_Base
 {
     public List<UI_ItemSlot> InventorySlots { get; private set; } = new();
-    int _maxSize;
+    private int _maxSize; // 인벤토리의 최대 슬롯 개수. 기본값은 9999로 설정되어 있으나, 필요에 따라 변경 가능.
 
     private Action<UI_ItemSlot> _onSlotClickAction; // 슬롯 클릭 시 호출되는 액션. 새 슬롯 추가될 때 재사용할 수 있도록 저장해둠.
     private ItemSlotDesign _slotDesign; // 슬롯의 디자인 정보. 기본적으로는 DefaultItemSlotDesign 사용.
 
-    private ScrollRect _scrollRect; // 이 인벤토리를 컨텐츠로 가지는 ScrollRect
+    private ScrollRect _scrollRect; // 이 인벤토리를 컨텐츠로 가지는 ScrollRect (null일 경우, 스크롤이 없는 인벤토리 UI)
 
     public override void Init() { }
 

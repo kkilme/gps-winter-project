@@ -168,26 +168,17 @@ public class UIManager
     }
 
     /// <summary>
-    /// T타입 PopupUI 제거
+    /// T타입 PopupUI를 찾아 존재하면 제거
     /// </summary>
     public void ClosePopupUI<T>() where T : UI_Popup
     {
         var popup = PopupUIs.FirstOrDefault(p => p is T);
-        if (PopupUIs.Contains(popup))
-        {
-            if (PopupUIs[^1] == popup) CloseTopPopupUI();
-            else
-            {
-                PopupUIs.Remove(popup);
-                Managers.ResourceMng.Destroy(popup.gameObject);
-            }
-        }
+        popup?.Close();
     }
 
     /// <summary>
     /// 특정 PopupUI를 제거
     /// </summary>
-    /// <param name="popup"></param>
     public void ClosePopupUI(UI_Popup popup)
     {
         if (PopupUIs.Contains(popup))

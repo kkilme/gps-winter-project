@@ -4,9 +4,9 @@ using UnityEngine;
 public class MoveTargetSelector : ActionTargetSelector
 {
     public override bool NeedTargetSelection { get; protected set; } = true;
-    public override void CalculateTargettableCells()
+    public override void CalculateTargetableCells()
     {
-        TargettableCells.Clear();
+        TargetableCells.Clear();
         var currentcell = Managers.BattleMng.CurrentTurnCreature.StandingCell;
         var myGrid = Managers.BattleMng.GridSystem.SideToGrid(currentcell.GridSide);
 
@@ -20,7 +20,7 @@ public class MoveTargetSelector : ActionTargetSelector
 
             if (nr >= 0 && nr <= GlobalValues.BATTLEGRID_ROW_COUNT - 1 && nc >= 0 && nc <= GlobalValues.BATTLEGRID_COL_COUNT - 1)
             {
-                TargettableCells.Add(myGrid[nr, nc]);
+                TargetableCells.Add(myGrid[nr, nc]);
             }
         }
     }

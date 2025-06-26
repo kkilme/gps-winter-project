@@ -20,6 +20,8 @@ public class ItemData
 public class ConsumableItemData : ItemData
 {
     public string Description;
+    public bool IsUsableInBattle; // 전투 중 사용 가능한 아이템인지 여부
+    public bool IsUsableInArea; // Area에서 사용 가능한 아이템인지 여부
 }
 
 [Serializable]

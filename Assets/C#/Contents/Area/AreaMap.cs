@@ -376,9 +376,11 @@ public class AreaMap
     /// <summary>
     /// AreaCamera의 X좌표 제한 계산 및 반환
     /// </summary>
-    public void CalcCameraPosLimitX(out float xmin, out float xmax)
+    public (float xmin, float xmax) CalculateCameraXPositionLimit()
     {
-        xmin = GridToWorldPosition(PlayableFieldStart.x, 0).x;
-        xmax = GridToWorldPosition(PlayableFieldStart.x + PlayableFieldWidth - 1, 0).x;
+        float xmin = GridToWorldPosition(PlayableFieldStart.x, 0).x;
+        float xmax = GridToWorldPosition(PlayableFieldStart.x + PlayableFieldWidth - 1, 0).x;
+
+        return (xmin, xmax);
     }
 }
