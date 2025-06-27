@@ -47,12 +47,15 @@ public class UI_AreaItemListPopup : UI_Popup
         if (selectedSlot.ItemData == null) return;
 
         UI_AreaItemUseConfirmPopup popup = Managers.UIMng.ShowPopupUI<UI_AreaItemUseConfirmPopup>();
+        UIUtility.SetRectPositionRelativeTo(selectedSlot.gameObject, popup.Panel.gameObject, UIUtility.RectPosDirection.Left, new Vector2(-3, 0));
+
         popup.BindItem(selectedSlot.ItemData);
     }
 
     public override void Close()
     {
         _inventory.ClearActionCallbackOnSlots();
+        Managers.UIMng.ClosePopupUI<UI_AreaItemUseConfirmPopup>();
         base.Close();
     }
 

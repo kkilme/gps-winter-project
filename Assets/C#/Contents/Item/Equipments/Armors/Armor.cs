@@ -7,12 +7,4 @@ public class Armor: Equipment
     {
         SetData(dataId);
     }
-
-    public override void SetData(int dataId)
-    {
-        ItemType = ItemType.Armor;
-        ItemData = Managers.DataMng.ArmorDataDict[dataId];
-        
-        base.SetData(dataId);
-    }
 }

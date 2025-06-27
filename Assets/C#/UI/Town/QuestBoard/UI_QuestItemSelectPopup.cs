@@ -18,7 +18,7 @@ public class UI_QuestItemSelectPopup : UI_Popup
         Button_Close
     }
 
-    public UI_Inventory PopupInventory; // 가져갈 수 있는 아이템이 담긴 인벤토리 (이 팝업창의 인벤토리)
+    public UI_Inventory PopupInventory { get; set; } // 가져갈 수 있는 아이템이 담긴 인벤토리 (이 팝업창의 인벤토리)
     private UI_QuestDetailPanel _detailPanel;
 
     public override void Init()

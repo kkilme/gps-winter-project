@@ -136,8 +136,6 @@ public partial class AreaMapGenerator
                 Destroy(pt.GetChild(i).gameObject);
             }
         }
-
-        Debug.Log("Map Cleared");
     }
 
     public static void ClearDebugObjects()
@@ -156,7 +154,7 @@ public partial class AreaMapGenerator
     {
         if (CurrentGeneratePhase < MapGeneratePhase.EventTileGenerate)
         {
-            Debug.LogWarning("Map must be generated first!");
+            Debug.LogWarning("[AreaMapGenerator] Map must be generated first!");
             return;
         }
 
@@ -199,7 +197,7 @@ public partial class AreaMapGenerator
     {
         if (CurrentGeneratePhase == MapGeneratePhase.NotStarted)
         {
-            Debug.LogWarning("Map must be generated first!");
+            Debug.LogWarning("[AreaMapGenerator] Map must be generated first!");
             return;
         }
 
@@ -219,7 +217,7 @@ public partial class AreaMapGenerator
     {
         if (CurrentGeneratePhase < MapGeneratePhase.PlayableFieldObstacleGenerate)
         {
-            Debug.LogWarning("Playable Field Decoration must be generated first!");
+            Debug.LogWarning("[AreaMapGenerator] Playable Field Decoration must be generated first!");
             return;
         }
 

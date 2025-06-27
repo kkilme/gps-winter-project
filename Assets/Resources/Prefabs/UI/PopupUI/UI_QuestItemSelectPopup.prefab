@@ -212,6 +212,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e8e9eb775b9748448f1ce5f220b092b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _panel: {fileID: 7281752792091828437}
+  PopupInventory: {fileID: 0}
 --- !u!1 &1197954078765236994
 GameObject:
   m_ObjectHideFlags: 0

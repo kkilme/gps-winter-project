@@ -206,16 +206,17 @@ public class UIManager
     /// <summary>
     /// T타입 PopupUI를 열거나 닫음 (Toggle)
     /// </summary>
-    public void TogglePopupUI<T>() where T : UI_Popup
+    public T TogglePopupUI<T>() where T : UI_Popup
     {
         var existingPopup = PopupUIs.FirstOrDefault(p => p is T);
         if (existingPopup != null)
         {
             ClosePopupUI<T>();
+            return null;
         }
         else
         {
-            ShowPopupUI<T>();
+            return ShowPopupUI<T>();
         }
     }
 

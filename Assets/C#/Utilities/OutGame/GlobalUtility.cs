@@ -65,11 +65,11 @@ public static class GlobalUtility
         var minIndex =
             Enumerable.Range(0, arr.GetLength(0))
                 .SelectMany(i => Enumerable.Range(0, arr.GetLength(1)).Select(j => (i, j)))
-                .Where(t => arr[t.Item1, t.Item2] == minValue)
+                .Where(t => arr[t.i, t.j] == minValue)
                 .OrderBy(_ => Guid.NewGuid())
                 .First();
 
-        y = minIndex.Item1; x = minIndex.Item2;
+        y = minIndex.i; x = minIndex.j;
     }
 
     public static void IncreaseDictCount<T>(Dictionary<T, int> dict, T key)

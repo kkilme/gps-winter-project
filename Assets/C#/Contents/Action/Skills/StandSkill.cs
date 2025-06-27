@@ -14,7 +14,7 @@ public abstract class StandSkill : BaseSkill
         yield return Executor.transform.DOLookAt(SelectedTargetCell.transform.position, 0.3f).WaitForCompletion();
 
         // 코인 던지기
-        var coinResult = CoinTossser.CoinToss(SkillData.CoinCount, Executor.CreatureStat.NameToStat(SkillData.UsingStat));
+        var coinResult = CoinTossHelper.CoinToss(SkillData.CoinCount, Executor.CreatureStat.NameToStat(SkillData.UsingStat));
 
         // 코인 던지기 UI 애니메이션 재생
         yield return Managers.BattleMng.UI.CoinTossDisplay.ShowResult(coinResult.result, SkillData.UsingStat);

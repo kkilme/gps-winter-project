@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static class CoinTossser
+public static class CoinTossHelper
 {
     public struct CoinTossResult
     {

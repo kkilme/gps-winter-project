@@ -11,7 +11,7 @@ public class UI_AreaItemUseConfirmPopup : UI_Popup
     enum Buttons
     {
         Button_Use,
-        Button_Close
+        Button_Cancel
     }
 
     private ItemData _itemData; // 선택된 아이템 데이터
@@ -20,7 +20,7 @@ public class UI_AreaItemUseConfirmPopup : UI_Popup
     {
         base.Init();
         Bind<Button>(typeof(Buttons));
-        GetButton(Buttons.Button_Close).onClick.AddListener(Close);
+        GetButton(Buttons.Button_Cancel).onClick.AddListener(Close);
     }
 
     public void BindItem(ItemData itemData)

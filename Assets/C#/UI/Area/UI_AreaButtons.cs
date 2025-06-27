@@ -70,6 +70,18 @@ public class UI_AreaButtons : UI_Base
 
     private void OnClickItemListButton()
     {
-        //Managers.UIMng.TogglePopupUI<UI_AreaItemList>();
+        if(_openPopup != null && _openPopup is not UI_AreaItemListPopup) _openPopup.Close();
+
+        UI_AreaItemListPopup popup = Managers.UIMng.TogglePopupUI<UI_AreaItemListPopup>();
+
+        if(popup == null) return;
+
+        _openPopup = popup;
+        UIUtility.SetRectPositionRelativeTo(
+            GetButton(Buttons.Button_ItemList).gameObject,
+            popup.Panel.gameObject,
+            UIUtility.RectPosDirection.Left,
+            new Vector2(-10, 0)
+            );
     }
 }

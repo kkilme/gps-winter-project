@@ -2,7 +2,8 @@
   "consumableItems": [
     {
       "DataId": 301000,
-      "Name": "Low Heal Potion",
+      "Name": "Heal Potion",
+      "ClassName": "HealPotion",
       "Description": "Recoveres 20% of max HP.",
       "IsUsableInBattle": true,
       "IsUsableInArea": true,

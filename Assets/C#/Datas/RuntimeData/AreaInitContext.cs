@@ -36,7 +36,12 @@ public class TestAreaInitContext: AreaInitContext
         base(new Quest(Managers.DataMng.QuestDataDict.Values.ToList()[0]), 
         new List<ItemData>()
         { // 테스트용 아이템들
-
+            Managers.DataMng.ItemDataDict[GlobalValues.ITEM_HEALPOTION_ID],
+            Managers.DataMng.ItemDataDict[GlobalValues.ITEM_HEALPOTION_ID],
+            Managers.DataMng.ItemDataDict[GlobalValues.ITEM_HEALPOTION_ID],
+            Managers.DataMng.ItemDataDict[GlobalValues.ITEM_HEALPOTION_ID],
+            Managers.DataMng.ItemDataDict[GlobalValues.ITEM_HEALPOTION_ID],
+            Managers.DataMng.ItemDataDict[GlobalValues.ITEM_HEALPOTION_ID],
         })
     { }
 }

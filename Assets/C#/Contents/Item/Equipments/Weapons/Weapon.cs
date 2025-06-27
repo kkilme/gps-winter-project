@@ -14,13 +14,9 @@ public class Weapon: Equipment
 
     public override void SetData(int dataId)
     {
-        ItemType = ItemType.Weapon;
-
-        WeaponData weaponData = Managers.DataMng.WeaponDataDict[dataId];
-        ItemData = weaponData;
-        WeaponType = weaponData.WeaponType;
-
         base.SetData(dataId);
+
+        WeaponType = WeaponData.WeaponType;
 
         foreach (int skillId in WeaponData.Skills)
         {
