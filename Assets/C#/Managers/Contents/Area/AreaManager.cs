@@ -216,7 +216,7 @@ public class AreaManager
 
         if (item is not IUsableInArea areaItem) return; // Area에서 사용 가능한 아이템인지 확인
 
-        areaItem.UseInArea();
+        areaItem.UseInArea(); // 아이템 사용
     }
 
     #endregion

@@ -3,9 +3,9 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Action의 대상을 선택하는 역할을 하는 클래스
+/// BattleAction의 대상을 선택하는 역할을 하는 클래스
 /// </summary>
-public abstract class ActionTargetSelector
+public abstract class BattleActionTargetSelector
 {
     /// <summary>
     /// Action의 대상이 될 수 있는 모든 BattleGridCell
@@ -14,7 +14,7 @@ public abstract class ActionTargetSelector
     /// <summary>
     /// 플레이어가 Action의 대상을 지정해 줄 필요가 있는지 여부
     /// </summary>
-    public abstract bool NeedTargetSelection { get; protected set; }
+    public abstract bool NeedTargetSelection { get; protected set; } // non-abstract으로 수정필요 
     /// <summary>
     /// Action의 대상이 될 수 있는 Cell 계산
     /// </summary>

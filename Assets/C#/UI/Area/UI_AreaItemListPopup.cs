@@ -46,8 +46,9 @@ public class UI_AreaItemListPopup : UI_Popup
     {
         if (selectedSlot.ItemData == null) return;
 
+        Managers.UIMng.ClosePopupUI<UI_AreaItemUseConfirmPopup>(); // 이미 열린 팝업 있다면 닫기
         UI_AreaItemUseConfirmPopup popup = Managers.UIMng.ShowPopupUI<UI_AreaItemUseConfirmPopup>();
-        UIUtility.SetRectPositionRelativeTo(selectedSlot.gameObject, popup.Panel.gameObject, UIUtility.RectPosDirection.Left, new Vector2(-3, 0));
+        UIUtility.SetRectPositionRelativeTo(selectedSlot.gameObject, popup.Panel.gameObject, UIUtility.RectPosDirection.Left); // 팝업 위치 설정
 
         popup.BindItem(selectedSlot.ItemData);
     }

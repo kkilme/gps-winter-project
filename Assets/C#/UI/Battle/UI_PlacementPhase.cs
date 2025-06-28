@@ -17,7 +17,7 @@ public class UI_PlacementPhase : UI_Base
         GetButton(Buttons.Button_StartBattle).onClick.AddListener(() =>
         {
             GetButton(Buttons.Button_StartBattle).interactable = false;
-            Managers.InputMng.RemovePointerOverGameObjectAction(Managers.BattleMng.BattleInputHandler.OnDragEnd);
+            Managers.InputMng.RemovePointerOverGameObjectAction(Managers.BattleMng.BattleInputHandler.OnDragEnd_PlacementPhase);
             Managers.InputMng.RemoveMouseAction(Managers.BattleMng.BattleInputHandler.HandleMouseOnPlacementPhase);
             Hide();
         });

@@ -63,10 +63,12 @@ public abstract class Creature : MonoBehaviour
     }
 
     /// <summary>
-    /// 최대 체력의 percent만큼 회복 
+    /// 최대 체력의 percent만큼 회복
     /// </summary>
+    /// <remarks>percent는 0.0f ~ 1.0f 사이의 값</remarks>
     public void TakeHeal(float percent)
     {
+        percent = Mathf.Clamp01(percent); // 0.0f ~ 1.0f 사이로 제한
         int heal = Mathf.FloorToInt(CreatureStat.MaxHp * percent);
         TakeHeal(heal);
     }

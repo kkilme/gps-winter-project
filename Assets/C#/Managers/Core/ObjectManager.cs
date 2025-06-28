@@ -7,12 +7,12 @@ using Object = UnityEngine.Object;
 public class ObjectManager
 {
     public bool Initialized { get; protected set; }
-    public Dictionary<int, BaseSkill> Skills { get; protected set; } // 스킬 객체를 미리 생성해놓고 반복해서 사용
+    public Dictionary<int, BattleSkill> Skills { get; protected set; } // 스킬 객체를 미리 생성해놓고 반복해서 사용
     private Transform _monsterRoot => GlobalUtility.FindOrCreateTransform("@Monsters");
 
     public void Init()
     {
-        Skills = new Dictionary<int, BaseSkill>();
+        Skills = new Dictionary<int, BattleSkill>();
 
         BindSkills();
 
@@ -31,7 +31,7 @@ public class ObjectManager
                 continue;
             }
 
-            var skill = Activator.CreateInstance(skillType) as BaseSkill;
+            var skill = Activator.CreateInstance(skillType) as BattleSkill;
 
             skill.SetData(skillData.Key);
             Skills[skillData.Key] = skill;

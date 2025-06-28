@@ -22,5 +22,5 @@ public abstract class CreatureAI : MonoBehaviour
     /// 실행할 스킬 결정
     /// </summary>
     /// <returns>선택된 스킬</returns>
-    public abstract BaseSkill DecideSkill(); // 자동 전투를 구현한다고 해도 Item은 AI가 사용할 수 없게 할 생각이기에 BaseSkill 반환
+    public abstract BattleSkill DecideSkill(); // 자동 전투를 구현한다고 해도 Item은 AI가 사용할 수 없게 할 생각이기에 BattleSkill 반환
 }

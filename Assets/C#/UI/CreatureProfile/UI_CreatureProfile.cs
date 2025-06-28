@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class UI_CreatureProfile : UI_Base
 {
     protected Creature _bindingCreature; // 바인딩된 Creature 인스턴스
+    public Creature BindingCreature => _bindingCreature;
     protected CanvasGroup _canvasGroup;
 
     private Tweener _blinkTweener;
@@ -59,7 +60,6 @@ public class UI_CreatureProfile : UI_Base
 
         _frameImages.Add(Get<Image>(Images.Frame_Stat));
         _frameImages.Add(Get<Image>(Images.Frame_Main));
-        _frameImages.Add(Get<Image>(Images.bg));
     }
 
     /// <summary>

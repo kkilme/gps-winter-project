@@ -8,7 +8,7 @@ public abstract class BattleAction
     #region Field
     public Creature Executor { get; protected set; } // 이 액션을 실행하는 Creature. 전투에서 한 턴에 한 Creature만 Action을 실행하는 것이 보장되어야 함.
     public BattleGridCell SelectedTargetCell { get; protected set; }
-    public abstract ActionTargetSelector TargetSelector { get; protected set; } // TODO: 자식 구현 강제화
+    public abstract BattleActionTargetSelector TargetSelector { get; protected set; } // TODO: 자식 구현 강제화
     public abstract ActionEffectRange EffectRange { get; protected set; }
     protected Animator _animator => Executor.Animator;
 

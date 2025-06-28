@@ -39,13 +39,13 @@ public class BattleInputHandler
                 OnMouseHover_PlacementPhase();
                 break;
             case MouseEvent.PointerDown:
-                OnDragStart();
+                OnDragStart_PlacementPhase();
                 break;
             case MouseEvent.Press:
-                OnDragging();
+                OnDragging_PlacementPhase();
                 break;
             case MouseEvent.PointerUp:
-                OnDragEnd();
+                OnDragEnd_PlacementPhase();
                 break;
         }
     }
@@ -68,7 +68,7 @@ public class BattleInputHandler
                 OnMouseHover_TargetSelect();
                 break;
             case MouseEvent.PointerDown:
-                OnClickGridCell();
+                OnClickGridCell_TargetSelect();
                 break;
         }
     }
@@ -141,7 +141,7 @@ public class BattleInputHandler
         }
     }
 
-    private void OnClickGridCell()
+    private void OnClickGridCell_TargetSelect()
     {   
         if (CurrentMouseOverCell == null || !_currentAction.TargetSelector.IsTargetable(CurrentMouseOverCell))
             return;
@@ -168,7 +168,7 @@ public class BattleInputHandler
         return new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0f, GlobalValues.BATTLEFIELD_POS_Z);
     }
 
-    private void OnDragStart()
+    private void OnDragStart_PlacementPhase()
     {
         if (CurrentMouseOverCell?.PlacedCreature == null || CurrentMouseOverCell.GridSide == GridSide.MonsterSide) return;
 
@@ -176,7 +176,7 @@ public class BattleInputHandler
         _dragStartCell = CurrentMouseOverCell;
     }
 
-    private void OnDragging()
+    private void OnDragging_PlacementPhase()
     {
         if (_draggingCreature == null) return;
 
@@ -184,7 +184,7 @@ public class BattleInputHandler
         _draggingCreature.transform.position = GetMouseWorldPosition();
     }
 
-    public void OnDragEnd()
+    public void OnDragEnd_PlacementPhase()
     {
         if (_draggingCreature == null) return;
         if (CurrentMouseOverCell != null && CurrentMouseOverCell.GridSide == GridSide.HeroSide)

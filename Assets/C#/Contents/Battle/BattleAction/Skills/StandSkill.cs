@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 제자리에 서서 수행되는 액션
 /// </summary>
-public abstract class StandSkill : BaseSkill
+public abstract class StandSkill : BattleSkill
 {
     public override IEnumerator Execute()
     {

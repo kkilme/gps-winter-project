@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OpponentSelector : ActionTargetSelector
+public class OpponentSelector : BattleActionTargetSelector
 {
     public override bool NeedTargetSelection { get; protected set; } = true;
     private AttackRangeType _rangeType;

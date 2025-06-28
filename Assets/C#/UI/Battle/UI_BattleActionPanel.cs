@@ -56,7 +56,7 @@ public class UI_BattleActionPanel : UI_Base
     private void SetupActionButtons()
     {
         ClearActionButtons();
-        foreach (BaseSkill skill in _hero.Weapon.Skills)
+        foreach (BattleSkill skill in _hero.Weapon.Skills)
         {
             var actionButton = Managers.UIMng.MakeSubItemUI<UI_ActionButton>(_actionButtonParent, "Battle/" + nameof(UI_ActionButton));
             actionButton.SetSkill(skill);
@@ -68,7 +68,7 @@ public class UI_BattleActionPanel : UI_Base
     }
 
     // 마우스를 가져다 댄 스킬의 정보 표시
-    public void ShowSkillInfo(BaseSkill skill)
+    public void ShowSkillInfo(BattleSkill skill)
     {   
         ClearActionInfo();
         GetText(Texts.Text_ActionName).text = skill.SkillData.Name;

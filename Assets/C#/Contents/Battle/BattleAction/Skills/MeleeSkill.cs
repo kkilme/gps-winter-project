@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 적에게 접근 후 공격하는 스킬 (근접 공격)
 /// </summary>
-public abstract class MeleeSkill : BaseSkill
+public abstract class MeleeSkill : BattleSkill
 {
     protected Vector3 _originalPos;
     public override IEnumerator Execute()

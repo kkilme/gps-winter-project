@@ -122,10 +122,10 @@ public abstract class UI_Base : MonoBehaviour
     protected Image GetImage(Enum idx) { return Get<Image>(idx); }
 
     // go가 이벤트 콜백(입력)을 받아 이벤트 함수를 실행할 수 있게 만든다.
-    public static void BindEvent(GameObject go, Action<PointerEventData> action,
-        UIEvent type = UIEvent.Click)
+    public static void BindEvent(GameObject go, Action<PointerEventData> action, UIEvent type = UIEvent.Click)
     {
         UI_EventHandler evt = GlobalUtility.GetOrAddComponent<UI_EventHandler>(go);
+        GlobalUtility.GetOrAddComponent<GraphicRaycaster>(go);
 
         switch (type)
         {

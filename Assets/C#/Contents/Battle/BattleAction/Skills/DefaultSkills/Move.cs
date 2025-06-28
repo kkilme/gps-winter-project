@@ -5,10 +5,10 @@ using UnityEngine;
 /// <summary>
 /// 다른 셀로 이동하는 기본 스킬. 해당 셀에 다른 Creature가 있을 경우, 위치를 교환함.
 /// </summary>
-public class Move : BaseSkill
+public class Move : BattleSkill
 {
     public override ActionEffectRange EffectRange { get; protected set; } = new SingleRange();
-    public override ActionTargetSelector TargetSelector { get; protected set; } = new MoveTargetSelector();
+    public override BattleActionTargetSelector TargetSelector { get; protected set; } = new MoveTargetSelector();
 
     public override IEnumerator Execute()
     {

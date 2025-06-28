@@ -30,7 +30,7 @@ public class UI_BattleScene : UI_Scene
 	public UI_CoinTossDisplay CoinTossDisplay { get; protected set; }
     public UI_TurnState TurnstateUI { get; protected set; }
     public UI_PlacementPhase PlacementPhaseUI { get; protected set; }
-    public UI_ChooseTarget ChooseTargetUI { get; protected set; }
+    public UI_ChooseTarget_Battle ChooseTargetUI { get; protected set; }
     public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
     public UI_MonsterProfileGroup MonsterProfileGroupUI { get; protected set; }
 
@@ -46,7 +46,7 @@ public class UI_BattleScene : UI_Scene
         CoinTossDisplay = GetGameObject(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
         TurnstateUI = GetGameObject(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
         PlacementPhaseUI = GetGameObject(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
-        ChooseTargetUI = GetGameObject(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget>();
+        ChooseTargetUI = GetGameObject(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget_Battle>();
         HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Vertical).GetOrAddComponent<UI_HeroProfileGroup>();
         MonsterProfileGroupUI = GetGameObject(SubItemUI.UI_MonsterProfileGroup).GetOrAddComponent<UI_MonsterProfileGroup>();
         GetGameObject(SubItemUI.UI_BattleVictory).GetOrAddComponent<UI_BattleVictory>();

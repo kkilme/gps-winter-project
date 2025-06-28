@@ -92,7 +92,7 @@ public class BattleManager
         BattleState = BattleState.HeroPlacement;
 
         Managers.InputMng.AddMouseAction(BattleInputHandler.HandleMouseOnPlacementPhase);
-        Managers.InputMng.AddPointerOverGameObjectAction(BattleInputHandler.OnDragEnd);
+        Managers.InputMng.AddPointerOverGameObjectAction(BattleInputHandler.OnDragEnd_PlacementPhase);
 
         UI.OnPlacementPhaseStart();
     }

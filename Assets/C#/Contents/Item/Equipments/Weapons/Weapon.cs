@@ -5,7 +5,7 @@ public class Weapon: Equipment
 {
     public WeaponData WeaponData => EquipmentData as WeaponData;
     public WeaponType WeaponType { get; protected set; }
-    public List<BaseSkill> Skills { get; protected set; } = new();
+    public List<BattleSkill> Skills { get; protected set; } = new();
     
     public Weapon(int dataId)
     {

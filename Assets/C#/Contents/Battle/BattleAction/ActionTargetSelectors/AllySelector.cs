@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AllySelector : ActionTargetSelector
+public class AllySelector : BattleActionTargetSelector
 {
     public override bool NeedTargetSelection { get; protected set; } = true;
     public override void CalculateTargetableCells()

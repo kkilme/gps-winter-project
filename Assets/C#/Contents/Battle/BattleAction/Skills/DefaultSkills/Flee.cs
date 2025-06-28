@@ -3,10 +3,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Flee : BaseSkill
+public class Flee : BattleSkill
 {
     public override ActionEffectRange EffectRange { get; protected set; } = new DummyRange();
-    public override ActionTargetSelector TargetSelector { get; protected set; } = new DummySelector();
+    public override BattleActionTargetSelector TargetSelector { get; protected set; } = new DummySelector();
 
     public override IEnumerator Execute()
     {

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class UI_ActionButton : UI_Base
 {
     private UI_BattleActionPanel _actionPanel;
-    private BaseSkill _skill;
+    private BattleSkill _skill;
 
     public override void Init()
     {
@@ -17,7 +17,7 @@ public class UI_ActionButton : UI_Base
         gameObject.BindEvent(OnMouseEnterEvent, UIEvent.Enter);
     }
 
-    public void SetSkill(BaseSkill skill)
+    public void SetSkill(BattleSkill skill)
     {
         _skill = skill;
     }
