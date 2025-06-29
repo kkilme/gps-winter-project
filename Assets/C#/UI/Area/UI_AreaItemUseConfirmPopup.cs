@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// AreaItemListPopup에서 아이템을 선택 시 생성되는, 실제 사용 버튼이 있는 팝업 UI.
 /// </summary>
 public class UI_AreaItemUseConfirmPopup : UI_Popup
 {
+    enum Texts
+    {
+        Text_ItemName,
+    }
+
     enum Buttons
     {
         Button_Use,
@@ -19,6 +25,7 @@ public class UI_AreaItemUseConfirmPopup : UI_Popup
     public override void Init()
     {
         base.Init();
+        Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<Button>(typeof(Buttons));
         GetButton(Buttons.Button_Cancel).onClick.AddListener(Close);
     }
@@ -26,6 +33,7 @@ public class UI_AreaItemUseConfirmPopup : UI_Popup
     public void BindItem(ItemData itemData)
     {
         _itemData = itemData;
+        GetText(Texts.Text_ItemName).text = itemData.Name;
         GetButton(Buttons.Button_Use).onClick.AddListener(UseItem);
     }
 
