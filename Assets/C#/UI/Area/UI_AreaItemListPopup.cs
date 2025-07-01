@@ -46,17 +46,26 @@ public class UI_AreaItemListPopup : UI_Popup
     {
         if (selectedSlot.ItemData == null) return;
 
-        Managers.UIMng.ClosePopupUI<UI_AreaItemUseConfirmPopup>(); // 이미 열린 팝업 있다면 닫기
-        UI_AreaItemUseConfirmPopup popup = Managers.UIMng.ShowPopupUI<UI_AreaItemUseConfirmPopup>();
+        Managers.UIMng.ClosePopupUI<UI_ConfirmActionPopup>(); // 이미 열린 팝업 있다면 닫기
+        UI_ConfirmActionPopup popup = Managers.UIMng.ShowPopupUI<UI_ConfirmActionPopup>();
         UIUtility.SetRectPositionRelativeTo(selectedSlot.gameObject, popup.Panel.gameObject, UIUtility.RectPosDirection.Left); // 팝업 위치 설정
 
-        popup.BindItem(selectedSlot.ItemData);
+        ItemData itemData = selectedSlot.ItemData;
+        popup.SetTitle(itemData.Name);
+        popup.SetConfirmText("Use");
+        popup.SetConfirmAction(UseItem);
+
+        void UseItem()
+        {
+            Managers.AreaMng.UseItem(itemData);
+            Close();
+        }
     }
 
     public override void Close()
     {
         _inventory.ClearActionCallbackOnSlots();
-        Managers.UIMng.ClosePopupUI<UI_AreaItemUseConfirmPopup>();
+        Managers.UIMng.ClosePopupUI<UI_ConfirmActionPopup>();
         base.Close();
     }
 
