@@ -177,6 +177,7 @@ public class GoldDetailDesign : ItemDetailDesign
         ui.SetDescription("Nobody hates gold, right?");
         ui.SetItemTypeIcon("Gold");
         ui.SetQuantity(quantity);
+        ui.DisableEquippedHeroInfo();
     }
 
     // 골드는 itemData가 없으므로 아래 메서드는 사용하지 않음

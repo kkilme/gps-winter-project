@@ -27,15 +27,13 @@ public class UI_BattleVictory : UI_Base
         seq.Append(titleRect.DOScale(new Vector3(.2f, .2f, 1f), .5f).From().SetEase(Ease.InQuad));
         seq.AppendInterval(1f);
         seq.Append(titleRect.DOScale(new Vector3(1f, 1f, 1f), 1f));
-        seq.Join(titleRect.DOAnchorPos(new Vector2(-680f, 440f), 1f).OnComplete(() =>
-        {
-            Vector3 temp = titleRect.transform.position;
 
-            titleRect.anchorMax = new Vector2(0, 1);
-            titleRect.anchorMin = new Vector2(0, 1);
+        Vector3 temp = titleRect.transform.position;
+        titleRect.anchorMax = new Vector2(0, 1);
+        titleRect.anchorMin = new Vector2(0, 1);
+        titleRect.transform.position = temp;
 
-            titleRect.transform.position = temp;
-        }));
+        seq.Join(titleRect.DOAnchorPos(new Vector2(280f, -100f), 1f));
         seq.Append(descRect.DOAnchorPosX(240, 1.5f).SetEase(Ease.OutCirc));
 
         return seq.Play();

@@ -18,11 +18,8 @@
       "MinGold": 5,
       "MaxGold": 10,
       "LootTable": [
-        {
-          "LootType": "Item",
-          "DataId": 301000,
-          "DropChance": 5,
-        },
+        { "ItemDataId": 301000, "DropChance": 50, },
+        { "ItemDataId": 202000, "DropChance": 100, },
       ]
     },
     {
@@ -42,11 +39,8 @@
       "MinGold": 5,
       "MaxGold": 10,
       "LootTable": [
-        {
-          "LootType": "Item",
-          "DataId": 301000,
-          "DropChance": 5,
-        },
+        { "ItemDataId": 301000, "DropChance": 50, },
+        { "ItemDataId": 202000, "DropChance": 100, },
       ]
     }
   ]

@@ -43,15 +43,12 @@ public class Monster : Creature
         {
             if (Random.Range(0, 101) <= lootData.DropChance)
             {
-                switch (lootData.Type)
+                if(!Managers.DataMng.ItemDataDict.TryGetValue(lootData.ItemDataId, out ItemData itemData))
                 {
-                    case LootType.Item: // TODO: 아이템 및 장비 객체 생성
-                        //loot.Items.Add(Managers.ItemMng.GetItem(lootData.DataId));
-                        break;
-                    case LootType.Equipment:
-                        //loot.Equipments.Add(Managers.ItemMng.GetEquipment(lootData.DataId));
-                        break;
+                    Debug.LogError($"[Monster] No such ItemData exists with dataId: {lootData.ItemDataId}");
+                    continue;
                 }
+                loot.Items.Add(itemData);
             }
         }
         return loot;

@@ -30,7 +30,7 @@ public class AreaManager
 
     public void Init(AreaMap map, AreaInitContext areaInitContext)
     {
-        Debug.Log("[AreaManager] Init AreaManager");
+        Debug.Log("[AreaManager] AreaManager Init Start");
 
         // 각종 필드 초기화
         Map = map;

@@ -93,7 +93,6 @@ public class SceneManagerEx
         // 로딩화면 생성 및 Fade in
         var loadingUI = Managers.UIMng.MakeGeneralUI<UI_Loading>();
         yield return loadingUI.FadeIn();
-        Managers.BattleMng.Clear();
 
         // BattleScene 언로드
         yield return SceneManager.UnloadSceneAsync(GlobalValues.BATTLE_SCENE_NAME);

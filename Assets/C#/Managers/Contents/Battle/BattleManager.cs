@@ -85,7 +85,7 @@ public class BattleManager
     }
 
     /// <summary>
-    /// 히어로 배치 단계
+    /// 영웅 배치 단계 시작
     /// </summary>
     private void StartPlacementPhase()
     {
@@ -166,6 +166,9 @@ public class BattleManager
         CurrentTurnCreature.StandingCell.HighlightOutline();
     }
 
+    /// <summary>
+    /// Action 실행이 끝났을 때 호출
+    /// </summary>
     public void OnActionEnd()
     {
         UnsetAction();
@@ -197,7 +200,6 @@ public class BattleManager
     /// <summary>
     /// 전투 종료 조건 확인 및 다음 턴으로 진행
     /// </summary>
-    /// <returns></returns>
     public IEnumerator NextTurn()
     {
         UI.OnTurnEnd();
@@ -205,7 +207,7 @@ public class BattleManager
 
         yield return new WaitForSeconds(0.7f); // 턴 전환시 약간의 대기시간을 둠
 
-        if (CheckBattleFinished())
+        if (CheckBattleFinished()) // 전투가 종료되었는지 확인
         {
             yield break;
         }
@@ -215,19 +217,18 @@ public class BattleManager
 
         if (CurrentTurnCreature is Monster)
         {
-            CoroutineRunner.Instance.StartCoroutine(ProceedMonsterTurn());
+            CoroutineRunner.Instance.StartCoroutine(ProceedMonsterTurn()); // 몬스터 턴일 시 몬스터 턴 진행
         }
     }
 
     /// <summary>
     /// 전투에서 creature 제외
     /// </summary>
-    /// <param name="creature"></param>
     public void RemoveCreature(Creature creature)
     {
         creature.StandingCell.RemoveCreature();
         TurnSystem.Remove(creature);
-        UI.TurnstateUI.RemoveTurnFrame(creature);
+        UI.TurnStateUI.RemoveTurnFrame(creature);
 
         // 현재 턴인 Creature가 이번 턴에 전투에서 이탈한 경우, 다음 턴으로 넘어감
         if (creature == CurrentTurnCreature)
@@ -236,6 +237,9 @@ public class BattleManager
         }
     }
 
+    /// <summary>
+    /// 전투에서 hero 제외 (죽거나 도망친 경우)
+    /// </summary>
     public void RemoveHero(Hero hero, bool isFlee)
     {
         if (isFlee) UI.HeroProfileGroupUI.OnFlee(hero);
@@ -246,6 +250,9 @@ public class BattleManager
         RemoveCreature(hero);
     }
 
+    /// <summary>
+    /// 전투에서 monster 제외 (죽은 경우)
+    /// </summary>
     public void RemoveMonster(Monster monster)
     {
         UI.MonsterProfileGroupUI.OnDead(monster);
@@ -254,6 +261,9 @@ public class BattleManager
         RemoveCreature(monster);
     }
 
+    /// <summary>
+    /// 전투가 종료되었는지 확인 및 종료여부 반환.
+    /// </summary>
     public bool CheckBattleFinished()
     {
         if (AliveMonsters.Count <= 0)
@@ -274,11 +284,17 @@ public class BattleManager
         return false;
     }
 
+    /// <summary>
+    /// 전투 결과에 따른 전투 종료 처리.
+    /// </summary>
     public void FinishBattle(BattleResultType battleResult)
     {
         UI.OnBattleEnd(battleResult);
     }
 
+    /// <summary>
+    /// 전투한 몬스터들로부터 전리품 생성 및 반환.
+    /// </summary>
     public Loot GenerateLoot()
     {
         Loot loot = new Loot();
@@ -290,7 +306,16 @@ public class BattleManager
     }
 
     /// <summary>
-    /// 전투 종료 후 초기화
+    /// 전투 결과에 따른 배틀 씬 언로드 시작
+    /// </summary>
+    public void UnloadBattleScene(BattleResultType battleResult)
+    {
+        Clear();
+        CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.EndBattleScene(battleResult));
+    }
+
+    /// <summary>
+    /// 전투 종료 후 BattleManager 초기화
     /// </summary>
     public void Clear()
     {

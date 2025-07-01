@@ -4,7 +4,7 @@
       "DataId": 401000,
       "Type": "SkillData",
       "Name": "Move",
-      "Description": "Move to other position",
+      "Description": "Moves to other position",
       "CoinCount": 0,
       "UsingStat": "None",
       "IconPath": "Icon_Move"
@@ -13,10 +13,19 @@
       "DataId": 401001,
       "Type": "SkillData",
       "Name": "Flee",
-      "Description": "Retreat from the battle.\nRequires perfect coin toss.",
+      "Description": "Retreats from the battle.\nRequires perfect coin toss.",
       "CoinCount": 2,
       "UsingStat": "Dexterity",
       "IconPath": "Icon_Run"
+    },
+    {
+      "DataId": 401002,
+      "Type": "SkillData",
+      "Name": "Bag",
+      "Description": "Opens the bag to use items.",
+      "CoinCount": 0,
+      "UsingStat": "None",
+      "IconPath": "Icon_Bag"
     },
     {
       "DataId": 402000,

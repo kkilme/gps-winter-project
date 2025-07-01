@@ -64,8 +64,8 @@ public class UI_TownScene : UI_Scene
 
     public void InitUIs()
     {
-        // UI_Base의 Init()이 아닌 각 UI 클래스의 LateInit으로 수동 초기화를 진행함.
-        // UI_Base의 Init()은 Awake에서 호출되기 때문에 대표적으로 두 가지 문제가 존재.
+        // UI_Base의 ShowGold()이 아닌 각 UI 클래스의 LateInit으로 수동 초기화를 진행함.
+        // UI_Base의 ShowGold()은 Awake에서 호출되기 때문에 대표적으로 두 가지 문제가 존재.
         // 1. 모든 UI가 동시에 Awake에서 초기화되기 때문에 순서 관계를 명확히 지정할 수가 없음. A 초기화가 완료된 이후 B를 초기화해야만 할 시, 문제가 발생함.
         // 2. Awake는 게임오브젝트가 활성화 상태일 때만 호출됨. 즉, 어떤 UI를 비활성화 상태로 게임을 시작한다면 제대로 초기화가 안되어 문제가 발생할 수 있음.
         // 이를 해결하기 위해 LateInit에서는 ShowInstantly()를 통해 UI를 직접적으로 활성화 시킨 후 초기화를 진행한다.

@@ -28,7 +28,7 @@ public class UI_BattleScene : UI_Scene
 
 	public UI_BattleActionPanel ActionPanel { get; protected set; }
 	public UI_CoinTossDisplay CoinTossDisplay { get; protected set; }
-    public UI_TurnState TurnstateUI { get; protected set; }
+    public UI_TurnState TurnStateUI { get; protected set; }
     public UI_PlacementPhase PlacementPhaseUI { get; protected set; }
     public UI_ChooseTarget_Battle ChooseTargetUI { get; protected set; }
     public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
@@ -44,7 +44,7 @@ public class UI_BattleScene : UI_Scene
 
         ActionPanel = GetGameObject(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
         CoinTossDisplay = GetGameObject(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
-        TurnstateUI = GetGameObject(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
+        TurnStateUI = GetGameObject(SubItemUI.UI_TurnState).GetOrAddComponent<UI_TurnState>();
         PlacementPhaseUI = GetGameObject(SubItemUI.UI_PlacementPhase).GetOrAddComponent<UI_PlacementPhase>();
         ChooseTargetUI = GetGameObject(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget_Battle>();
         HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Vertical).GetOrAddComponent<UI_HeroProfileGroup>();
@@ -63,15 +63,15 @@ public class UI_BattleScene : UI_Scene
         ActionPanel.Hide();
         CoinTossDisplay.Hide();
         ChooseTargetUI.Hide();
-        TurnstateUI.Setup();
-        TurnstateUI.HideInstantly();
+        TurnStateUI.Setup();
+        TurnStateUI.HideInstantly();
         HeroProfileGroupUI.BindCreature();
         MonsterProfileGroupUI.BindCreature();
     }
 
     public void OnBattlePhaseStart()
     {
-        TurnstateUI.Show();
+        TurnStateUI.Show();
         OnTurnStart();
     }
 
@@ -79,7 +79,7 @@ public class UI_BattleScene : UI_Scene
     {
         var turnCreature = _battleManager.CurrentTurnCreature;
 
-        TurnstateUI.RefreshTurnFramesPosition();
+        TurnStateUI.RefreshTurnFramesPosition();
 
         if (turnCreature is Hero)
         {
@@ -99,10 +99,13 @@ public class UI_BattleScene : UI_Scene
         MonsterProfileGroupUI.StopBlinking();
     }
 
+    /// <summary>
+    /// 전투 종료 시 전투 결과에 따른 UI 표시.
+    /// </summary>
     public void OnBattleEnd(BattleResultType battleResult)
     {
         ActionPanel.Hide();
-        TurnstateUI.Hide();
+        TurnStateUI.Hide();
         CoinTossDisplay.Hide();
         _fadeBG.DOColor(new Color(_fadeBG.color.r, _fadeBG.color.g, _fadeBG.color.b, 0.9f), 0.7f).OnComplete(() =>
         {
@@ -121,39 +124,22 @@ public class UI_BattleScene : UI_Scene
         });
     }
 
+    /// <summary>
+    /// 전투 승리 시 전리품 UI 표시.
+    /// </summary>
     private void ShowLoot()
     {   
-        Loot loot = Managers.BattleMng.GenerateLoot();
+        Loot loot = Managers.BattleMng.GenerateLoot(); // 전리품 생성
         UI_Loot lootUI = Managers.UIMng.ShowPopupUI<UI_Loot>();
 
-        int itemCount = loot.Items.Count + 1;
-        lootUI.Init(loot.Gold);
-        lootUI.OnLootAction -= OnLootAction;
-        lootUI.OnLootAction += OnLootAction;
-        lootUI.Show();
+        lootUI.OnLootTakeComplete += OnLootTakeComplete;
+        lootUI.Show(loot);
 
-        void OnLootAction(LootActionType action)
+        static void OnLootTakeComplete(Loot lootTaken)
         {
-            lootUI.Close();
-            itemCount--;
-
-            if (itemCount == 0)
-            {
-                CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.EndBattleScene(BattleResultType.Victory));
-            } 
-            else
-            {
-                ShowNext();
-            }
-        }
-
-        void ShowNext()
-        {
-            UI_Loot lootUI = Managers.UIMng.ShowPopupUI<UI_Loot>(); // TODO: popup 닫기
-            lootUI.Init(loot.Items[itemCount - 1]);
-            lootUI.OnLootAction -= OnLootAction;
-            lootUI.OnLootAction += OnLootAction;
-            lootUI.Show();
+            Managers.AreaMng.Loots.Add(lootTaken);
+            Managers.UIMng.ClosePopupUI<UI_Loot>();
+            Managers.BattleMng.UnloadBattleScene(BattleResultType.Victory);
         }
     }
 }
