@@ -20,7 +20,7 @@ public class UI_CoinTossDisplay : UI_Base
         Bind<UI_Coin>(typeof(Coins));
     }
 
-    public void ShowDeafult(int coinCount, StatName stat)
+    public void Show(int coinCount, StatName stat)
     {   
         if(coinCount == 0)
         {
@@ -41,7 +41,7 @@ public class UI_CoinTossDisplay : UI_Base
 
     public IEnumerator ShowResult(bool[] result, StatName stat)
     {
-        ShowDeafult(result.Length, stat); // 몬스터 턴을 위해 필요
+        Show(result.Length, stat); // 몬스터 턴을 위해 필요
         for (int i = 0; i < result.Length; i++)
         {
             Get<UI_Coin>(i).ShowResult(result[i]);

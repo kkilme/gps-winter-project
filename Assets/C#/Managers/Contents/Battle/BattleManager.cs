@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleManager
@@ -136,7 +137,7 @@ public class BattleManager
 
             GridSystem.HighlightTargettableCells(action);
         }
-        else // 대상 선택이 필요 없는 액션인 경우: 대상이 스킬에서 강제로 정해져 있거나, 랜덤 대상을 선택하는 액션임
+        else // 대상 선택이 필요 없는 액션인 경우: 대상이 액션에서 강제로 정해져 있거나, 랜덤 대상을 선택하는 액션임
         {
             if (!action.IsExecutable())
             {
@@ -150,6 +151,12 @@ public class BattleManager
         }
     }
 
+    public void SetAction(ItemAction itemAction)
+    {
+        UI.CoinTossDisplay.HideInstantly(); // 아이템 사용은 코인 토스를 하지 않으므로 숨김
+        SetAction(action: itemAction);
+    }
+
     /// <summary>
     /// Action 실행이 끝나거나, Cancel 되었을 때 호출
     /// </summary>
@@ -158,6 +165,7 @@ public class BattleManager
         BattleState = BattleState.Idle;
         CurrentAction = null;
         UI.ChooseTargetUI.Hide();
+        UI.ActionPanel.Show();
 
         Managers.InputMng.RemoveMouseAction(BattleInputHandler.HandleMouseOnTargetSelect);
         Managers.InputMng.AddMouseAction(BattleInputHandler.HandleMouseOnBattlePhase);

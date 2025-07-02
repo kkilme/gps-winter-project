@@ -14,7 +14,6 @@ public class UI_ChooseTarget_Battle : UI_Base
         GetButton(Buttons.Button_Cancel).onClick.AddListener(() =>
         {
             Managers.BattleMng.UnsetAction();
-            Managers.BattleMng.UI.ActionPanel.ShowInstantly();
         });
     }
 }

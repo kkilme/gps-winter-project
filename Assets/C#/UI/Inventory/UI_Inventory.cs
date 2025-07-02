@@ -348,6 +348,7 @@ public class UI_Inventory : UI_Base
     /// </summary>
     public void Clear()
     {
+        ClearActionCallbackOnSlots();
         foreach (var slot in InventorySlots)
         {
             slot.UnbindItem();
@@ -359,10 +360,16 @@ public class UI_Inventory : UI_Base
     /// </summary>
     public void HardClear()
     {
-        for(int i = transform.childCount - 1; i >= 0; i--)
+        ClearActionCallbackOnSlots();
+        for (int i = transform.childCount - 1; i >= 0; i--)
         {
             Destroy(transform.GetChild(i).gameObject);
         }
         InventorySlots.Clear();
+    }
+
+    public void OnDestroy()
+    {
+        ClearActionCallbackOnSlots();
     }
 }

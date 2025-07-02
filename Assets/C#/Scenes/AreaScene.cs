@@ -30,6 +30,7 @@ public class AreaScene : BaseScene
         AreaManager.Init(map, areaInitContext);
     }
 
+#if UNITY_EDITOR
     #region Test
     private void Start()
     {
@@ -51,4 +52,5 @@ public class AreaScene : BaseScene
         }
     }
     #endregion
+#endif
 }

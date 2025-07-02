@@ -23,6 +23,7 @@ public class BattleScene : BaseScene
         {
             // TODO: for test
             // BattleScene에서 시작하여 플레이 테스트 시에만 실행
+            for(int i = 0; i<7; i++) Managers.AreaMng.Items.Add(new HealPotion(GlobalValues.ITEM_HEALPOTION_ID)); // 테스트용 아이템 추가
             Managers.HeroMng.SpawnHeroParty();
             InitBattle(GlobalValues.MONSTERSQUAD_SQUAD1_ID, Managers.DataMng.AreaDataDict[AreaName.Forest].BattleFieldName);
         }

@@ -8,7 +8,7 @@ using UnityEngine;
 // 또다른 테스트 환경을 구축한다면 GameStarter를 상속받는 클래스를 제작하면 될 듯.
 public class GameStarter
 {
-    public void OnGameStart()
+    public void SetupGame()
     {
         AddStartHeroes();
         AddStartItems();

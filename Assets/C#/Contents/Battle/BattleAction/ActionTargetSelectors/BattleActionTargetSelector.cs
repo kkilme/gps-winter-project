@@ -8,15 +8,15 @@ using UnityEngine;
 public abstract class BattleActionTargetSelector
 {
     /// <summary>
-    /// Action의 대상이 될 수 있는 모든 BattleGridCell
+    /// Action의 대상이 될 수 있는 모든 BattleGridCell. CalculateTargetableCells에 의해 채워짐.
     /// </summary>
     public HashSet<BattleGridCell> TargetableCells { get; protected set; } = new();
     /// <summary>
     /// 플레이어가 Action의 대상을 지정해 줄 필요가 있는지 여부
     /// </summary>
-    public abstract bool NeedTargetSelection { get; protected set; } // non-abstract으로 수정필요 
+    public abstract bool NeedTargetSelection { get; protected set; }
     /// <summary>
-    /// Action의 대상이 될 수 있는 Cell 계산
+    /// Action의 대상이 될 수 있는 Cell 계산하여 TargetableCells에 저장
     /// </summary>
     public abstract void CalculateTargetableCells();
 

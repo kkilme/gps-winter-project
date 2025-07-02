@@ -18,7 +18,8 @@ public class UI_BattleScene : UI_Scene
         UI_MonsterProfileGroup,
         UI_BattleVictory,
         UI_BattleDefeat,
-        UI_BattleRetreat
+        UI_BattleRetreat,
+        UI_BattleBag,
     }
 
     enum Images
@@ -33,6 +34,7 @@ public class UI_BattleScene : UI_Scene
     public UI_ChooseTarget_Battle ChooseTargetUI { get; protected set; }
     public UI_HeroProfileGroup HeroProfileGroupUI { get; protected set; }
     public UI_MonsterProfileGroup MonsterProfileGroupUI { get; protected set; }
+    public UI_BattleBag BattleBagUI { get; protected set; }
 
     private BattleManager _battleManager => Managers.BattleMng;
     private Image _fadeBG;
@@ -49,6 +51,7 @@ public class UI_BattleScene : UI_Scene
         ChooseTargetUI = GetGameObject(SubItemUI.UI_ChooseTarget).GetOrAddComponent<UI_ChooseTarget_Battle>();
         HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Vertical).GetOrAddComponent<UI_HeroProfileGroup>();
         MonsterProfileGroupUI = GetGameObject(SubItemUI.UI_MonsterProfileGroup).GetOrAddComponent<UI_MonsterProfileGroup>();
+        BattleBagUI = GetGameObject(SubItemUI.UI_BattleBag).GetOrAddComponent<UI_BattleBag>();
         GetGameObject(SubItemUI.UI_BattleVictory).GetOrAddComponent<UI_BattleVictory>();
         GetGameObject(SubItemUI.UI_BattleDefeat).GetOrAddComponent<UI_BattleDefeat>();
         GetGameObject(SubItemUI.UI_BattleRetreat).GetOrAddComponent<UI_BattleRetreat>();
@@ -60,6 +63,7 @@ public class UI_BattleScene : UI_Scene
 
     public void OnPlacementPhaseStart()
     {
+        BattleBagUI.HideInstantly();
         ActionPanel.Hide();
         CoinTossDisplay.Hide();
         ChooseTargetUI.Hide();

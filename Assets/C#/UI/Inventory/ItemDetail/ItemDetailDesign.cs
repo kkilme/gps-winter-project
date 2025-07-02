@@ -1,8 +1,9 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Text;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
-using DG.Tweening;
 
 
 public abstract class ItemDetailDesign
@@ -158,7 +159,22 @@ public class ConsumableItemDetailDesign : ItemDetailDesign
             return;
         }
 
-        ui.SetDescription(consumableItemData.Description);
+        StringBuilder sb = new StringBuilder();
+        sb.Append(consumableItemData.Description + '\n');
+        if(consumableItemData.IsUsableInArea && consumableItemData.IsUsableInBattle)
+        {
+            sb.Append("<color=#FFCD64>Usable in Area and Battle</color>");
+        }
+        else if(consumableItemData.IsUsableInArea)
+        {
+            sb.Append("<color=#FFCD64>Usable in Area</color>");
+        }
+        else if(consumableItemData.IsUsableInBattle)
+        {
+            sb.Append("<color=#FFCD64>Usable in Battle</color>");
+        }        
+
+        ui.SetDescription(sb.ToString().TrimEnd());
     }
 
     protected override void ApplyItemTypeIconImage(UI_ItemDetailPopup ui, ItemData itemData)

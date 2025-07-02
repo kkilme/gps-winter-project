@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_ActionButton : UI_Base
+public class UI_BattleActionButton : UI_Base
 {
     private UI_BattleActionPanel _actionPanel;
     private BattleSkill _skill;

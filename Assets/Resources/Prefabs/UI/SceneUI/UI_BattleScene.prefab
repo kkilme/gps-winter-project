@@ -230,6 +230,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6287520779449944152}
     m_Modifications:
+    - target: {fileID: 112695384780489306, guid: f252cf0fe7c1d684fb066ef2dde2ae86, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 306904892583237710, guid: f252cf0fe7c1d684fb066ef2dde2ae86, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

@@ -74,6 +74,7 @@ public static class GlobalValues
 
     public const int ACTION_MOVE_ID = 401000;
     public const int ACTION_FLEE_ID = 401001;
+    public const int ACTION_BAG_ID = 401002;
     public const int ACTION_STRIKE_ID = 402000;
     public const int ACTION_BITE_ID = 403000;
 

@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// AreaScene에서, Area에 가져온 아이템을 디스플레이 및 사용할 수 있도록 하는 팝업 UI
+/// BattleScene에서 아이템을 디스플레이 및 사용할 수 있도록 하는 UI. AreaItemListPopup과 매우 유사함.
 /// </summary>
-public class UI_AreaItemListPopup : UI_Popup
+public class UI_BattleBag : UI_Base
 {
     enum GameObjects
     {
@@ -22,21 +22,22 @@ public class UI_AreaItemListPopup : UI_Popup
 
     public override void Init()
     {
-        base.Init();
         Bind<GameObject>(typeof(GameObjects));
         Bind<Button>(typeof(Buttons));
-        GetButton(Buttons.Button_Close).onClick.AddListener(Close);
+        GetButton(Buttons.Button_Close).onClick.AddListener(HideInstantly);
+        _inventory = GetGameObject(GameObjects.Inventory).GetOrAddComponent<UI_Inventory>();
+        _inventory.LateInit(OnSlotSelected, maxSize: GlobalValues.MAX_AREAITEM_COUNT);
+    }
 
-        UI_Inventory inventory = GetGameObject(GameObjects.Inventory).GetOrAddComponent<UI_Inventory>();
-        inventory.HardClear();
-        inventory.LateInit(OnSlotSelected, maxSize: GlobalValues.MAX_AREAITEM_COUNT);
-        _inventory = inventory;
-
+    public override void ShowInstantly()
+    {
+        _inventory.HardClear();
 
         foreach (var item in Managers.AreaMng.Items)
         {
-            inventory.AddItem(item.ItemData);
+            _inventory.AddItem(item.ItemData);
         }
+        gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -45,7 +46,6 @@ public class UI_AreaItemListPopup : UI_Popup
     private void OnSlotSelected(UI_ItemSlot selectedSlot)
     {
         if (selectedSlot.ItemData == null) return;
-
         Managers.UIMng.ClosePopupUI<UI_ConfirmActionPopup>(); // 이미 열린 팝업 있다면 닫기
         UI_ConfirmActionPopup popup = Managers.UIMng.ShowPopupUI<UI_ConfirmActionPopup>();
         UIUtility.SetRectPositionRelativeTo(selectedSlot.gameObject, popup.Panel.gameObject, UIUtility.RectPosDirection.Left); // 팝업 위치 설정
@@ -57,20 +57,21 @@ public class UI_AreaItemListPopup : UI_Popup
 
         void UseItem()
         {
-            Managers.AreaMng.UseItem(itemData);
-            Close();
+            List<Item> currentItems = Managers.AreaMng.Items;
+            Item item = currentItems.Find(i => i.DataId == itemData.DataId);
+            if (item == null) return; // 아이템이 존재하는지 확인
+            if(item is not IUsableInBattle battleItem) return; // Battle에서 사용 가능한 아이템인지 확인
+
+            ItemAction itemAction = battleItem.GetItemAction(); // 아이템 액션 가져오기
+            HideInstantly(); // UnsetAction부터 하기 위해 먼저 해야 함
+            Managers.BattleMng.SetAction(itemAction); // 현재 액션으로 설정
         }
     }
 
-    public override void Close()
+    public override void HideInstantly()
     {
-        _inventory.ClearActionCallbackOnSlots();
+        Managers.BattleMng.UnsetAction();
         Managers.UIMng.ClosePopupUI<UI_ConfirmActionPopup>();
-        base.Close();
-    }
-
-    private void OnDestroy()
-    {
-        _inventory.ClearActionCallbackOnSlots();
+        base.HideInstantly();
     }
 }
