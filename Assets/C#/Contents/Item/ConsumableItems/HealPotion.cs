@@ -8,7 +8,7 @@ public class HealPotion : ConsumableItem, IUsableInArea, IUsableInBattle
 
     public ItemAction GetItemAction()
     {
-        return new HealPotionAction();
+        return new HealPotionAction(this);
     }
 
     public void UseInArea()

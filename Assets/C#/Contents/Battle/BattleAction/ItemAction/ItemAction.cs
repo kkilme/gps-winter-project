@@ -5,7 +5,7 @@ public abstract class ItemAction : BattleAction
 {
     public Item Item { get; protected set; }
 
-    public void SetItem(Item item)
+    public ItemAction(Item item)
     {
         Item = item;
     }

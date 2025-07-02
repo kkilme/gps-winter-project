@@ -46,13 +46,15 @@ public class UI_BattleActionPanel : UI_Base
 
     public override Tween Show()
     {   
-        if (_showTween != null) return _showTween; // 이미 진행중이면 중복 실행 방지
-        gameObject.SetActive(true);
         _hero = Managers.BattleMng.CurrentTurnCreature as Hero;
+        if (_hero == null) return DOVirtual.DelayedCall(0, () => { });
         ClearActionInfo();
         SetupActionButtons();
-        
+        gameObject.SetActive(true);
+
+        if (_showTween != null) return _showTween; // 이미 진행중이면 중복 실행 방지
         _showTween = _rect.DOAnchorPosY(-400f, 1f).From(true).SetEase(Ease.OutCirc).OnComplete(() => { _showTween = null; });
+
         return _showTween;
     }
 
