@@ -3,6 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 전투에서 후퇴 시의 UI
+/// </summary>
 public class UI_BattleRetreat : UI_Base
 {
     enum RectTransforms
@@ -38,6 +41,7 @@ public class UI_BattleRetreat : UI_Base
         {
             button.gameObject.SetActive(true);
             button.GetComponent<RectTransform>().DOScale(new Vector3(.5f, .5f, .5f), 0.5f).From().SetEase(Ease.OutBack);
+            // Area로 돌아가는 버튼
             button.onClick.AddListener(() =>
             {
                 Managers.BattleMng.UnloadBattleScene(BattleResultType.Retreat);

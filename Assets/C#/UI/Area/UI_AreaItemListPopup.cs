@@ -10,7 +10,8 @@ public class UI_AreaItemListPopup : UI_Popup
 {
     enum GameObjects
     {
-        Inventory
+        Inventory,
+        Indicator_NoItems
     }
 
     enum Buttons
@@ -32,6 +33,7 @@ public class UI_AreaItemListPopup : UI_Popup
         inventory.LateInit(OnSlotSelected, maxSize: GlobalValues.MAX_AREAITEM_COUNT);
         _inventory = inventory;
 
+        GetGameObject(GameObjects.Indicator_NoItems).SetActive(Managers.AreaMng.Items.Count == 0); // 아이템이 없을 때의 표시
 
         foreach (var item in Managers.AreaMng.Items)
         {

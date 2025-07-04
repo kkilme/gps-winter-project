@@ -33,7 +33,6 @@ public class UI_Inventory : UI_Base
         slotDesign ??= new DefaultItemSlotDesign(); // 디자인을 지정하지 않을 시 기본 슬롯 디자인 사용
         _slotDesign = slotDesign;
 
-
         // 이미 존재하는 슬롯들 할당 및 초기화
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
@@ -361,9 +360,11 @@ public class UI_Inventory : UI_Base
     public void HardClear()
     {
         ClearActionCallbackOnSlots();
-        for (int i = transform.childCount - 1; i >= 0; i--)
+        while (transform.childCount > 0)
         {
-            Destroy(transform.GetChild(i).gameObject);
+            Transform child = transform.GetChild(0);
+            child.SetParent(null);      // 부모 자식 관계 해제 -> childCount 즉시 감소
+            Destroy(child.gameObject);  // 실제 파괴는 다음 프레임에
         }
         InventorySlots.Clear();
     }

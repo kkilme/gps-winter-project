@@ -180,6 +180,7 @@ public class BattleManager
     public void OnActionEnd()
     {
         UnsetAction();
+        UI.ActionPanel.Hide();
         UI.CoinTossDisplay.Hide();
         CoroutineRunner.Instance.StartCoroutine(NextTurn());
     }

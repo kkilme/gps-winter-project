@@ -1,6 +1,9 @@
 using DG.Tweening;
 using UnityEngine;
 
+/// <summary>
+/// 전투 승리시의 UI
+/// </summary>
 public class UI_BattleVictory : UI_Base
 {
     enum RectTransforms

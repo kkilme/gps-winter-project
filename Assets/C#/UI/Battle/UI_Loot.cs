@@ -8,14 +8,14 @@ using UnityEngine.UI;
 
 public class UI_Loot : UI_Popup
 {
-    public Action<Loot> OnLootTakeComplete;
+    public Action<Loot> OnLootTakeComplete; // 전리품 획득 완료 시 호출되는 이벤트
 
     private RectTransform _actionRect;
     private RectTransform _itemDetailRect;
     private UI_ItemDetailPopup _itemDetailPopup;
 
-    private Loot _lootDropped; // 전투에서 나온 모든 전리품
-    private Loot _lootTaken; // 플레이어가 획득하고자 선개한 전리품
+    private Loot _lootDropped; // 나온 모든 전리품
+    private Loot _lootTaken; // 플레이어가 획득하고자 선택한 전리품
 
     enum RectTransforms
     {

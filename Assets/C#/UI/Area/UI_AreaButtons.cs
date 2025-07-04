@@ -21,7 +21,7 @@ public class UI_AreaButtons : UI_Base
     }
 
     private AreaManager _areaManager => Managers.AreaMng;
-    private UI_Popup _openPopup;
+    private UI_Popup _openPopup; // LootList와 ItemList 중 현재 열려있는 팝업 UI
 
     public override void Init()
     {
@@ -35,7 +35,7 @@ public class UI_AreaButtons : UI_Base
 
     public override Tween Show()
     {
-        GetText(Texts.Text_RestCount).text = Managers.AreaMng.AreaData.MaxRestCount.ToString();
+        GetText(Texts.Text_RestCount).text = _areaManager.AreaData.MaxRestCount.ToString();
         return base.Show();
     }
 
@@ -63,11 +63,29 @@ public class UI_AreaButtons : UI_Base
         }
     }
 
+    /// <summary>
+    /// 전리품(Loots) 버튼을 누를 시의 콜백 함수. Area에서 획득한 전리품 목록을 표시하는 팝업 UI를 열고 적절히 위치를 설정한다.
+    /// </summary>
     private void OnClickLootListButton()
     {
-        //Managers.UIMng.TogglePopupUI<UI_AreaLootList>();
+        if (_openPopup != null && _openPopup is not UI_AreaLootListPopup) _openPopup.Close();
+
+        UI_AreaLootListPopup popup = Managers.UIMng.TogglePopupUI<UI_AreaLootListPopup>();
+
+        if (popup == null) return;
+
+        _openPopup = popup;
+        UIUtility.SetRectPositionRelativeTo(
+            GetButton(Buttons.Button_LootList).gameObject,
+            popup.Panel.gameObject,
+            UIUtility.RectPosDirection.Left,
+            new Vector2(-10, 0)
+            );
     }
 
+    /// <summary>
+    /// 아이템(Items) 버튼을 누를 시의 콜백 함수. Area에 가져온 아이템 목록을 표시하는 팝업 UI를 열고 적절히 위치를 설정한다.
+    /// </summary>
     private void OnClickItemListButton()
     {
         if(_openPopup != null && _openPopup is not UI_AreaItemListPopup) _openPopup.Close();
