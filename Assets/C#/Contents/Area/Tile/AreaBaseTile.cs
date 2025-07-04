@@ -5,7 +5,9 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using DG.Tweening;
 
-// Area 맵의 육각형 타일 게임으보젝트에 붙는 스크립트
+/// <summary>
+/// Area 맵의 육각형 타일 게임오브젝트에 붙는 스크립트
+/// </summary>
 public class AreaBaseTile : MonoBehaviour
 {   
     // 플레이어가 밟고 서는 타일 오브젝트 그 자체
