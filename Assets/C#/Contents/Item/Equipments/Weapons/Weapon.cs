@@ -20,12 +20,12 @@ public class Weapon: Equipment
 
         foreach (int skillId in WeaponData.Skills)
         {
-            Skills.Add(Managers.ObjectMng.Skills[skillId]);
+            Skills.Add(Managers.ObjectHolder.Skills[skillId]);
         }
 
         // 모든 무기에 공통적으로 있는 기본 스킬 추가
-        Skills.Add(Managers.ObjectMng.Skills[GlobalValues.ACTION_MOVE_ID]);
-        Skills.Add(Managers.ObjectMng.Skills[GlobalValues.ACTION_FLEE_ID]);
-        Skills.Add(Managers.ObjectMng.Skills[GlobalValues.ACTION_BAG_ID]);
+        Skills.Add(Managers.ObjectHolder.Skills[GlobalValues.ACTION_MOVE_ID]);
+        Skills.Add(Managers.ObjectHolder.Skills[GlobalValues.ACTION_FLEE_ID]);
+        Skills.Add(Managers.ObjectHolder.Skills[GlobalValues.ACTION_BAG_ID]);
     }
 }

@@ -27,7 +27,7 @@ public class Managers : MonoBehaviour
     #region Core
     private DataManager _dataMng = new DataManager();
     private InputManager _inputMng = new InputManager();
-    private ObjectManager _objectMng = new ObjectManager();
+    private ObjectHolder _objectHolder = new ObjectHolder();
     private PoolManager _poolMng = new PoolManager();
     private ResourceManager _resourceMng = new ResourceManager();
     private SceneManagerEx _sceneMng = new SceneManagerEx();
@@ -36,7 +36,7 @@ public class Managers : MonoBehaviour
 
     public static DataManager DataMng => Instance._dataMng;
     public static InputManager InputMng => Instance._inputMng;
-    public static ObjectManager ObjectMng => Instance._objectMng;
+    public static ObjectHolder ObjectHolder => Instance._objectHolder;
     public static PoolManager PoolMng => Instance._poolMng;
     public static ResourceManager ResourceMng => Instance._resourceMng;
     public static SceneManagerEx SceneMng => Instance._sceneMng;

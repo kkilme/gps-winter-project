@@ -15,7 +15,7 @@ public class DefaultMonsterAI : CreatureAI
         _skillList = new List<BattleSkill>();
         foreach(int dataId in _monster.MonsterData.Actions)
         {
-            _skillList.Add(Managers.ObjectMng.Skills[dataId]);
+            _skillList.Add(Managers.ObjectHolder.Skills[dataId]);
         }
     }
 

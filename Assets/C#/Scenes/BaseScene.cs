@@ -25,7 +25,7 @@ public abstract class BaseScene : MonoBehaviour
     protected virtual void Init()
     {
         // TODO- 최초 Scene에서만 실행
-        if (!Managers.ObjectMng.Initialized)
+        if (!Managers.ObjectHolder.Initialized)
         {
             Managers.Init();
             Managers.InputMng.Init();
@@ -34,7 +34,7 @@ public abstract class BaseScene : MonoBehaviour
             Managers.SoundMng.Init();
             Managers.PoolMng.Init();
             Managers.UIMng.Init();
-            Managers.ObjectMng.Init();
+            Managers.ObjectHolder.Init();
             Managers.ResourceMng.Init();
 
             GameStarter game = new();

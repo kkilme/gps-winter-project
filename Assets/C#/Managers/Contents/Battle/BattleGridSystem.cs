@@ -63,7 +63,7 @@ public class BattleGridSystem
 
         foreach (MonsterSquad_MonsterData monsterData in squadData.Monsters)
         {
-            Monster monster = Managers.ObjectMng.SpawnMonster(monsterData.DataId);
+            Monster monster = MonsterSpawner.SpawnMonster(monsterData.DataId);
             MonsterGrid[monsterData.y, monsterData.x].PlaceCreature(monster);
             monster.LookFront();
             _battleManager.AliveMonsters.Add(monster);

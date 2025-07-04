@@ -11,7 +11,7 @@ public enum TileColorChangeType
 
 // 플레이 가능 영역에 생성되는, 플레이어가 이동 가능한 이벤트 타일.
 // Note: 플레이어가 밟고 서있는 육각형 블록 게임오브젝트는 AreaBaseTile
-public abstract class AreaEventTile: MonoBehaviour
+public abstract class AreaEventTile: MonoBehaviour           
 {
     public AreaTileType TileType;
 
