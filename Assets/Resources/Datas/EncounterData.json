@@ -1,0 +1,13 @@
+{
+  "encounerDatas": [
+    {
+      "DataId": 301000,
+      "Name": "Pond",
+      "ClassName": "PondEncounter",
+      "Description": "Restores 20% of a hero's max HP.",
+      "ImagePath": "Bomb",
+      "UsingStat": "Intelligence",
+      "CoinCount": 4,
+    }
+  ]
+}
