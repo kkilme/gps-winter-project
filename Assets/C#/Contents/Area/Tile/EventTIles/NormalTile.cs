@@ -15,9 +15,4 @@ public sealed class NormalTile : AreaEventTile
         if (_willBeDestroyed) return;
         CoroutineRunner.Instance.StartCoroutine(Managers.AreaMng.OnTileEventFinish());
     }
-
-    public override void OnTileEventFinish()
-    {
-        
-    }
 }

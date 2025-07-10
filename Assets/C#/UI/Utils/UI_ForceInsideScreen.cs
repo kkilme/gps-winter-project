@@ -8,7 +8,7 @@ public class UI_ForceInsideScreen : MonoBehaviour
 {
     private RectTransform _rect; // 따라다닐 UI의 RectTransform
     private Canvas _canvas; // 이 UI가 속한 캔버스
-    private Vector2 _padding = new Vector2(8, 8); // 마우스와 UI의 기본 간격
+    private Vector2 _padding = new Vector2(8, 8); // 마우스와 UI의 간격
 
     private void Awake()
     {

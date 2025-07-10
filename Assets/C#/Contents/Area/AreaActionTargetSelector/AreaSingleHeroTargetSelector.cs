@@ -3,8 +3,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
-public class AreaHeroTargetSelector : IAreaActionTargetSelector
+/// <summary>
+/// Area에서 한 영웅을 타겟으로 선택하는 클래스
+/// </summary>
+public class AreaSingleHeroTargetSelector : IAreaActionTargetSelector
 {
     private Action<object> _onTargetSelected;
     private AreaManager AreaManager => Managers.AreaMng;

@@ -107,6 +107,4 @@ public abstract class AreaEventTile: MonoBehaviour
     }
 
     public abstract void OnTileEnter();
-
-    public abstract void OnTileEventFinish();
 }

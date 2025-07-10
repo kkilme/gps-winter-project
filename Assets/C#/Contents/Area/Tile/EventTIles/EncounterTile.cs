@@ -16,11 +16,9 @@ public sealed class EncounterTile : AreaEventTile
     public override void OnTileEnter()
     {
         if (_willBeDestroyed) return;
-        Managers.AreaMng.AreaState = AreaState.Idle; // TODO - Encounter 구현 시 상태 수정
-    }
+        Managers.AreaMng.AreaState = AreaState.Encounter;
 
-    public override void OnTileEventFinish()
-    {
-        throw new System.NotImplementedException();
+        AreaEncounter encounter = Managers.AreaMng.GetEncounter();
+        encounter.ShowEncounterPopup();
     }
 }

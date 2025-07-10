@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// UI_CoinToss에서 하나의 Coin을 나타내는 UI
+/// </summary>
 public class UI_Coin : UI_Base
 {
     enum StatImages
@@ -31,18 +34,17 @@ public class UI_Coin : UI_Base
     private Color _bgOriginalColor;
     private Color _statIconOriginalColor;
 
-    public override void Init()
+    public override void Init() { }
+
+    public void LateInit(StatName statName)
     {
         Bind<Image>(typeof(StatImages));
         Bind<GameObject>(typeof(GameObjects));
+
         _bg = GetComponent<Image>();
         _bgOriginalColor = _bg.color;
         _statIconOriginalColor = Get<Image>(StatImages.Strength).color;
-    }
-
-    public void ShowDefault(StatName statName)
-    {
-        _bg.color = _bgOriginalColor;
+        
         GetGameObject(GameObjects.Icon_Fail).SetActive(false);
         GetGameObject(GameObjects.Frame_Success).SetActive(false);
 
@@ -57,6 +59,9 @@ public class UI_Coin : UI_Base
         gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// 코인 토스 성공 여부에 따른 색 변화
+    /// </summary>
     public void ShowResult(bool isSuccess)
     {
         if (isSuccess)

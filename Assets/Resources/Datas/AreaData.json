@@ -4,12 +4,15 @@
           "Name": "Forest",
           "BattleFieldName": "Forest_1",
           "CollapseTimer": 4,
-          "CollapseAmount": 2,
+          "CollapseAmount": 1,
           "MaxRestCount": 2,
           "MonsterSquadIds":[
               501000,
               501001
           ],
+          "EncounterIds":[
+              701000,
+          ]
       }
   ]
 }

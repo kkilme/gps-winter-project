@@ -165,17 +165,16 @@ public class AreaManager
     }
 
     /// <summary>
-    /// 어떤 타일의 이벤트가 끝났을 때 호출되는 메서드
+    /// 현재 타일의 이벤트가 끝났을 때 호출되는 메서드
     /// </summary>
     public IEnumerator OnTileEventFinish()
     {
-        _currentTile.OnTileEventFinish();
-
         switch (_currentTile.TileType)
         {
             case AreaTileType.Normal:
                 break;
             case AreaTileType.Battle:
+            case AreaTileType.Encounter:
                 Map.ReplaceEventTile(CurrentPlayerPosition, AreaTileType.Normal);
                 break;
         }
@@ -184,6 +183,8 @@ public class AreaManager
         yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressTurn());
 
         Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
+
+        AreaState = AreaState.Idle;
     }
     #endregion
 
@@ -216,6 +217,16 @@ public class AreaManager
         if (item is not IUsableInArea areaItem) return; // Area에서 사용 가능한 아이템인지 확인
 
         areaItem.UseInArea(); // 아이템 사용
+    }
+
+    public AreaEncounter GetEncounter()
+    {
+        List<int> availableEncounters = AreaData.EncounterIds;
+
+        // 이 Area에서 가능한 Encounter들 중 랜덤으로 하나를 선택함
+        int selected = availableEncounters[Random.Range(0, availableEncounters.Count)];
+
+        return Managers.ObjectHolder.Encounters[selected];
     }
 
     #endregion

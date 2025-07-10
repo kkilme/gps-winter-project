@@ -123,7 +123,7 @@ public class UI_BattleActionPanel : UI_Base
             GetText(Texts.Text_SlotPercentage).text = _hero.CreatureStat.NameToStat(skill.SkillData.UsingStat).ToString();
         }
 
-        Managers.BattleMng.UI.CoinTossDisplay.Show(skill.SkillData.CoinCount, skill.SkillData.UsingStat);
+        Managers.BattleMng.UI.CoinTossDisplay.SetData(skill.SkillData.CoinCount, skill.SkillData.UsingStat);
     }
 
     protected void ClearActionInfo()

@@ -1,13 +1,12 @@
 {
-  "encounerDatas": [
+  "encounterDatas": [
     {
-      "DataId": 301000,
+      "DataId": 701000,
       "Name": "Pond",
-      "ClassName": "PondEncounter",
-      "Description": "Restores 20% of a hero's max HP.",
-      "ImagePath": "Bomb",
-      "UsingStat": "Intelligence",
-      "CoinCount": 4,
+      "ClassName": "Encounter_Pond",
+      "Description": "You found a pond. Would you drink some water here?",
+      "ImagePath": "Pond",
+      "IsLeavable": true,
     }
   ]
 }

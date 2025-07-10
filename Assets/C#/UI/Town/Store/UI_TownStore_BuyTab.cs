@@ -20,7 +20,7 @@ public class UI_TownStore_BuyTab : UI_Base
         // 상점 물품 채워넣기
         foreach (var entry in Managers.DataMng.StoreDataDict[itemType].StoreEntries)
         {
-            UI_StoreEntry storeEntry = Managers.UIMng.MakeSubItemUI<UI_StoreEntry>(transform, "Town/UI_StoreEntry");
+            UI_StoreEntry storeEntry = Managers.UIMng.MakeSubItemUI<UI_StoreEntry>(transform, "Town/" + nameof(UI_StoreEntry));
             storeEntry.LateInit(entry);
         }
     }

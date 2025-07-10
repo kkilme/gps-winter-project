@@ -51,14 +51,11 @@ public class AreaCollapseSystem
             _collapseInformer.OnCollapseFinished();
             Debug.Log("[AreaCollapseSystem] Collapse is at limit.");
         }
-
-        _areaManager.AreaState = AreaState.Idle;
     }
 
     public void ProgressCollapse()
     {
         _map.CollapseTiles(_collapseCount * _collapseAmount, _collapseAmount);
         _collapseCount++;
-        Debug.Log($"[AreaCollapseSystem] ProgressCollapse - TurnCount: {_turnCount}, CollapseCount: {_collapseCount}");
     }
 }

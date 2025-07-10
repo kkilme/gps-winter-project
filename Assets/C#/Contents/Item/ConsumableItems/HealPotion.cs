@@ -21,10 +21,10 @@ public class HealPotion : ConsumableItem, IUsableInArea, IUsableInBattle
                 Debug.LogError("[HealPotion] UseInArea: Hero is null or not a valid Hero instance.");
                 return;
             }
-            _hero.TakeHeal(percent: .2f);
+            _hero.TakeHeal(ratio: .2f);
             Managers.AreaMng.Items.Remove(this);
         }
-        AreaHeroTargetSelector targetSelector = new AreaHeroTargetSelector();
+        AreaSingleHeroTargetSelector targetSelector = new AreaSingleHeroTargetSelector();
         targetSelector.StartTargetSelection(Use);
     }
 }

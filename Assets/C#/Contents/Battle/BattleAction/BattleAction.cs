@@ -7,8 +7,8 @@ public abstract class BattleAction
 {
     #region Field
     public Creature Executor { get; protected set; } // 이 액션을 실행하는 Creature.
-                                                     // 현재 구조에선 BattleAction 객체를 하나씩만 생성하여(ItemAction제외) 반복 사용하기 때문에,
-                                                     // 전투에서 한 턴에 한 Creature만 Action을 실행하는 것이 보장되어야 함.
+                                                     // 현재 게임 시작 시 ObjectHolder에서 BattleSkill 객체를 하나씩만 생성하여 반복 사용하기 때문에,
+                                                     // 전투에서 한 턴에 한 Creature만 Action을 실행하는 것이 보장되지 않는다면 풀링 + 팩토리 패턴같은 구조로 수정이 필요하게 됨.
     public BattleGridCell SelectedTargetCell { get; protected set; }
     public abstract BattleActionTargetSelector TargetSelector { get; protected set; } // abstract로 하여 자식이 구현(값 설정)을 반강제화함. 완전한 강제는 아니므로 결국 개발자의 몫.
     public abstract ActionEffectRange EffectRange { get; protected set; }

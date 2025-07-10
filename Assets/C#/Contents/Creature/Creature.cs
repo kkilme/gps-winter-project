@@ -49,13 +49,24 @@ public abstract class Creature : MonoBehaviour
             CoroutineRunner.Instance.StartCoroutine(OnDead());
         }
     }
-    
+
     /// <summary>
-    /// heal만큼 체력 회복
+    /// 최대 체력의 ratio 비율만큼 체력 감소 (소수점은 올림처리)
     /// </summary>
-    public void TakeHeal(int heal)
+    /// <remarks>ratio는 0.0f ~ 1.0f 사이의 값</remarks>
+    public void TakeDamage(float ratio, DamageTextType damageTextType)
     {
-        var finalHeal = Mathf.Min(heal, CreatureStat.FinalStat.MaxHp - CreatureStat.Hp);
+        ratio = Mathf.Clamp01(ratio);
+        int damage = Mathf.CeilToInt(CreatureStat.MaxHp * ratio);
+        TakeDamage(damage, damageTextType);
+    }
+
+    /// <summary>
+    /// amount만큼 체력 회복.
+    /// </summary>
+    public void TakeHeal(int amount)
+    {
+        var finalHeal = Mathf.Min(amount, CreatureStat.FinalStat.MaxHp - CreatureStat.Hp);
 
         CreatureStat.TakeHeal(finalHeal);
         if (ProfileUI) ProfileUI.OnHeal();
@@ -63,13 +74,13 @@ public abstract class Creature : MonoBehaviour
     }
 
     /// <summary>
-    /// 최대 체력의 percent만큼 회복
+    /// 최대 체력의 ratio 비율만큼 체력 회복 (소수점은 올림처리)
     /// </summary>
-    /// <remarks>percent는 0.0f ~ 1.0f 사이의 값</remarks>
-    public void TakeHeal(float percent)
+    /// <remarks>ratio는 0.0f ~ 1.0f 사이의 값</remarks>
+    public void TakeHeal(float ratio)
     {
-        percent = Mathf.Clamp01(percent); // 0.0f ~ 1.0f 사이로 제한
-        int heal = Mathf.FloorToInt(CreatureStat.MaxHp * percent);
+        ratio = Mathf.Clamp01(ratio); // 0.0f ~ 1.0f 사이로 제한
+        int heal = Mathf.CeilToInt(CreatureStat.MaxHp * ratio);
         TakeHeal(heal);
     }
 

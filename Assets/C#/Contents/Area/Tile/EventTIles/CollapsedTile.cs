@@ -16,9 +16,4 @@ public sealed class CollapsedTile : AreaEventTile
         if (_willBeDestroyed) return;
         CoroutineRunner.Instance.StartCoroutine(Managers.AreaMng.OnTileEventFinish());
     }
-
-    public override void OnTileEventFinish()
-    {
-        
-    }
 }

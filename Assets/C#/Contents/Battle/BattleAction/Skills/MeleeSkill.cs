@@ -11,7 +11,7 @@ public abstract class MeleeSkill : BattleSkill
     public override IEnumerator Execute()
     {
         // 코인 던지기
-        var coinResult = CoinTossHelper.CoinToss(SkillData.CoinCount, Executor.CreatureStat.NameToStat(SkillData.UsingStat));
+        CoinTossHelper.CoinTossResult coinResult = CoinTossHelper.CoinToss(SkillData.CoinCount, Executor.CreatureStat.NameToStat(SkillData.UsingStat));
 
         // 코인 던지기 UI 애니메이션 재생
         yield return Managers.BattleMng.UI.CoinTossDisplay.ShowResult(coinResult.result, SkillData.UsingStat);

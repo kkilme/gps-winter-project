@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 코인 토스를 보여주는 UI
+/// </summary>
 public class UI_CoinTossDisplay : UI_Base
 {
     public enum Coins
@@ -20,7 +23,10 @@ public class UI_CoinTossDisplay : UI_Base
         Bind<UI_Coin>(typeof(Coins));
     }
 
-    public void Show(int coinCount, StatName stat)
+    /// <summary>
+    /// stat에 맞게 코인 이미지를 설정하고 coinCount만큼 활성화
+    /// </summary>
+    public void SetData(int coinCount, StatName stat)
     {   
         if(coinCount == 0)
         {
@@ -31,7 +37,7 @@ public class UI_CoinTossDisplay : UI_Base
         for (int i = 0; i < GlobalValues.MAX_COIN_COUNT; i++)
         {
             if (i < coinCount)
-                Get<UI_Coin>(i).ShowDefault(stat);
+                Get<UI_Coin>(i).LateInit(stat);
             else
                 Get<UI_Coin>(i).gameObject.SetActive(false);
         }
@@ -41,7 +47,7 @@ public class UI_CoinTossDisplay : UI_Base
 
     public IEnumerator ShowResult(bool[] result, StatName stat)
     {
-        Show(result.Length, stat); // 몬스터 턴을 위해 필요
+        SetData(result.Length, stat); // 몬스터 턴을 위해 필요
         for (int i = 0; i < result.Length; i++)
         {
             Get<UI_Coin>(i).ShowResult(result[i]);

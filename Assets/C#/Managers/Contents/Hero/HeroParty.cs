@@ -77,6 +77,14 @@ public class HeroParty
         return flag;
     }
 
+    /// <summary>
+    /// 영웅 파티의 특정 스탯 평균치를 반환.
+    /// </summary>
+    public int GetAverageStat(StatName stat)
+    {
+        return Mathf.FloorToInt((float)RuntimeHeroes.Average(h => h.CreatureStat.NameToStat(stat)));
+    }
+
     #region Battle
     /// <summary>
     /// 전투에서 영웅이 배치될 BattleGrid 좌표를 반환.

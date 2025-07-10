@@ -55,6 +55,7 @@ public static class GlobalValues
     public const string ITEMICON_PATH_PREFIX = "Textures/ItemIcons/";
     public const string COLORGRADIENT_PATH_PREFIX = "Textures/TMP_ColorGradients/";
     public const string TOWNTEXTURE_PATH_PREFIX = "Textures/Town/";
+    public const string AREAENCOUNTER_PATH_PREFIX = "Textures/EncounterImages/";
     #endregion
 
     #region DataId
@@ -79,6 +80,8 @@ public static class GlobalValues
     public const int ACTION_BITE_ID = 403000;
 
     public const int MONSTERSQUAD_SQUAD1_ID = 501000;
+
+    public const int AREAENCOUNTER_POND_ID = 701000;
 
     #endregion
 
