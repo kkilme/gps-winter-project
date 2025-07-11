@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 
 public abstract class AreaEncounter

@@ -77,7 +77,7 @@ public static class CoinTossHelper
     {
         double result = CalculateChanceOfCoinTossResult(totalCoinCount, coinCountRequired, successChancePerCoin);
 
-        return (int)Math.Floor(result * 100);
+        return (int)Math.Round(result * 100);
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ public static class CoinTossHelper
     {
         double result = CalculateChanceOfCoinTossResult(totalCoinCount, minCoinCountRequired, maxCoinCountRequired, successChancePerCoin);
 
-        return (int)Math.Floor(result * 100);
+        return (int)Math.Round(result * 100);
     }
 
 }

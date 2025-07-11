@@ -13,6 +13,7 @@ public class UI_AreaEncounterPopup : UI_Popup
     {
         Text_EncounterName,
         Text_EncounterDescription,
+        Text_PartyAverageStat,
     }
 
     enum Images
@@ -58,8 +59,9 @@ public class UI_AreaEncounterPopup : UI_Popup
     {
         Get<TextMeshProUGUI>(Texts.Text_EncounterName).text = encounterData.Name;
         Get<TextMeshProUGUI>(Texts.Text_EncounterDescription).text = encounterData.Description;
+        Get<TextMeshProUGUI>(Texts.Text_PartyAverageStat).text = $"Party Average {usingStat.ToString()}: {Managers.HeroMng.HeroParty.GetAverageStat(usingStat)}";
         Get<Image>(Images.Image_EncounterImage).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.AREAENCOUNTER_PATH_PREFIX + encounterData.ImagePath);
-        _coinTossDisplay.SetData(coinCount, usingStat);
+        _coinTossDisplay.Show(coinCount, usingStat);
     }
 
     /// <summary>
@@ -100,6 +102,8 @@ public class UI_AreaEncounterPopup : UI_Popup
         UI_EncounterResultLine line = Managers.UIMng.MakeSubItemUI<UI_EncounterResultLine>(_resultDetailParent, "Area/" + nameof(UI_EncounterResultLine));
         line.SetData(successCount.ToString(), chanceOfResult, resultDescription);
         _resultDetails.Add(successCount, line);
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_resultDetailParent as RectTransform);
     }
 
     /// <summary>
@@ -117,6 +121,8 @@ public class UI_AreaEncounterPopup : UI_Popup
         {
             _resultDetails.Add(i, line);
         }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_resultDetailParent as RectTransform);
     }
 
     public override Tween Show()

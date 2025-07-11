@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// </summary>
 public class UI_Coin : UI_Base
 {
-    enum StatImages
+    enum StatImage
     {
         Strength,
         Vitality,
@@ -21,40 +21,43 @@ public class UI_Coin : UI_Base
         Frame_Success,
     }
 
-    private static readonly Dictionary<StatName, StatImages> _statIconDic = new Dictionary<StatName, StatImages>
+    private static readonly Dictionary<StatName, StatImage> _statIconDic = new Dictionary<StatName, StatImage>
     {
-        { StatName.Strength, StatImages.Strength },
-        { StatName.Vitality, StatImages.Vitality },
-        { StatName.Dexterity, StatImages.Dexterity },
-        { StatName.Intelligence, StatImages.Intelligence },
+        { StatName.Strength, StatImage.Strength },
+        { StatName.Vitality, StatImage.Vitality },
+        { StatName.Dexterity, StatImage.Dexterity },
+        { StatName.Intelligence, StatImage.Intelligence },
     };
 
-    private Image _bg;
-    private Image _statIcon;
-    private Color _bgOriginalColor;
-    private Color _statIconOriginalColor;
+    private Image _statImage;
+
+    private Color _statImageOriginalColor;
 
     public override void Init() { }
 
-    public void LateInit(StatName statName)
+    public void LateInit()
     {
-        Bind<Image>(typeof(StatImages));
+        Bind<Image>(typeof(StatImage));
         Bind<GameObject>(typeof(GameObjects));
 
-        _bg = GetComponent<Image>();
-        _bgOriginalColor = _bg.color;
-        _statIconOriginalColor = Get<Image>(StatImages.Strength).color;
+        _statImageOriginalColor = Get<Image>(StatImage.Strength).color;
         
         GetGameObject(GameObjects.Icon_Fail).SetActive(false);
         GetGameObject(GameObjects.Frame_Success).SetActive(false);
+    }
 
-        StatImages iconType = _statIconDic[statName];
+    public void Show(StatName statName)
+    {
+        GetGameObject(GameObjects.Icon_Fail).SetActive(false);
+        GetGameObject(GameObjects.Frame_Success).SetActive(false);
 
-        _statIcon = Get<Image>(iconType);
-        _statIcon.color = _statIconOriginalColor;
+        StatImage statImage = _statIconDic[statName];
+
+        _statImage = Get<Image>(statImage);
+        _statImage.color = _statImageOriginalColor;
 
         for (int i = 0; i < 4; i++)
-            Get<Image>(i).gameObject.SetActive(i == (int)iconType);
+            Get<Image>(i).gameObject.SetActive(i == (int)statImage);
 
         gameObject.SetActive(true);
     }
@@ -66,13 +69,11 @@ public class UI_Coin : UI_Base
     {
         if (isSuccess)
         {
-            _bg.color = Color.green;
             GetGameObject(GameObjects.Frame_Success).SetActive(true);
         }
         else
         {
-            _bg.color = Color.gray;
-            _statIcon.color = Color.gray;
+            _statImage.color = Color.gray;
             GetGameObject(GameObjects.Icon_Fail).SetActive(true);
         }
     }
