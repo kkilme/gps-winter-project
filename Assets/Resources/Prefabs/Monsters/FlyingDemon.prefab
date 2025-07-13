@@ -2245,6 +2245,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3891923349452803438}
   - component: {fileID: 3891923349461803650}
+  - component: {fileID: -4665251055353925720}
+  - component: {fileID: -2555222117228169739}
   m_Layer: 8
   m_Name: FlyingDemon
   m_TagString: Monster
@@ -2290,6 +2292,30 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-4665251055353925720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3891923349452443982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871a379cd45f5bb4392e2f217ed238cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-2555222117228169739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3891923349452443982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10dfba5df02fb024a81e339cf56c1d4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3891923349452443984
 GameObject:
   m_ObjectHideFlags: 0

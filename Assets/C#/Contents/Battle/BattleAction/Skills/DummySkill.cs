@@ -13,5 +13,7 @@ public class DummySkill : BattleSkill
     public override IEnumerator Execute()
     {
         yield return new WaitForSeconds(1f);
+
+        Managers.BattleMng.OnActionEnd();
     }
 }

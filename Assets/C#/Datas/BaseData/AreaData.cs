@@ -13,6 +13,7 @@ public class AreaData
     public int CollapseAmount; // Collapse 시 파괴되는 행 개수
     public int MaxRestCount; // 최대 휴식 가능 횟수
     public List<int> MonsterSquadIds = new(); // 이 Area에서 등장 가능한 몬스터 스쿼드의 DataId
+    public int BossSquadId; // 이 Area의 Boss 스쿼드의 DataId
     public List<int> EncounterIds = new(); // 이 Area에서 등장 가능한 Encounter의 DataId
 }
 

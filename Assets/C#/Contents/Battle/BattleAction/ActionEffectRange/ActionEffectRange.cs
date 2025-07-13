@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class ActionEffectRange
 {
     /// <summary>
-    /// 선택한 Target을 기준으로 Action의 영향을 받는 모든 BattleGridCell
+    /// 선택한 selected 셀을 기준으로 Action의 영향을 받는 모든 BattleGridCell를 계산하여 반환
     /// </summary>
     public abstract List<BattleGridCell> GetAffectedTargets(BattleGridCell selected);
 }

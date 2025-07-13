@@ -23,25 +23,25 @@ public class AreaCollapseSystem
     }
 
     /// <summary>
-    /// turnCount만큼의 턴(붕괴 진척도) 진행 
+    /// progressCount만큼의 붕괴 진척도 진행 
     /// </summary>
-    public IEnumerator ProgressTurn(int turnCount = 1)
+    public IEnumerator ProgressCollapse(int progressCount = 1)
     {
         if (_collapseFinished)
         {
-            _turnCount += turnCount;
+            _turnCount += progressCount;
             yield break;
         }
 
-        for(int i = 0; i<turnCount; i++)
+        for(int i = 0; i<progressCount; i++)
         {
             _turnCount++;
             if (_turnCount % _collapseTimer == 0)
             {
-                ProgressCollapse();
+                ExecuteCollapse();
             }
             var tween = _collapseInformer.ProgressTimer();
-            if(turnCount > 1) yield return tween.WaitForCompletion();
+            if(progressCount > 1) yield return tween.WaitForCompletion();
         }
 
         // 보스 위치로부터 최대 2칸 아래까지만 파괴됨
@@ -53,7 +53,10 @@ public class AreaCollapseSystem
         }
     }
 
-    public void ProgressCollapse()
+    /// <summary>
+    /// 붕괴 진척도가 다 찰 시 실제 붕괴 진행
+    /// </summary>
+    public void ExecuteCollapse()
     {
         _map.CollapseTiles(_collapseCount * _collapseAmount, _collapseAmount);
         _collapseCount++;

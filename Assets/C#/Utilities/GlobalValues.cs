@@ -7,17 +7,16 @@ public static class GlobalValues
     public const float BATTLEFIELD_POS_X = -1000f;
     public const float BATTLEFIELD_POS_Z = -1000f;
 
-    // 2X3을 유지할 계획이지만, 나중에 변경될 수 있으므로 선언
     public const int BATTLEGRID_ROW_COUNT = 2;
     public const int BATTLEGRID_COL_COUNT = 3;
 
-    public const float CREATURE_BATTLE_VELOCITY = 5f;
+    public const float CREATURE_BATTLE_VELOCITY = 5f; // 전투에서, Creature들의 이동속도.
 
-    public const int MAX_COIN_COUNT = 8;
-    public const int MAX_PARTY_SIZE = 4;
+    public const int MAX_COIN_COUNT = 8; // 게임에서 진행되는 모든 코인 토스 관련 시스템에서, 가능한 최대 코인 수
+    public const int MAX_PARTY_SIZE = 4; // 파티 인원 최대 수
     public const int MAX_AREAITEM_COUNT = 8; // Area에 가져갈 수 있는 아이템의 최대 개수. 수정 시 관련 UI(UI_QuestDetailPanel, UI_AreaItemListPopup)프리팹도 수정 필요.
 
-    public const int AREA_REST_TURN_COUNT = 3;
+    public const int AREA_REST_PROGRESS_COLLAPSE_COUNT = 3; // Area에서 휴식 시 진행되는 붕괴 진척도
 
     public static readonly int[,] DIRECTION_4WAY = new int[4, 2] { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
     public static readonly int[,] HERO_POS_ON_AREA_TILE_OFFSET = new int[4, 2] { { 0, 1 }, { -1, 0 }, { 1, 0 }, { 0, -1 } };

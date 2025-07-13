@@ -60,7 +60,7 @@
       "DamagePerCoin": 5,
       "IconPath": "Icon_Sword"
     },
-        {
+    {
       "DataId": 403001,
       "Type": "AttackSkillData",
       "Name": "Charge",
@@ -69,6 +69,28 @@
       "UsingStat": "Strength",
       "AttackType": "Physical",
       "DamagePerCoin": 5,
+      "IconPath": "Icon_Sword"
+    },
+    {
+      "DataId": 403002,
+      "Type": "AttackSkillData",
+      "Name": "BerserkSpin",
+      "Description": "Damages all targets in 3x1 area.",
+      "CoinCount": 4,
+      "UsingStat": "Strength",
+      "AttackType": "Physical",
+      "DamagePerCoin": 7,
+      "IconPath": "Icon_Sword"
+    },
+    {
+      "DataId": 403003,
+      "Type": "AttackSkillData",
+      "Name": "Smash",
+      "Description": "Damages single target.",
+      "CoinCount": 5,
+      "UsingStat": "Strength",
+      "AttackType": "Physical",
+      "DamagePerCoin": 4,
       "IconPath": "Icon_Sword"
     }
   ]

@@ -16,17 +16,17 @@ public class MonsterSquadData
 
         foreach (MonsterSquad_MonsterData monster in Monsters)
         {
-            if (monster.x < 0 || monster.x >= 3 || monster.y < 0 || monster.y >= 3)
+            if (monster.col < 0 || monster.col >= 3 || monster.row < 0 || monster.row >= 3)
             {
-                Debug.LogWarning($"MonsterSquadData {DataId} - Invalid position ({monster.x}, {monster.y})");
+                Debug.LogWarning($"MonsterSquadData {DataId} - Invalid position ({monster.col}, {monster.row})");
                 return false;
             }
-            if (usedPos.Contains((monster.x, monster.y)))
+            if (usedPos.Contains((monster.col, monster.row)))
             {
-                Debug.LogWarning($"MonsterSquadData {DataId} - Duplicate position ({monster.x}, {monster.y})");
+                Debug.LogWarning($"MonsterSquadData {DataId} - Duplicate position ({monster.col}, {monster.row})");
                 return false;
             }
-            usedPos.Add((monster.x, monster.y));
+            usedPos.Add((monster.col, monster.row));
         }
         return true;
     }
@@ -35,8 +35,8 @@ public class MonsterSquadData
 public class MonsterSquad_MonsterData
 {
     public int DataId;
-    public int x;
-    public int y;
+    public int col;
+    public int row;
 }
 
 [Serializable]

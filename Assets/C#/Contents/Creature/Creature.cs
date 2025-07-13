@@ -38,10 +38,12 @@ public abstract class Creature : MonoBehaviour
     /// </summary>
     public void TakeDamage(int damage, DamageTextType damageTextType)
     {
-        if(damage > 0) Animator.SetTrigger("OnDamaged");
+        if (IsDead()) return;
+        if (damage > 0) Animator.SetTrigger("OnDamaged");
         if (ProfileUI) ProfileUI.OnDamaged();
 
         CreatureStat.TakeDamage(damage); // 실제 데미지 적용
+
         DamageTextFactory.CreateDamageText(this, damage, damageTextType); // 데미지 텍스트 생성
 
         if (IsDead())

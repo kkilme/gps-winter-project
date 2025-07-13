@@ -12,7 +12,6 @@ public class UI_CreatureProfile : UI_Base
     protected CanvasGroup _canvasGroup;
 
     private Tweener _blinkTweener;
-    private Tweener _frameColorTweener;
 
     private Image _creatureImageBg;
     private Color _creatureImageBgOriginalColor;
@@ -107,15 +106,14 @@ public class UI_CreatureProfile : UI_Base
     /// </summary>
     public void OnDamaged()
     {
-        _frameColorTweener?.Kill();
+        Sequence sequence = DOTween.Sequence();
+
         foreach (var image in _frameImages)
         {
-            Color originalColor = image.color;
-            image.DOColor(Color.red, 0.2f).OnComplete(() =>
-            {
-                image.DOColor(originalColor, 0.2f);
-            });
+            sequence.Join(image.DOColor(Color.red, 0.2f).OnComplete(() => { image.DOColor(Color.white, 0.2f); }));
         }
+
+        sequence.Play();
     }
 
     /// <summary>
@@ -123,13 +121,11 @@ public class UI_CreatureProfile : UI_Base
     /// </summary>
     public void OnHeal()
     {
-        _frameColorTweener?.Kill();
         foreach (var image in _frameImages)
         {
-            Color originalColor = image.color;
             image.DOColor(Color.green, 0.2f).OnComplete(() =>
             {
-                image.DOColor(originalColor, 0.2f);
+                image.DOColor(Color.white, 0.2f);
             });
         }
     }

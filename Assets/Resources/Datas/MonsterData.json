@@ -13,7 +13,6 @@
       "Intelligence": 10,
       "Actions": [
         403000,
-        403000
       ],
       "MinGold": 5,
       "MaxGold": 10,
@@ -38,6 +37,28 @@
       ],
       "MinGold": 5,
       "MaxGold": 10,
+      "LootTable": [
+        { "ItemDataId": 301000, "DropChance": 50, },
+        { "ItemDataId": 202000, "DropChance": 100, },
+      ]
+    },
+        {
+      "DataId": 102002,
+      "Name": "Orc",
+      "Hp": 100,
+      "BaseDamage": 10,
+      "PhysicalDefense": 4,
+      "MagicDefense": 4,
+      "Strength": 80,
+      "Vitality": 70,
+      "Dexterity": 60,
+      "Intelligence": 30,
+      "Actions": [
+        403002,
+        403003,
+      ],
+      "MinGold": 80,
+      "MaxGold": 100,
       "LootTable": [
         { "ItemDataId": 301000, "DropChance": 50, },
         { "ItemDataId": 202000, "DropChance": 100, },

@@ -425,14 +425,14 @@ GameObject:
   - component: {fileID: 4047972025199878}
   - component: {fileID: 95457531584545886}
   - component: {fileID: 8175570053014771240}
-  - component: {fileID: 3650059183466250228}
+  - component: {fileID: 8173637620248703761}
   m_Layer: 8
   m_Name: Slime
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4047972025199878
 Transform:
   m_ObjectHideFlags: 0
@@ -483,7 +483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871a379cd45f5bb4392e2f217ed238cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3650059183466250228
+--- !u!114 &8173637620248703761
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -492,6 +492,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1931298151966786}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14930bd2cbbe4f1479a73389ab671d18, type: 3}
+  m_Script: {fileID: 11500000, guid: 10dfba5df02fb024a81e339cf56c1d4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

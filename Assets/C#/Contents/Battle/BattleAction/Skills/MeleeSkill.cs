@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// 적에게 접근 후 공격하는 스킬 (근접 공격)
+/// 적에게 접근 후 사용하는 스킬 (근접 스킬)
 /// </summary>
 public abstract class MeleeSkill : BattleSkill
 {
@@ -28,6 +28,7 @@ public abstract class MeleeSkill : BattleSkill
         Managers.BattleMng.OnActionEnd();
     }
 
+    // 근접 스킬이므로 대상 위치로 이동
     protected virtual Tween MoveToTarget()
     {   
         _originalPos = Executor.transform.position;
@@ -50,25 +51,27 @@ public abstract class MeleeSkill : BattleSkill
         return sequence.Play();
     }
 
+    // 실제 공격 - 애니메이션 실행, 데미지 적용
     // 공격 애니메이션, 각종 스킬 효과 등을 변경하려면 override 필요
     protected virtual IEnumerator Attack(int coinHeadCount)
     {
         var attackSkillData = SkillData as AttackSkillData;
-        var targets = EffectRange.GetAffectedTargets(SelectedTargetCell);
+        var targets = EffectRange.GetAffectedTargets(SelectedTargetCell).FindAll(cell => cell.PlacedCreature != null);
 
         _animator.SetTrigger(GlobalValues.ANIMATION_PARAM_ATTACK1);
 
-        yield return DOVirtual.DelayedCall(1f, () => { }).WaitForCompletion();
+        yield return new WaitForSeconds(1f);
 
         var dmgTextType = attackSkillData.AttackType == AttackType.Physical ? DamageTextType.PhysicalDamage : DamageTextType.MagicDamage;
         foreach(var target in targets)
         {
-            // target.PlacedCreature이 null이 아니라는 보증은 EffectRange.GetAffectedTargets에서 함
+            if (target.PlacedCreature == null) continue;
             var damage = DamageCalculator.CalculateFinalDamage(Executor, target.PlacedCreature, attackSkillData, coinHeadCount, targets.Count);
             target.PlacedCreature.TakeDamage(damage, dmgTextType);
         }
     }
 
+    // 제자리로 돌아가기
     protected virtual Tween Return()
     {
         Sequence sequence = DOTween.Sequence();

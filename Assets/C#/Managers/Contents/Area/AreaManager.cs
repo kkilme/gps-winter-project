@@ -169,6 +169,8 @@ public class AreaManager
     /// </summary>
     public IEnumerator OnTileEventFinish()
     {
+        CameraController.Freeze = false;
+
         switch (_currentTile.TileType)
         {
             case AreaTileType.Normal:
@@ -180,7 +182,7 @@ public class AreaManager
         }
 
         // 붕괴 턴 진행
-        yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressTurn());
+        yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressCollapse());
 
         Map.ChangeNeighborTilesColor(CurrentPlayerPosition, TileColorChangeType.Highlight);
 
@@ -197,7 +199,7 @@ public class AreaManager
         AreaState = AreaState.Busy;
 
         _party.Rest();
-        yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressTurn(GlobalValues.AREA_REST_TURN_COUNT));
+        yield return CoroutineRunner.Instance.StartCoroutine(CollapseSystem.ProgressCollapse(GlobalValues.AREA_REST_PROGRESS_COLLAPSE_COUNT));
 
         AreaState = AreaState.Idle;
     }

@@ -1739,6 +1739,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8511647367374981090}
   - component: {fileID: 8511647367367272476}
+  - component: {fileID: 272021031206551112}
+  - component: {fileID: 3017105140960933405}
   m_Layer: 8
   m_Name: Orc
   m_TagString: Monster
@@ -1784,6 +1786,30 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &272021031206551112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8511647367374691266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871a379cd45f5bb4392e2f217ed238cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3017105140960933405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8511647367374691266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa5b7e6138477842ab8053496adaca7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8511647367374691268
 GameObject:
   m_ObjectHideFlags: 0
