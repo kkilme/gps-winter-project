@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class SceneManagerEx
 {
@@ -54,9 +55,10 @@ public class SceneManagerEx
     // 2. AreaManager.OnBattleSceneLoadStart()
     // 3. 배틀 씬 로딩 시작 및 완료
     // 4. AreaManager.OnBattleSceneLoadFinish()
+    // 5. monsterSquadId를 받아와 BattleManager.Init()
     // 5. 로딩화면 Fade out
     /// /////////////////////////////////
-    public IEnumerator LoadBattleScene(AreaManager areaManager)
+    public IEnumerator LoadBattleScene(AreaManager areaManager, BattleType battleType)
     {
         Debug.Log("[SceneManagerEx] BattleScene Load Start");
 
@@ -72,6 +74,16 @@ public class SceneManagerEx
         CurrentSceneType = SceneType.BattleScene;
 
         areaManager.OnBattleSceneLoadFinish();
+
+
+        var squadId = battleType switch
+        {
+            BattleType.Normal => areaManager.GetRandomMonsterSquadId(),
+            BattleType.Boss => areaManager.AreaData.BossSquadId,
+            _ => throw new NotImplementedException()
+        };
+
+        Managers.BattleMng.Init(squadId, areaManager.AreaData.BattleFieldName);
 
         // 로딩 화면 fade out, 삭제
         yield return loadingUI.FadeOut();

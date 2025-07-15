@@ -175,6 +175,8 @@ public class AreaManager
         {
             case AreaTileType.Normal:
                 break;
+            case AreaTileType.Boss:
+                break;
             case AreaTileType.Battle:
             case AreaTileType.Encounter:
                 Map.ReplaceEventTile(CurrentPlayerPosition, AreaTileType.Normal);
@@ -190,7 +192,7 @@ public class AreaManager
     }
     #endregion
 
-    #region AreaActions
+    #region AreaContents
     /// <summary>
     /// 영웅들 체력 회복 및 붕괴 턴 추가 진행
     /// </summary>
@@ -221,16 +223,28 @@ public class AreaManager
         areaItem.UseInArea(); // 아이템 사용
     }
 
-    public AreaEncounter GetEncounter()
+    /// <summary>
+    /// 이 Area에서 가능한 Encounter들 중 랜덤으로 하나를 반환
+    /// </summary>
+    public AreaEncounter GetRandomEncounter()
     {
-        List<int> availableEncounters = AreaData.EncounterIds;
-
-        // 이 Area에서 가능한 Encounter들 중 랜덤으로 하나를 선택함
-        int selected = availableEncounters[Random.Range(0, availableEncounters.Count)];
+        int selected = AreaData.EncounterIds.GetRandomElement();
 
         return Managers.ObjectHolder.Encounters[selected];
     }
 
+    /// <summary>
+    /// 이 Area에서 가능한 MonsterSquad들 중 랜덤으로 하나를 반환
+    /// </summary>
+    public int GetRandomMonsterSquadId()
+    {
+        return AreaData.MonsterSquadIds.GetRandomElement();
+    }
+
+    private void OnVictory()
+    {
+
+    }
     #endregion
 
     #region SceneTransition
@@ -238,13 +252,13 @@ public class AreaManager
     /// 전투씬 로딩 시작
     /// 전투씬 전환 흐름: LoadBattleScene -> 로딩화면 Fade in 완료 -> OnBattleSceneLoadStart ->  배틀 씬 로딩 시작 및 완료 -> OnBattleSceneLoadFinish -> 로딩화면 Fade out
     /// </summary>
-    public void LoadBattleScene()
+    public void LoadBattleScene(BattleType battleType)
     {
         AreaState = AreaState.Battle;
         CameraController.Freeze = true;
         Managers.InputMng.RemoveMouseAction(AreaInputHandler.HandleMouseInput);
 
-        CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadBattleScene(this));
+        CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadBattleScene(this, battleType)); // 실제 씬 로딩 시작
     }
 
     /// <summary>
@@ -262,9 +276,6 @@ public class AreaManager
     public void OnBattleSceneLoadFinish()
     {
         CameraController.gameObject.SetActive(false);
-
-        var squadId = AreaData.MonsterSquadIds[Random.Range(0, AreaData.MonsterSquadIds.Count)];
-        Managers.BattleMng.Init(squadId, AreaData.BattleFieldName);
     }
 
     /// <summary>

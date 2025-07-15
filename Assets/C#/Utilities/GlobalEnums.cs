@@ -52,9 +52,10 @@ public enum AreaTileType
     Collapsed
 }
 
-public enum QuestRewardType
+public enum BattleType
 {
-    Money,
+    Normal,
+    Boss,
 }
 
 public enum BattleResultType
@@ -62,12 +63,6 @@ public enum BattleResultType
     Victory,
     Defeat,
     Retreat,
-}
-
-public enum LootActionType
-{
-    Take,
-    Dispose
 }
 
 public enum SceneType
@@ -146,27 +141,6 @@ public enum BattleState
     ActionProcessing,
     Finishing,
 }
-public enum CreatureBattleState
-{
-    Wait,
-    PrepareAction,
-    ActionProceed,
-    Dead
-}
-
-public enum AnimState
-{
-    Attack,
-    Defend,
-    DefendHit,
-    Die,
-    Dizzy,
-    Hit,
-    Idle,
-    Move,
-    Skill,
-    Victory
-}
 
 public enum AreaState
 {
@@ -175,7 +149,6 @@ public enum AreaState
     Moving,
     Battle,
     Encounter,
-    Boss,
 }
 
 #endregion
@@ -199,23 +172,6 @@ public enum MouseEvent
     PointerUp,
     Click,
     Hover,
-}
-
-#endregion
-
-#region NonContent
-
-public enum Layer
-{
-    Ground = 6,
-    Block = 7,
-    Monster = 8,
-    Player = 9,
-}
-
-public enum CameraMode
-{
-    QuarterView,
 }
 
 #endregion

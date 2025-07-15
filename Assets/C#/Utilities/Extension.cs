@@ -28,16 +28,14 @@ public static class Extension
         return go != null & go.activeSelf;
     }
 
-    public static string QuestRewardToString(this QuestReward[] rewards)
+    public static T GetRandomElement<T>(this List<T> list)
     {
-        string toString = "";
-
-        foreach (var reward in rewards)
+        if (list == null || list.Count == 0)
         {
-            toString += $"{Managers.DataMng.ItemDataDict[reward.ItemDataId].Name} x{reward.Quantity} ";
+            throw new ArgumentException("List is null or empty.");
         }
 
-        return toString;
+        return list[UnityEngine.Random.Range(0, list.Count)];
     }
 
     public static void SetLayerRecursively(this GameObject go, int layer)

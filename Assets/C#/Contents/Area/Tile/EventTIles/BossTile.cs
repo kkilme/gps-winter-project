@@ -12,6 +12,7 @@ public sealed class BossTile : AreaEventTile
 
     public override void OnTileEnter()
     {
-        Managers.AreaMng.AreaState = AreaState.Idle; // TODO - Boss 구현 시 상태 수정
+        if (_willBeDestroyed) return; // 타일이 파괴될 예정이라면 이벤트를 실행하지 않음
+        Managers.AreaMng.LoadBattleScene(BattleType.Boss);
     }
 }

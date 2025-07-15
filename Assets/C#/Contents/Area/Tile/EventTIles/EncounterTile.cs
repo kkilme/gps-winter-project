@@ -19,7 +19,7 @@ public sealed class EncounterTile : AreaEventTile
         Managers.AreaMng.AreaState = AreaState.Encounter;
         Managers.AreaMng.CameraController.Freeze = true;
 
-        AreaEncounter encounter = Managers.AreaMng.GetEncounter();
+        AreaEncounter encounter = Managers.AreaMng.GetRandomEncounter();
         encounter.ShowEncounterPopup();
     }
 }
