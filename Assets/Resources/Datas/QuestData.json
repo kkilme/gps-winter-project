@@ -7,7 +7,7 @@
           "Name": "Exploring the forest",
           "Objective": "Defeat the area boss.",
           "AreaName": "Forest",
-          "Rewards": [
+          "FirstClearRewards": [
             {"ItemDataId": 301000, "Quantity": 2},
           ],
           "UnlockQuestDataId": [601001],
@@ -21,7 +21,7 @@
           "Name": "Going deeper into the forest",
           "Objective": "Defeat the area boss.",
           "AreaName": "Forest",
-          "Rewards": [
+          "FirstClearRewards": [
             {"ItemDataId": 301000, "Quantity": 2},
           ],
           "UnlockQuestDataId": [],

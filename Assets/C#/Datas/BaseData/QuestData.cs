@@ -22,7 +22,7 @@ public class QuestData
     public string Objective;
 
     public string AreaName; // 퀘스트 수락 시 이동되는 Area. AreaName enum의 값과 같아야함.
-    public QuestReward[] Rewards;
+    public QuestReward[] FirstClearRewards;
     public int[] UnlockQuestDataId; // 해당 퀘스트 완료 시 열리는 퀘스트의 DataId
 
     public bool IsUnlocked; // 퀘스트 개방 여부

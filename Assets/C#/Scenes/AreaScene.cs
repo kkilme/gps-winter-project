@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class AreaScene : BaseScene
 {
-    public Quest Quest { get; private set; }
-
     private AreaManager AreaManager => Managers.AreaMng;
     private AreaMapGenerator _areaMapGenerator;
 
@@ -19,9 +17,7 @@ public class AreaScene : BaseScene
     }
 
     public void InitArea(AreaInitContext areaInitContext)
-    {
-        Quest = areaInitContext.Quest;
-        
+    {        
         // AreaMapGenerator 초기화 및 맵 생성
         _areaMapGenerator.Init(areaInitContext.AreaName);
         AreaMap map = _areaMapGenerator.GenerateMap();

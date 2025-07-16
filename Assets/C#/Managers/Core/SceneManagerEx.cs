@@ -94,7 +94,7 @@ public class SceneManagerEx
     // 전투씬 종료 흐름 //////////////////
     // 1. 로딩화면 Fade in 완료
     // 2. 전투씬 언로드
-    // 3-1. 영웅 모두 사망시: Area 씬 언로드, Town 씬 로드
+    // 3-1. 영웅 모두 사망시(전투 패배 시): Area 씬 언로드, Town 씬 로드
     // 4-2. 승리 / 도망친 영웅 존재시: Area 씬 활성화
     // 5. 로딩화면 Fade out
     /////////////////////////////////////
@@ -110,7 +110,7 @@ public class SceneManagerEx
         yield return SceneManager.UnloadSceneAsync(GlobalValues.BATTLE_SCENE_NAME);
         yield return SceneLoadHelper.FakeProgress(loadingUI, 0, 0.3f);
 
-        if (result == BattleResultType.Defeat)
+        if (result == BattleResultType.Defeat) // 전투에서 패배 시 - TownScene으로
         {
             // AreaScene 언로드
             if (SceneManager.GetSceneByName(GlobalValues.AREA_SCENE_NAME).isLoaded)
@@ -123,7 +123,7 @@ public class SceneManagerEx
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.TOWN_SCENE_NAME));
             CurrentSceneType = SceneType.TownScene;
         }
-        else
+        else // 전투 도망 또는 승리 시 - Area 복귀
         {
 #if UNITY_EDITOR
             //////////////////////////// For Test //////////////////////////////////////////////////
@@ -172,6 +172,29 @@ public class SceneManagerEx
 
         // Area 씬 초기화
         GetCurrentScene<AreaScene>().InitArea(areaInitContext);
+
+        // 로딩 화면 fade out
+        yield return loadingUI.FadeOut();
+    }
+
+    public IEnumerator LoadTownScene()
+    {
+        Debug.Log($"[SceneManagerEx] TownScene Load Start");
+
+        // 로딩화면 생성 및 Fade in
+        var loadingUI = Managers.UIMng.MakeGeneralUI<UI_Loading>();
+        yield return loadingUI.FadeIn();
+
+        // AreaScene 언로드
+        if (SceneManager.GetSceneByName(GlobalValues.AREA_SCENE_NAME).isLoaded)
+            yield return SceneManager.UnloadSceneAsync(GlobalValues.AREA_SCENE_NAME);
+        yield return SceneLoadHelper.FakeProgress(loadingUI, 0.3f, 0.6f);
+
+        // TownScene 로드
+        yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.TOWN_SCENE_NAME, loadingUI, 0.6f);
+
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.TOWN_SCENE_NAME));
+        CurrentSceneType = SceneType.TownScene;
 
         // 로딩 화면 fade out
         yield return loadingUI.FadeOut();

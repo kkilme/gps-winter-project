@@ -546,7 +546,7 @@ GameObject:
   - component: {fileID: 68132023194333360}
   - component: {fileID: 5516563415650539453}
   m_Layer: 5
-  m_Name: Buy
+  m_Name: Try
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
