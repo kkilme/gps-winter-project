@@ -8,8 +8,6 @@ public class AreaInputHandler
     private AreaManager _areaManager => Managers.AreaMng;
     private AreaCameraController _cameraController => _areaManager.CameraController;
     private AreaMap _map => _areaManager.Map;
-    private HeroParty _party => Managers.HeroMng.HeroParty;
-    private Vector3 _currentPlayerPosition => _areaManager.CurrentPlayerPosition;
 
     private Vector3 _currentMouseoverPosition; // 현재 마우스 위치의 WorldPosition
     private GameObject _mouseoverIndicator; // 마우스 위치의 타일 강조해주는 육각형 테두리 형태 게임오브젝트
@@ -38,5 +36,10 @@ public class AreaInputHandler
                 _areaManager.MoveHeroes(_currentMouseoverPosition);
                 break;
         }
+    }
+
+    public void Clear()
+    {
+        Managers.InputMng.RemoveMouseAction(HandleMouseInput);
     }
 }

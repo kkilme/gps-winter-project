@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class AreaManager
 {
@@ -178,6 +179,8 @@ public class AreaManager
             case AreaTileType.Normal:
                 break;
             case AreaTileType.Boss:
+                Map.ReplaceEventTile(CurrentPlayerPosition, AreaTileType.Normal);
+                OnQuestComplete();
                 break;
             case AreaTileType.Battle:
             case AreaTileType.Encounter:
@@ -245,7 +248,27 @@ public class AreaManager
 
     private void OnQuestComplete()
     {
+        var popup = Managers.UIMng.ShowPopupUI<UI_AreaCompletePopup>();
+        popup.Show(Loots, Quest);
 
+        // 보상 지급 //
+        foreach (var item in Loots.Items)
+        {
+            Managers.InvMng.AddItem(item.DataId);
+        }
+        if (!Quest.QuestData.IsComplete)
+        {
+            // 첫 퀘스트 클리어 보상 추가
+            foreach (QuestReward reward in Quest.QuestData.FirstClearRewards)
+            {
+                for (int i = 0; i < reward.Quantity; i++)
+                {
+                    Managers.InvMng.AddItem(reward.ItemDataId);
+                }
+            }
+            Quest.QuestData.IsComplete = true;
+        }
+        Managers.InvMng.AddGold(Loots.Gold);
     }
     #endregion
 
@@ -283,17 +306,24 @@ public class AreaManager
     /// <summary>
     /// 전투 씬 언로드 및 AreaScene이 ActiveScene으로 전환 된 후 호출
     /// </summary>
-    public void OnBattleSceneUnloadFinish(BattleResultType battleResult)
+    public IEnumerator OnBattleSceneUnloadFinish(UI_Loading loadingUI)
     {
-        PlaceHeroes(CurrentPlayerPosition);
+        PlaceHeroes(CurrentPlayerPosition); // BattleScene과 영웅 게임오브젝트를 공유하기 때문에, 다시 배치해줘야함
         CameraController.gameObject.SetActive(true);
-        CameraController.GetComponent<AreaCameraController>().Freeze = false;
         _light.SetActive(true);
         UI.ShowInstantly();
 
-        CoroutineRunner.Instance.StartCoroutine(OnTileEventFinish());
+        yield return loadingUI.FadeOut(); // 로딩 UI Fade Out 전/후에 해야할 일이 달라서 이런 식으로 구현함
 
+        CameraController.Freeze = false;
         Managers.InputMng.AddMouseAction(AreaInputHandler.HandleMouseInput);
+        CoroutineRunner.Instance.StartCoroutine(OnTileEventFinish());
+    }
+
+    public void Clear()
+    {
+        AreaInputHandler.Clear();
+        Items.Clear();
     }
 
     #endregion

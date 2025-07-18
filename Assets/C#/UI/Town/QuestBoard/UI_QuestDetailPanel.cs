@@ -74,14 +74,14 @@ public class UI_QuestDetailPanel : UI_Base
         GetButton(Buttons.Button_Start).onClick.AddListener(()=>StartQuest(quest));
 
         _rewardInventory.HardClear();
-        foreach(QuestReward reward in data.Rewards)
+        foreach(QuestReward reward in data.FirstClearRewards)
         {
             int rewardDataId = reward.ItemDataId;
             ItemData itemData = Managers.DataMng.ItemDataDict[rewardDataId];
             _rewardInventory.AddItem(itemData, reward.Quantity);
         }
 
-        ItemInventory.Clear();
+        ItemInventory.Clear(false);
         GetText(Texts.Text_ItemCount).text = $"<color=#F8913F>0</color> / 8";
     }
 
@@ -95,7 +95,6 @@ public class UI_QuestDetailPanel : UI_Base
             // 빈 슬롯 클릭 시, 아이템 선택 팝업창을 띄움.
             // 이미 팝업창이 존재할 시 새로 띄우지 않음.
             if (_questItemSelectPopup != null) return;
-
             UI_QuestItemSelectPopup popup = Managers.UIMng.ShowPopupUI<UI_QuestItemSelectPopup>();
             popup.LateInit(this);
             _questItemSelectPopup = popup;

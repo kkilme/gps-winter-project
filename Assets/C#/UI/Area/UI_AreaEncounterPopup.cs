@@ -70,13 +70,14 @@ public class UI_AreaEncounterPopup : UI_Popup
     public void SetupButtons(bool isLeavable, Action onTry, Action onLeave)
     {
         var tryButton = GetButton(Buttons.Button_Try);
+        var leaveButton = GetButton(Buttons.Button_Leave);
+
         tryButton.onClick.RemoveAllListeners(); // 중복 방지
         tryButton.onClick.AddListener(() => {
             tryButton.interactable = false;
+            leaveButton.interactable = false;
             onTry?.Invoke();
         });
-
-        var leaveButton = GetButton(Buttons.Button_Leave);
         if (!isLeavable)
         {
             leaveButton.gameObject.SetActive(false);
@@ -85,6 +86,7 @@ public class UI_AreaEncounterPopup : UI_Popup
         {
             leaveButton.onClick.RemoveAllListeners();
             leaveButton.onClick.AddListener(() => {
+                tryButton.interactable = false;
                 leaveButton.interactable = false;
                 onLeave?.Invoke();
             });

@@ -27,7 +27,7 @@ public class UI_Inventory : UI_Base
         _scrollRect = GetComponentInParent<ScrollRect>();
         _maxSize = maxSize;
 
-        ShowInstantly(); // 일부 요소는 게임 오브젝트가 비활성화 상태일 시 초기화가 실패하므로 꼭 활성화해주어야 함. 비활성화는 LateInit을 호출하는 클래스의 몫임.
+        ShowInstantly(); // 일부 요소는 게임 오브젝트가 비활성화 상태일 시 초기화가 실패하므로 꼭 활성화해주어야 함. 이후 다시 비활성화는 LateInit을 호출하는 클래스의 몫임.
         _onSlotClickAction = onSlotClickAction;
 
         slotDesign ??= new DefaultItemSlotDesign(); // 디자인을 지정하지 않을 시 기본 슬롯 디자인 사용
@@ -336,18 +336,15 @@ public class UI_Inventory : UI_Base
         if (_scrollRect) _scrollRect.verticalNormalizedPosition = 1f;
     }
 
-    public override void HideInstantly()
-    {
-        Clear();
-        base.HideInstantly();
-    }
-
     /// <summary>
     /// 인벤토리의 모든 아이템 슬롯을 Unbind.
     /// </summary>
-    public void Clear()
+    /// <param name="removeActionCallback">
+    /// 슬롯의 Callback도 함께 지울 지 여부
+    /// </param>
+    public void Clear(bool removeActionCallback = true)
     {
-        ClearActionCallbackOnSlots();
+        if(removeActionCallback) ClearActionCallbackOnSlots();
         foreach (var slot in InventorySlots)
         {
             slot.UnbindItem();

@@ -53,7 +53,7 @@ public class UI_AreaCompletePopup : UI_Popup
         GetText(Texts.Text_Gold).text = Managers.AreaMng.Loots.Gold.ToString("N0");
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetText(Texts.Text_Gold).GetComponentInParent<RectTransform>()); // Preferred Width에 맞추기 위해 Horizontal Layout 강제 업데이트
 
-        UI_Inventory rewardInventory = GetGameObject(GameObjects.Inventory_Loots).GetOrAddComponent<UI_Inventory>();
+        UI_Inventory rewardInventory = GetGameObject(GameObjects.Inventory_QuestRewards).GetOrAddComponent<UI_Inventory>();
         rewardInventory.HardClear();
         rewardInventory.LateInit();
 
@@ -73,14 +73,16 @@ public class UI_AreaCompletePopup : UI_Popup
         {
             rewardInventory.gameObject.SetActive(false);
         }
+
+        GetButton(Buttons.Button_ReturnToTown).onClick.AddListener(()=>CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadTownScene()));
     }
 
     public void Show(Loot loot, Quest quest)
     {
-        GameObject completeText = GetGameObject(GameObjects.Complete);
-        RectTransform completeRect = completeText.GetComponent<RectTransform>();
         Panel.gameObject.SetActive(false);
         LateInit(loot, quest);
+        GameObject completeText = GetGameObject(GameObjects.Complete);
+        RectTransform completeRect = completeText.GetComponent<RectTransform>();
 
         Sequence seq = DOTween.Sequence();
 
@@ -89,11 +91,11 @@ public class UI_AreaCompletePopup : UI_Popup
         seq.Append(completeRect.DOScale(new Vector3(1f, 1f, 1f), 1f));
 
         Vector3 temp = completeRect.transform.position;
-        completeRect.anchorMax = new Vector2(0, 1);
-        completeRect.anchorMin = new Vector2(0, 1);
+        completeRect.anchorMax = new Vector2(0.5f, 1);
+        completeRect.anchorMin = new Vector2(0.5f, 1);
         completeRect.transform.position = temp;
 
-        seq.Join(completeRect.DOAnchorPos(new Vector2(280f, -100f), 1f).OnComplete(() => { Panel.gameObject.SetActive(true); }));
+        seq.Join(completeRect.DOAnchorPos(new Vector2(0f, -80f), 1f).OnComplete(() => { Panel.gameObject.SetActive(true); }));
 
         RectTransform panelRect = Panel.gameObject.GetComponent<RectTransform>();
         seq.Append(panelRect.DOScale(new Vector3(.2f, .2f, 1f), .5f).From().SetEase(Ease.InQuad));

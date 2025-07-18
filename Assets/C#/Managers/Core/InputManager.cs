@@ -59,7 +59,7 @@ public class InputManager
     // 입력이 없다면 바로 리턴, 입력이 있다면 KeyAction/MouseAction을 Invoke
     public void OnUpdate()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
+        if (EventSystem.current && EventSystem.current.IsPointerOverGameObject())
         {
             PointerOverGameObjectAction?.Invoke(); 
             return;

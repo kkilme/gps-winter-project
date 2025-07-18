@@ -100,6 +100,7 @@ public class UI_TownInventory : UI_Base
 
     private void HideTab(InventoryTab tabName)
     {
+        Get<UI_Inventory>(tabName).Clear();
         Get<UI_Inventory>(tabName).HideInstantly();
         _tabToButton[tabName].SetInactive();
     }

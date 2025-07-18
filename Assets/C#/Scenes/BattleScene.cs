@@ -19,7 +19,7 @@ public class BattleScene : BaseScene
 #if UNITY_EDITOR
     private void Start()
     {
-        if (Managers.SceneMng.FirstScene == SceneType.BattleScene)
+        if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
         {
             int testSquadId = GlobalValues.MONSTERSQUAD_SQUAD1_ID;
             // TODO: for test

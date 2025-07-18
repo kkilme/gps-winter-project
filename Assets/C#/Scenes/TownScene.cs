@@ -12,6 +12,9 @@ public class TownScene : BaseScene
 
     private void Start()
     {
-        Managers.TownMng.Init();
+        if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
+        {
+            Managers.TownMng.Init();
+        }
     }
 }

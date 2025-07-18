@@ -31,7 +31,7 @@ public class AreaScene : BaseScene
     private void Start()
     {
         // TODO: AreaScene에서 시작하여 플레이 테스트 시에만 실행
-        if (Managers.SceneMng.FirstScene == SceneType.AreaScene)
+        if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
         {
             AreaInitContext testContext = new TestAreaInitContext();
             InitArea(testContext);
@@ -42,9 +42,9 @@ public class AreaScene : BaseScene
     public new void Update()
     {
         base.Update();
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.T))
         {
-            
+            CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadTownScene());
         }
     }
     #endregion
