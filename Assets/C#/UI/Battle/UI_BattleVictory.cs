@@ -22,6 +22,8 @@ public class UI_BattleVictory : UI_Base
     {
         gameObject.SetActive(true);
 
+        Managers.SoundMng.PlayEffect("battle_victory", .4f);
+
         RectTransform titleRect = Get<RectTransform>(RectTransforms.VictoryTitle);
         RectTransform descRect = Get<RectTransform>(RectTransforms.VictoryDescription);
 

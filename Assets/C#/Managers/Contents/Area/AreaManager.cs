@@ -125,6 +125,7 @@ public class AreaManager
 
         targetPosition = Map.GetTileCenterPosition(targetPosition);
 
+        Managers.SoundMng.PlayEffect("footstep_grass");
         _party.MoveTo(targetPosition).OnComplete(() =>
         {
             OnHeroMoved(targetPosition);
@@ -248,6 +249,9 @@ public class AreaManager
 
     private void OnQuestComplete()
     {
+        Managers.SoundMng.FadeoutBGM(1f);
+        Managers.SoundMng.PlayEffect("quest_complete", .4f);
+
         var popup = Managers.UIMng.ShowPopupUI<UI_AreaCompletePopup>();
         popup.Show(Loots, Quest);
 
@@ -267,6 +271,13 @@ public class AreaManager
                 }
             }
             Quest.QuestData.IsComplete = true;
+
+            // 다음 퀘스트 잠금 해제
+            foreach (var questId in Quest.QuestData.UnlockQuestDataId)
+            {
+                QuestData questData = Managers.DataMng.QuestDataDict[questId];
+                questData.IsUnlocked = true;
+            }
         }
         Managers.InvMng.AddGold(Loots.Gold);
     }
@@ -280,6 +291,8 @@ public class AreaManager
     public void LoadBattleScene(BattleType battleType)
     {
         AreaState = AreaState.Battle;
+        Managers.SoundMng.PlayEffect("battle_start", .4f);
+
         CameraController.Freeze = true;
         Managers.InputMng.RemoveMouseAction(AreaInputHandler.HandleMouseInput);
 

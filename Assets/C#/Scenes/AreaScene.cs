@@ -17,11 +17,11 @@ public class AreaScene : BaseScene
     }
 
     public void InitArea(AreaInitContext areaInitContext)
-    {        
+    {   
         // AreaMapGenerator 초기화 및 맵 생성
         _areaMapGenerator.Init(areaInitContext.AreaName);
         AreaMap map = _areaMapGenerator.GenerateMap();
-
+        
         // AreaManager 초기화
         AreaManager.Init(map, areaInitContext);
     }
@@ -33,6 +33,7 @@ public class AreaScene : BaseScene
         // TODO: AreaScene에서 시작하여 플레이 테스트 시에만 실행
         if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
         {
+            Managers.SoundMng.PlayBGM("AreaBGM");
             AreaInitContext testContext = new TestAreaInitContext();
             InitArea(testContext);
         }

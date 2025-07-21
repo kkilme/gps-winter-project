@@ -6,15 +6,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 전리품을 하나씩 보여주며 플레이어가 획득하거나 버릴 수 있도록 하는 UI
+/// </summary>
 public class UI_Loot : UI_Popup
 {
-    public Action<Loot> OnLootTakeComplete; // 전리품 획득 완료 시 호출되는 이벤트
+    public Action<Loot> OnLootTakeComplete; // 모든 전리품 획득 완료 시 호출되는 이벤트
 
     private RectTransform _actionRect;
     private RectTransform _itemDetailRect;
     private UI_ItemDetailPopup _itemDetailPopup;
 
-    private Loot _lootDropped; // 나온 모든 전리품
+    private Loot _lootDropped; // 생성된 모든 전리품
     private Loot _lootTaken; // 플레이어가 획득하고자 선택한 전리품
 
     enum RectTransforms
@@ -45,6 +48,8 @@ public class UI_Loot : UI_Popup
 
     public void ShowGold(int goldAmount)
     {
+        Managers.SoundMng.PlayGoldSound();
+
         _itemDetailPopup.ApplyGoldDesign(goldAmount);
 
         _itemDetailRect.DOScale(new Vector3(0.2f, 0.2f, 1f), 0.5f).From().SetEase(Ease.InQuad).OnComplete(() =>
@@ -55,6 +60,7 @@ public class UI_Loot : UI_Popup
         GetButton(Buttons.Button_Take).onClick.AddListener(TakeLoot);
         GetButton(Buttons.Button_Dispose).onClick.AddListener(ShowNextLoot);
 
+        // 전리품 획득
         void TakeLoot()
         {
             _lootTaken.Gold += goldAmount;
@@ -64,6 +70,8 @@ public class UI_Loot : UI_Popup
 
     public void ShowItem(ItemData itemData)
     {
+        Managers.SoundMng.PlayItemEffect(itemData.SoundPath, 0.4f);
+
         _itemDetailPopup.ApplyDesign(itemData);
 
         _itemDetailRect.DOScale(new Vector3(0.2f, 0.2f, 1f), 0.5f).From().SetEase(Ease.InQuad).OnComplete(() =>
@@ -74,6 +82,7 @@ public class UI_Loot : UI_Popup
         GetButton(Buttons.Button_Take).onClick.AddListener(TakeLoot);
         GetButton(Buttons.Button_Dispose).onClick.AddListener(ShowNextLoot);
 
+        // 전리품 획득
         void TakeLoot()
         {
             _lootTaken.Items.Add(itemData);
@@ -95,13 +104,13 @@ public class UI_Loot : UI_Popup
         GetButton(Buttons.Button_Dispose).onClick.RemoveAllListeners();
         _actionRect.gameObject.SetActive(false);
 
-        // 골드 전리품을 위한 코드
+        // 골드를 위한 코드
         if (_currentLootIndex == -1)
         {
             _currentLootIndex = 0;
             if (_lootDropped.Gold != 0)
             {
-                // 골드가 0이 아니면 골드 전리품을 보여줌
+                // 전리품으로 나온 골드가 0이 아니면 골드를 보여줌
                 ShowGold(_lootDropped.Gold);
                 return;
             }

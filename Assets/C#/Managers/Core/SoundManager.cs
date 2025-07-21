@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 public class SoundManager
 {
     private AudioSource[] _audioSources = new AudioSource[(int)SoundType.MaxCount];
-    private Dictionary<string, AudioClip> _audioClipDic = new Dictionary<string, AudioClip>();
+    private Dictionary<string, AudioClip> _audioClipDic = new Dictionary<string, AudioClip>(); // 경로와 AudioClip을 매핑하여 재사용
 
     public void Init()
     {
@@ -27,42 +28,90 @@ public class SoundManager
         }
     }
 
-    // path 위치의 음원 재생
-    public void Play(string path, SoundType type = SoundType.Effect, float pitch = 1.0f)
+    /// <summary>
+    /// path 위치의 AudioClip으로 BGM 재생
+    /// </summary>
+    public void PlayBGM(string path, float pitch = 1.0f)
     {
-        AudioClip audioClip = GetOrAddAudioClip(path, type);
-        Play(audioClip, type, pitch);
+        AudioClip audioClip = GetOrAddAudioClip("BGM/" + path, SoundType.Bgm);
+        if(audioClip == null)
+        {
+            return;
+        }
+        CoroutineRunner.Instance.StartCoroutine(PlayBGMCoroutine(audioClip, pitch));
     }
 
-    // 재생 타입은 type, 재생 속도는 pitch로 설정하여 audioClip 재생
-    public void Play(AudioClip audioClip, SoundType type = SoundType.Effect, float pitch = 1.0f)
+    private Tween _bgmFadeTween;
+
+    private IEnumerator PlayBGMCoroutine(AudioClip audioClip, float pitch = 1.0f)
     {
+        AudioSource audioSource = _audioSources[(int)SoundType.Bgm];
+        if (audioSource.isPlaying && audioSource.volume > 0f)
+        {
+            // 현재 BGM이 재생 중이면 페이드 아웃
+            yield return FadeoutBGM().WaitForCompletion();
+        }
+        audioSource.Stop();
+        audioSource.volume = 0f;
+
+        audioSource.clip = audioClip;
+        audioSource.pitch = pitch;
+        audioSource.Play();
+
+        _bgmFadeTween = audioSource.DOFade(.5f, 3f);
+        yield return _bgmFadeTween.WaitForCompletion(); // 새 BGM 페이드 인
+    }
+
+    public Tween FadeoutBGM(float duration = 2f)
+    {
+        AudioSource audioSource = _audioSources[(int)SoundType.Bgm];
+
+        if(_bgmFadeTween != null && _bgmFadeTween.IsActive() && _bgmFadeTween.IsPlaying())
+        {
+            _bgmFadeTween.Kill(); // 진행중인 페이드 효과 제거. FadeIn 도중이여도 무조건 FadeOut이 우선순위를 가짐.
+        }
+        return audioSource.DOFade(0f, duration);
+    }
+
+    /// <summary>
+    /// 효과음 재생
+    /// </summary>
+    /// <param name="path">효과음 AudioClip 경로</param>
+    /// <param name="stopPlayingSound">기존에 재생중인 효과음 정지할지 여부</param>
+    public void PlayEffect(string path, float volume = 1.0f, float pitch = 1.0f, bool stopPlayingSound = false)
+    {
+        AudioClip audioClip = GetOrAddAudioClip("Effect/" + path, SoundType.Effect);
         if (audioClip == null)
+        {
             return;
-
-        if (type == SoundType.Bgm)
-        {
-            AudioSource audioSource = _audioSources[(int)type];
-            if (audioSource.isPlaying)
-                audioSource.Stop();
-
-            audioSource.pitch = pitch;
-            audioSource.clip = audioClip;
-            audioSource.Play();
         }
-        else
+
+        AudioSource audioSource = _audioSources[(int)SoundType.Effect];
+        if (audioSource.isPlaying && stopPlayingSound)
         {
-            AudioSource audioSource = _audioSources[(int)SoundType.Effect];
-            audioSource.pitch = pitch;
-            audioSource.PlayOneShot(audioClip);
+            audioSource.Stop();
         }
+        audioSource.volume = volume;
+        audioSource.pitch = pitch;
+        audioSource.PlayOneShot(audioClip);
+        
+    }
+
+    public void PlayItemEffect(string path, float volume = 1.0f, float pitch = 1.0f, bool stopPlayingSound = false)
+    {
+        PlayEffect("Item/" + path, volume, pitch, stopPlayingSound);
+    }
+
+    public void PlayGoldSound(float pitch = 1.0f, bool stopPlayingSound = false)
+    {
+        PlayEffect("Item/Gold", .4f, pitch, stopPlayingSound);
     }
 
     // path 위치의 음원파일 로드 후 반환
     private AudioClip GetOrAddAudioClip(string path, SoundType type = SoundType.Effect)
     {
-        if (path.Contains("Sounds/") == false)
-            path = $"Sounds/{path}";
+        if (path.Contains("Audio/") == false)
+            path = $"Audio/{path}";
 
         AudioClip audioClip;
 

@@ -135,14 +135,15 @@ public class UI_BuyConfirmPopup : UI_Popup
         int price = _storeEntryData.Price * _quantity;
         if (Managers.InvMng.Gold < price)
         {
-            // TODO: UI로 경고 표시
+            // TODO?: UI로 경고 표시
             return;
         }
 
+        Managers.SoundMng.PlayGoldSound();
         Managers.InvMng.RemoveGold(price); // 골드 차감
         Managers.InvMng.AddItem(_storeEntryData.ItemDataId, _quantity); // 아이템 추가
         _storeEntryData.Stock -= _quantity; // 재고 감소
         ui_StoreEntry.UpdateStock(_storeEntryData); // UI 업데이트
-        Close();
+        Close(); // 팝업 닫기
     }
 }

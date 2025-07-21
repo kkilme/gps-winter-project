@@ -7,6 +7,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
+/// <summary>
+/// 선택한 퀘스트의 상세 정보를 보여주는 UI 패널.
+/// </summary>
 public class UI_QuestDetailPanel : UI_Base
 {
     enum Buttons
@@ -118,6 +121,7 @@ public class UI_QuestDetailPanel : UI_Base
     /// </summary>
     public void AddItem(ItemData itemData)
     {
+        Managers.SoundMng.PlayItemEffect(itemData.SoundPath, .4f);
         ItemInventory.AddItem(itemData);
         int notEmptySlotCnt = ItemInventory.InventorySlots.FindAll(x => !x.IsEmpty).Count;
         GetText(Texts.Text_ItemCount).text = $"<color=#F8913F>{notEmptySlotCnt}</color> / 8";
@@ -139,7 +143,12 @@ public class UI_QuestDetailPanel : UI_Base
             .ConvertAll(slot => slot.ItemData);
 
         AreaInitContext areaInitContext = new(quest, itemDatas);
+        //foreach (ItemData item in areaInitContext.Items)
+        //{
+        //    Managers.InvMng.RemoveItem(item, 1); // 선택한 아이템을 인벤토리에서 제거
+        //}
 
+        Managers.SoundMng.PlayEffect("quest_start", .2f);
         CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadAreaScene(areaInitContext)); // Area 씬 로드 시작
     }
 

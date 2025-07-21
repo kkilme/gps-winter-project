@@ -130,11 +130,12 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         // 장비 해제
         if (equipment == null)
         {
+            Managers.SoundMng.PlayItemEffect("Equipment", .4f);
             UnbindEquipment();
             Managers.HeroMng.HeroStorage.UnEquipEquipment(_heroInstanceId, _equipmentType);
             return;
         }
-
+        Managers.SoundMng.PlayItemEffect(equipment.EquipmentData.SoundPath, .4f);
         BindEquipment(equipment);
         Managers.HeroMng.HeroStorage.EquipEquipment(_heroInstanceId, _equipmentType, equipment.InstanceId);
     }

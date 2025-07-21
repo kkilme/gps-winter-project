@@ -130,6 +130,7 @@ public class UI_AreaEncounterPopup : UI_Popup
     public override Tween Show()
     {
         gameObject.SetActive(true);
+        Managers.SoundMng.PlayEffect("whoosh2", .4f);
         return Panel.DOScale(new Vector3(0.2f, 0.2f, 1f), 0.4f).From().SetEase(Ease.InQuad);
     }
 

@@ -14,6 +14,7 @@ public class ItemData
     public string ImagePath;
     public int MaxStack; // 인벤토리에서 최대로 스택될 수 있는 양. 모든 장비는 이 수치가 1로 고정됨.
     public int SellPrice; // 상점에서 판매할 때의 가격
+    public string SoundPath; // 아이템 사운드 경로 ("Audio/Effect/Item/" 이하 경로)
 }
 
 [Serializable]
@@ -88,6 +89,7 @@ public class WeaponDataLoader : ILoader<int, WeaponData>
             weapon.EquipmentType = EquipmentType.Weapon;
             weapon.MaxStack = 1;
             weapon.ImagePath ??= "Default_Weapon";
+            weapon.SoundPath ??= "Equipment";
             dic.Add(weapon.DataId, weapon);
         }
 
@@ -116,6 +118,7 @@ public class ArmorDataLoader : ILoader<int, ArmorData>
             };
             armor.MaxStack = 1;
             armor.ImagePath ??= "Default_Armor";
+            armor.SoundPath ??= "Equipment";
             dic.Add(armor.DataId, armor);
         }
 

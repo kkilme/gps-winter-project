@@ -131,6 +131,7 @@ public class UI_SellConfirmPanel : UI_Base
         bool success = Managers.InvMng.SellItem(_itemInstanceData, _quantity);
         if (success)
         {
+            Managers.SoundMng.PlayGoldSound();
             OnSell?.Invoke();
         }
         HideInstantly();

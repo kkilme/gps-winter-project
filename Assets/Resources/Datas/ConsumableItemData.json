@@ -9,6 +9,7 @@
       "IsUsableInArea": true,
       "MaxStack": 5,
       "SellPrice": 5,
+      "SoundPath": "Potion",
     }
   ]
 }

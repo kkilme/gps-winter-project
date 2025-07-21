@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// 코인 토스를 보여주는 UI
+/// 코인 토스 결과를 보여주는 UI
 /// </summary>
 public class UI_CoinTossDisplay : UI_Base
 {
@@ -43,11 +43,21 @@ public class UI_CoinTossDisplay : UI_Base
         gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// 코인 토스 결과 표시
+    /// </summary>
     public IEnumerator ShowResult(bool[] result, StatName stat)
     {
         Show(result.Length, stat); // 몬스터 턴을 위해 필요
         for (int i = 0; i < result.Length; i++)
         {
+            if (result[i])
+            {
+                Managers.SoundMng.PlayEffect("coin_success");
+            } else
+            {
+                Managers.SoundMng.PlayEffect("coin_fail");
+            }
             Get<UI_Coin>(i).ShowResult(result[i]);
             yield return new WaitForSeconds(0.3f);
         }

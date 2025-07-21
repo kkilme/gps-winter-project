@@ -37,7 +37,7 @@ public class UI_TownStore_SellPanel : UI_Base, IStorePanel
     /// </summary>
     private void ShowInventory()
     {
-        _inventory.Clear();
+        _inventory.Clear(false);
         _inventory.ShowInstantly();
 
         List<ItemInstanceData> allItems = Managers.InvMng.ItemList;

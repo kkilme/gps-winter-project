@@ -14,6 +14,7 @@ public class TownScene : BaseScene
     {
         if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
         {
+            Managers.SoundMng.PlayBGM("TownBGM");
             Managers.TownMng.Init();
         }
     }

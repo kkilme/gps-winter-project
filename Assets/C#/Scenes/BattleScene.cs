@@ -21,6 +21,7 @@ public class BattleScene : BaseScene
     {
         if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
         {
+            Managers.SoundMng.PlayBGM("BattleBGM");
             int testSquadId = GlobalValues.MONSTERSQUAD_SQUAD1_ID;
             // TODO: for test
             // BattleScene에서 시작하여 플레이 테스트 시에만 실행

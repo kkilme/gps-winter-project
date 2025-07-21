@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Town에서 퀘스트를 관리하는 UI. 퀘스트 목록과 상세 정보를 보여주는 패널을 포함.
+/// </summary>
 public class UI_QuestBoard : UI_Base
 {   
     enum Panels

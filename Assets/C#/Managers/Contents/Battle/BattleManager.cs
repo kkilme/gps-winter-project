@@ -298,6 +298,7 @@ public class BattleManager
     /// </summary>
     public void FinishBattle(BattleResultType battleResult)
     {
+        Managers.SoundMng.FadeoutBGM();
         UI.OnBattleEnd(battleResult);
     }
 
