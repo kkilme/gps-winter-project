@@ -143,10 +143,10 @@ public class UI_QuestDetailPanel : UI_Base
             .ConvertAll(slot => slot.ItemData);
 
         AreaInitContext areaInitContext = new(quest, itemDatas);
-        //foreach (ItemData item in areaInitContext.Items)
-        //{
-        //    Managers.InvMng.RemoveItem(item, 1); // 선택한 아이템을 인벤토리에서 제거
-        //}
+        foreach (ItemData item in areaInitContext.Items)
+        {
+            Managers.InvMng.RemoveItemByItemDataId(item.DataId, 1); // 선택한 아이템을 인벤토리에서 제거
+        }
 
         Managers.SoundMng.PlayEffect("quest_start", .2f);
         CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadAreaScene(areaInitContext)); // Area 씬 로드 시작

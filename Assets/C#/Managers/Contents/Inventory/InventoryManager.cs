@@ -58,7 +58,7 @@ public class InventoryManager
     /// <returns>
     /// 정상적으로 제거 시 true, 문제가 발생하여 제거하지 못할 시 false 반환.
     /// </returns>
-    public bool RemoveItem(int instanceId, int quantity = 1)
+    public bool RemoveItemByInstanceId(int instanceId, int quantity = 1)
     {
         if (!ItemDict.TryGetValue(instanceId, out ItemInstanceData itemData))
         {
@@ -88,11 +88,24 @@ public class InventoryManager
     }
 
     /// <summary>
+    /// 특정 itemDataId에 해당하는 아이템을 인벤토리에서 제거.
+    /// </summary>
+    public bool RemoveItemByItemDataId(int itemDataId, int quantity = 1)
+    {
+        ItemInstanceData itemInstance = GetItemByDataId(itemDataId);
+        if (itemInstance == null)
+        {
+            Debug.LogError($"[InventoryManager] Could not find item with dataId: {itemDataId} to remove.");
+            return false;
+        }
+        return RemoveItemByInstanceId(itemInstance.InstanceId, quantity);
+    }
+    /// <summary>
     /// item을 quantity만큼 remove함과 동시에, 판매 가격에 맞게 골드 획득
     /// </summary>
     public bool SellItem(ItemInstanceData item, int quantity = 1)
     {
-        if (!RemoveItem(item.InstanceId, quantity))
+        if (!RemoveItemByInstanceId(item.InstanceId, quantity))
         {
             return false;
         }
