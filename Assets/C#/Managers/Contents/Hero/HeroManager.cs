@@ -36,6 +36,8 @@ public class HeroManager
                     int weaponDataId = HeroStorage.GetEquippedWeapon(heroInstanceId)?.ItemDataId ?? -1;
                     if (weaponDataId != -1)
                         hero.EquipWeapon(weaponDataId);
+                    else
+                        hero.EquipWeapon(GlobalValues.HERO_HANDWEAPON_ID);
 
                     // 저장된 방어구 장착
                     var equippedArmors = HeroStorage.GetEquippedArmors(heroInstanceId);

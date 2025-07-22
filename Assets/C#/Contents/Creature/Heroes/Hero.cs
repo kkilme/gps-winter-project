@@ -62,15 +62,6 @@ public class Hero : Creature
 
     #region Weapon
 
-    /// <summary>
-    /// Hero의 애니메이터 변경. 무기에 따라 애니메이터가 다름.
-    /// </summary>
-    private void ChangeAnimator()
-    {
-        string path = GlobalValues.HERO_ANIMATOR_PATH_PREFIX + Weapon.WeaponType;
-        Animator.runtimeAnimatorController = Managers.ResourceMng.Load<RuntimeAnimatorController>(path);
-        Animator.SetBool(GlobalValues.ANIMATION_PARAM_TOWNSCENE, Managers.SceneMng.CurrentScene is TownScene);
-    }
 
     public void EquipWeapon(int weaponDataId)
     {
@@ -86,36 +77,58 @@ public class Hero : Creature
         UnEquipWeapon();
 
         Weapon = equippingWeapon;
-        SetWeaponVisibility(true);
+        ShowWeaponObject();
         ChangeAnimator();
     }
     
     public void UnEquipWeapon()
     {
-        if (Weapon == null)
-            return;
+        if (Weapon == null || Weapon.DataId == GlobalValues.HERO_HANDWEAPON_ID) return;
 
-        SetWeaponVisibility(false);
+        HideWeaponObject();
         Weapon = null;
+        EquipWeapon(GlobalValues.HERO_HANDWEAPON_ID); // 손 무기로 변경
     }
     
-    public void SetWeaponVisibility(bool isVisible)
+    /// <summary>
+    /// 장착한 무기에 맞게 무기 게임 오브젝트를 활성화/비활성화
+    /// </summary>
+    public void ShowWeaponObject()
     {
         int leftIndex = Weapon.WeaponData.LeftIndex;
         int rightIndex = Weapon.WeaponData.RightIndex;
+
         if (leftIndex != 0)
-        {
-            _leftHand.transform.GetChild(leftIndex).gameObject.SetActive(isVisible);
-        }
+            _leftHand.transform.GetChild(leftIndex).gameObject.SetActive(true);
+        
         if (rightIndex != 0)
+            _rightHand.transform.GetChild(rightIndex).gameObject.SetActive(true);
+    }
+
+    private void HideWeaponObject()
+    {
+        for (int i = 0; i < _leftHand.transform.childCount; i++)
         {
-            _rightHand.transform.GetChild(rightIndex).gameObject.SetActive(isVisible);
+            _leftHand.transform.GetChild(i).gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < _rightHand.transform.childCount; i++)
+        {
+            _rightHand.transform.GetChild(i).gameObject.SetActive(false);
         }
     }
 
+    /// <summary>
+    /// Hero의 애니메이터 변경. 무기에 따라 애니메이터가 다름.
+    /// </summary>
+    private void ChangeAnimator()
+    {
+        string path = GlobalValues.HERO_ANIMATOR_PATH_PREFIX + Weapon.WeaponType;
+        Animator.runtimeAnimatorController = Managers.ResourceMng.Load<RuntimeAnimatorController>(path);
+        Animator.SetBool(GlobalValues.ANIMATION_PARAM_TOWNSCENE, Managers.SceneMng.CurrentScene is TownScene);
+    }
     #endregion
 
-    
     #region Armor
 
     public void EquipArmor(int armorDataId)
@@ -134,7 +147,7 @@ public class Hero : Creature
         UnEquipArmor(armorType);
         
         Armors[armorType] = equippingArmor;
-        ChangeArmorVisibility(armorType ,true);
+        ChangeArmorObjectVisibility(armorType ,true);
     }
 
     public void UnEquipArmor(ArmorType armorType)
@@ -142,11 +155,11 @@ public class Hero : Creature
         if (Armors[armorType] == null)
             return;
 
-        ChangeArmorVisibility(armorType, false);
+        ChangeArmorObjectVisibility(armorType, false);
         Armors[armorType] = null;
     }
 
-    public void ChangeArmorVisibility(ArmorType armorType, bool isActive)
+    public void ChangeArmorObjectVisibility(ArmorType armorType, bool isActive)
     {
         int idx = Armors[armorType].ArmorData.ArmorIndex;
         switch (armorType)

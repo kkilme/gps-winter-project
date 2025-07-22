@@ -50,6 +50,17 @@
       "IconPath": "Icon_Thunder"
     },
     {
+      "DataId": 402002,
+      "Type": "AttackSkillData",
+      "Name": "Punch",
+      "Description": "Damages single target.",
+      "CoinCount": 2,
+      "UsingStat": "Strength",
+      "AttackType": "Physical",
+      "DamagePerCoin": 4,
+      "IconPath": "Icon_Sword"
+    },
+    {
       "DataId": 403000,
       "Type": "AttackSkillData",
       "Name": "Bite",
@@ -92,6 +103,6 @@
       "AttackType": "Physical",
       "DamagePerCoin": 4,
       "IconPath": "Icon_Sword"
-    }
+    },
   ]
 }

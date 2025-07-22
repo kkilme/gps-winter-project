@@ -64,6 +64,7 @@ public static class GlobalValues
 
     public const int MONSTER_BAT_ID = 102000;
 
+    public const int HERO_HANDWEAPON_ID = 201003; // 무기 장착 안된 상태의 Hero가 사용하는 무기
     public const int KNIGHT_START_WEAPON_ID = 201000;
     public const int WIZARD_START_WEAPON_ID = 201002;
 

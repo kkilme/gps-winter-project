@@ -33,6 +33,17 @@
 		 402001,
 	   ],
        "SellPrice": 50,
+    },
+    {
+      "DataId": 201003,
+      "Name": "Hand",
+      "Attack": 2,
+      "RightIndex": 0,
+      "WeaponType": "NoWeapon",
+      "Skills": [
+        402002,
+      ],
+      "SellPrice": 0,
     }
   ]
 }

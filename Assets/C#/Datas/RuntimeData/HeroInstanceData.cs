@@ -35,7 +35,6 @@ public class HeroInstanceData
 
         Stat.AddEquipmentStat(Weapon.EquipmentData); 
         
-
         // 시작 방어구 (없음)
         Armors = new Dictionary<ArmorType, EquipmentInstanceData>
         {
