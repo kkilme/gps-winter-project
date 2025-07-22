@@ -11,18 +11,46 @@ public class Hero : Creature
     public Weapon Weapon { get; protected set; }
     public Dictionary<ArmorType, Armor> Armors { get; protected set; }
 
+    #region Outfit
     // 각종 장비 오브젝트의 부모 오브젝트들
-    private GameObject _head;
+    private GameObject _helmet;
     private GameObject _leftHand;
     private GameObject _rightHand;
-    
+    private GameObject _hair;
+
+    private int _startBodyIndex; // 첫 영웅 Body 외형의 인덱스
+    private int _startHairIndex; // 첫 영웅 헤어 외형의 인덱스
+
+    private const int BODY_ARMOR_COUNT = 20; // 존재하는 모든 Body 외형 개수
+    private const int HAIR_COUNT = 13; // 존재하는 모든 헤어 외형 개수
+    private const int CLOAK_COUNT = 3; // 존재하는 모든 Cloak 외형 개수
+    #endregion
     protected override void Init()
     {
         base.Init();
         
-        _head = GlobalUtility.FindChild(gameObject, "head", true);
+        _helmet = GlobalUtility.FindChild(gameObject, "Helmet", true);
         _leftHand = GlobalUtility.FindChild(gameObject, "weapon_l", true);
         _rightHand = GlobalUtility.FindChild(gameObject, "weapon_r", true);
+
+        for(int i = 0; i<BODY_ARMOR_COUNT; i++)
+        {
+            if(gameObject.transform.GetChild(i).gameObject.activeSelf)
+            {
+                _startBodyIndex = i;
+                break;
+            }
+        }
+
+        _hair = GlobalUtility.FindChild(gameObject, "Hair", true);
+        for(int i = 0; i<HAIR_COUNT; i++)
+        {
+            if(_hair.transform.GetChild(i).gameObject.activeSelf)
+            {
+                _startHairIndex = i;
+                break;
+            }
+        }
 
         Armors = new Dictionary<ArmorType, Armor>();
         foreach (ArmorType type in (ArmorType[])Enum.GetValues(typeof(ArmorType)))
@@ -91,9 +119,9 @@ public class Hero : Creature
     }
     
     /// <summary>
-    /// 장착한 무기에 맞게 무기 게임 오브젝트를 활성화/비활성화
+    /// 장착한 무기에 맞게 무기 외형 게임 오브젝트 활성화
     /// </summary>
-    public void ShowWeaponObject()
+    private void ShowWeaponObject()
     {
         int leftIndex = Weapon.WeaponData.LeftIndex;
         int rightIndex = Weapon.WeaponData.RightIndex;
@@ -147,7 +175,7 @@ public class Hero : Creature
         UnEquipArmor(armorType);
         
         Armors[armorType] = equippingArmor;
-        ChangeArmorObjectVisibility(armorType ,true);
+        ShowArmorObject(armorType);
     }
 
     public void UnEquipArmor(ArmorType armorType)
@@ -155,24 +183,57 @@ public class Hero : Creature
         if (Armors[armorType] == null)
             return;
 
-        ChangeArmorObjectVisibility(armorType, false);
+        HideArmorObject(armorType);
         Armors[armorType] = null;
     }
 
-    public void ChangeArmorObjectVisibility(ArmorType armorType, bool isActive)
+    /// <summary>
+    /// 장착한 장비에 맞게 장비 외형 게임 오브젝트 활성화
+    /// </summary>
+    private void ShowArmorObject(ArmorType armorType)
     {
+        HideArmorObject(armorType);
         int idx = Armors[armorType].ArmorData.ArmorIndex;
         switch (armorType)
         {
-             case ArmorType.Body: 
-                 transform.GetChild(idx - 1).gameObject.SetActive(isActive);
+             case ArmorType.Body:
+                transform.GetChild(_startBodyIndex).gameObject.SetActive(false);
+                transform.GetChild(idx).gameObject.SetActive(true);
                  break; 
              case ArmorType.Cloak:
-                 transform.GetChild(idx + 19).gameObject.SetActive(isActive);
+                 transform.GetChild(idx + 20).gameObject.SetActive(true);
                  break;
              case ArmorType.Helmet:
-                 _head.transform.GetChild(idx + 96).gameObject.SetActive(isActive);
+                _hair.transform.GetChild(_startHairIndex).gameObject.SetActive(false);
+                _helmet.transform.GetChild(idx).gameObject.SetActive(true);
                  break;
+        }
+    }
+
+    private void HideArmorObject(ArmorType armorType)
+    {
+        switch (armorType)
+        {
+            case ArmorType.Body:
+                for (int i = 0; i < BODY_ARMOR_COUNT; i++)
+                {
+                    transform.GetChild(i).gameObject.SetActive(false);
+                }
+                transform.GetChild(_startBodyIndex).gameObject.SetActive(true);
+                break;
+            case ArmorType.Cloak:
+                for (int i = 0; i < CLOAK_COUNT; i++)
+                {
+                    transform.GetChild(i + BODY_ARMOR_COUNT).gameObject.SetActive(false);
+                }
+                break;
+            case ArmorType.Helmet:
+                for (int i = 0; i < _helmet.transform.childCount; i++)
+                {
+                    _helmet.transform.GetChild(i).gameObject.SetActive(false);
+                }
+                _hair.transform.GetChild(_startHairIndex).gameObject.SetActive(true);
+                break;
         }
     }
 

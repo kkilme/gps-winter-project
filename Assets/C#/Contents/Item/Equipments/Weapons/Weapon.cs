@@ -4,7 +4,7 @@ using UnityEngine;
 public class Weapon: Equipment
 {
     public WeaponData WeaponData => EquipmentData as WeaponData;
-    public WeaponType WeaponType { get; protected set; }
+    public WeaponType WeaponType => WeaponData.WeaponType;
     public List<BattleSkill> Skills { get; protected set; } = new();
     
     public Weapon(int dataId)
@@ -15,8 +15,6 @@ public class Weapon: Equipment
     public override void SetData(int dataId)
     {
         base.SetData(dataId);
-
-        WeaponType = WeaponData.WeaponType;
 
         foreach (int skillId in WeaponData.Skills)
         {

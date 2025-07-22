@@ -6,7 +6,7 @@
       "ArmorType": "Body",
       "PhysicalDefense": 2,
       "MagicDefense": 1,
-      "ArmorIndex": 5,
+      "ArmorIndex": 6,
       "SellPrice": 50,
     },
     {
@@ -16,8 +16,18 @@
       "Defense": 1,
       "MagicDefense": 1,
       "Dexterity": 1,
-      "ArmorIndex": 6,
+      "ArmorIndex": 7,
       "SellPrice": 50,
-    }
+    },
+    {
+      "DataId": 202002,
+      "Name": "Basic Cloak",
+      "ArmorType": "Cloak",
+      "PhysicalDefense": 2,
+      "MagicDefense": 3,
+      "Dexterity": 2,
+      "ArmorIndex": 1,
+      "SellPrice": 50,
+    },
   ]
 }

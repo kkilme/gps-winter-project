@@ -137,6 +137,7 @@ public class SceneManagerEx
 
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.TOWN_SCENE_NAME));
             CurrentSceneType = SceneType.TownScene;
+            Managers.TownMng.Init();
 
             Managers.SoundMng.PlayBGM("TownBGM");
 

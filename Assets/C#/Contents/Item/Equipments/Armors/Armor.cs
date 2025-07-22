@@ -1,7 +1,7 @@
 public class Armor: Equipment
 {
     public ArmorData ArmorData => EquipmentData as ArmorData;
-    public ArmorType ArmorType { get; protected set; }
+    public ArmorType ArmorType => ArmorData.ArmorType;
 
     public Armor(int dataId)
     {
