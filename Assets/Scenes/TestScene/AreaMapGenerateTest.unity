@@ -190,14 +190,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 110198593}
-  m_LocalRotation: {x: 0.47344345, y: 0.0031854056, z: -0.001693984, w: 0.8808169}
-  m_LocalPosition: {x: 27.099113, y: 46.596836, z: -5.1962013}
+  m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
+  m_LocalPosition: {x: 44.36679, y: 37.28111, z: 20.936146}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 55, y: 0, z: 0}
 --- !u!1 &154626944
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,9 +512,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1471485147}
-        m_TargetAssemblyTypeName: AreaMapGenerator, Assembly-CSharp
-        m_MethodName: TestGenerateMap
+      - m_Target: {fileID: 1471485148}
+        m_TargetAssemblyTypeName: AreaMapGenerateTestScene, Assembly-CSharp
+        m_MethodName: GenerateMap
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -800,7 +800,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1471485146}
-  - component: {fileID: 1471485145}
+  - component: {fileID: 1471485148}
   - component: {fileID: 1471485147}
   m_Layer: 0
   m_Name: '@AreaScene'
@@ -809,18 +809,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1471485145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1471485144}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d714bafe73e090b49ba4a57c98f867b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1471485146
 Transform:
   m_ObjectHideFlags: 0
@@ -853,8 +841,21 @@ MonoBehaviour:
     - Key: 0
       Value: {fileID: 11400000, guid: fddaeaea89f9c9f479cd96c4203a9736, type: 2}
     - Key: 1
-      Value: {fileID: 11400000, guid: fddaeaea89f9c9f479cd96c4203a9736, type: 2}
+      Value: {fileID: 11400000, guid: 9d182b3d0dcfdb94786ee8cdb06db081, type: 2}
   _testAreaName: 0
+  _showFogOfWar: 0
   _infoText: {fileID: 1952064081478352647, guid: cbca0bd44ca62614ebbef305f574095c, type: 3}
   _pathIndicator: {fileID: 2009543534564417760, guid: e98c9167005cd2441b48c7732e46b9d0, type: 3}
   CurrentGeneratePhase: 0
+--- !u!114 &1471485148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471485144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b25f60c7e3e1e46ba3b5252c4014f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

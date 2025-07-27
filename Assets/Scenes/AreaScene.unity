@@ -7532,6 +7532,7 @@ MonoBehaviour:
     - Key: 0
       Value: {fileID: 11400000, guid: fddaeaea89f9c9f479cd96c4203a9736, type: 2}
   _testAreaName: 0
+  _showFogOfWar: 1
   _infoText: {fileID: 1952064081478352647, guid: cbca0bd44ca62614ebbef305f574095c, type: 3}
   _pathIndicator: {fileID: 2009543534564417760, guid: e98c9167005cd2441b48c7732e46b9d0, type: 3}
   CurrentGeneratePhase: 0

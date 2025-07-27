@@ -265,7 +265,7 @@ public partial class AreaMapGenerator
     {
         if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
         {
-            _isTestMode = true;
+            //_isTestMode = true;
         }
     }
 

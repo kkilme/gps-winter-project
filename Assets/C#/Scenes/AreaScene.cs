@@ -30,7 +30,7 @@ public class AreaScene : BaseScene
     #region Test
     private void Start()
     {
-        // TODO: AreaScene에서 시작하여 플레이 테스트 시에만 실행
+        // AreaScene에서 시작하여 플레이 테스트 시에만 실행
         if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
         {
             Managers.SoundMng.PlayBGM("AreaBGM");
@@ -39,7 +39,6 @@ public class AreaScene : BaseScene
         }
     }
 
-    // TOOD: for test
     public new void Update()
     {
         base.Update();

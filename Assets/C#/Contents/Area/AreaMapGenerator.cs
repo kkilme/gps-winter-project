@@ -22,11 +22,12 @@ public partial class AreaMapGenerator : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField, Tooltip("테스트 용으로 생성할 Area")] private AreaName _testAreaName;
+    [SerializeField, Tooltip("맵 생성 후 Fog Of War를 보일 지 여부")] private bool _showFogOfWar = false;
     [SerializeField] private GameObject _infoText;
     [SerializeField] private GameObject _pathIndicator;
-    [ReadOnly] public MapGeneratePhase CurrentGeneratePhase = MapGeneratePhase.NotStarted; // 에디터상에서 버튼으로 맵 생성을 테스트하는 데 사용
+    [SerializeField, ReadOnly] public MapGeneratePhase CurrentGeneratePhase = MapGeneratePhase.NotStarted; // 에디터상에서 버튼으로 맵 생성을 테스트하는 데 사용
 
-    private bool _isTestMode = false; // AreaScene에서 직접 실행 시 true
+    private bool _isTestMode => Managers.SceneMng.LastSceneType == SceneType.UnknownScene; // AreaScene에서 직접 실행 시 true
 
     public bool Init(AreaName area = AreaName.Forest)
     {
@@ -70,6 +71,7 @@ public partial class AreaMapGenerator : MonoBehaviour
         GenerateEventTiles();
         GenerateFogOfWar();
         Map.RevealFogOfWarOnAreaStart(); // 전장의 안개 일부 미리 밝힘. Debug 편의를 위해 AreaManager가 아니라 여기서 함.
+        if (_isTestMode && !_showFogOfWar) HideFogOfWar();
 
         Debug.Log($"[AreaMapGenerator.GenerateMap] Finished generating map.");
         return Map;
@@ -110,6 +112,11 @@ public partial class AreaMapGenerator : MonoBehaviour
                 if (Map.TileTypeMap[z, x] != AreaTileType.Empty)
                 {
                     List<Vector2Int> emptyPositions = GetEmptyPositions();
+                    if(emptyPositions.Count == 0) // 빈 위치가 아예 없다면 break
+                    {
+                        Debug.LogWarning("[AreaMapGenerator] No empty positions available for subtile generation.");
+                        break;
+                    }
                     tilePosition = emptyPositions[Random.Range(0, emptyPositions.Count)];
                 }
                 else
@@ -176,7 +183,9 @@ public partial class AreaMapGenerator : MonoBehaviour
 
     }
 
-    // MainTile 생성 알고리즘
+    /// <summary>
+    /// MainTile 생성 알고리즘
+    /// </summary>
     public void GenerateMainTile()
     {
         CurrentGeneratePhase = MapGeneratePhase.Maintilegenerate;
@@ -199,13 +208,16 @@ public partial class AreaMapGenerator : MonoBehaviour
             Map.BaseTileMap[z, x] = tile;
             Map.TileTypeMap[z, x] = AreaTileType.MainTile;
         }
+
+        // 모든 타일이 생성된 후 BaseTile 초기화
+        InitBaseTiles();
     }
 
-    // 플레이 가능(플레이어가 이동 가능) 영역 설정
+    /// <summary>
+    /// 플레이 가능 영역(실제 게임 컨텐츠 진행 영역) 설정
+    /// </summary>
     public void SetupPlayableField(out List<Vector2Int> playableField, out List<Vector2Int> unplayableField)
     {
-        InitBaseTiles();
-
         CurrentGeneratePhase = MapGeneratePhase.PlayableFieldSetup;
         _light.cullingMask = LayerMask.GetMask(_lightCullingMask);
 
@@ -279,15 +291,19 @@ public partial class AreaMapGenerator : MonoBehaviour
         }
     }
 
-    // 플레이 불가능 필드의 장애물(장식물) 생성
-    // 나중에 전장의 안개가 추가되면서 큰 의미는 없어졌음. (장애물이 보이지 않음)
+    /// <summary>
+    /// 플레이 불가능 필드의 장애물(장식물) 생성
+    /// </summary>
+    // 나중에 전장의 안개가 추가되면서 큰 의미는 없어졌음. (어차피 플레이 불가능 필드의 장식물은 대부분 전장의 안개에 가려 보이지 않음)
     public void GenerateUnplayableFieldObstacles(List<Vector2Int> unplayableField)
     {
         CurrentGeneratePhase = MapGeneratePhase.UnplayableFieldObstacleGenerate;
         GenerateObstacles(unplayableField, _data.UnplayableFieldDecorationProportion);
     }
 
-    // 플레이 가능 필드의 장애물(장식물) 생성
+    /// <summary>
+    /// 플레이 가능 필드의 장애물(장식물) 생성
+    /// </summary>
     public void GeneratePlayableFieldObstacles(List<Vector2Int> playableField)
     {
         CurrentGeneratePhase = MapGeneratePhase.PlayableFieldObstacleGenerate;
@@ -324,7 +340,9 @@ public partial class AreaMapGenerator : MonoBehaviour
         }
     }
 
-    // 필드에 비율에 맞게 장애물 생성
+    /// <summary>
+    /// 필드에 비율에 맞게 장애물 생성. GenerateUnplayableFieldObstacles와 GeneratePlayableFieldObstacles에서 사용됨.
+    /// </summary>
     private void GenerateObstacles(List<Vector2Int> field, float proportion)
     {
         int totalGenerated = 0;
@@ -336,8 +354,8 @@ public partial class AreaMapGenerator : MonoBehaviour
 
             if (Map.TileTypeMap[pos.y, pos.x] == AreaTileType.ForceEmpty) continue;
 
-            Map.BaseTileMap[pos.y, pos.x].EnableObstacle();
             Map.BaseTileMap[pos.y, pos.x].IsObstacleGenerated = true; // 해당 타일이 장애물이 활성화된 타일임을 체크해주어야 함. 전장의 안개 관련 로직에 필요.
+            Map.BaseTileMap[pos.y, pos.x].EnableObstacle();
 
             if (Map.TileTypeMap[pos.y, pos.x] != AreaTileType.OutOfField)
             {
@@ -349,7 +367,9 @@ public partial class AreaMapGenerator : MonoBehaviour
         }
     }
 
-    // 플레이 가능 영역에 이벤트 타일 생성
+    /// <summary>
+    /// 플레이 가능 영역에 이벤트 타일 생성
+    /// </summary>
     public void GenerateEventTiles()
     {
         CurrentGeneratePhase = MapGeneratePhase.EventTileGenerate;
@@ -359,9 +379,9 @@ public partial class AreaMapGenerator : MonoBehaviour
         // 보스 타일
         Map.CreateEventTile(_bossPosition.x, _bossPosition.y, AreaTileType.Boss);
         // 전투 타일
-        CreateTileWithWindow(3, _data.BattleTileNum, AreaTileType.Battle);
+        CreateEventTileWithWindow(3, _data.BattleTileNum, AreaTileType.Battle);
         // 인카운터 타일
-        CreateTileWithWindow(3, _data.EncounterTileNum, AreaTileType.Encounter);
+        CreateEventTileWithWindow(3, _data.EncounterTileNum, AreaTileType.Encounter);
         // 남은 빈 공간은 모두 일반 타일
         for (int z = _playableFieldZStart; z < _playableFieldZStart + _data.PlayableFieldHeight; z++)
         {
@@ -378,7 +398,7 @@ public partial class AreaMapGenerator : MonoBehaviour
     }
 
     // Window를 사용하여 이벤트 타일 생성. 랜덤성을 높이고자 한 시도
-    private void CreateTileWithWindow(int windowSize, int tilenum, AreaTileType tileType)
+    private void CreateEventTileWithWindow(int windowSize, int tilenum, AreaTileType tileType)
     {
         List<int> zWindowStarts = new();
         ResetWindowStartsList();
@@ -415,7 +435,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                 if (trycnt == 100)
                 {
                     // window로 생성 실패: 완전 랜덤
-                    createSuccess = ChooseTilePositionWithAllRandom(tileType, out x, out z);
+                    createSuccess = GetRandomEventTilePosition(tileType, out x, out z);
                     break;
                 }
             }
@@ -445,7 +465,7 @@ public partial class AreaMapGenerator : MonoBehaviour
     }
 
     // 완전한 랜덤으로 이벤트 타일 생성 위치 선택 시도
-    private bool ChooseTilePositionWithAllRandom(AreaTileType tileType, out int x, out int z)
+    private bool GetRandomEventTilePosition(AreaTileType tileType, out int x, out int z)
     {
         int trycnt = 0;
         while (true)
@@ -467,6 +487,9 @@ public partial class AreaMapGenerator : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// 전장의 안개 생성
+    /// </summary>
     public void GenerateFogOfWar()
     {
         CurrentGeneratePhase = MapGeneratePhase.FogOfWarGenerate;
