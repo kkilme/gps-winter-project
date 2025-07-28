@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class BerserkSpin : MeleeSkill
 {
-    public override ActionEffectRange EffectRange { get; protected set; } = new BerserkSpinEffectRange();
+    public override BattleActionEffectRange EffectRange { get; protected set; } = new BerserkSpinEffectRange();
     public override BattleActionTargetSelector TargetSelector { get; protected set; } = new OpponentSelector(AttackRangeType.Melee);
 
     protected override IEnumerator Attack(int coinHeadCount)

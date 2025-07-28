@@ -11,7 +11,7 @@ public abstract class BattleAction
                                                      // 전투에서 한 턴에 한 Creature만 Action을 실행하는 것이 보장되지 않는다면 풀링 + 팩토리 패턴같은 구조로 수정이 필요하게 됨.
     public BattleGridCell SelectedTargetCell { get; protected set; }
     public abstract BattleActionTargetSelector TargetSelector { get; protected set; } // abstract로 하여 자식이 구현(값 설정)을 반강제화함. 완전한 강제는 아니므로 결국 개발자의 몫.
-    public abstract ActionEffectRange EffectRange { get; protected set; }
+    public abstract BattleActionEffectRange EffectRange { get; protected set; }
     protected Animator _animator => Executor.Animator;
 
     #endregion

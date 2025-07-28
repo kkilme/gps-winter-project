@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class Move : BattleSkill
 {
-    public override ActionEffectRange EffectRange { get; protected set; } = new SingleRange();
+    public override BattleActionEffectRange EffectRange { get; protected set; } = new SingleRange();
     public override BattleActionTargetSelector TargetSelector { get; protected set; } = new MoveTargetSelector();
 
     public override IEnumerator Execute()

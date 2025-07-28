@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 대상 기준 1 x 2 범위
 /// </summary>
-public class OneByTwoRange : ActionEffectRange
+public class OneByTwoRange : BattleActionEffectRange
 {
     public override List<BattleGridCell> GetAffectedTargets(BattleGridCell selected)
     {

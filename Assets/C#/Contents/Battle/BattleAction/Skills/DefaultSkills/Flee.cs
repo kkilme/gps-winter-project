@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class Flee : BattleSkill
 {
-    public override ActionEffectRange EffectRange { get; protected set; } = new DummyRange();
+    public override BattleActionEffectRange EffectRange { get; protected set; } = new DummyRange();
     public override BattleActionTargetSelector TargetSelector { get; protected set; } = new DummySelector();
 
     public override IEnumerator Execute()

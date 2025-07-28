@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealPotionAction : ItemAction
 {
-    public override ActionEffectRange EffectRange { get; protected set; } = new SingleRange();
+    public override BattleActionEffectRange EffectRange { get; protected set; } = new SingleRange();
     public override BattleActionTargetSelector TargetSelector { get; protected set; } = new SelfSelector();
 
     public HealPotionAction(Item item) : base(item) { }

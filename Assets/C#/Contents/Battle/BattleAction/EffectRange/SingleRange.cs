@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class SingleRange : ActionEffectRange
+public class SingleRange : BattleActionEffectRange
 {
     public override List<BattleGridCell> GetAffectedTargets(BattleGridCell selected)
     {
