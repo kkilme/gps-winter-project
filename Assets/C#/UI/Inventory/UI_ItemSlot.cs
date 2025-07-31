@@ -1,9 +1,8 @@
-using System.Collections;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System;
 
 /// <summary>
 /// 인벤토리에서 한 칸의 슬롯 UI를 담당.
@@ -34,14 +33,15 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
 
     private int _quantity;
     private TextMeshProUGUI _quantityText;
-    public int Quantity { 
-        get => _quantity; 
-        set 
+    public int Quantity
+    {
+        get => _quantity;
+        set
         {
             if (_quantity != 0 && value == 0)
             {
                 UnbindItem();
-            } 
+            }
             else if (value > 1)
             {
                 go_quantity.SetActive(true);
@@ -52,11 +52,11 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
                 go_quantity.SetActive(false);
             }
             _quantity = value;
-        } 
+        }
     }
 
     /// <summary>
-    /// 새 아이템이 들어갈 수 있는 슬롯인지 여부
+    /// 새 아이템이 들어갈 수 있는 슬롯인지 여부.
     /// </summary>
     public bool IsEmpty => ItemInstanceData == null && ItemData == null && !_isCustomSlot;
     private bool _isCustomSlot;
@@ -107,12 +107,12 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
         float width, height;
 
         GridLayoutGroup gridLayout = transform.parent.GetComponent<GridLayoutGroup>();
-        if(gridLayout == null)
+        if (gridLayout == null)
         {
             RectTransform rect = GetComponent<RectTransform>();
             width = rect.rect.width;
             height = rect.rect.height;
-        } 
+        }
         else
         {
             width = gridLayout.cellSize.x;
@@ -206,8 +206,8 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
         if (ItemInstanceData != null)
         {
             ItemDetailUIFactory.CreateItemDetailUI(ItemInstanceData);
-        } 
-        else if(ItemData != null)
+        }
+        else if (ItemData != null)
         {
             ItemDetailUIFactory.CreateItemDetailUI(ItemData);
         }
@@ -215,7 +215,7 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if(_slotDesign != null) _slotImage.sprite = _slotDesign.GetDefaultSlotSprite();
+        if (_slotDesign != null) _slotImage.sprite = _slotDesign.GetDefaultSlotSprite();
         Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
     }
 
@@ -226,5 +226,10 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
         {
             OnClickAction?.Invoke(this);
         }
+    }
+
+    public void OnDestroy()
+    {
+        OnClickAction = null;
     }
 }

@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class FogOfWar : MonoBehaviour
 {   
-    //[SerializeField]
-    //private Sprite _fill;
-
     public void Show()
     {
         gameObject.SetActive(true);
@@ -21,5 +18,4 @@ public class FogOfWar : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
 }

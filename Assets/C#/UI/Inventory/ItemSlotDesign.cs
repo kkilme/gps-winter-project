@@ -1,8 +1,8 @@
-using System.Collections;
 using UnityEngine;
 
 /* NOTE:
  * 현재 디자인이 필요할 때마다 new()로 생성하는데, 디자인을 캐시하여 재사용할 수 있도록 개선 가능할 것으로 보임.
+ * 디자인을 ScriptableObject로 만들 수도 있어보임.
  */
 /// <summary>
 /// 아이템 슬롯의 디자인 정보를 보유하며, 디자인을 적용한 아이템 슬롯을 생성도 하는 클래스.
@@ -12,7 +12,7 @@ public abstract class ItemSlotDesign
     /// <summary>
     /// 커스텀 슬롯인지 여부: 아이템이 들어갈 수 없는 슬롯
     /// </summary>
-    protected abstract bool IsCustomSlot { get; set; }
+    protected virtual bool IsCustomSlot => false;
 
     /// <summary>
     /// 아이템 슬롯을 생성하여, 초기화 및 디자인을 적용 후 리턴.
@@ -25,6 +25,16 @@ public abstract class ItemSlotDesign
     }
 
     /// <summary>
+    /// static으로 캐시된 스프라이트를 로드하거나, 경로로부터 스프라이트를 로드하여 반환. (유틸 메소드)
+    /// </summary>
+    protected Sprite LoadSprite(ref Sprite cache, string path)
+    {
+        if (cache == null)
+            cache = Managers.ResourceMng.Load<Sprite>(path);
+        return cache;
+    }
+
+    /// <summary>
     /// 슬롯의 배경 이미지 스프라이트를 반환.
     /// </summary>
     public abstract Sprite GetDefaultSlotSprite();
@@ -32,7 +42,6 @@ public abstract class ItemSlotDesign
     /// <summary>
     /// 마우스 오버 시 변경될 슬롯의 배경 이미지 스프라이트를 반환.
     /// </summary>
-    /// <returns></returns>
     public abstract Sprite GetSlotSpriteOnMouseOver();
 
     /// <summary>
@@ -43,23 +52,18 @@ public abstract class ItemSlotDesign
 
 public class DefaultItemSlotDesign : ItemSlotDesign
 {
-    protected override bool IsCustomSlot { get; set; } = false;
     protected static Sprite _defaultSlotSprite;
     protected static Sprite _slotSpriteOnMouseOver;
     protected static Sprite _defaultContentSprite;
 
     public override Sprite GetDefaultSlotSprite()
     {
-        if (_defaultSlotSprite == null)
-            _defaultSlotSprite = Managers.ResourceMng.Load<Sprite>("Textures/Inventory/ItemSlot_Default");
-        return _defaultSlotSprite;
+        return LoadSprite(ref _defaultSlotSprite, "Textures/Inventory/ItemSlot_Default");
     }
 
     public override Sprite GetSlotSpriteOnMouseOver()
     {
-        if (_slotSpriteOnMouseOver == null)
-            _slotSpriteOnMouseOver = Managers.ResourceMng.Load<Sprite>("Textures/Inventory/ItemSlot_Mouseover_Default");
-        return _slotSpriteOnMouseOver;
+        return LoadSprite(ref _slotSpriteOnMouseOver, "Textures/Inventory/ItemSlot_Mouseover_Default");
     }
 
     public override Sprite GetDefaultContentSprite()
@@ -70,7 +74,6 @@ public class DefaultItemSlotDesign : ItemSlotDesign
 
 public class PlusIconItemSlotDesign : ItemSlotDesign
 {
-    protected override bool IsCustomSlot { get; set; } = false;
     protected static Sprite _defaultSlotSprite;
     protected static Sprite _slotSpriteOnMouseOver;
     protected static Sprite _defaultContentSprite;
@@ -78,67 +81,53 @@ public class PlusIconItemSlotDesign : ItemSlotDesign
 
     public override Sprite GetDefaultSlotSprite()
     {
-        if (_defaultSlotSprite == null)
-            _defaultSlotSprite = Managers.ResourceMng.Load<Sprite>("Textures/Inventory/ItemSlot_Default");
-        return _defaultSlotSprite;
+        return LoadSprite(ref _defaultSlotSprite, "Textures/Inventory/ItemSlot_Default");
     }
 
     public override Sprite GetSlotSpriteOnMouseOver()
     {
-        if (_slotSpriteOnMouseOver == null)
-            _slotSpriteOnMouseOver = Managers.ResourceMng.Load<Sprite>("Textures/Inventory/ItemSlot_Mouseover_Default");
-        return _slotSpriteOnMouseOver;
+        return LoadSprite(ref _slotSpriteOnMouseOver, "Textures/Inventory/ItemSlot_Mouseover_Default");
     }
 
     public override Sprite GetDefaultContentSprite()
     {
-        if(_defaultContentSprite == null)
-            _defaultContentSprite = Managers.ResourceMng.Load<Sprite>("Textures/PictoIcons/PictoIcon_Plus");
-        return _defaultContentSprite;
+        return LoadSprite(ref _defaultContentSprite, "Textures/PictoIcons/PictoIcon_Plus");
     }
 }
 
 public class EquipmentUnequipSlotDesign : ItemSlotDesign
 {
-    protected override bool IsCustomSlot { get; set; } = true;
+    protected override bool IsCustomSlot => true;
     protected static Sprite _defaultSlotSprite;
     protected static Sprite _slotSpriteOnMouseOver;
     protected static Sprite _defaultContentSprite;
 
     public override Sprite GetDefaultSlotSprite()
     {
-        if (_defaultSlotSprite == null)
-            _defaultSlotSprite = Managers.ResourceMng.Load<Sprite>("Textures/Inventory/ItemSlot_Default");
-        return _defaultSlotSprite;
+        return LoadSprite(ref _defaultSlotSprite, "Textures/Inventory/ItemSlot_Default");
     }
 
     public override Sprite GetSlotSpriteOnMouseOver()
     {
-        if (_slotSpriteOnMouseOver == null)
-            _slotSpriteOnMouseOver = Managers.ResourceMng.Load<Sprite>("Textures/Inventory/ItemSlot_Mouseover_Default");
-        return _slotSpriteOnMouseOver;
+        return LoadSprite(ref _slotSpriteOnMouseOver, "Textures/Inventory/ItemSlot_Mouseover_Default");
     }
 
     public override Sprite GetDefaultContentSprite()
     {
-        if (_defaultContentSprite == null)
-            _defaultContentSprite = Managers.ResourceMng.Load<Sprite>("Textures/PictoIcons/PictoIcon_X");
-        return _defaultContentSprite;
+        return LoadSprite(ref _defaultContentSprite, "Textures/PictoIcons/PictoIcon_X");
     }
 }
 
 public class QuestRewardSlotDesign : ItemSlotDesign
 {
-    protected override bool IsCustomSlot { get; set; } = true;
+    protected override bool IsCustomSlot => true;
     protected static Sprite _defaultSlotSprite;
     protected static Sprite _slotSpriteOnMouseOver;
     protected static Sprite _defaultContentSprite;
 
     public override Sprite GetDefaultSlotSprite()
     {
-        if (_defaultSlotSprite == null)
-            _defaultSlotSprite = Managers.ResourceMng.Load<Sprite>("Textures/Inventory/ItemSlot_GreenFrame");
-        return _defaultSlotSprite;
+        return LoadSprite(ref _defaultSlotSprite, "Textures/Inventory/ItemSlot_GreenFrame");
     }
 
     public override Sprite GetSlotSpriteOnMouseOver()

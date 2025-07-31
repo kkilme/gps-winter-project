@@ -10,7 +10,8 @@ public class UI_QuestItemSelectPopup : UI_Popup
 {
     enum GameObjects
     {
-        Inventory
+        Inventory,
+        Indicator_NoItems
     }
 
     enum Buttons
@@ -25,6 +26,7 @@ public class UI_QuestItemSelectPopup : UI_Popup
     {
         base.Init();
         Bind<GameObject>(typeof(GameObjects));
+        GetGameObject(GameObjects.Indicator_NoItems).SetActive(false);
         Bind<Button>(typeof(Buttons));
         GetButton(Buttons.Button_Close).onClick.AddListener(Close);
     }
@@ -41,15 +43,21 @@ public class UI_QuestItemSelectPopup : UI_Popup
 
         inventory.HardClear();
 
-        List<ItemInstanceData> items = Managers.InvMng.GetAllItemsOfType(ItemType.Consumable); // 현재 Area에 가져갈 수 있는 아이템은 소모품 뿐
+        List<ItemInstanceData> items = Managers.InvMng.GetAllItemsOfType(ItemType.Consumable); // Area에 가져갈 수 있는 아이템은 소모품 뿐
         foreach (var item in items)
         {
-            inventory.AddItem(item.ItemData, item.Quantity);
+            AddItem(item.ItemData, item.Quantity);
         }
 
         foreach (var slot in detailPanel.ItemInventory.InventorySlots)
         {
-            inventory.RemoveItem(slot.ItemData); // 이미 유저가 가져가고자 선택한 아이템 제거
+            PopupInventory.RemoveItem(slot.ItemData, destroySlot: true); // 이미 유저가 가져가고자 선택한 아이템 제거
+        }
+
+        // 아이템이 하나도 없을 경우, 아이템 없다는 문구 표시
+        if (PopupInventory.IsEmpty())
+        {
+            GetGameObject(GameObjects.Indicator_NoItems).SetActive(true);
         }
 
         ScrollRect scrollRect = GetComponentInChildren<ScrollRect>();
@@ -63,8 +71,33 @@ public class UI_QuestItemSelectPopup : UI_Popup
     {
         if (selectedSlot.ItemData == null || _detailPanel.ItemInventory.IsFull()) return;
 
-        PopupInventory.RemoveItem(selectedSlot, quantity: 1);
         _detailPanel.AddItem(selectedSlot.ItemData);
+        RemoveItem(selectedSlot.ItemData);
+    }
+
+    /// <summary>
+    /// PopupInventory에 아이템 추가
+    /// </summary>
+    public void AddItem(ItemData itemData, int quantity = 1)
+    {
+        if(itemData == null) return;
+
+        GetGameObject(GameObjects.Indicator_NoItems).SetActive(false);
+        PopupInventory.AddItem(itemData, quantity, true);
+    }
+
+    /// <summary>
+    /// PopupInventory에서 아이템 제거
+    /// </summary>
+    public void RemoveItem(ItemData itemData)
+    {
+        if(itemData == null) return;
+
+        PopupInventory.RemoveItem(itemData, destroySlot: true);
+        if (PopupInventory.IsEmpty())
+        {
+            GetGameObject(GameObjects.Indicator_NoItems).SetActive(true);
+        }
     }
 
     public override void Close()

@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
-using System.Linq;
 
 /// <summary>
 /// 게임에서 사용되는 모든 인벤토리 형식 UI에 사용
@@ -45,7 +45,7 @@ public class UI_Inventory : UI_Base
     }
 
     /// <summary>
-    /// 새로운 slot을 생성하여 자식으로 추가. 성공 여부 반환.
+    /// 새로운 slot을 생성하여 자식으로 추가.
     /// </summary>
     public void AddEmptySlot()
     {
@@ -56,7 +56,7 @@ public class UI_Inventory : UI_Base
     }
 
     /// <summary>
-    /// 외부에서 생성한 슬롯 추가. 주로 아이템이 아닌 요소를 슬롯에 할당하기 위해 사용. 인벤토리 최대 크기를 무시함.
+    /// 외부에서 생성한 슬롯 추가. 주로 아이템이 아닌 요소를 커스텀으로 할당한 슬롯을 추가하기 위해 사용. 인벤토리 최대 크기를 무시함.
     /// </summary>
     public void AddSlot(UI_ItemSlot itemSlot, bool addDefaultActionCallback = false)
     {
@@ -71,28 +71,14 @@ public class UI_Inventory : UI_Base
     /// <summary>
     /// 적절한 슬롯을 찾거나 생성하여 인벤토리 슬롯에 아이템 인스턴스 데이터를 바인딩.
     /// </summary>
-    /// <param name="applyStackLimit"> 스택 제한을 적용할지 여부. 기본값은 true.</param>
-    public void AddItem(ItemInstanceData itemInstanceData, bool applyStackLimit = true)
+    public void AddItem(ItemInstanceData itemInstanceData)
     {
-        if (itemInstanceData == null) return;
+        if (itemInstanceData == null || itemInstanceData.Quantity <= 0) return;
 
-        int left = itemInstanceData.Quantity; // 장비의 경우 1로 고정
+        int left = itemInstanceData.Quantity;
+        int maxStack = itemInstanceData.ItemData.MaxStack;
 
-        int maxStack = applyStackLimit ? itemInstanceData.ItemData.MaxStack : 9999; // 스택 제한이 적용되지 않는 경우 9999로 설정
-        // 먼저 스택 가능한 슬롯을 찾고 추가
-        foreach (var slot in InventorySlots)
-        {
-            if (!slot.IsEmpty && slot.ItemInstanceData == itemInstanceData && slot.Quantity < maxStack)
-            {
-                int canAdd = slot.ItemData.MaxStack - slot.Quantity;
-                int toAdd = Mathf.Min(canAdd, left);
-                slot.Quantity += toAdd;
-                left -= toAdd;
-                if (left <= 0)
-                    return;
-            }
-        }
-        // 남은 수량이 있으면 빈 슬롯을 찾거나 만들어서 추가
+        // 빈 슬롯을 찾거나 만들어서 추가
         while (left > 0)
         {
             if (IsFull())
@@ -119,68 +105,80 @@ public class UI_Inventory : UI_Base
     /// <summary>
     /// 적절한 슬롯을 찾거나 생성하여 인벤토리 슬롯에 아이템 데이터를 바인딩.
     /// </summary>
-    /// <param name="enableStack"> 같은 아이템일 경우 스택을 할지 여부. 기본값은 false.</param>
+    /// <param name="enableStack"> 다른 칸에 같은 아이템이 있을 경우 스택을 할지 여부. 기본값은 false.</param>
     public void AddItem(ItemData itemData, int quantity = 1, bool enableStack = false)
     {
-        if (itemData == null) return;
+        if (itemData == null || quantity <= 0) return;
 
-        if (enableStack)
+        if (enableStack) // 스택을 허용하는 경우
         {
+            int left = quantity;
             // 스택 가능한 슬롯을 찾고 추가
-            UI_ItemSlot slot = InventorySlots.Find(s => s.ItemData == itemData);
-            slot.Quantity += quantity;
-            return;
-        }
-
-        // 빈 슬롯을 찾거나 만들어서 추가
-        UI_ItemSlot emptySlot = InventorySlots.Find(s => s.IsEmpty);
-        if (emptySlot == null)
-        {
-            if (IsFull())
+            foreach (var slot in InventorySlots)
             {
-                Debug.LogWarning($"[UI_Inventory] Could not add {itemData.Name}. Inventory is full!");
-                return;
+                if (!slot.IsEmpty && slot.ItemData == itemData && slot.Quantity < itemData.MaxStack)
+                {
+                    int canAdd = itemData.MaxStack - slot.Quantity;
+                    int toAdd = Mathf.Min(canAdd, left);
+                    slot.Quantity += toAdd;
+                    left -= toAdd;
+                    if (left <= 0)
+                        return;
+                }
             }
-            AddEmptySlot();
-            emptySlot = InventorySlots[^1];
+
+            // 빈 슬롯을 찾거나 만들어서 추가
+            while (left > 0)
+            {
+                if (IsFull())
+                {
+                    Debug.LogWarning($"[UI_Inventory] Could not add {itemData.Name} * {left}. Inventory is full!");
+                    break;
+                }
+
+                UI_ItemSlot emptySlot = InventorySlots.Find(s => s.IsEmpty);
+                if (emptySlot == null)
+                {
+                    AddEmptySlot();
+                    emptySlot = InventorySlots[^1];
+                }
+
+                int toAdd = Mathf.Min(itemData.MaxStack, left);
+                emptySlot.BindItem(itemData, toAdd);
+                left -= toAdd;
+            }
+        }
+        else // 스택을 하지 않고 새로운 슬롯에 quantity만큼 추가
+        {
+            UI_ItemSlot emptySlot = InventorySlots.Find(s => s.IsEmpty);
+            if (emptySlot == null)
+            {
+                AddEmptySlot();
+                emptySlot = InventorySlots[^1];
+            }
+            emptySlot.BindItem(itemData, quantity);
         }
 
-        emptySlot.BindItem(itemData, quantity);
     }
 
     /// <summary>
-    /// itemInstanceData를 quantity만큼 인벤토리에서 제거 (뒤 슬롯부터 제거)
+    /// itemInstanceData를 인벤토리에서 제거
     /// </summary>
-    public void RemoveItem(ItemInstanceData itemInstanceData, int quantity = 1)
+    public void RemoveItem(ItemInstanceData itemInstanceData, bool destroySlot = false)
     {
         if (itemInstanceData == null) return;
 
-        while (quantity > 0)
+        // 스택 가능한 슬롯을 찾고 추가
+        foreach (var slot in InventorySlots)
         {
-            // 뒤에서부터 찾기
-            UI_ItemSlot slot = null;
-            for (int i = InventorySlots.Count - 1; i >= 0; i--)
+            if (!slot.IsEmpty && slot.ItemInstanceData == itemInstanceData)
             {
-                if (InventorySlots[i].ItemInstanceData == itemInstanceData)
-                {
-                    slot = InventorySlots[i];
-                    break;
-                }
-            }
-            if (slot == null)
-            {
-                Debug.LogWarning($"[UI_Inventory] Could not remove item instance: (ItemInstancedDataId{itemInstanceData.InstanceId} : {itemInstanceData.ItemData.Name}) * {quantity}. Does not exist in inventory!");
-                break;
-            }
-            if (quantity >= slot.Quantity)
-            {
-                quantity -= slot.Quantity;
                 slot.UnbindItem();
-            }
-            else
-            {
-                slot.Quantity -= quantity;
-                quantity = 0;
+                if(destroySlot)
+                {
+                    InventorySlots.Remove(slot);
+                    Destroy(slot.gameObject); // 슬롯 오브젝트 파괴
+                }
             }
         }
     }
@@ -188,7 +186,7 @@ public class UI_Inventory : UI_Base
     /// <summary>
     /// itemData를 quantity만큼 인벤토리에서 제거 (뒤 슬롯부터 제거)
     /// </summary>
-    public void RemoveItem(ItemData itemData, int quantity = 1)
+    public void RemoveItem(ItemData itemData, int quantity = 1, bool destroySlot = false)
     {
         if (itemData == null) return;
 
@@ -213,6 +211,11 @@ public class UI_Inventory : UI_Base
             {
                 quantity -= slot.Quantity;
                 slot.UnbindItem();
+                if (destroySlot)
+                {
+                    InventorySlots.Remove(slot);
+                    Destroy(slot.gameObject); // 슬롯 오브젝트 파괴
+                }
             }
             else
             {
@@ -226,7 +229,7 @@ public class UI_Inventory : UI_Base
     /// 특정 itemSlot에 바인딩된 item을 quantity만큼 제거.
     /// </summary>
     /// <remarks> 해당 슬롯의 Quantity가 제거하고자 하는 quantity보다 적다면 무시됨.</remarks>
-    public void RemoveItem(UI_ItemSlot itemSlot, int quantity = 1)
+    public void RemoveItem(UI_ItemSlot itemSlot, int quantity = 1, bool destroySlot = false)
     {
         if (itemSlot == null) return;
 
@@ -234,19 +237,36 @@ public class UI_Inventory : UI_Base
         if (slot == null || slot.IsEmpty || slot.Quantity < quantity) return;
 
         slot.Quantity -= quantity;
+        if(slot.Quantity <= 0)
+        {
+            slot.UnbindItem();
+            if (destroySlot)
+            {
+                InventorySlots.Remove(slot);
+                Destroy(slot.gameObject); // 슬롯 오브젝트 파괴
+            }
+        }
     }
 
-    public void UnbindSlot(UI_ItemSlot itemSlot)
+    /// <summary>
+    /// 특정 슬롯에서 아이템 바인딩 해제.
+    /// </summary>
+    public void UnbindSlot(UI_ItemSlot itemSlot, bool destroySlot = false)
     {
         int idx = InventorySlots.FindIndex(slot => slot == itemSlot);
         if(idx >= 0)
         {
             itemSlot.UnbindItem();
+            if (destroySlot)
+            {
+                InventorySlots.Remove(itemSlot);
+                Destroy(itemSlot.gameObject); // 슬롯 오브젝트 파괴
+            }
         }
     }
 
     /// <summary>
-    /// 인벤토리 슬롯 UI의 각 아이템 인스턴스별로, 실제 인벤토리 매니저의 데이터와 수량이 일치하는지 검증하고, 초과 시 UI의 수량을 조정.
+    /// 인벤토리 슬롯 UI의 각 아이템 인스턴스별로, 실제 인벤토리 매니저의 데이터 및 수량과 일치하는지 검증하고, 초과 시 UI 강제 조정.
     /// </summary>
     public void ValidateInventory()
     {
@@ -299,10 +319,22 @@ public class UI_Inventory : UI_Base
         }
     }
 
+    /// <summary>
+    /// 인벤토리가 가득 차있는지 여부. 즉, 아이템이 바인딩 된 슬롯 개수가 인벤토리의 _maxSize 이상인지 여부.
+    /// </summary>
     public bool IsFull()
     {
         int notEmptySlotCnt = InventorySlots.Count(slot => !slot.IsEmpty);
         return notEmptySlotCnt >= _maxSize;
+    }
+
+    /// <summary>
+    /// 인벤토리가 비어있는지 여부. 즉, 아이템이 바인딩 된 슬롯이 하나라도 존재하는 지 여부.
+    /// </summary>
+    public bool IsEmpty()
+    {
+        int notEmptySlotCnt = InventorySlots.Count(slot => !slot.IsEmpty);
+        return notEmptySlotCnt == 0;
     }
 
     /// <summary>

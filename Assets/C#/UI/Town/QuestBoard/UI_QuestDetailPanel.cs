@@ -107,7 +107,7 @@ public class UI_QuestDetailPanel : UI_Base
             // 이미 아이템이 담긴 슬롯 클릭 시, 아이템을 제거함
             if (_questItemSelectPopup != null)
             {
-                _questItemSelectPopup.PopupInventory.AddItem(selectedSlot.ItemData, enableStack: true); // 아이템 제거 전, 팝업창에 다시 아이템 추가
+                _questItemSelectPopup.AddItem(selectedSlot.ItemData); // 아이템 제거 전, 팝업창에 다시 아이템 추가
             }
 
             ItemInventory.UnbindSlot(selectedSlot);
