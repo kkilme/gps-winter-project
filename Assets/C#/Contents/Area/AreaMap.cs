@@ -300,14 +300,12 @@ public class AreaMap
         void Explore(int x, int z, int currentDistance)
         {
             var pos = new Vector2Int(x, z);
-            if (visibleTiles.Contains(pos)) return;
             visibleTiles.Add(pos);
-
             if (currentDistance >= visionRange) return;
 
             foreach (var neighbor in GetNeighbors(x, z))
             {
-                if (BaseTileMap[z, x].IsObstacleGenerated) // TileTypeMap == Obstacle을 사용하지 않는 이유: UnplayableField에서 모든 타일의 타입은 OutOfField로 지정되기 때문에 Obstacle Type이 존재하지 않음.
+                if (BaseTileMap[neighbor.y, neighbor.x].IsObstacleGenerated) // TileTypeMap == Obstacle을 사용하지 않는 이유: UnplayableField에서 모든 타일의 타입은 OutOfField로 지정되기 때문에 Obstacle Type이 존재하지 않음.
                     Explore(neighbor.x, neighbor.y, currentDistance + 2); // 장애물: 거리 2
                 else
                     Explore(neighbor.x, neighbor.y, currentDistance + 1); // 일반 타일: 거리 1
