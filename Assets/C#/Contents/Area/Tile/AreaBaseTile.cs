@@ -12,6 +12,8 @@ public class AreaBaseTile : MonoBehaviour
 {   
     // 플레이어가 밟고 서는 타일 오브젝트 그 자체
     private GameObject _tile;
+    private MaterialPropertyBlock _mpb;
+    private Renderer _tileRenderer;
     private Material _tileMaterial;
 
     // 타일 위의 오브젝트
@@ -22,13 +24,17 @@ public class AreaBaseTile : MonoBehaviour
     public void Init()
     {
         _tile = gameObject;
-        _tileMaterial = Application.isPlaying ? GetComponent<Renderer>().material : GetComponent<Renderer>().sharedMaterial; // Material 인스턴스화. Editor상에서 인스턴스화 시 치명적이기 때문에 따로 처리. 
-
+        _tileRenderer = GetComponent<Renderer>();
+        //_tileMaterial = Application.isPlaying ? GetComponent<Renderer>().material : GetComponent<Renderer>().sharedMaterial; // Material 인스턴스화. Editor상에서 인스턴스화 시 치명적이기 때문에 따로 처리. 
+        
+        _mpb ??= new MaterialPropertyBlock();
         _obstacle = gameObject.transform.GetChild(0).gameObject;
         _obstacle.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // 각도를 랜덤으로 하여 랜덤성 부여
 
         DisableObstacle();
     }
+
+    private Coroutine _brightnessRoutine;
 
     /// <summary>
     /// 타일 & 장애물 밝기 변경
@@ -37,10 +43,33 @@ public class AreaBaseTile : MonoBehaviour
     public void SetBrightness(bool isVisible)
     {
         Color targetColor = isVisible ? Color.white : Color.gray * 0.5f;
-        _tileMaterial.DOColor(targetColor, 0.5f); // 타일은 Material Instance를 사용하여 DOTween으로 색상 변경
+        //_tileMaterial.DOColor(targetColor, 0.5f); // 타일은 Material Instance를 사용하여 DOTween으로 색상 변경
+
+        if (_brightnessRoutine != null)
+            StopCoroutine(_brightnessRoutine);
+        _brightnessRoutine = StartCoroutine(LerpBrightness(targetColor, 0.5f));
 
         var renderers = _obstacle.GetComponentsInChildren<Renderer>();
         RenderUtility.SetRenderersBrightness(renderers, isVisible ? 1f : 0.4f); // 장애물은 Material Property Block을 사용하여 색상 변경
+    }
+
+    private IEnumerator LerpBrightness(Color targetColor, float duration)
+    {
+        _tileRenderer.GetPropertyBlock(_mpb);
+        Color currentColor = _mpb.GetColor("_Color");
+
+        float time = 0f;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            Color lerped = Color.Lerp(currentColor, targetColor, time / duration);
+            _mpb.SetColor("_Color", lerped);
+            _tileRenderer.SetPropertyBlock(_mpb);
+            yield return null;
+        }
+
+        _mpb.SetColor("_Color", targetColor);
+        _tileRenderer.SetPropertyBlock(_mpb);
     }
 
     /// <summary>

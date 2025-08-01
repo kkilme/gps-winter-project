@@ -52,7 +52,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 435858176134575976}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -154,6 +154,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3688812524851206121}
     m_Modifications:
+    - target: {fileID: 1864494478448698137, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1864494479475754186, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3799422192898032982, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -214,6 +222,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock Cluster 01
       objectReference: {fileID: 0}
+    - target: {fileID: 3799422192898032983, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}
 --- !u!4 &4554757780915502633 stripped
@@ -231,6 +243,10 @@ PrefabInstance:
     - target: {fileID: 3189782229289018632, guid: 8013c77a1a6316e438f53329de117512, type: 3}
       propertyPath: m_Name
       value: Grass 01B One Sided (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3189782229289018632, guid: 8013c77a1a6316e438f53329de117512, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3189782229289515304, guid: 8013c77a1a6316e438f53329de117512, type: 3}
       propertyPath: m_RootOrder
@@ -294,6 +310,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass 01B One Sided
       objectReference: {fileID: 0}
+    - target: {fileID: 3189782229289018632, guid: 8013c77a1a6316e438f53329de117512, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3189782229289515304, guid: 8013c77a1a6316e438f53329de117512, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -352,6 +372,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3688812524851206121}
     m_Modifications:
+    - target: {fileID: 1864494478448698137, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1864494479475754186, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3799422192898032982, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -399,6 +427,10 @@ PrefabInstance:
     - target: {fileID: 3799422192898032983, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}
       propertyPath: m_Name
       value: Rock Cluster 01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3799422192898032983, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 751383722de18bd4caf0482bb995e4f3, type: 3}

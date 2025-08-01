@@ -19,10 +19,8 @@ public abstract class AreaEventTile: MonoBehaviour
     protected SpriteRenderer _fill;     // 셀 내부 스프라이트
     protected GameObject _icon;           // 아이콘 오브젝트
 
-    protected Color _outlineColor;      // 모서리 스프라이트 색
-    protected Color _fillColor;         // 내부 스프라이트 색
-    protected Color _outlineHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 indicator 색
-    protected Color _fillHighlightColor; // 플레이어의 이동 가능 지점을 보여줄 때 하이라이트되어 변하는 fill 색
+    [SerializeField]
+    protected EventTileColorData _colorData; // 타일 색상 데이터
 
     protected Tweener _outlineColorTween; // DoTween을 통해 TileObject의 스프라이트 색을 바꾸는데, Tweener는 이 작업을 의미함. 작업 도중에 취소 시 사용.
     protected Tweener _fillColorTween;
@@ -32,18 +30,17 @@ public abstract class AreaEventTile: MonoBehaviour
     public void Init()
     {   
         InitSprite();
-        InitColor();
         InitMesh();
     }
 
     private void InitSprite()
     {
-        _outline = transform.Find("outline")?.GetComponent<SpriteRenderer>();
         _fill = transform.Find("fill")?.GetComponent<SpriteRenderer>();
+        _fill.color = _colorData.FillDefaultColor;
+        _outline = transform.Find("outline")?.GetComponent<SpriteRenderer>();
+        _outline.color = _colorData.OutlineDefaultColor;
         _icon = transform.Find("icon")?.gameObject;
     }
-
-    protected abstract void InitColor();
 
     /// <summary>
     /// Sprite로 Mesh를 만들고 Collider에 적용: raycast를 위해 필요
@@ -62,12 +59,12 @@ public abstract class AreaEventTile: MonoBehaviour
         switch (changeType)
         {
             case TileColorChangeType.Highlight:
-                _outlineColorTween = _outline.DOColor(_outlineHighlightColor, duration).OnComplete(() => { _outlineColorTween = null; });
-                _fillColorTween = _fill.DOColor(_fillHighlightColor, duration).OnComplete(() => { _fillColorTween = null; });
+                _fillColorTween = _fill.DOColor(_colorData.FillHighlightColor, duration).OnComplete(() => { _fillColorTween = null; });
+                _outlineColorTween = _outline.DOColor(_colorData.OutlineHighlightColor, duration).OnComplete(() => { _outlineColorTween = null; });
                 break;
             case TileColorChangeType.Reset:
-                _outlineColorTween = _outline.DOColor(_outlineColor, duration).OnComplete(() => { _outlineColorTween = null; });
-                _fillColorTween = _fill.DOColor(_fillColor, duration).OnComplete(() => { _fillColorTween = null; });
+                _fillColorTween = _fill.DOColor(_colorData.FillDefaultColor, duration).OnComplete(() => { _fillColorTween = null; });
+                _outlineColorTween = _outline.DOColor(_colorData.OutlineDefaultColor, duration).OnComplete(() => { _outlineColorTween = null; });
                 break;
         }
 
