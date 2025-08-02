@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 // Pooling한 GameObject들을 Stack으로 관리
@@ -34,11 +32,11 @@ public class Pool
     {
         if (poolAble == null)
             return;
-        
+
         poolAble.transform.SetParent(Root);
         poolAble.gameObject.SetActive(false);
         poolAble.IsUsing = false;
-        
+
         _poolStack.Push(poolAble);
     }
 
@@ -46,14 +44,14 @@ public class Pool
     public PoolAble Pop(Transform parent)
     {
         PoolAble poolAble;
-        
+
         if (_poolStack.Count > 0)
             poolAble = _poolStack.Pop();
         else
         {
             poolAble = Create();
         }
-        
+
         poolAble.gameObject.SetActive(true);
 
         poolAble.transform.SetParent(parent ?? Managers.SceneMng.CurrentScene.transform);

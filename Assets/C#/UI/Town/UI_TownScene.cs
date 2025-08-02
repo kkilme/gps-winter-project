@@ -1,8 +1,4 @@
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UI_TownScene : UI_Scene
@@ -57,7 +53,7 @@ public class UI_TownScene : UI_Scene
 
         GetButton(Buttons.Button_Inventory).onClick.AddListener(() => { ShowTownUI(InventoryUI); });
         GetButton(Buttons.Button_HeroList).onClick.AddListener(() => { ShowTownUI(HeroListUI); });
-        GetButton(Buttons.Button_Store).onClick.AddListener(() =>{ ShowTownUI(StoreUI); });
+        GetButton(Buttons.Button_Store).onClick.AddListener(() => { ShowTownUI(StoreUI); });
         GetButton(Buttons.Button_Quest).onClick.AddListener(() => { ShowTownUI(QuestBoardUI); });
         GetButton(Buttons.Button_PartyFormation).onClick.AddListener(() => { ShowTownUI(PartyFormationUI); });
     }

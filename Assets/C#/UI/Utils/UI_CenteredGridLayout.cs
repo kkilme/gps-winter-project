@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,9 +15,9 @@ public class UI_CenteredGridLayout : MonoBehaviour
 
     private void OnRectTransformDimensionsChange() => UpdateLayout();
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     private void OnValidate() => UpdateLayout();
-    #endif
+#endif
 
     private void UpdateLayout()
     {

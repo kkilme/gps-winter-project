@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UI_Popup : UI_Base
@@ -12,9 +10,9 @@ public class UI_Popup : UI_Base
 
     public override void Init()
     {
-        if(_panel == null)
+        if (_panel == null)
         {
-            if(transform.childCount > 0)
+            if (transform.childCount > 0)
             {
                 _panel = transform.GetChild(0).GetComponent<RectTransform>();
             }

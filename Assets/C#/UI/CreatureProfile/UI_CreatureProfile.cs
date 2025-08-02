@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -141,7 +140,7 @@ public class UI_CreatureProfile : UI_Base
 
     private void OnDestroy()
     {
-        if(_bindingCreature != null)
+        if (_bindingCreature != null)
         {
             var stat = _bindingCreature.CreatureStat;
             stat.OnStatChanged -= UpdateStatProfile;

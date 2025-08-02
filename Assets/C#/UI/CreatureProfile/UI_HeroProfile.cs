@@ -26,7 +26,7 @@ public class UI_HeroProfile : UI_CreatureProfile
         var stat = hero.CreatureStat;
         stat.OnStatChanged -= UpdateStatProfile;
         stat.OnStatChanged += UpdateStatProfile;
-        
+
         heroInstanceData.OnNameChanged -= UpdateName;
         heroInstanceData.OnNameChanged += UpdateName;
         UpdateName(heroInstanceData);

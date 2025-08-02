@@ -44,4 +44,3 @@ public class UI_BattleVictory : UI_Base
         return seq.Play();
     }
 }
-    

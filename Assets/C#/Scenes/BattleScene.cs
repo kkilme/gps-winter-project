@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
 public class BattleScene : BaseScene
-{   
+{
     protected override void Init()
     {
         SceneType = SceneType.BattleScene;
@@ -25,7 +22,7 @@ public class BattleScene : BaseScene
             int testSquadId = GlobalValues.MONSTERSQUAD_SQUAD1_ID;
             // TODO: for test
             // BattleScene에서 시작하여 플레이 테스트 시에만 실행
-            for(int i = 0; i<7; i++) Managers.AreaMng.Items.Add(new HealPotion(GlobalValues.ITEM_HEALPOTION_ID)); // 테스트용 아이템 추가
+            for (int i = 0; i < 7; i++) Managers.AreaMng.Items.Add(new HealPotion(GlobalValues.ITEM_HEALPOTION_ID)); // 테스트용 아이템 추가
             Managers.HeroMng.SpawnHeroParty();
             InitBattle(testSquadId + 2, Managers.DataMng.AreaDataDict[AreaName.Forest].BattleFieldName);
         }
@@ -39,7 +36,7 @@ public class BattleScene : BaseScene
         {
             StartCoroutine(Managers.BattleMng.NextTurn());
         }
-        if(Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             Managers.BattleMng.FinishBattle(BattleResultType.Victory);
         }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,14 +13,14 @@ public class OrcAI : MonsterAI
         List<BattleSkill> skillList = new List<BattleSkill>(_skillList);
 
         var berserkSpin = skillList.Find(s => s is BerserkSpin) as BerserkSpin;
-        if(_berserkSpinCooldown == 0 && berserkSpin != null)
+        if (_berserkSpinCooldown == 0 && berserkSpin != null)
         {
             SetupBerserkSpin(berserkSpin);
             return berserkSpin;
         }
 
-        _berserkSpinCooldown = Mathf.Max(0, _berserkSpinCooldown-1);
-        if(berserkSpin != null) skillList.Remove(berserkSpin);
+        _berserkSpinCooldown = Mathf.Max(0, _berserkSpinCooldown - 1);
+        if (berserkSpin != null) skillList.Remove(berserkSpin);
 
         while (skillList.Count > 0)
         {
@@ -54,7 +53,7 @@ public class OrcAI : MonsterAI
         BerserkSpinEffectRange range = berserkSpin.EffectRange as BerserkSpinEffectRange;
 
         int maxTargetCount = 0;
- 
+
         foreach (var targetable in targetables)
         {
             maxTargetCount = Mathf.Max(maxTargetCount, range.GetAffectedTargets(targetable).Count);
@@ -64,11 +63,11 @@ public class OrcAI : MonsterAI
         foreach (var targetable in targetables)
         {
             // 최대로 많은 적을 공격할 수 있는 타겟을 지정한다.
-            if(maxTargetCount == range.GetAffectedTargets(targetable).Count) candidates.Add(targetable);
+            if (maxTargetCount == range.GetAffectedTargets(targetable).Count) candidates.Add(targetable);
         }
 
         berserkSpin.SetTarget(candidates[Random.Range(0, candidates.Count)]);
         _berserkSpinCooldown = BERSERKSPIN_COLLDOWN;
     }
-    
+
 }

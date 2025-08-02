@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -77,7 +76,7 @@ public class UI_EquipmentSelectPopup : UI_Popup
         if (selectedSlot.ItemInstanceData == null) return;
 
         if (selectedSlot.ItemInstanceData is not EquipmentInstanceData equipmentInstanceData) return;
-        
+
         _bindingEquipmentSlot.ChangeEquipment(equipmentInstanceData);
         Close();
     }

@@ -1,6 +1,5 @@
 using DG.Tweening;
 using UnityEngine;
-using System.Collections;
 
 public enum TileColorChangeType
 {
@@ -11,7 +10,7 @@ public enum TileColorChangeType
 
 // 플레이 가능 영역에 생성되는, 플레이어가 이동 가능한 이벤트 타일.
 // Note: 플레이어가 밟고 서있는 육각형 블록 게임오브젝트는 AreaBaseTile
-public abstract class AreaEventTile: MonoBehaviour           
+public abstract class AreaEventTile : MonoBehaviour
 {
     public AreaTileType TileType;
 
@@ -28,7 +27,7 @@ public abstract class AreaEventTile: MonoBehaviour
     protected bool _willBeDestroyed = false; // 타일이 파괴될 예정인지 여부
 
     public void Init()
-    {   
+    {
         InitSprite();
         InitMesh();
     }
@@ -53,7 +52,7 @@ public abstract class AreaEventTile: MonoBehaviour
 
     public void ChangeColor(TileColorChangeType changeType, float duration = 0.3f)
     {
-        if(_willBeDestroyed) return; // 타일이 파괴될 예정이라면 색을 바꾸지 않음
+        if (_willBeDestroyed) return; // 타일이 파괴될 예정이라면 색을 바꾸지 않음
 
         KillColorTween();
         switch (changeType)

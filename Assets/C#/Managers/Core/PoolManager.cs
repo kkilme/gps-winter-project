@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,14 +35,14 @@ public class PoolManager
             GameObject.Destroy(poolAble.gameObject);
             return;
         }
-        
+
         _poolDic[name].Push(poolAble);
     }
 
     // original의 이름에 해당하는 Pool을 parent를 부모 오브젝트로 설정한 후 Pop
     public PoolAble Pop(GameObject original, Transform parent = null)
     {
-        if(_poolDic.ContainsKey(original.name) == false)
+        if (_poolDic.ContainsKey(original.name) == false)
             CreatePool(original);
 
         return _poolDic[original.name].Pop(parent);
@@ -54,10 +53,10 @@ public class PoolManager
     {
         if (_poolDic.ContainsKey(name) == false)
             return null;
-        
+
         return _poolDic[name].Original;
     }
-    
+
     public void Clear()
     {
         foreach (Transform child in _root)

@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 
@@ -52,7 +51,7 @@ public static class UIUtility
         basePos += (Vector3)offset;
 
         Vector3 localPos = basePos;
-        if(target.parent != null) localPos = target.parent.InverseTransformPoint(basePos); // 부모가 있다면 로컬 좌표로 변환
+        if (target.parent != null) localPos = target.parent.InverseTransformPoint(basePos); // 부모가 있다면 로컬 좌표로 변환
 
         //Debug.Log($"Setting position for {target.name} relative to {reference.name} at {localPos} in {direction} direction with offset {offset}.");
 
@@ -83,7 +82,7 @@ public static class UIUtility
     {
         RectTransform referenceRect = reference.GetComponent<RectTransform>();
         RectTransform targetRect = target.GetComponent<RectTransform>();
-        if(referenceRect == null || targetRect == null)
+        if (referenceRect == null || targetRect == null)
         {
             Debug.LogError("Both GameObjects must have RectTransform components.");
             return;

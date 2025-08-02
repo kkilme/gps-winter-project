@@ -1,13 +1,12 @@
-using System.Collections;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 
 public class UI_EncounterResultLine : UI_Base
 {
     enum Texts
     {
-        Text_CoinCount, 
+        Text_CoinCount,
         Text_Percent,
         Text_ResultDescription
     }

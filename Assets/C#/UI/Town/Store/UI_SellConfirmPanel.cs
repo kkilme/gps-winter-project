@@ -1,8 +1,7 @@
-using System.Collections;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 /// <summary>
 /// TownStore의 SellPanel에서 아이템 판매를 확인하는 패널 UI. 개수 설정 및 판매 버튼을 포함.
@@ -44,7 +43,7 @@ public class UI_SellConfirmPanel : UI_Base
 
     private RectTransform _rect;
 
-    public override void Init(){}
+    public override void Init() { }
 
     public void LateInit()
     {

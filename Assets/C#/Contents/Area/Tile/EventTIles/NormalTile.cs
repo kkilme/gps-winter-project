@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public sealed class NormalTile : AreaEventTile
 {
     public override void OnTileEnter()

@@ -1,5 +1,5 @@
-using UnityEngine.UI;
 using System;
+using UnityEngine.UI;
 
 public class UI_ChooseTarget_Area : UI_Base
 {

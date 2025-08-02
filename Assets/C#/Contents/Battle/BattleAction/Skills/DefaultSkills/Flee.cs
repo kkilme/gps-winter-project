@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Flee : BattleSkill
 {
@@ -32,7 +31,7 @@ public class Flee : BattleSkill
         // 도망가기
         Executor.transform.DOMove(fleeTargetPos, GameUtility.CalculateMovetime(Executor.transform.position, fleeTargetPos));
         _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, true);
-      
+
         yield return new WaitForSeconds(2f);
 
         _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, false);

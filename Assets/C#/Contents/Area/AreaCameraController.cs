@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
 public class AreaCameraController : MonoBehaviour
 {
     #region field
-    public bool Freeze { get;  set; } // true: 카메라 정지
+    public bool Freeze { get; set; } // true: 카메라 정지
 
     private Camera _camera;
     private Transform _cameraTransform; // 실제 카메라 컴포넌트가 부착된 오브젝트의 트랜스폼
@@ -140,10 +138,10 @@ public class AreaCameraController : MonoBehaviour
             }
         }
     }
-    
+
     // 마우스 휠을 이용한 zoom
     private void HandleZoom()
-    {   
+    {
         if (Input.mouseScrollDelta.y != 0)
         {
             _newZoom += (int)(Input.mouseScrollDelta.y * -_zoomAmount);
@@ -206,12 +204,12 @@ public class AreaCameraController : MonoBehaviour
     }
     // 카메라 위치 및 zoom 업데이트
     private void UpdateCamera()
-    {   
+    {
         _newPosition.x = Mathf.Clamp(_newPosition.x, _posLimitXmin, _posLimitXmax);
         _newPosition.z = Mathf.Clamp(_newPosition.z, _posLimitZmin, _posLimitZmax);
 
         transform.position = Vector3.Lerp(transform.position, _newPosition, _moveTime * Time.deltaTime);
-        if(Vector3.Distance(transform.position, _newPosition) < 1e-3) transform.position = _newPosition;
+        if (Vector3.Distance(transform.position, _newPosition) < 1e-3) transform.position = _newPosition;
 
         _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, _newZoom, _moveTime * Time.deltaTime);
 
@@ -228,7 +226,7 @@ public class AreaCameraController : MonoBehaviour
 
     // zoom 단계에 따른 카메라 이동 속도를 미리 계산해서 저장
     private void InitializeMoveSpeedWithZoom()
-    {   
+    {
         if (_zoominLimit > _zoomoutLimit)
         {
             Debug.LogError("zoominLimit must be smaller than zoomoutLimit!");

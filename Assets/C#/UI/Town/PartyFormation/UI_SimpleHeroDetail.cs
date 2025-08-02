@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;   
+using UnityEngine.UI;
 
 /// <summary>
 /// PartyFormation UI에서 한 영웅의 정보를 보여주는 UI
@@ -44,7 +42,7 @@ public class UI_SimpleHeroDetail : UI_Base, IPointerClickHandler
     public HeroInstanceData BindingHeroData;
     private UI_PartyFormation _partyFormationUI;
 
-    public override void Init() {}
+    public override void Init() { }
 
     public void LateInit(UI_PartyFormation partyFormationUI, HeroInstanceData heroData)
     {
@@ -105,7 +103,7 @@ public class UI_SimpleHeroDetail : UI_Base, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(eventData.button == PointerEventData.InputButton.Left)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
             _partyFormationUI.OnHeroDetailUIClicked(this);
         }

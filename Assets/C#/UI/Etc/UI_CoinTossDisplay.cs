@@ -31,7 +31,7 @@ public class UI_CoinTossDisplay : UI_Base
     /// stat에 맞게 코인 이미지를 설정하고 coinCount만큼 활성화
     /// </summary>
     public void Show(int coinCount, StatName stat)
-    {   
+    {
         for (int i = 0; i < GlobalValues.MAX_COIN_COUNT; i++)
         {
             if (i < coinCount)
@@ -54,7 +54,8 @@ public class UI_CoinTossDisplay : UI_Base
             if (result[i])
             {
                 Managers.SoundMng.PlayEffect("coin_success");
-            } else
+            }
+            else
             {
                 Managers.SoundMng.PlayEffect("coin_fail");
             }

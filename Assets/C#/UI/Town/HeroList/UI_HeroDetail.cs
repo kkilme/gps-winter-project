@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;   
+using UnityEngine.UI;
 
 /// <summary>
 /// HeroList UI에서 한 영웅의 상세 정보를 보여주는 UI
@@ -50,7 +48,7 @@ public class UI_HeroDetail : UI_Base
     private HeroInstanceData _bindingHeroData;
     private TMP_InputField _heroNameInputField;
 
-    public override void Init() {}
+    public override void Init() { }
 
     public void BindHero(HeroInstanceData heroData)
     {
@@ -117,7 +115,7 @@ public class UI_HeroDetail : UI_Base
 
     private void FinishNameEdit(string changedName)
     {
-        if(changedName != "") _bindingHeroData.CustomName = changedName.Trim(); // 이름 변경
+        if (changedName != "") _bindingHeroData.CustomName = changedName.Trim(); // 이름 변경
 
         _heroNameInputField.gameObject.SetActive(false);
         GetButton(Buttons.Button_ChangeName).gameObject.SetActive(true);

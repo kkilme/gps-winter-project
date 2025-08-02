@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,7 +18,7 @@ public class InventoryManager
     /// </summary>
     public void AddItem(int itemDataId, int quantity = 1)
     {
-        if(!Managers.DataMng.ItemDataDict.TryGetValue(itemDataId, out ItemData itemData))
+        if (!Managers.DataMng.ItemDataDict.TryGetValue(itemDataId, out ItemData itemData))
         {
             Debug.LogError($"[InventoryManager] Could not add item with itemDataId: {itemDataId}. No such item data exists.");
             return;
@@ -33,14 +32,14 @@ public class InventoryManager
         }
         else
         {
-            switch(itemData.ItemType)
+            switch (itemData.ItemType)
             {
                 case ItemType.Consumable:
                     ItemDict.Add(_nextInstanceId, new ConsumableItemInstanceData(itemDataId, _nextInstanceId++, quantity));
                     break;
                 case ItemType.Weapon:
                 case ItemType.Armor:
-                    for(int i = 0; i < quantity; i++)
+                    for (int i = 0; i < quantity; i++)
                     {
                         ItemDict.Add(_nextInstanceId, new EquipmentInstanceData(itemDataId, _nextInstanceId++));
                     }
@@ -68,7 +67,7 @@ public class InventoryManager
 
         if (itemData is ConsumableItemInstanceData consumableItemData)
         {
-            if(consumableItemData.Quantity < quantity)
+            if (consumableItemData.Quantity < quantity)
             {
                 Debug.LogError($"[InventoryManager] Not enough quantity to remove. Requested: {quantity}, Available: {consumableItemData.Quantity}");
                 return false;
@@ -156,19 +155,19 @@ public class InventoryManager
     /// </summary>
     public bool IsValidEquipment(int instanceId, EquipmentType type)
     {
-        if(!ItemDict.TryGetValue(instanceId, out ItemInstanceData itemData))
+        if (!ItemDict.TryGetValue(instanceId, out ItemInstanceData itemData))
         {
             Debug.LogError($"[InventoryManager] Invalid instanceId: {instanceId}");
             return false;
         }
 
-        if(itemData is not EquipmentInstanceData equipmentData)
+        if (itemData is not EquipmentInstanceData equipmentData)
         {
             Debug.LogError($"[InventoryManager] InstanceId {instanceId} is not an EquipmentInstanceData.");
             return false;
         }
 
-        if(equipmentData.EquipmentType != type)
+        if (equipmentData.EquipmentType != type)
         {
             Debug.LogError($"[InventoryManager] InstanceId {instanceId} is not of type {type}. Actual type: {equipmentData.EquipmentType}");
             return false;
@@ -180,7 +179,7 @@ public class InventoryManager
     #region Currency
     public void AddGold(int amount)
     {
-        if(amount < 0)
+        if (amount < 0)
         {
             Debug.LogError("[InventoryManager] Cannot add negative gold amount.");
             return;
@@ -190,12 +189,12 @@ public class InventoryManager
 
     public void RemoveGold(int amount)
     {
-        if(amount < 0)
+        if (amount < 0)
         {
             Debug.LogError("[InventoryManager] Cannot remove negative gold amount.");
             return;
         }
-        if(Gold < amount)
+        if (Gold < amount)
         {
             Debug.LogError("[InventoryManager] Not enough gold to remove.");
             return;

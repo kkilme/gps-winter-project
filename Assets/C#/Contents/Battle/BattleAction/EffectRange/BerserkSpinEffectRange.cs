@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 /// <summary>
 /// BerserkSpin 스킬의 영향 범위. Orc(스킬 사용 Creature)가 근접하여 다가간 위치를 기준으로, 근처의 모든 셀(최대 8개).

@@ -1,7 +1,6 @@
-using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 
 public class UI_BuyConfirmPopup : UI_Popup
@@ -19,7 +18,7 @@ public class UI_BuyConfirmPopup : UI_Popup
         Button_Close,
 
         Button_Buy,
-        
+
         Button_MultipleMinus,
         Button_SingleMinus,
         Button_SinglePlus,
@@ -68,7 +67,7 @@ public class UI_BuyConfirmPopup : UI_Popup
         GetText(Texts.Text_ItemName).text = itemData.Name;
         Get<UI_ItemSlot>(ItemSlot.UI_ItemSlot).BindItem(itemData);
 
-        if(storeEntryData.HasStockLimit) GetText(Texts.Text_Stock).text = "Stock: " + storeEntryData.Stock.ToString("N0");
+        if (storeEntryData.HasStockLimit) GetText(Texts.Text_Stock).text = "Stock: " + storeEntryData.Stock.ToString("N0");
         else GetText(Texts.Text_Stock).text = "Stock: ∞";
         GetText(Texts.Text_CurrentGold).text = Managers.InvMng.Gold.ToString("N0");
 
@@ -93,7 +92,7 @@ public class UI_BuyConfirmPopup : UI_Popup
 
     private void OnQuantityEdited(string quantity)
     {
-        if(int.TryParse(quantity, out int parsedQuantity) && parsedQuantity > 0)
+        if (int.TryParse(quantity, out int parsedQuantity) && parsedQuantity > 0)
         {
             SetQuantity(parsedQuantity);
         }
@@ -105,14 +104,14 @@ public class UI_BuyConfirmPopup : UI_Popup
 
     private void UpdatePrice()
     {
-        if(_storeEntryData == null)
+        if (_storeEntryData == null)
         {
             Debug.LogError("[UI_BuyConfirmPopup] Store entry data is not set.");
             return;
         }
 
         GetText(Texts.Text_Price).text = (_storeEntryData.Price * _quantity).ToString("N0");
-        if(Managers.InvMng.Gold < _storeEntryData.Price * _quantity)
+        if (Managers.InvMng.Gold < _storeEntryData.Price * _quantity)
         {
             GetText(Texts.Text_Price).color = Color.red; // 가격이 부족할 경우 빨간색으로 표시
         }
@@ -126,7 +125,7 @@ public class UI_BuyConfirmPopup : UI_Popup
 
     private void Buy()
     {
-        if(_storeEntryData == null)
+        if (_storeEntryData == null)
         {
             Debug.LogError("[UI_BuyConfirmPopup] Store entry data is not set.");
             return;

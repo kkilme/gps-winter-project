@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 // XZ를 축으로 하는 육각형 맵
@@ -257,10 +256,11 @@ public class AreaMap
     public void ReplaceEventTile(int x, int z, AreaTileType tileType)
     {
         var oldTile = EventTileMap[z, x];
-        if(oldTile == null)
+        if (oldTile == null)
         {
             CreateEventTile(x, z, tileType);
-        } else
+        }
+        else
         {
             oldTile.Destroy();
             CreateEventTile(x, z, tileType);
@@ -278,7 +278,7 @@ public class AreaMap
     /// </summary>
     public void CollapseTiles(int row, int amount)
     {
-        for(int z = row + PlayableFieldStart.y; z < row + PlayableFieldStart.y + amount; z++)
+        for (int z = row + PlayableFieldStart.y; z < row + PlayableFieldStart.y + amount; z++)
         {
             for (int x = PlayableFieldStart.x; x <= PlayableFieldStart.x + PlayableFieldWidth; x++)
             {

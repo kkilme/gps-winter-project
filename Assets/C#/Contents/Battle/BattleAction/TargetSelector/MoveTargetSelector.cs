@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using UnityEngine;
-
 public class MoveTargetSelector : BattleActionTargetSelector
 {
     public override bool NeedTargetSelection { get; protected set; } = true;
@@ -13,7 +10,7 @@ public class MoveTargetSelector : BattleActionTargetSelector
         int row = currentcell.Row;
         int col = currentcell.Column;
 
-        for (int i = 0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
             int nr = row + GlobalValues.DIRECTION_4WAY[i, 0];
             int nc = col + GlobalValues.DIRECTION_4WAY[i, 1];

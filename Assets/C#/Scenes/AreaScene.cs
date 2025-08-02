@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class AreaScene : BaseScene
@@ -17,11 +14,11 @@ public class AreaScene : BaseScene
     }
 
     public void InitArea(AreaInitContext areaInitContext)
-    {   
+    {
         // AreaMapGenerator 초기화 및 맵 생성
         _areaMapGenerator.Init(areaInitContext.AreaName);
         AreaMap map = _areaMapGenerator.GenerateMap();
-        
+
         // AreaManager 초기화
         AreaManager.Init(map, areaInitContext);
     }

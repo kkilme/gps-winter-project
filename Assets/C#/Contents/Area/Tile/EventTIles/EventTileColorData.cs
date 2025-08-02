@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EventTile Color Data", menuName = "Scriptable Object/EventTileColorData")]

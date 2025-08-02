@@ -28,14 +28,14 @@ public class Hero : Creature
     protected override void Init()
     {
         base.Init();
-        
+
         _helmet = GlobalUtility.FindChild(gameObject, "Helmet", true);
         _leftHand = GlobalUtility.FindChild(gameObject, "weapon_l", true);
         _rightHand = GlobalUtility.FindChild(gameObject, "weapon_r", true);
 
-        for(int i = 0; i<BODY_ARMOR_COUNT; i++)
+        for (int i = 0; i < BODY_ARMOR_COUNT; i++)
         {
-            if(gameObject.transform.GetChild(i).gameObject.activeSelf)
+            if (gameObject.transform.GetChild(i).gameObject.activeSelf)
             {
                 _startBodyIndex = i;
                 break;
@@ -43,9 +43,9 @@ public class Hero : Creature
         }
 
         _hair = GlobalUtility.FindChild(gameObject, "Hair", true);
-        for(int i = 0; i<HAIR_COUNT; i++)
+        for (int i = 0; i < HAIR_COUNT; i++)
         {
-            if(_hair.transform.GetChild(i).gameObject.activeSelf)
+            if (_hair.transform.GetChild(i).gameObject.activeSelf)
             {
                 _startHairIndex = i;
                 break;
@@ -96,7 +96,7 @@ public class Hero : Creature
         Weapon weapon = new Weapon(weaponDataId);
         EquipWeapon(weapon);
     }
-    
+
     public void EquipWeapon(Weapon equippingWeapon)
     {
         if (Weapon?.WeaponData.DataId == equippingWeapon.WeaponData.DataId) // 동일한 무기 장착 시 무시
@@ -108,7 +108,7 @@ public class Hero : Creature
         ShowWeaponObject();
         ChangeAnimator();
     }
-    
+
     public void UnEquipWeapon()
     {
         if (Weapon == null || Weapon.DataId == GlobalValues.HERO_HANDWEAPON_ID) return;
@@ -117,7 +117,7 @@ public class Hero : Creature
         Weapon = null;
         EquipWeapon(GlobalValues.HERO_HANDWEAPON_ID); // 손 무기로 변경
     }
-    
+
     /// <summary>
     /// 장착한 무기에 맞게 무기 외형 게임 오브젝트 활성화
     /// </summary>
@@ -128,7 +128,7 @@ public class Hero : Creature
 
         if (leftIndex != 0)
             _leftHand.transform.GetChild(leftIndex).gameObject.SetActive(true);
-        
+
         if (rightIndex != 0)
             _rightHand.transform.GetChild(rightIndex).gameObject.SetActive(true);
     }
@@ -173,7 +173,7 @@ public class Hero : Creature
             return;
 
         UnEquipArmor(armorType);
-        
+
         Armors[armorType] = equippingArmor;
         ShowArmorObject(armorType);
     }
@@ -196,17 +196,17 @@ public class Hero : Creature
         int idx = Armors[armorType].ArmorData.ArmorIndex;
         switch (armorType)
         {
-             case ArmorType.Body:
+            case ArmorType.Body:
                 transform.GetChild(_startBodyIndex).gameObject.SetActive(false);
                 transform.GetChild(idx).gameObject.SetActive(true);
-                 break; 
-             case ArmorType.Cloak:
-                 transform.GetChild(idx + 20).gameObject.SetActive(true);
-                 break;
-             case ArmorType.Helmet:
+                break;
+            case ArmorType.Cloak:
+                transform.GetChild(idx + 20).gameObject.SetActive(true);
+                break;
+            case ArmorType.Helmet:
                 _hair.transform.GetChild(_startHairIndex).gameObject.SetActive(false);
                 _helmet.transform.GetChild(idx).gameObject.SetActive(true);
-                 break;
+                break;
         }
     }
 

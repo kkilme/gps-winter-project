@@ -1,9 +1,6 @@
-using DG.Tweening;
-using System;
-using System.Collections;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 인벤토리 등에서 아이템의 상세 정보를 보여주는 팝업 UI.
@@ -55,7 +52,7 @@ public class UI_ItemDetailPopup : UI_Popup
         HeroInstanceData heroInstanceData = Managers.HeroMng.HeroStorage.GetHeroInstanceData(heroInstanceId);
 
         GetGameObject(GameObjects.EquippedHeroFrame).SetActive(true);
-        GetImage(Images.Image_Hero).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.CREATURE_IMAGE_PATH_PREFIX + heroInstanceData.ClassName +"_front");
+        GetImage(Images.Image_Hero).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.CREATURE_IMAGE_PATH_PREFIX + heroInstanceData.ClassName + "_front");
         GetText(Texts.Text_EquippedHero).text = "Equipped By " + heroInstanceData.CustomName;
     }
 }

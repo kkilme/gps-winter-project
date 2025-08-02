@@ -1,8 +1,6 @@
 using DG.Tweening;
 using System;
-using System.Collections;
 using System.Text;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 
@@ -122,7 +120,7 @@ public class WeaponItemDetailDesign : EquipmentItemDetailDesign
     protected override void ApplyDescription(UI_ItemDetailPopup ui, ItemData itemData)
     {
         base.ApplyDescription(ui, itemData);
-        if(itemData is not WeaponData weaponData) return;
+        if (itemData is not WeaponData weaponData) return;
 
         // 무기 스킬 정보 서술
         StringBuilder sb = new StringBuilder(ui.GetDescription());
@@ -153,7 +151,7 @@ public class ConsumableItemDetailDesign : ItemDetailDesign
 {
     protected override void ApplyDescription(UI_ItemDetailPopup ui, ItemData itemData)
     {
-        if(itemData is not ConsumableItemData consumableItemData)
+        if (itemData is not ConsumableItemData consumableItemData)
         {
             ui.SetDescription("");
             return;
@@ -161,18 +159,18 @@ public class ConsumableItemDetailDesign : ItemDetailDesign
 
         StringBuilder sb = new StringBuilder();
         sb.Append(consumableItemData.Description + '\n');
-        if(consumableItemData.IsUsableInArea && consumableItemData.IsUsableInBattle)
+        if (consumableItemData.IsUsableInArea && consumableItemData.IsUsableInBattle)
         {
             sb.Append("<color=#FFCD64>Usable in Area and Battle</color>");
         }
-        else if(consumableItemData.IsUsableInArea)
+        else if (consumableItemData.IsUsableInArea)
         {
             sb.Append("<color=#FFCD64>Usable in Area</color>");
         }
-        else if(consumableItemData.IsUsableInBattle)
+        else if (consumableItemData.IsUsableInBattle)
         {
             sb.Append("<color=#FFCD64>Usable in Battle</color>");
-        }        
+        }
 
         ui.SetDescription(sb.ToString().TrimEnd());
     }

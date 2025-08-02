@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // 현재 몬스터 AI만 구현했지만, Hero의 AI도 구현하여 자동 전투 등을 구현할 수 있을 것으로 생각됨.

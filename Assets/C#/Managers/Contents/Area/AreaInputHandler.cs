@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using DG.Tweening;
 
 // Area에서의 키보드/마우스 인풋 처리
 public class AreaInputHandler
@@ -21,7 +19,7 @@ public class AreaInputHandler
     public void HandleMouseInput(MouseEvent mouseEvent)
     {
         if (_areaManager.AreaState != AreaState.Idle) return;
-        
+
         // mouseoverIndicator 위치 조정
         if (_cameraController.GetMouseoverPosition(out Vector3 mouseOverPosition) && _map.IsPositionStandable(mouseOverPosition))
         {

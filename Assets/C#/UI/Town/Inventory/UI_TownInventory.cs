@@ -1,6 +1,5 @@
 using DG.Tweening;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,7 +37,7 @@ public class UI_TownInventory : UI_Base
     private RectTransform _rectTransform;
     private float _offscreenY; // 화면에서 UI를 숨길 때 이동할 Y좌표
 
-    public override void Init() {}
+    public override void Init() { }
 
     public void LateInit()
     {

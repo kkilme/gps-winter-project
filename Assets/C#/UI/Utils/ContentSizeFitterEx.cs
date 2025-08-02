@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +15,7 @@ public class ContentSizeFitterEx : ContentSizeFitter
     public override void SetLayoutHorizontal()
     {
         base.SetLayoutHorizontal();
-        if(!LimitWidth) return;
+        if (!LimitWidth) return;
 
         var rectTransform = transform as RectTransform;
         var sizeDelta = rectTransform.sizeDelta;
@@ -29,7 +28,7 @@ public class ContentSizeFitterEx : ContentSizeFitter
     public override void SetLayoutVertical()
     {
         base.SetLayoutVertical();
-        if(!LimitHeight) return;
+        if (!LimitHeight) return;
 
         var rectTransform = transform as RectTransform;
         var sizeDelta = rectTransform.sizeDelta;

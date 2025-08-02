@@ -1,6 +1,3 @@
-using System.Collections;
-using UnityEngine;
-
 /// <summary>
 /// 게임 시작 시 기본 영웅/아이템 등 지급
 /// </summary>

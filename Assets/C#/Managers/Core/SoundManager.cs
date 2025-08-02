@@ -34,7 +34,7 @@ public class SoundManager
     public void PlayBGM(string path, float pitch = 1.0f)
     {
         AudioClip audioClip = GetOrAddAudioClip("BGM/" + path, SoundType.Bgm);
-        if(audioClip == null)
+        if (audioClip == null)
         {
             return;
         }
@@ -66,7 +66,7 @@ public class SoundManager
     {
         AudioSource audioSource = _audioSources[(int)SoundType.Bgm];
 
-        if(_bgmFadeTween != null && _bgmFadeTween.IsActive() && _bgmFadeTween.IsPlaying())
+        if (_bgmFadeTween != null && _bgmFadeTween.IsActive() && _bgmFadeTween.IsPlaying())
         {
             _bgmFadeTween.Kill(); // 진행중인 페이드 효과 제거. FadeIn 도중이여도 무조건 FadeOut이 우선순위를 가짐.
         }
@@ -94,7 +94,7 @@ public class SoundManager
         audioSource.volume = volume;
         audioSource.pitch = pitch;
         audioSource.PlayOneShot(audioClip);
-        
+
     }
 
     public void PlayItemEffect(string path, float volume = 1.0f, float pitch = 1.0f, bool stopPlayingSound = false)
@@ -127,13 +127,13 @@ public class SoundManager
                 _audioClipDic.Add(path, audioClip);
             }
         }
-        
+
         if (audioClip == null)
             Debug.Log($"Failed to load AudioClip : {path}");
 
         return audioClip;
     }
-    
+
     public void Clear()
     {
         foreach (AudioSource audioSource in _audioSources)
@@ -141,7 +141,7 @@ public class SoundManager
             audioSource.clip = null;
             audioSource.Stop();
         }
-        
+
         _audioClipDic.Clear();
     }
 }

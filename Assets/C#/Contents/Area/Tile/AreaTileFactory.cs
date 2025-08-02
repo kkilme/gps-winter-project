@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 // 타입을 받아 Area 타일(AreaEventTile) 및 FogOfWar을 생성하는 팩토리 클래스
@@ -35,7 +34,7 @@ public static class AreaTileFactory
 
     public static FogOfWar CreateFogOfWar(Vector3 position, bool isUnplayableField, Transform parent)
     {
-        GameObject fogOfWarObject = isUnplayableField ?  
+        GameObject fogOfWarObject = isUnplayableField ?
             Managers.ResourceMng.Instantiate(FOW_UNPLAYABLE_FIELD_PATH, parent) : Managers.ResourceMng.Instantiate(FOW_PLAYABLE_FIELD_PATH, parent);
 
         fogOfWarObject.transform.position = position;

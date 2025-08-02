@@ -14,7 +14,7 @@ public class UI_ForceInsideScreen : MonoBehaviour
     {
         _rect = GetComponent<RectTransform>();
         _canvas = GetComponentInParent<Canvas>();
-        
+
         // UI 오브젝트 첫 생성 시 RectTransform의 값들이 제대로 초기화가 되지 않아 SetPosition()에서 잘못된 위치가 결정될 수 있음.
         // 이를 Fade 효과를 통해 제대로 초기화될 시간을 주고, 자연스럽게 보이도록 함.
         CanvasGroup canvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();

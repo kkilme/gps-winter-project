@@ -1,4 +1,3 @@
-using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,8 +14,8 @@ public abstract class UI_CreatureProfileGroup : UI_Base
     /// </summary>
     public void BindEvent(Action<PointerEventData> action, UIEvent type = UIEvent.Click)
     {
-        foreach(var profile in _creatureProfiles.Values)
-        {            
+        foreach (var profile in _creatureProfiles.Values)
+        {
             BindEvent(profile.gameObject, action, type);
         }
     }
@@ -64,7 +63,7 @@ public abstract class UI_CreatureProfileGroup : UI_Base
     {
         if (_creatureProfiles.TryGetValue(creature, out var profile))
             return profile;
-        
+
         Debug.LogError($"[UI_CreatureProfileGroup] Profile for {creature.name} not found.");
         return null;
     }

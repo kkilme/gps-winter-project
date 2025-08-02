@@ -1,7 +1,6 @@
 
 using DG.Tweening;
 using System.Collections;
-using UnityEngine;
 
 /// <summary>
 /// 제자리에 서서 수행되는 액션

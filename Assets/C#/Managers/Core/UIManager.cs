@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// UI의 생성 및 제거 역할 담당
@@ -10,7 +9,7 @@ public class UIManager
 {
     private int _order = 10; // 현재까지 최근에 사용한 오더
     private GameObject _root;
-    
+
     public UI_Scene SceneUI { get; protected set; } // 현재의 고정 캔버스 UI
     public List<UI_Popup> PopupUIs { get; protected set; }
 
@@ -18,7 +17,7 @@ public class UIManager
     {
         PopupUIs = new List<UI_Popup>();
     }
-    
+
     public GameObject Root
     {
         get
@@ -60,7 +59,7 @@ public class UIManager
             ui.transform.SetParent(parent);
             rectTransform.localScale = localScale;
         }
-        else if(forceRootParent)
+        else if (forceRootParent)
         {
             ui.transform.SetParent(Root.transform);
         }
@@ -92,7 +91,7 @@ public class UIManager
             path = typeof(T).Name;
 
         GameObject go = Managers.ResourceMng.Instantiate($"UI/GeneralUI/{path}");
-        
+
         SetUIParent(go, parent, false);
 
         return go.GetOrAddComponent<T>();
@@ -107,7 +106,7 @@ public class UIManager
             path = typeof(T).Name;
 
         GameObject go = Managers.ResourceMng.Instantiate($"UI/SubItemUI/{path}");
-        
+
         SetUIParent(go, parent);
 
         return go.GetOrAddComponent<T>();
@@ -146,9 +145,9 @@ public class UIManager
         Canvas canvas = GlobalUtility.GetOrAddComponent<Canvas>(go);
         canvas.sortingOrder = _order++;
         PopupUIs.Add(popupUI);
-        
+
         SetUIParent(go, Root.transform);
-        
+
         return popupUI;
     }
 
@@ -160,7 +159,7 @@ public class UIManager
         if (PopupUIs.Count == 0)
             return;
 
-        UI_Popup popupUI= PopupUIs[^1];
+        UI_Popup popupUI = PopupUIs[^1];
         Managers.ResourceMng.Destroy(popupUI.gameObject);
         PopupUIs.RemoveAt(PopupUIs.Count - 1);
 

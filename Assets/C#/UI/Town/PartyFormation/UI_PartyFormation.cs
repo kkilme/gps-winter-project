@@ -67,7 +67,7 @@ public class UI_PartyFormation : UI_Base
     /// </summary>
     public void OnHeroDetailUIClicked(UI_SimpleHeroDetail heroDetailUI)
     {
-        if(_selectedHeroDetailUIs.Contains(heroDetailUI))
+        if (_selectedHeroDetailUIs.Contains(heroDetailUI))
         {
             // 이미 선택된 영웅을 클릭한 경우, 선택 해제
             _selectedHeroDetailUIs.Remove(heroDetailUI);
@@ -85,7 +85,7 @@ public class UI_PartyFormation : UI_Base
     {
         for (int i = 1; i <= _selectedHeroDetailUIs.Count; i++)
         {
-            _selectedHeroDetailUIs[i-1].SetOrderInParty(i);
+            _selectedHeroDetailUIs[i - 1].SetOrderInParty(i);
         }
     }
 
@@ -102,7 +102,7 @@ public class UI_PartyFormation : UI_Base
         Close();
     }
 
-    
+
     public override Tween Show()
     {
         gameObject.SetActive(true);

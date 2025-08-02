@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UI_TurnState : UI_Base
 {
@@ -51,9 +50,10 @@ public class UI_TurnState : UI_Base
                 x = BORDER_SIZE;
                 creatureTurnFrame.Resize(BIG_FRAME_SIZE);
                 creatureTurnFrame.StartBlinking();
-            } else
+            }
+            else
             {
-                x = BORDER_SIZE + BIG_FRAME_SIZE / 2 + PADDING + NORMAL_FRAME_SIZE / 2 + (NORMAL_FRAME_SIZE + PADDING) * (index-1);
+                x = BORDER_SIZE + BIG_FRAME_SIZE / 2 + PADDING + NORMAL_FRAME_SIZE / 2 + (NORMAL_FRAME_SIZE + PADDING) * (index - 1);
                 creatureTurnFrame.Resize(NORMAL_FRAME_SIZE);
             }
             index++;

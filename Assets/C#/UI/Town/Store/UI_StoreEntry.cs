@@ -1,4 +1,3 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,7 +52,8 @@ public class UI_StoreEntry : UI_Base
             Get<Button>(Buttons.Button_Buy).onClick.AddListener(ShowBuyConfirmPopup);
 
             UpdateStock(entryData);
-        } else
+        }
+        else
         {
             Debug.LogError($"[UI_StoreEntry] ItemData with ID {entryData.ItemDataId} not found.");
         }
@@ -66,12 +66,14 @@ public class UI_StoreEntry : UI_Base
             Get<GameObject>(GameObjects.Design_SoldOut).SetActive(false);
             GetText(Texts.Text_Stock).text = "Stock: ∞";
             Get<Button>(Buttons.Button_Buy).interactable = true;
-        } else if (entryData.Stock == 0)
+        }
+        else if (entryData.Stock == 0)
         {
             Get<GameObject>(GameObjects.Design_SoldOut).SetActive(true);
             GetText(Texts.Text_Stock).text = "Stock: 0";
             Get<Button>(Buttons.Button_Buy).interactable = false;
-        } else
+        }
+        else
         {
             Get<GameObject>(GameObjects.Design_SoldOut).SetActive(false);
             GetText(Texts.Text_Stock).text = "Stock: " + entryData.Stock.ToString();

@@ -1,5 +1,4 @@
 using AYellowpaper.SerializedCollections;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -33,10 +32,10 @@ public partial class AreaMapGenerator : MonoBehaviour
     {
         ClearMap();
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         // 에디터상에서 디버그용
         if (_isTestMode) area = _testAreaName;
-        #endif
+#endif
 
         _data = _dataset[area];
 
@@ -112,7 +111,7 @@ public partial class AreaMapGenerator : MonoBehaviour
                 if (Map.TileTypeMap[z, x] != AreaTileType.Empty)
                 {
                     List<Vector2Int> emptyPositions = GetEmptyPositions();
-                    if(emptyPositions.Count == 0) // 빈 위치가 아예 없다면 break
+                    if (emptyPositions.Count == 0) // 빈 위치가 아예 없다면 break
                     {
                         Debug.LogWarning("[AreaMapGenerator] No empty positions available for subtile generation.");
                         break;

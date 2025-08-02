@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -30,10 +29,10 @@ public class AreaInitContext
 /// <summary>
 /// 테스트용 AreaInitContext 클래스
 /// </summary>
-public class TestAreaInitContext: AreaInitContext
+public class TestAreaInitContext : AreaInitContext
 {
-    public TestAreaInitContext(): 
-        base(new Quest(Managers.DataMng.QuestDataDict.Values.ToList()[0]), 
+    public TestAreaInitContext() :
+        base(new Quest(Managers.DataMng.QuestDataDict.Values.ToList()[0]),
         new List<ItemData>()
         { // 테스트용 아이템들
             Managers.DataMng.ItemDataDict[GlobalValues.ITEM_HEALPOTION_ID],

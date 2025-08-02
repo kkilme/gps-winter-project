@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +8,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class UI_TownStore_BuyTab : UI_Base
 {
-    public override void Init(){}
+    public override void Init() { }
 
     public void ShowInstantly(ItemType itemType)
     {
@@ -27,7 +25,7 @@ public class UI_TownStore_BuyTab : UI_Base
 
     private void Clear()
     {
-        for (int i = gameObject.transform.childCount-1; i>=0; i--)
+        for (int i = gameObject.transform.childCount - 1; i >= 0; i--)
         {
             Destroy(gameObject.transform.GetChild(i).gameObject);
         }

@@ -33,7 +33,7 @@ public class AreaCollapseSystem
             yield break;
         }
 
-        for(int i = 0; i<progressCount; i++)
+        for (int i = 0; i < progressCount; i++)
         {
             _turnCount++;
             if (_turnCount % _collapseTimer == 0)
@@ -41,7 +41,7 @@ public class AreaCollapseSystem
                 ExecuteCollapse();
             }
             var tween = _collapseInformer.ProgressTimer();
-            if(progressCount > 1) yield return tween.WaitForCompletion();
+            if (progressCount > 1) yield return tween.WaitForCompletion();
         }
 
         // 보스 위치로부터 최대 2칸 아래까지만 파괴됨

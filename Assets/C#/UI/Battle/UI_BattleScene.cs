@@ -1,17 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_BattleScene : UI_Scene
 {
-	enum SubItemUI
-	{
-		UI_BattleActionPanel,
-		UI_CoinTossDisplay,
-		UI_TurnState,
+    enum SubItemUI
+    {
+        UI_BattleActionPanel,
+        UI_CoinTossDisplay,
+        UI_TurnState,
         UI_PlacementPhase,
         UI_ChooseTarget,
         UI_HeroProfileGroup_Vertical,
@@ -27,8 +24,8 @@ public class UI_BattleScene : UI_Scene
         FadeBG,
     }
 
-	public UI_BattleActionPanel ActionPanel { get; protected set; }
-	public UI_CoinTossDisplay CoinTossDisplay { get; protected set; }
+    public UI_BattleActionPanel ActionPanel { get; protected set; }
+    public UI_CoinTossDisplay CoinTossDisplay { get; protected set; }
     public UI_TurnState TurnStateUI { get; protected set; }
     public UI_PlacementPhase PlacementPhaseUI { get; protected set; }
     public UI_ChooseTarget_Battle ChooseTargetUI { get; protected set; }
@@ -41,7 +38,7 @@ public class UI_BattleScene : UI_Scene
 
     public override void Init()
     {
-		Bind<GameObject>(typeof(SubItemUI));
+        Bind<GameObject>(typeof(SubItemUI));
         Bind<Image>(typeof(Images));
 
         ActionPanel = GetGameObject(SubItemUI.UI_BattleActionPanel).GetOrAddComponent<UI_BattleActionPanel>();
@@ -132,7 +129,7 @@ public class UI_BattleScene : UI_Scene
     /// 전투 승리 시 전리품 UI 표시.
     /// </summary>
     private void ShowLoot()
-    {   
+    {
         Loot loot = Managers.BattleMng.GenerateLoot(); // 전리품 생성
         UI_Loot lootUI = Managers.UIMng.ShowPopupUI<UI_Loot>();
 

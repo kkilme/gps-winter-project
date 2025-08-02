@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
     private static bool _initialized;
-    
+
     private static Managers s_instance;
     public static Managers Instance { get { Init(); return s_instance; } }
 
@@ -42,7 +39,7 @@ public class Managers : MonoBehaviour
     public static SceneManagerEx SceneMng => Instance._sceneMng;
     public static SoundManager SoundMng => Instance._soundMng;
     public static UIManager UIMng => Instance._uiMng;
-    
+
     #endregion
 
     public static void Init()
@@ -50,7 +47,7 @@ public class Managers : MonoBehaviour
         if (s_instance == null || !_initialized)
         {
             _initialized = true;
-            
+
             GameObject go = GameObject.Find("@Managers");
             if (go == null)
             {
@@ -58,13 +55,13 @@ public class Managers : MonoBehaviour
                 go.AddComponent<Managers>();
                 go.AddComponent<CoroutineRunner>();
             }
-            
+
             DontDestroyOnLoad(go);
-            
+
             s_instance = go.GetComponent<Managers>();
         }
     }
-    
+
     public static void Clear()
     {
         InputMng.Clear();

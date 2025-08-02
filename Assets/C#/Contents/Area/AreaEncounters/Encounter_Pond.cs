@@ -1,7 +1,3 @@
-using System.Collections;
-using UnityEngine;
-
-
 public class Encounter_Pond : AreaEncounter
 {
     public override void SetData(EncounterData encounterData)
@@ -51,7 +47,7 @@ public class Encounter_Pond : AreaEncounter
         switch (coinSuccessCount)
         {
             case 4:
-                foreach(Hero hero in Managers.HeroMng.HeroParty.RuntimeHeroes)
+                foreach (Hero hero in Managers.HeroMng.HeroParty.RuntimeHeroes)
                 {
                     hero.TakeHeal(.4f);
                 }

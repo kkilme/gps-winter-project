@@ -1,4 +1,3 @@
-using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,7 +54,7 @@ public class UI_TownStore_SellPanel : UI_Base, IStorePanel
 
     private void ShowSellPanel(UI_ItemSlot selectedSlot)
     {
-        if(selectedSlot.IsEmpty) return;
+        if (selectedSlot.IsEmpty) return;
 
         _sellConfirmPanel.ShowInstantly();
         _sellConfirmPanel.BindItem(selectedSlot.ItemInstanceData);

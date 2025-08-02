@@ -21,7 +21,7 @@ public abstract class MeleeSkill : BattleSkill
 
         // 공격
         yield return Attack(coinResult.successCount);
-        
+
         // 제자리로 복귀
         yield return Return().WaitForCompletion();
 
@@ -30,7 +30,7 @@ public abstract class MeleeSkill : BattleSkill
 
     // 근접 스킬이므로 대상 위치로 이동
     protected virtual Tween MoveToTarget()
-    {   
+    {
         _originalPos = Executor.transform.position;
 
         Sequence sequence = DOTween.Sequence();
@@ -63,7 +63,7 @@ public abstract class MeleeSkill : BattleSkill
         yield return new WaitForSeconds(1f);
 
         var dmgTextType = attackSkillData.AttackType == AttackType.Physical ? DamageTextType.PhysicalDamage : DamageTextType.MagicDamage;
-        foreach(var target in targets)
+        foreach (var target in targets)
         {
             if (target.PlacedCreature == null) continue;
             var damage = DamageCalculator.CalculateFinalDamage(Executor, target.PlacedCreature, attackSkillData, coinHeadCount, targets.Count);
@@ -80,7 +80,8 @@ public abstract class MeleeSkill : BattleSkill
 
         sequence.Append(Executor.transform.DOMove(_originalPos, GameUtility.CalculateMovetime(Executor.transform.position, _originalPos))
             .OnStart(() => { _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, true); })
-            .OnComplete(() => { 
+            .OnComplete(() =>
+            {
                 _animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, false);
                 Executor.LookFront(0.5f);
             }));

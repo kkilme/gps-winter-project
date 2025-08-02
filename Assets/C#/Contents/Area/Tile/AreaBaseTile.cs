@@ -14,7 +14,6 @@ public class AreaBaseTile : MonoBehaviour
     private GameObject _tile;
     private MaterialPropertyBlock _mpb;
     private Renderer _tileRenderer;
-    private Material _tileMaterial;
 
     // 타일 위의 오브젝트
     private GameObject _obstacle;
@@ -25,8 +24,7 @@ public class AreaBaseTile : MonoBehaviour
     {
         _tile = gameObject;
         _tileRenderer = GetComponent<Renderer>();
-        //_tileMaterial = Application.isPlaying ? GetComponent<Renderer>().material : GetComponent<Renderer>().sharedMaterial; // Material 인스턴스화. Editor상에서 인스턴스화 시 치명적이기 때문에 따로 처리. 
-        
+         
         _mpb ??= new MaterialPropertyBlock();
         _obstacle = gameObject.transform.GetChild(0).gameObject;
         _obstacle.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // 각도를 랜덤으로 하여 랜덤성 부여
@@ -43,14 +41,13 @@ public class AreaBaseTile : MonoBehaviour
     public void SetBrightness(bool isVisible)
     {
         Color targetColor = isVisible ? Color.white : Color.gray * 0.5f;
-        //_tileMaterial.DOColor(targetColor, 0.5f); // 타일은 Material Instance를 사용하여 DOTween으로 색상 변경
 
         if (_brightnessRoutine != null)
             StopCoroutine(_brightnessRoutine);
-        _brightnessRoutine = StartCoroutine(LerpBrightness(targetColor, 0.5f));
+        _brightnessRoutine = StartCoroutine(LerpBrightness(targetColor, 0.5f)); // 타일 오브젝트는 Lerp로 밝기 변경
 
         var renderers = _obstacle.GetComponentsInChildren<Renderer>();
-        RenderUtility.SetRenderersBrightness(renderers, isVisible ? 1f : 0.4f); // 장애물은 Material Property Block을 사용하여 색상 변경
+        RenderUtility.SetRenderersBrightness(renderers, isVisible ? 1f : 0.4f); // 장애물은 즉시 밝기 변경
     }
 
     private IEnumerator LerpBrightness(Color targetColor, float duration)

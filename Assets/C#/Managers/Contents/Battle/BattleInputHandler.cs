@@ -130,7 +130,7 @@ public class BattleInputHandler
                 CurrentMouseOverCell = null;
                 return;
             }
-            
+
             CurrentMouseOverCell = cell;
             CurrentMouseOverCell.HighlightFill();
         }
@@ -142,7 +142,7 @@ public class BattleInputHandler
     }
 
     private void OnClickGridCell_TargetSelect()
-    {   
+    {
         if (CurrentMouseOverCell == null || !_currentAction.TargetSelector.IsTargetable(CurrentMouseOverCell))
             return;
 

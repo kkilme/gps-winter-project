@@ -1,7 +1,6 @@
-using System.Collections;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using DG.Tweening;
 
 
 public class UI_CollapseInformer : UI_Base
@@ -47,10 +46,10 @@ public class UI_CollapseInformer : UI_Base
             _leftTurn = _collapseTimer;
         }
 
-        if(_leftTurn <= 3)
+        if (_leftTurn <= 3)
         {
             _leftTurnText.colorGradientPreset = cg_Danger;
-        } 
+        }
         else
         {
             _leftTurnText.colorGradientPreset = cg_Safe;

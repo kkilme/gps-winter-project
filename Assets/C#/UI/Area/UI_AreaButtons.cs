@@ -1,8 +1,6 @@
 using DG.Tweening;
-using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
@@ -88,11 +86,11 @@ public class UI_AreaButtons : UI_Base
     /// </summary>
     private void OnClickItemListButton()
     {
-        if(_openPopup != null && _openPopup is not UI_AreaItemListPopup) _openPopup.Close();
+        if (_openPopup != null && _openPopup is not UI_AreaItemListPopup) _openPopup.Close();
 
         UI_AreaItemListPopup popup = Managers.UIMng.TogglePopupUI<UI_AreaItemListPopup>();
 
-        if(popup == null) return;
+        if (popup == null) return;
 
         _openPopup = popup;
         UIUtility.SetRectPositionRelativeTo(

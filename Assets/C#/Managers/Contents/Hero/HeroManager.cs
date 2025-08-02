@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class HeroManager
@@ -45,12 +43,12 @@ public class HeroManager
                     {
                         foreach (var armors in equippedArmors)
                         {
-                            if(armors.Value == null) continue;
+                            if (armors.Value == null) continue;
                             Armor armor = new Armor(armors.Value.ItemDataId);
                             hero.EquipArmor(armor);
                         }
                     }
-                    
+
                     HeroParty.AddRuntimeHero(heroInstanceId, hero);
                 }
             }
@@ -80,13 +78,13 @@ public class HeroManager
     /// </remarks>
     public void SetHeroParty(List<int> heroInstanceIds)
     {
-        if(heroInstanceIds == null || heroInstanceIds.Count == 0)
+        if (heroInstanceIds == null || heroInstanceIds.Count == 0)
         {
             Debug.LogWarning("[HeroManager] Cannot set empty hero party.");
             return;
         }
 
-        if(heroInstanceIds.Count > GlobalValues.MAX_PARTY_SIZE)
+        if (heroInstanceIds.Count > GlobalValues.MAX_PARTY_SIZE)
         {
             Debug.LogWarning($"[HeroManager] Cannot set hero party with more than {GlobalValues.MAX_PARTY_SIZE} heroes.");
             return;
@@ -95,7 +93,7 @@ public class HeroManager
         DestroyHeroParty();
         HeroParty.HeroIds.Clear();
 
-        foreach(int heroInstanceId in heroInstanceIds)
+        foreach (int heroInstanceId in heroInstanceIds)
         {
             HeroParty.AddHero(heroInstanceId);
         }

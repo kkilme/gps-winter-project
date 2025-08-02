@@ -1,7 +1,3 @@
-using System.Collections;
-using UnityEngine;
-
-
 public class ItemInstanceData
 {
     public int ItemDataId { get; protected set; } // ItemData의 DataId

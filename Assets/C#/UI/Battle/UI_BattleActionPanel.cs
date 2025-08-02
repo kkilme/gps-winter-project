@@ -1,9 +1,7 @@
-using TMPro;
-using System;
-using Unity.VisualScripting;
-using UnityEngine.UI;
-using UnityEngine;
 using DG.Tweening;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 전투 중 액션 선택 창
@@ -45,7 +43,7 @@ public class UI_BattleActionPanel : UI_Base
     private Vector2 _initialPosition;
 
     public override Tween Show()
-    {   
+    {
         _hero = Managers.BattleMng.CurrentTurnCreature as Hero;
         if (_hero == null) return DOVirtual.DelayedCall(0, () => { });
         ClearActionInfo();
@@ -81,7 +79,7 @@ public class UI_BattleActionPanel : UI_Base
         {
             var actionButton = Managers.UIMng.MakeSubItemUI<UI_BattleActionButton>(_actionButtonParent, "Battle/" + nameof(UI_BattleActionButton));
             actionButton.SetSkill(skill);
-            
+
             var image = actionButton.GetComponent<Image>();
             image.sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.ACTIONICON_PATH_PREFIX + skill.SkillData.IconPath);
         }
@@ -92,7 +90,7 @@ public class UI_BattleActionPanel : UI_Base
     /// 마우스를 가져다 댄 스킬의 정보 표시
     /// </summary>
     public void ShowSkillInfo(BattleSkill skill)
-    {   
+    {
         ClearActionInfo();
         GetText(Texts.Text_ActionName).text = skill.SkillData.Name;
         GetText(Texts.Text_ActionDescription).text = skill.SkillData.Description;
@@ -103,15 +101,17 @@ public class UI_BattleActionPanel : UI_Base
             GetGameObject(GameObjects.Amount).SetActive(true);
             var skillData = skill.SkillData as AttackSkillData;
             GetText(Texts.Text_AmountWord).text = "Damage\nPer Slot";
-            if(skillData.AttackType == AttackType.Physical)
+            if (skillData.AttackType == AttackType.Physical)
             {
                 GetText(Texts.Text_AmountNumber).color = GlobalValues.PHYSICAL_UI_ELEMENT_COLOR;
-            } else if (skillData.AttackType == AttackType.Magic)
+            }
+            else if (skillData.AttackType == AttackType.Magic)
             {
                 GetText(Texts.Text_AmountNumber).color = GlobalValues.MAGIC_UI_ELEMENT_COLOR;
             }
             GetText(Texts.Text_AmountNumber).text = skillData.DamagePerCoin.ToString();
-        } else
+        }
+        else
         {
             GetGameObject(GameObjects.Amount).SetActive(false);
         }

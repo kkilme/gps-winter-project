@@ -46,7 +46,7 @@ public class UI_AreaEncounterPopup : UI_Popup
         _coinTossDisplay = GetComponentInChildren<UI_CoinTossDisplay>();
 
         _resultDetailParent = GetGameObject(GameObjects.ResultDetails).transform;
-        for(int i = _resultDetailParent.childCount - 1; i >= 0; i--)
+        for (int i = _resultDetailParent.childCount - 1; i >= 0; i--)
         {
             Destroy(_resultDetailParent.GetChild(i).gameObject); // 에디터에서의 디스플레이용으로 추가해놓은 기존 자식 오브젝트 제거
         }
@@ -73,7 +73,8 @@ public class UI_AreaEncounterPopup : UI_Popup
         var leaveButton = GetButton(Buttons.Button_Leave);
 
         tryButton.onClick.RemoveAllListeners(); // 중복 방지
-        tryButton.onClick.AddListener(() => {
+        tryButton.onClick.AddListener(() =>
+        {
             tryButton.interactable = false;
             leaveButton.interactable = false;
             onTry?.Invoke();
@@ -85,7 +86,8 @@ public class UI_AreaEncounterPopup : UI_Popup
         else
         {
             leaveButton.onClick.RemoveAllListeners();
-            leaveButton.onClick.AddListener(() => {
+            leaveButton.onClick.AddListener(() =>
+            {
                 tryButton.interactable = false;
                 leaveButton.interactable = false;
                 onLeave?.Invoke();

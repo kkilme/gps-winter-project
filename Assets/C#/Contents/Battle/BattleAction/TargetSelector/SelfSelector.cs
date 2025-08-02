@@ -1,6 +1,3 @@
-using System.Collections;
-using UnityEngine;
-
 /// <summary>
 /// 자기 자신을 선택하는 BattleActionTargetSelector
 /// </summary>

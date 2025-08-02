@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -70,10 +69,10 @@ public static class ItemFactory
         }
 
         var type = Type.GetType(itemData.ClassName);
-        if(type != null && typeof(Weapon).IsAssignableFrom(type))
+        if (type != null && typeof(Weapon).IsAssignableFrom(type))
         {
             return (Weapon)Activator.CreateInstance(type, dataId);
-        } 
+        }
         else
         {
             return new Weapon(dataId);

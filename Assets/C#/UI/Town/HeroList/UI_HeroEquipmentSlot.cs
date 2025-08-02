@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 /// <summary>
@@ -40,7 +37,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
         _slotImage = GetComponent<Image>();
         _slotImage.sprite = slotDesign.GetDefaultSlotSprite();
-        
+
         _heroInstance.OnEquipmentChanged -= BindEquipment;
         _heroInstance.OnEquipmentChanged += BindEquipment; // 영웅의 장비가 변경될 때마다 BindEquipment 호출
 
@@ -78,7 +75,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         {
             Image contentImage = GetImage(Images.Image_Equipment);
             Sprite defaultSprite = _slotDesign.GetDefaultContentSprite();
-            if(defaultSprite != null)
+            if (defaultSprite != null)
             {
                 contentImage.gameObject.SetActive(true);
                 contentImage.sprite = defaultSprite;
@@ -112,7 +109,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(!_enableEquipmentChange) return; // 장비 변경이 비활성화된 경우 아무 동작도 하지 않음
+        if (!_enableEquipmentChange) return; // 장비 변경이 비활성화된 경우 아무 동작도 하지 않음
 
         // 이미 열린 장비 선택 창이 있다면 닫기
         Managers.UIMng.ClosePopupUI<UI_EquipmentSelectPopup>();
@@ -142,6 +139,6 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
 
     private void OnDestroy()
     {
-        if(_heroInstance != null) _heroInstance.OnEquipmentChanged -= BindEquipment;
+        if (_heroInstance != null) _heroInstance.OnEquipmentChanged -= BindEquipment;
     }
 }

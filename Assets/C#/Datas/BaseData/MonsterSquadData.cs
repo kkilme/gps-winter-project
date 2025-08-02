@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ public class MonsterSquadData
 
     public bool Validate()
     {
-        HashSet<(int, int)> usedPos = new HashSet<(int, int)> ();
+        HashSet<(int, int)> usedPos = new HashSet<(int, int)>();
 
         foreach (MonsterSquad_MonsterData monster in Monsters)
         {
@@ -49,7 +48,7 @@ public class MonsterSquadDataLoader : ILoader<int, MonsterSquadData>
         Dictionary<int, MonsterSquadData> dic = new Dictionary<int, MonsterSquadData>();
         foreach (MonsterSquadData squad in monsterSquads)
         {
-            if(squad.Validate()) dic.Add(squad.DataId, squad);
+            if (squad.Validate()) dic.Add(squad.DataId, squad);
         }
 
         return dic;

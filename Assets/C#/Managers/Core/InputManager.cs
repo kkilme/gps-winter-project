@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -18,7 +16,7 @@ public class InputManager
     {
         KeyAction = null;
         MouseAction = null;
-        
+
         _pressed = false;
         _pressedTime = 0;
     }
@@ -61,7 +59,7 @@ public class InputManager
     {
         if (EventSystem.current && EventSystem.current.IsPointerOverGameObject())
         {
-            PointerOverGameObjectAction?.Invoke(); 
+            PointerOverGameObjectAction?.Invoke();
             return;
         }
 
@@ -71,7 +69,7 @@ public class InputManager
         }
 
         if (MouseAction != null)
-        {   
+        {
             MouseAction?.Invoke(MouseEvent.Hover);
             if (Input.GetMouseButton(0))
             {
@@ -93,13 +91,13 @@ public class InputManager
                     MouseAction?.Invoke(MouseEvent.PointerUp);
 
                 }
-                
+
                 _pressed = false;
                 _pressedTime = 0;
             }
         }
     }
-    
+
     public void Clear()
     {
         KeyAction = null;

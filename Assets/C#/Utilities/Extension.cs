@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -39,7 +38,7 @@ public static class Extension
     }
 
     public static void SetLayerRecursively(this GameObject go, int layer)
-    {   
+    {
         go.layer = layer;
         foreach (Transform child in go.transform)
         {

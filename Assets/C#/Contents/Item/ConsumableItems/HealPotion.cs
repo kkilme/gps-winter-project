@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 
@@ -16,7 +15,7 @@ public class HealPotion : ConsumableItem, IUsableInArea, IUsableInBattle
         void Use(object hero)
         {
             Hero _hero = hero as Hero;
-            if(_hero == null)
+            if (_hero == null)
             {
                 Debug.LogError("[HealPotion] UseInArea: Hero is null or not a valid Hero instance.");
                 return;

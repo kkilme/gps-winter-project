@@ -1,7 +1,5 @@
-using System.Collections;
-using UnityEngine;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 
 public class HeroInstanceData
@@ -33,8 +31,8 @@ public class HeroInstanceData
         Weapon = Managers.InvMng.GetUnequippedEquipment(startWeaponDataId);
         Weapon.EquippedHeroId = instanceId;
 
-        Stat.AddEquipmentStat(Weapon.EquipmentData); 
-        
+        Stat.AddEquipmentStat(Weapon.EquipmentData);
+
         // 시작 방어구 (없음)
         Armors = new Dictionary<ArmorType, EquipmentInstanceData>
         {

@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -28,7 +27,7 @@ public class UI_BattleActionButton : UI_Base
     }
 
     protected void OnMouseEnterEvent(PointerEventData data)
-    {   
+    {
         _actionPanel.ShowSkillInfo(_skill);
     }
 }

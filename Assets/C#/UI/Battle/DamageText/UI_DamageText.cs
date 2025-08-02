@@ -1,20 +1,15 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEngine.UI;
 using UnityEngine;
 
 [RequireComponent(typeof(UI_Billboard))]
 public class UI_DamageText : UI_Base
 {
     public TextMeshProUGUI Text { get; private set; }
-    private Camera _camera;
 
     public override void Init()
     {
         Text = GetComponentInChildren<TextMeshProUGUI>();
-        _camera = Camera.main;
     }
 
     public void Show(int amount, DamageTextDesign design)

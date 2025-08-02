@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using DG.Tweening;
-using UnityEngine.UI;
+using System.Collections;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Loading : UI_Base
 {
@@ -24,7 +23,7 @@ public class UI_Loading : UI_Base
 
     public override void Init()
     {
-		_canvasGroup = GetComponent<CanvasGroup>();
+        _canvasGroup = GetComponent<CanvasGroup>();
         Bind<Slider>(typeof(Sliders));
         Bind<TextMeshProUGUI>(typeof(Texts));
         _progressBar = Get<Slider>(Sliders.Slider_Progress);

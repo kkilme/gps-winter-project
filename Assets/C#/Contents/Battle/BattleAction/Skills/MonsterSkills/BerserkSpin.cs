@@ -1,4 +1,3 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,10 +29,10 @@ public class BerserkSpin : MeleeSkill
         foreach (var target in targets)
         {
             var damage = DamageCalculator.CalculateFinalDamage(Executor, target.PlacedCreature, attackSkillData, coinHeadCount, targets.Count);
-            damageToTarget[target] = (damage, damage/4);
+            damageToTarget[target] = (damage, damage / 4);
         }
 
-        for(int i = 0; i<3; i++)
+        for (int i = 0; i < 3; i++)
         {
             yield return new WaitForSeconds(.35f);
             foreach (var target in targets)

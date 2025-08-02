@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using UnityEngine;
-
 public class OpponentSelector : BattleActionTargetSelector
 {
     public override bool NeedTargetSelection { get; protected set; } = true;
@@ -26,11 +23,12 @@ public class OpponentSelector : BattleActionTargetSelector
                     TargetableCells.Add(cell);
                 }
             }
-        } else if (_rangeType == AttackRangeType.Melee)
+        }
+        else if (_rangeType == AttackRangeType.Melee)
         {
             for (int col = 0; col < GlobalValues.BATTLEGRID_COL_COUNT; col++)
             {
-                for (int row = GlobalValues.BATTLEGRID_ROW_COUNT-1; row >= 0; row--)
+                for (int row = GlobalValues.BATTLEGRID_ROW_COUNT - 1; row >= 0; row--)
                 {
                     // 근접일 시 어떤 열에서 가장 앞에 있는 적만 타게팅 가능
                     var cell = opponentGrid[row, col];

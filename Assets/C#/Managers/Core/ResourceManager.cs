@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // 파일 로드 및 GameObject 생성
@@ -26,7 +24,7 @@ public class ResourceManager
             if (go != null)
                 return go as T;
         }
-        
+
         return Resources.Load<T>(path);
     }
 
@@ -50,7 +48,7 @@ public class ResourceManager
             go.name = original.name;
         else
             go.name = name;
-        
+
         return go;
     }
 
@@ -71,7 +69,7 @@ public class ResourceManager
             Managers.PoolMng.Push(poolAble);
             return;
         }
-        
+
         Object.Destroy(go);
     }
 }

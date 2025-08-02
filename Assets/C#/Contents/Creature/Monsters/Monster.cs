@@ -1,7 +1,6 @@
-using System.Collections.Generic;
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
-using DG.Tweening;
 
 /// <summary>
 /// 기본 Monster 클래스. 
@@ -10,7 +9,7 @@ public class Monster : Creature
 {
     public CreatureAI AIBrain { get; protected set; } // 자동 전투를 구현한다면 Creature로 옮겨야 할 듯
     public MonsterData MonsterData => CreatureData as MonsterData;
-    
+
     public override void SetData(int dataId)
     {
         CreatureData = Managers.DataMng.MonsterDataDict[dataId];
@@ -29,7 +28,7 @@ public class Monster : Creature
         Animator.SetBool(GlobalValues.ANIMATION_PARAM_DEAD, true);
 
         Managers.BattleMng.RemoveMonster(this);
-        
+
         yield return new WaitForSeconds(5f);
 
         gameObject.SetActive(false);
@@ -43,7 +42,7 @@ public class Monster : Creature
         {
             if (Random.Range(0, 101) <= lootData.DropChance)
             {
-                if(!Managers.DataMng.ItemDataDict.TryGetValue(lootData.ItemDataId, out ItemData itemData))
+                if (!Managers.DataMng.ItemDataDict.TryGetValue(lootData.ItemDataId, out ItemData itemData))
                 {
                     Debug.LogError($"[Monster] No such ItemData exists with dataId: {lootData.ItemDataId}");
                     continue;

@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using UnityEngine;
 
-public class Weapon: Equipment
+public class Weapon : Equipment
 {
     public WeaponData WeaponData => EquipmentData as WeaponData;
     public WeaponType WeaponType => WeaponData.WeaponType;
     public List<BattleSkill> Skills { get; protected set; } = new();
-    
+
     public Weapon(int dataId)
     {
         SetData(dataId);

@@ -1,4 +1,4 @@
-public class Armor: Equipment
+public class Armor : Equipment
 {
     public ArmorData ArmorData => EquipmentData as ArmorData;
     public ArmorType ArmorType => ArmorData.ArmorType;

@@ -1,6 +1,3 @@
-using DG.Tweening;
-using UnityEngine;
-
 public sealed class CollapsedTile : AreaEventTile
 {
     public override void OnTileEnter()

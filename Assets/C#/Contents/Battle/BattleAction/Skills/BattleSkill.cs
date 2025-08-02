@@ -1,7 +1,3 @@
-using DG.Tweening;
-using System.Collections;
-using UnityEngine;
-
 public abstract class BattleSkill : BattleAction
 {
     public int DataId { get; protected set; }

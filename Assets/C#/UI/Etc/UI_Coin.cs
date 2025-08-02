@@ -41,7 +41,7 @@ public class UI_Coin : UI_Base
         Bind<GameObject>(typeof(GameObjects));
 
         _statImageOriginalColor = Get<Image>(StatImage.Strength).color;
-        
+
         GetGameObject(GameObjects.Icon_Fail).SetActive(false);
         GetGameObject(GameObjects.Frame_Success).SetActive(false);
     }

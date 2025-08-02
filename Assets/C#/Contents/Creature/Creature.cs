@@ -9,7 +9,7 @@ public abstract class Creature : MonoBehaviour
     public UI_CreatureProfile ProfileUI { get; protected set; } // Creature의 프로필 UI
     public Animator Animator { get; protected set; }
     public BattleGridCell StandingCell { get; set; }
-    
+
     private void Awake()
     {
         Init();
@@ -32,7 +32,7 @@ public abstract class Creature : MonoBehaviour
     /// 전투 씬에서 Creature가 정면을 바라보도록 함
     /// </summary>
     public abstract Tween LookFront(float duration = 0f);
-    
+
     /// <summary>
     /// damage만큼 체력 감소
     /// </summary>

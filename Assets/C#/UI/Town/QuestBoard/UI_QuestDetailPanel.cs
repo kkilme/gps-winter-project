@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
@@ -42,7 +39,7 @@ public class UI_QuestDetailPanel : UI_Base
 
     private UI_Inventory _rewardInventory; // 퀘스트 첫 클리어 보상을 보여주는 인벤토리
 
-    public override void Init() {}
+    public override void Init() { }
 
     public void LateInit()
     {
@@ -74,10 +71,10 @@ public class UI_QuestDetailPanel : UI_Base
         GetText(Texts.Text_Objective).text = data.Objective;
         GetGameObject(GameObjects.Flag_RewardClaimed).SetActive(data.IsComplete);
         GetButton(Buttons.Button_Start).onClick.RemoveAllListeners();
-        GetButton(Buttons.Button_Start).onClick.AddListener(()=>StartQuest(quest));
+        GetButton(Buttons.Button_Start).onClick.AddListener(() => StartQuest(quest));
 
         _rewardInventory.HardClear();
-        foreach(QuestReward reward in data.FirstClearRewards)
+        foreach (QuestReward reward in data.FirstClearRewards)
         {
             int rewardDataId = reward.ItemDataId;
             ItemData itemData = Managers.DataMng.ItemDataDict[rewardDataId];
@@ -101,7 +98,7 @@ public class UI_QuestDetailPanel : UI_Base
             UI_QuestItemSelectPopup popup = Managers.UIMng.ShowPopupUI<UI_QuestItemSelectPopup>();
             popup.LateInit(this);
             _questItemSelectPopup = popup;
-        } 
+        }
         else
         {
             // 이미 아이템이 담긴 슬롯 클릭 시, 아이템을 제거함

@@ -22,7 +22,7 @@ public class BattleGridSystem
                 // 그리드 오브젝트를 동적으로 생성해야 할 시 수정 필요.
                 var herocell = GlobalUtility.FindChild(heroGrid, $"BattleGridCell ({row}, {col})");
                 var monsterCell = GlobalUtility.FindChild(monsterGrid, $"BattleGridCell ({row}, {col})");
-                if(herocell == null || monsterCell == null)
+                if (herocell == null || monsterCell == null)
                 {
                     Debug.LogError($"Failed to find BattleGridCell ({row}, {col})");
                     continue;
@@ -78,10 +78,10 @@ public class BattleGridSystem
     {
         // Creature끼리의 위치 교환을 위해 밑의 if문 필요.
         // 조건이 없을 시, A를 B의 위치로 옮긴 후 B를 A의 위치로 옮길 때 문제가 생김.
-        if(creature.StandingCell.PlacedCreature == creature) creature.StandingCell.PlacedCreature = null;
+        if (creature.StandingCell.PlacedCreature == creature) creature.StandingCell.PlacedCreature = null;
         targetCell.PlaceCreature(creature);
 
-        if(_battleManager.BattleState == BattleState.HeroPlacement && creature is Hero hero) Managers.HeroMng.HeroParty.SaveBattlePosition(hero.InstanceId, new Vector2Int(targetCell.Column, targetCell.Row));
+        if (_battleManager.BattleState == BattleState.HeroPlacement && creature is Hero hero) Managers.HeroMng.HeroParty.SaveBattlePosition(hero.InstanceId, new Vector2Int(targetCell.Column, targetCell.Row));
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public class BattleGridSystem
     /// </summary>
     public void ResetAllCellColor()
     {
-        foreach(var cell in HeroGrid)
+        foreach (var cell in HeroGrid)
         {
             cell.RevertFillColor();
             cell.RevertOutlineColor();

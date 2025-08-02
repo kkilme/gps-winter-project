@@ -1,4 +1,3 @@
-using System;
 using UnityEngine.UI;
 
 public class UI_ChooseTarget_Battle : UI_Base

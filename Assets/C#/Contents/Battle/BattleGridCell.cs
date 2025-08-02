@@ -38,8 +38,8 @@ public abstract class BattleGridCell : MonoBehaviour
     }
 
     public void RemoveCreature()
-    {   
-        if(PlacedCreature != null)
+    {
+        if (PlacedCreature != null)
             PlacedCreature.StandingCell = null;
         PlacedCreature = null;
     }

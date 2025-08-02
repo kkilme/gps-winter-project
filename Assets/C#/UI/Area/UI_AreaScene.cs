@@ -1,6 +1,4 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,8 +55,8 @@ public class UI_AreaScene : UI_Scene
     public UI_ChooseTarget_Area ShowChooseTargetUI(bool showScreenDim = false)
     {
         ChooseTargetUI.Show();
-        if(showScreenDim)
-            ShowScreenDim(); 
+        if (showScreenDim)
+            ShowScreenDim();
         return ChooseTargetUI;
     }
 

@@ -1,6 +1,3 @@
-using System.Collections;
-using UnityEngine;
-
 public class Item
 {
     public int DataId { get; protected set; }

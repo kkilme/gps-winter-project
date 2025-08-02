@@ -36,7 +36,7 @@ public class PhysicalDamageTextDesign : DamageTextDesign
 {
     public PhysicalDamageTextDesign()
     {
-        if( _colorGradient == null )
+        if (_colorGradient == null)
             _colorGradient = Managers.ResourceMng.Load<TMP_ColorGradient>(GlobalValues.COLORGRADIENT_PATH_PREFIX + "PhysicalDamage");
 
         _textColor = GlobalValues.PHYSICAL_UI_ELEMENT_COLOR;

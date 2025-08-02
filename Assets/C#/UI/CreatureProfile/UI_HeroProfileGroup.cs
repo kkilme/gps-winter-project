@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UI_HeroProfileGroup : UI_CreatureProfileGroup
@@ -28,7 +27,7 @@ public class UI_HeroProfileGroup : UI_CreatureProfileGroup
 
         int index = 0;
         foreach (var kvp in Managers.HeroMng.HeroParty.RuntimeHeroesDict)
-        {   
+        {
             int id = kvp.Key;
             Hero hero = kvp.Value;
             var profile = GetGameObject((HeroProfileUI)index++).GetOrAddComponent<UI_HeroProfile>();

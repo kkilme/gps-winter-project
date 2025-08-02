@@ -1,4 +1,3 @@
-using UnityEngine;
 public class MonsterBattleGridCell : BattleGridCell
 {
     public override void HighlightOutline()

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -80,7 +79,7 @@ public class UI_QuestItemSelectPopup : UI_Popup
     /// </summary>
     public void AddItem(ItemData itemData, int quantity = 1)
     {
-        if(itemData == null) return;
+        if (itemData == null) return;
 
         GetGameObject(GameObjects.Indicator_NoItems).SetActive(false);
         PopupInventory.AddItem(itemData, quantity, true);
@@ -91,7 +90,7 @@ public class UI_QuestItemSelectPopup : UI_Popup
     /// </summary>
     public void RemoveItem(ItemData itemData)
     {
-        if(itemData == null) return;
+        if (itemData == null) return;
 
         PopupInventory.RemoveItem(itemData, destroySlot: true);
         if (PopupInventory.IsEmpty())

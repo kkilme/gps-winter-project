@@ -1,5 +1,4 @@
 using DG.Tweening;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +30,7 @@ public class UI_BattleDefeat : UI_Base
 
         RectTransform titleRect = Get<RectTransform>(RectTransforms.DefeatTitle);
         Button button = Get<Button>(Buttons.Button_Return);
-        
+
         button.gameObject.SetActive(false);
 
         Sequence seq = DOTween.Sequence();
@@ -51,4 +50,3 @@ public class UI_BattleDefeat : UI_Base
         return seq.Play();
     }
 }
-    

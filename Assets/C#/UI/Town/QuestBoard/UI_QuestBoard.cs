@@ -1,6 +1,4 @@
 using DG.Tweening;
-using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +6,7 @@ using UnityEngine.UI;
 /// Town에서 퀘스트를 관리하는 UI. 퀘스트 목록과 상세 정보를 보여주는 패널을 포함.
 /// </summary>
 public class UI_QuestBoard : UI_Base
-{   
+{
     enum Panels
     {
         UI_QuestList,
@@ -26,7 +24,7 @@ public class UI_QuestBoard : UI_Base
     private RectTransform _rectTransform;
     private float _offscreenY; // 화면에서 UI를 숨길 때 이동할 Y좌표
 
-    public override void Init() {}
+    public override void Init() { }
 
     public void LateInit()
     {

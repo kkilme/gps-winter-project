@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System;
+using TMPro;
+using UnityEngine.UI;
 
 /// <summary>
 /// 어떠한 행동을 한번 더 확인시키는, 다양한 상황에서 사용될 수 있는 팝업 UI.
@@ -37,7 +34,7 @@ public class UI_ConfirmActionPopup : UI_Popup
     public void SetConfirmAction(Action confirmAction)
     {
         _confirmAction = confirmAction;
-        GetButton(Buttons.Button_Confirm).onClick.AddListener(() => 
+        GetButton(Buttons.Button_Confirm).onClick.AddListener(() =>
         {
             _confirmAction?.Invoke();
             Close();

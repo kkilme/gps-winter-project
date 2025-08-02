@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 [Serializable]
 public class CreatureData
@@ -19,11 +17,11 @@ public class CreatureData
 }
 
 
-public class HeroData: CreatureData
+public class HeroData : CreatureData
 {
     public int StartWeapon; // 시작 무기의 DataId
 }
-    
+
 [Serializable]
 public class MonsterData : CreatureData
 {

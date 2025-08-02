@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
@@ -9,7 +6,7 @@ using Object = UnityEngine.Object;
 /// 모든 Scene의 조상 클래스. 각 Scene에 진입했을 때 가장 먼저 BaseScene이 Awake()가 호출된다.
 /// </summary>
 public abstract class BaseScene : MonoBehaviour
-{ 
+{
     public SceneType SceneType { get; protected set; } = SceneType.UnknownScene;
 
     private void Awake()
@@ -38,11 +35,11 @@ public abstract class BaseScene : MonoBehaviour
             Managers.ResourceMng.Init();
 
             GameStarter game = new();
-            game.SetupGame();            
+            game.SetupGame();
         }
-        
+
         Object obj = FindObjectOfType(typeof(EventSystem));
-        
+
         if (obj == null)
             Managers.ResourceMng.Instantiate("UI/EventSystem").name = "@EventSystem";
     }

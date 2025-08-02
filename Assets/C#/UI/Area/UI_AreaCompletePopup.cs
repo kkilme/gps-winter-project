@@ -1,9 +1,8 @@
-using System.Collections;
+using DG.Tweening;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using DG.Tweening;
 
 /// <summary>
 /// Area 완료 시 나오는 팝업
@@ -30,7 +29,7 @@ public class UI_AreaCompletePopup : UI_Popup
         Text_Gold
     }
 
-    public override void Init(){}
+    public override void Init() { }
 
     private void LateInit(Loot loot, Quest quest)
     {
@@ -60,9 +59,9 @@ public class UI_AreaCompletePopup : UI_Popup
         if (!quest.QuestData.IsComplete)
         {
             // 첫 퀘스트 클리어 보상 추가
-            foreach(QuestReward reward in quest.QuestData.FirstClearRewards)
+            foreach (QuestReward reward in quest.QuestData.FirstClearRewards)
             {
-                for(int i = 0; i<reward.Quantity; i++)
+                for (int i = 0; i < reward.Quantity; i++)
                 {
                     ItemData itemData = Managers.DataMng.ItemDataDict[reward.ItemDataId];
                     rewardInventory.AddItem(itemData);
@@ -74,7 +73,7 @@ public class UI_AreaCompletePopup : UI_Popup
             rewardInventory.gameObject.SetActive(false);
         }
 
-        GetButton(Buttons.Button_ReturnToTown).onClick.AddListener(()=>CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadTownScene()));
+        GetButton(Buttons.Button_ReturnToTown).onClick.AddListener(() => CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadTownScene()));
     }
 
     public void Show(Loot loot, Quest quest)

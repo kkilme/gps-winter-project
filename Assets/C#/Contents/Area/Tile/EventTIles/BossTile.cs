@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public sealed class BossTile : AreaEventTile
 {
     public override void OnTileEnter()

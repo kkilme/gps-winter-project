@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,7 +8,7 @@ public class SceneManagerEx
     /// <summary>
     /// 현재 씬 이전에 활성화되어있던 씬. 첫 시작 시 UnknownScene이며, 이를 통해 테스트 환경 구현
     /// </summary>
-    public SceneType LastSceneType; 
+    public SceneType LastSceneType;
     public SceneType CurrentSceneType;
     private BaseScene _currentScene;
     /// <summary>
@@ -19,7 +18,7 @@ public class SceneManagerEx
     {
         get
         {
-            if(_currentScene == null || _currentScene.SceneType != CurrentSceneType)
+            if (_currentScene == null || _currentScene.SceneType != CurrentSceneType)
             {
                 var activeScene = SceneManager.GetActiveScene();
                 var rootObjects = activeScene.GetRootGameObjects();

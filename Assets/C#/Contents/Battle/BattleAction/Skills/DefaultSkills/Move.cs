@@ -16,7 +16,7 @@ public class Move : BattleSkill
 
         // 해당 셀에 다른 Creature가 있을 경우, 위치를 교환
         if (!SelectedTargetCell.IsEmpty())
-        {   
+        {
             Creature targetCreature = SelectedTargetCell.PlacedCreature;
             Animator targetAnimator = targetCreature.Animator;
 
@@ -34,7 +34,8 @@ public class Move : BattleSkill
                 .OnStart(() => { targetAnimator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, true); })
                 .OnComplete(() => { targetAnimator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, false); })
              );
-        } else // 해당 셀이 비어있을 경우, 그냥 이동
+        }
+        else // 해당 셀이 비어있을 경우, 그냥 이동
         {
             sequence.Append(Executor.transform.DOLookAt(SelectedTargetCell.transform.position, 0.1f));
             sequence.Append(
@@ -46,10 +47,10 @@ public class Move : BattleSkill
 
         // 실제 이동
         yield return sequence.Play().WaitForCompletion();
-        
+
         // BattleGridSystem에 변동된 위치 적용 및 Creature가 다시 정면을 바라보게 함
         if (!SelectedTargetCell.IsEmpty())
-        {   
+        {
             Creature targetCreature = SelectedTargetCell.PlacedCreature;
             Managers.BattleMng.GridSystem.SwapCreaturePosition(Executor, SelectedTargetCell.PlacedCreature);
 
@@ -58,7 +59,8 @@ public class Move : BattleSkill
             sequence.Join(targetCreature.LookFront(0.1f));
 
             yield return sequence.Play().WaitForCompletion();
-        } else
+        }
+        else
         {
             Managers.BattleMng.GridSystem.MoveCreature(Executor, SelectedTargetCell);
             yield return Executor.LookFront(0.1f).WaitForCompletion();

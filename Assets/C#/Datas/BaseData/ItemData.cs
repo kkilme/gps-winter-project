@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 
 [Serializable]
@@ -105,7 +103,7 @@ public class ArmorDataLoader : ILoader<int, ArmorData>
     public Dictionary<int, ArmorData> MakeDict()
     {
         var dic = new Dictionary<int, ArmorData>();
-        foreach (var armor in armors) 
+        foreach (var armor in armors)
         {
             armor.ClassName ??= armor.Name;
             armor.ItemType = ItemType.Armor;

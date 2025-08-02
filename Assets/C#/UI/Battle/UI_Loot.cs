@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
-using TMPro;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -118,7 +115,7 @@ public class UI_Loot : UI_Popup
         }
 
         // 전리품을 모두 보여줬을 경우(더 보여줄 전리품이 남아있지 않음)
-        if(_currentLootIndex >= _lootDropped.Items.Count - 1)
+        if (_currentLootIndex >= _lootDropped.Items.Count - 1)
         {
             _itemDetailRect.gameObject.SetActive(false);
             OnLootTakeComplete?.Invoke(_lootTaken);

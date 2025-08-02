@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,7 +59,7 @@ public class UI_BattleBag : UI_Base
             List<Item> currentItems = Managers.AreaMng.Items;
             Item item = currentItems.Find(i => i.DataId == itemData.DataId);
             if (item == null) return; // 아이템이 존재하는지 확인
-            if(item is not IUsableInBattle battleItem) return; // Battle에서 사용 가능한 아이템인지 확인
+            if (item is not IUsableInBattle battleItem) return; // Battle에서 사용 가능한 아이템인지 확인
 
             ItemAction itemAction = battleItem.GetItemAction(); // 아이템 액션 가져오기
             HideInstantly(); // UnsetAction부터 하기 위해 먼저 해야 함

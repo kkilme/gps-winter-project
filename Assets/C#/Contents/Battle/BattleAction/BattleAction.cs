@@ -1,4 +1,3 @@
-using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
@@ -29,7 +28,7 @@ public abstract class BattleAction
         Executor = creature;
 
         TargetSelector.CalculateTargetableCells();
-        if(!TargetSelector.NeedTargetSelection)
+        if (!TargetSelector.NeedTargetSelection)
         {
             SetRandomTarget();
         }
@@ -94,7 +93,7 @@ public abstract class BattleAction
     /// </summary>
     public void HighlightAffectedTargets()
     {
-        if(SelectedTargetCell == null)
+        if (SelectedTargetCell == null)
         {
             return;
         }

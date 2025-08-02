@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -174,7 +173,7 @@ public class UI_Inventory : UI_Base
             if (!slot.IsEmpty && slot.ItemInstanceData == itemInstanceData)
             {
                 slot.UnbindItem();
-                if(destroySlot)
+                if (destroySlot)
                 {
                     InventorySlots.Remove(slot);
                     Destroy(slot.gameObject); // 슬롯 오브젝트 파괴
@@ -237,7 +236,7 @@ public class UI_Inventory : UI_Base
         if (slot == null || slot.IsEmpty || slot.Quantity < quantity) return;
 
         slot.Quantity -= quantity;
-        if(slot.Quantity <= 0)
+        if (slot.Quantity <= 0)
         {
             slot.UnbindItem();
             if (destroySlot)
@@ -254,7 +253,7 @@ public class UI_Inventory : UI_Base
     public void UnbindSlot(UI_ItemSlot itemSlot, bool destroySlot = false)
     {
         int idx = InventorySlots.FindIndex(slot => slot == itemSlot);
-        if(idx >= 0)
+        if (idx >= 0)
         {
             itemSlot.UnbindItem();
             if (destroySlot)
@@ -376,7 +375,7 @@ public class UI_Inventory : UI_Base
     /// </param>
     public void Clear(bool removeActionCallback = true)
     {
-        if(removeActionCallback) ClearActionCallbackOnSlots();
+        if (removeActionCallback) ClearActionCallbackOnSlots();
         foreach (var slot in InventorySlots)
         {
             slot.UnbindItem();

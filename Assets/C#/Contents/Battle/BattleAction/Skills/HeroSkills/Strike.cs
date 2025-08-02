@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class Strike : MeleeSkill
 {
     public override BattleActionEffectRange EffectRange { get; protected set; } = new SingleRange();

@@ -1,7 +1,7 @@
 using DG.Tweening;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 // 4명의 영웅으로 구성된 파티 관리
 public class HeroParty
@@ -18,7 +18,7 @@ public class HeroParty
     /// </summary>
     public void AddHero(int id)
     {
-        if(HeroIds.Count >= GlobalValues.MAX_PARTY_SIZE)
+        if (HeroIds.Count >= GlobalValues.MAX_PARTY_SIZE)
         {
             Debug.LogWarning($"[HeroParty] Cannot add more heroes. Max hero count is {GlobalValues.MAX_PARTY_SIZE}");
             return;
@@ -31,7 +31,7 @@ public class HeroParty
     /// </summary>
     public void AddRuntimeHero(int id, Hero hero)
     {
-        if(RuntimeHeroesDict.ContainsKey(id) || RuntimeHeroes.Contains(hero))
+        if (RuntimeHeroesDict.ContainsKey(id) || RuntimeHeroes.Contains(hero))
         {
             Debug.LogWarning($"[HeroParty] Could not add RuntimeHero: {id} {hero.name}");
             return;
@@ -72,7 +72,7 @@ public class HeroParty
     public bool IsAllDead()
     {
         bool flag = true;
-        foreach(var hero in RuntimeHeroes) flag &= hero.IsDead();
+        foreach (var hero in RuntimeHeroes) flag &= hero.IsDead();
 
         return flag;
     }
@@ -106,7 +106,7 @@ public class HeroParty
         else
         {
             var usedPos = _battlePositionsCache.Values.ToList();
-            for(int i = 0; i < GlobalValues.BATTLEGRID_ROW_COUNT; i++)
+            for (int i = 0; i < GlobalValues.BATTLEGRID_ROW_COUNT; i++)
             {
                 for (int j = 0; j < GlobalValues.BATTLEGRID_COL_COUNT; j++)
                 {
@@ -114,7 +114,7 @@ public class HeroParty
                     if (!usedPos.Contains(pos)) // 현재 구현상 BattleGrid 칸의 수(6)는 파티 최대 인원 수(4)보다 크므로, 반드시 빈 위치가 존재함
                     {
                         _battlePositionsCache.Add(heroInstanceId, pos);
-                        if(!_battlePositions.ContainsKey(heroInstanceId))
+                        if (!_battlePositions.ContainsKey(heroInstanceId))
                             _battlePositions.Add(heroInstanceId, pos);
                         return pos;
                     }
@@ -132,7 +132,7 @@ public class HeroParty
     public void SaveBattlePosition(int heroInstanceId, Vector2Int position)
     {
         _battlePositions[heroInstanceId] = position;
-        if(_battlePositionsCache.ContainsKey(heroInstanceId)) _battlePositionsCache[heroInstanceId] = position;
+        if (_battlePositionsCache.ContainsKey(heroInstanceId)) _battlePositionsCache[heroInstanceId] = position;
     }
     #endregion
 

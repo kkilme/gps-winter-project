@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
@@ -26,7 +23,7 @@ public class UI_QuestList_Quest : UI_Base
         Text_QuestName,
     }
 
-    public override void Init() {}
+    public override void Init() { }
 
     public void LateInit(UI_QuestBoard questBoardUI, Quest quest)
     {
