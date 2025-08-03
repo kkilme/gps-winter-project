@@ -145,6 +145,7 @@ public class HeroParty
         Sequence sequence = DOTween.Sequence();
         for (int i = 0; i < RuntimeHeroes.Count; i++)
         {
+            if (RuntimeHeroes[i].IsDead()) continue;
             Vector3 adjustedTargetPos =
                 targetPos + new Vector3(GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 0], 0, GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 1]);
             RuntimeHeroes[i].transform.LookAt(adjustedTargetPos);
@@ -159,6 +160,7 @@ public class HeroParty
     {
         foreach (var hero in RuntimeHeroes)
         {
+            if(hero.IsDead()) continue;
             hero.Animator.SetBool(GlobalValues.ANIMATION_PARAM_MOVING, true);
         }
     }

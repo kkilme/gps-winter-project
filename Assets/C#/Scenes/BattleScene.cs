@@ -44,6 +44,10 @@ public class BattleScene : BaseScene
         {
             Managers.BattleMng.FinishBattle(BattleResultType.Defeat);
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Managers.BattleMng.FinishBattle(BattleResultType.Retreat);
+        }
     }
 #endif
 }

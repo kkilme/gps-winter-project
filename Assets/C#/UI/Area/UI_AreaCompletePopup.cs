@@ -73,7 +73,7 @@ public class UI_AreaCompletePopup : UI_Popup
             rewardInventory.gameObject.SetActive(false);
         }
 
-        GetButton(Buttons.Button_ReturnToTown).onClick.AddListener(() => CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadTownScene()));
+        GetButton(Buttons.Button_ReturnToTown).onClick.AddListener(() => Managers.AreaMng.LoadTownScene());
     }
 
     public void Show(Loot loot, Quest quest)

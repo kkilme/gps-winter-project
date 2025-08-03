@@ -3,9 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 전투에서 패배했을 시의 UI
+/// Area/전투에서 패배했을 시의 UI
 /// </summary>
-public class UI_BattleDefeat : UI_Base
+public class UI_Defeat : UI_Popup
 {
     enum RectTransforms
     {
@@ -22,6 +22,7 @@ public class UI_BattleDefeat : UI_Base
         Bind<RectTransform>(typeof(RectTransforms));
         Bind<Button>(typeof(Buttons));
         gameObject.SetActive(false);
+        Show();
     }
 
     public override Tween Show()
@@ -43,7 +44,11 @@ public class UI_BattleDefeat : UI_Base
             // 마을로 돌아가는 버튼
             button.onClick.AddListener(() =>
             {
-                Managers.BattleMng.UnloadBattleScene(BattleResultType.Defeat);
+                var currentSceneType = Managers.SceneMng.CurrentSceneType;
+                if (currentSceneType == SceneType.BattleScene)
+                    Managers.BattleMng.UnloadBattleScene(BattleResultType.Defeat);
+                else if (currentSceneType == SceneType.AreaScene)
+                    Managers.AreaMng.LoadTownScene();
             });
         }));
 

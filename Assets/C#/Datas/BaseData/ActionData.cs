@@ -27,13 +27,6 @@ public class AttackSkillData : SkillData
     public int DamagePerCoin;
 }
 
-//// TODO: ItemData
-//[Serializable]
-//public class ItemData : ActionData
-//{
-//    public int Heal;
-//}
-
 [Serializable]
 public class SkillDataLoader : ILoader<int, SkillData>
 {
@@ -49,18 +42,3 @@ public class SkillDataLoader : ILoader<int, SkillData>
         return dic;
     }
 }
-
-//[Serializable]
-//public class ItemDataLoader : ILoader<int, ItemData>
-//{
-//    public List<ItemData> items = new List<ItemData>();
-
-//    public Dictionary<int, ItemData> MakeDict()
-//    {
-//        var dic = new Dictionary<int, ItemData>();
-//        foreach (ItemData item in items)
-//            dic.Add(item.DataId, item);
-
-//        return dic;
-//    }
-//}

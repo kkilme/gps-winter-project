@@ -27,6 +27,7 @@ public class TownManager
         Managers.HeroMng.SpawnHeroParty();
         foreach (var hero in Managers.HeroMng.HeroParty.RuntimeHeroes)
         {
+            hero.TakeHeal(1f); // 영웅 체력 전체 회복
             hero.gameObject.transform.position = _heroPositions[i++].position;
             hero.transform.LookAt(Camera.main.transform.position);
             hero.transform.rotation = Quaternion.Euler(0, hero.transform.rotation.eulerAngles.y, 0);

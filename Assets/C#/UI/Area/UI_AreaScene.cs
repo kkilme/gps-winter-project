@@ -16,7 +16,8 @@ public class UI_AreaScene : UI_Scene
 
     enum Images
     {
-        screenDim,
+        ScreenDim_UnderHeroProfile,
+        ScreenDim_Top,
     }
 
     public UI_AreaTopBar TopBar { get; private set; }
@@ -56,28 +57,41 @@ public class UI_AreaScene : UI_Scene
     {
         ChooseTargetUI.Show();
         if (showScreenDim)
-            ShowScreenDim();
+            HighlightHeroProfiles();
         return ChooseTargetUI;
     }
 
-    public void HideChooseTargetUI()
+    public void ResetUI()
     {
+        CoinTossDisplay.Hide();
         ChooseTargetUI.Hide();
-        HideScreenDim();
+        DehighlightHeroProfiles();
+        HideScreenDimTop();
     }
 
-    public void ShowScreenDim()
+    public void HighlightHeroProfiles()
     {
-        // 현재 자식 순서를 이용해 screenDim이 HeroProfileGroupUI만 가리지 않도록 설정되어 있음.
-        // 이를 통해 HeroProfileGroupUI를 강조하는 효과를 줌.
-        // 만약 다른 UI 요소를 강조하고자 한다면 자식 순서를 조정하는 등의 추가 작업이 필요함.
-        Image screenDim = GetImage(Images.screenDim);
+        // ScreenDim 이미지를 통해 HeroProfileGroupUI를 강조하는 효과를 줌.
+        Image screenDim = GetImage(Images.ScreenDim_UnderHeroProfile);
         screenDim.DOFade(0.9f, 0.5f);
     }
 
-    public void HideScreenDim()
+    public void DehighlightHeroProfiles()
     {
-        Image screenDim = GetImage(Images.screenDim);
+        Image screenDim = GetImage(Images.ScreenDim_UnderHeroProfile);
+        screenDim.DOFade(0f, 0.5f);
+    }
+
+    public void ShowScreenDimTop()
+    {
+        // 모든 UI를 덮는 ScreenDim
+        Image screenDim = GetImage(Images.ScreenDim_Top);
+        screenDim.DOFade(0.9f, 0.5f);
+    }
+
+    public void HideScreenDimTop()
+    {
+        Image screenDim = GetImage(Images.ScreenDim_Top);
         screenDim.DOFade(0f, 0.5f);
     }
 }

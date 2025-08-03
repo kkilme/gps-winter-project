@@ -39,7 +39,7 @@ public class AreaSingleHeroTargetSelector : IAreaActionTargetSelector
     {
         AreaManager.UI.HeroProfileGroupUI.StopBlinking();
         AreaManager.UI.HeroProfileGroupUI.ClearEvent();
-        AreaManager.UI.HideChooseTargetUI();
+        AreaManager.UI.ResetUI();
         AreaManager.AreaState = AreaState.Idle;
     }
 }

@@ -71,6 +71,12 @@ public class AreaCollapseSystem
                 collapsedTile.ApplyCollapseDamage();
             }
         }
+
         _collapseCount++;
+
+        if (Managers.HeroMng.HeroParty.IsAllDead())
+        {
+            _areaManager.OnQuestFailed();
+        }
     }
 }

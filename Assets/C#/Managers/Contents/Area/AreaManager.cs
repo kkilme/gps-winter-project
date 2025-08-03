@@ -37,7 +37,7 @@ public class AreaManager
         AreaData = Managers.DataMng.AreaDataDict[areaInitContext.AreaName];
         Quest = areaInitContext.Quest;
         UI = Managers.UIMng.ShowSceneUI<UI_AreaScene>();
-        foreach(var itemData in areaInitContext.Items)
+        foreach (var itemData in areaInitContext.Items)
         {
             Items.Add(ItemFactory.CreateItemById(itemData.DataId));
         }
@@ -85,7 +85,7 @@ public class AreaManager
         targetPosition = Map.GetTileCenterPosition(targetPosition);
         for (int i = 0; i < heroes.Count; i++)
         {
-            if(!heroes[i].IsDead()) heroes[i].transform.position = targetPosition + new Vector3(GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 0], 0, GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 1]);
+            if (!heroes[i].IsDead()) heroes[i].transform.position = targetPosition + new Vector3(GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 0], 0, GlobalValues.HERO_POS_ON_AREA_TILE_OFFSET[i, 1]);
         }
     }
 
@@ -109,7 +109,7 @@ public class AreaManager
     /// </summary>
     public void MoveHeroes(Vector3 targetPosition)
     {
-        if(AreaState != AreaState.Idle) return;
+        if (AreaState != AreaState.Idle) return;
 
         // 이동 가능한 타일인지 확인
         if (!Map.IsPositionMoveable(CurrentPlayerPosition, targetPosition)) return;
@@ -129,7 +129,7 @@ public class AreaManager
             OnHeroMoved(targetPosition);
         });
     }
-    
+
     /// <summary>
     /// 영웅 파티 이동 완료 후 실행되는 로직
     /// </summary>
@@ -148,7 +148,7 @@ public class AreaManager
     private void UpdateTileBrightness()
     {
         var newVisiblePos = Map.GetVisibleTilePositions(CurrentPlayerPosition);
-        foreach(var pos in _visiblePositions)
+        foreach (var pos in _visiblePositions)
         {
             if (!newVisiblePos.Contains(pos) || Map.TileTypeMap[pos.y, pos.x] == AreaTileType.Collapsed) // 붕괴된 타일도 밝기 낮춤
             {
@@ -171,6 +171,12 @@ public class AreaManager
     /// </summary>
     public IEnumerator OnTileEventFinish()
     {
+        if (Managers.HeroMng.HeroParty.IsAllDead())
+        {
+            OnQuestFailed();
+            yield break;
+        }
+
         CameraController.Freeze = false;
 
         switch (_currentTile.TileType)
@@ -245,6 +251,9 @@ public class AreaManager
         return AreaData.MonsterSquadIds.GetRandomElement();
     }
 
+    /// <summary>
+    /// 퀘스트 완료 시 보상 지급 및 UI 팝업 표시
+    /// </summary>
     private void OnQuestComplete()
     {
         Managers.SoundMng.FadeoutBGM(1f);
@@ -278,6 +287,19 @@ public class AreaManager
             }
         }
         Managers.InvMng.AddGold(Loots.Gold);
+    }
+
+    /// <summary>
+    /// 퀘스트 실패 시 로직
+    /// </summary>
+    public void OnQuestFailed()
+    {
+        Managers.SoundMng.FadeoutBGM(1f);
+        CameraController.Freeze = true;
+        AreaInputHandler.Clear();
+
+        UI.ShowScreenDimTop();
+        Managers.UIMng.ShowPopupUI<UI_Defeat>();
     }
     #endregion
 
@@ -331,12 +353,19 @@ public class AreaManager
         CoroutineRunner.Instance.StartCoroutine(OnTileEventFinish());
     }
 
+    /// <summary>
+    /// Town 씬 로딩 시작
+    /// </summary>
+    public void LoadTownScene()
+    {
+        CoroutineRunner.Instance.StartCoroutine(Managers.SceneMng.LoadTownScene());
+    }
+
+    #endregion
+
     public void Clear()
     {
         AreaInputHandler.Clear();
         Items.Clear();
     }
-
-    #endregion
-
 }

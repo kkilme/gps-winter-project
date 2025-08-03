@@ -25,7 +25,7 @@ public class UI_ChooseTarget_Area : UI_Base
 
     public override void HideInstantly()
     {
-        Managers.AreaMng.UI.HideScreenDim();
+        Managers.AreaMng.UI.DehighlightHeroProfiles();
         base.HideInstantly();
     }
 

@@ -14,7 +14,6 @@ public class UI_BattleScene : UI_Scene
         UI_HeroProfileGroup_Vertical,
         UI_MonsterProfileGroup,
         UI_BattleVictory,
-        UI_BattleDefeat,
         UI_BattleRetreat,
         UI_BattleBag,
     }
@@ -50,7 +49,6 @@ public class UI_BattleScene : UI_Scene
         MonsterProfileGroupUI = GetGameObject(SubItemUI.UI_MonsterProfileGroup).GetOrAddComponent<UI_MonsterProfileGroup>();
         BattleBagUI = GetGameObject(SubItemUI.UI_BattleBag).GetOrAddComponent<UI_BattleBag>();
         GetGameObject(SubItemUI.UI_BattleVictory).GetOrAddComponent<UI_BattleVictory>();
-        GetGameObject(SubItemUI.UI_BattleDefeat).GetOrAddComponent<UI_BattleDefeat>();
         GetGameObject(SubItemUI.UI_BattleRetreat).GetOrAddComponent<UI_BattleRetreat>();
 
         Bind<UI_Base>(typeof(SubItemUI));
@@ -108,6 +106,8 @@ public class UI_BattleScene : UI_Scene
         ActionPanel.Hide();
         TurnStateUI.Hide();
         CoinTossDisplay.Hide();
+        HeroProfileGroupUI.StopBlinking();
+        MonsterProfileGroupUI.StopBlinking();
         _fadeBG.DOColor(new Color(_fadeBG.color.r, _fadeBG.color.g, _fadeBG.color.b, 0.9f), 0.7f).OnComplete(() =>
         {
             switch (battleResult)
@@ -116,7 +116,7 @@ public class UI_BattleScene : UI_Scene
                     Get<UI_Base>(SubItemUI.UI_BattleVictory).Show().OnComplete(() => { ShowLoot(); });
                     break;
                 case BattleResultType.Defeat:
-                    Get<GameObject>(SubItemUI.UI_BattleDefeat).GetComponent<UI_Base>().Show();
+                    Managers.UIMng.ShowPopupUI<UI_Defeat>();
                     break;
                 case BattleResultType.Retreat:
                     Get<GameObject>(SubItemUI.UI_BattleRetreat).GetComponent<UI_Base>().Show();
