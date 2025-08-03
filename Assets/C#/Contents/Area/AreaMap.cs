@@ -76,8 +76,8 @@ public class AreaMap
     /// </summary>
     public void WorldToGridPosition(Vector3 worldPosition, out int x, out int z)
     {
-        x = Mathf.RoundToInt((worldPosition.x - (int)_originPosition.x) / (TILE_PREFAB_WIDTH * 0.75f));
-        z = Mathf.RoundToInt((worldPosition.z - (int)_originPosition.z) / TILE_PREFAB_HEIGHT - (x % 2 == 1 ? 0.5f : 0f));
+        x = Mathf.RoundToInt((worldPosition.x - _originPosition.x) / (TILE_PREFAB_WIDTH * 0.75f));
+        z = Mathf.RoundToInt((worldPosition.z - _originPosition.z) / TILE_PREFAB_HEIGHT - (x % 2 == 1 ? 0.5f : 0f));
     }
 
     /// <summary>
@@ -274,19 +274,26 @@ public class AreaMap
     }
 
     /// <summary>
-    /// row(PlayableField 기준)행부터 row + amount - 1 행까지의 타일들을 CollapsedTile로 교체. Boss 타일은 제외.
+    /// row(PlayableField 기준)행부터 row + amount - 1 행까지의 타일들을 CollapsedTile로 교체. 붕괴된 타일들의 위치를 List로 반환.
     /// </summary>
-    public void CollapseTiles(int row, int amount)
+    public List<Vector2Int> CollapseTiles(int row, int amount)
     {
+        List<Vector2Int> collapsedTiles = new();
         for (int z = row + PlayableFieldStart.y; z < row + PlayableFieldStart.y + amount; z++)
         {
             for (int x = PlayableFieldStart.x; x <= PlayableFieldStart.x + PlayableFieldWidth; x++)
             {
-                if (TileTypeMap[z, x] != AreaTileType.OutOfField && TileTypeMap[z, x] != AreaTileType.Boss) ReplaceEventTile(GridToWorldPosition(x, z), AreaTileType.Collapsed);
-                BaseTileMap[z, x].OnCollapse();
-                RevealFogOfWar(x, z); // 전장의 안개도 함께 제거
+                if (TileTypeMap[z, x] != AreaTileType.OutOfField)
+                {
+                    ReplaceEventTile(GridToWorldPosition(x, z), AreaTileType.Collapsed);
+                    RevealFogOfWar(x, z); // 전장의 안개도 함께 제거
+                    BaseTileMap[z, x].OnCollapse();
+                    collapsedTiles.Add(new Vector2Int(x, z));
+                }
             }
         }
+
+        return collapsedTiles;
     }
 
     /// <summary>

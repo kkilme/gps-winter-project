@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 // 턴 진행에 따른 Area 붕괴 시스템
@@ -58,7 +59,18 @@ public class AreaCollapseSystem
     /// </summary>
     public void ExecuteCollapse()
     {
-        _map.CollapseTiles(_collapseCount * _collapseAmount, _collapseAmount);
+        List<Vector2Int> collapsedTiles = _map.CollapseTiles(_collapseCount * _collapseAmount, _collapseAmount);
+        _map.WorldToGridPosition(_areaManager.CurrentPlayerPosition, out int x, out int z);
+
+        // 현재 플레이어 위치가 붕괴된 타일에 포함되어 있다면 데미지 주기
+        if (collapsedTiles.Contains(new Vector2Int(x, z)))
+        {
+            CollapsedTile collapsedTile = _map.EventTileMap[z, x] as CollapsedTile;
+            if(collapsedTile != null)
+            {
+                collapsedTile.ApplyCollapseDamage();
+            }
+        }
         _collapseCount++;
     }
 }
