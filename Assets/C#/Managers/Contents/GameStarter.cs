@@ -40,6 +40,7 @@ public class GameStarter
     {
         Managers.InvMng.AddItem(GlobalValues.ITEM_HEALPOTION_ID, 13);
         Managers.InvMng.AddItem(GlobalValues.ARMOR_SAMPLEBODY1_ID, 2);
+        Managers.InvMng.AddItem(202001, 3); // Basic Helmet
         Managers.InvMng.AddItem(202002, 3); // Basic Cloak
     }
 

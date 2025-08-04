@@ -2,7 +2,7 @@
   "armors": [
     {
       "DataId": 202000,
-      "Name": "Basic Body Armor",
+      "Name": "Basic BodyArmor",
       "ArmorType": "Body",
       "PhysicalDefense": 2,
       "MagicDefense": 1,
@@ -11,12 +11,12 @@
     },
     {
       "DataId": 202001,
-      "Name": "SampleBody2",
-      "ArmorType": "Body",
+      "Name": "Basic Helmet",
+      "ArmorType": "Helmet",
       "Defense": 1,
       "MagicDefense": 1,
       "Dexterity": 1,
-      "ArmorIndex": 7,
+      "ArmorIndex": 0,
       "SellPrice": 50,
     },
     {

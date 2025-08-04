@@ -44,22 +44,28 @@ public class UI_PartyFormation : UI_Base
     private void FillSimpleHeroDetailUI()
     {
         List<HeroInstanceData> savedHeroDatas = Managers.HeroMng.HeroStorage.GetAllOwnedHeroDatas();
+
+        // 모든 영웅에 대한 UI 생성 및 초기화
+        Dictionary<long, UI_SimpleHeroDetail> allHeroUIMap = new Dictionary<long, UI_SimpleHeroDetail>();
         foreach (var heroData in savedHeroDatas)
         {
-            UI_SimpleHeroDetail heroDetail = Managers.UIMng.MakeSubItemUI<UI_SimpleHeroDetail>(_heroDetailParent, "Town/" + nameof(UI_SimpleHeroDetail));
-            heroDetail.LateInit(this, heroData);
+            var ui = Managers.UIMng.MakeSubItemUI<UI_SimpleHeroDetail>(_heroDetailParent, "Town/" + nameof(UI_SimpleHeroDetail));
+            ui.LateInit(this, heroData);
+            allHeroUIMap.Add(heroData.InstanceId, ui);
 
-            // 파티에 속해 있는 영웅인지 확인하고, UI에 반영
-            if (Managers.HeroMng.IsHeroInParty(heroData))
-            {
-                _selectedHeroDetailUIs.Add(heroDetail);
-            }
-            else
-            {
-                heroDetail.DisableOrderInParty();
-            }
-            UpdateHeroDetailUIOrder();
+            ui.DisableOrderInParty();
         }
+
+        // 파티 영웅 순서대로 _selectedHeroDetailUIs 채우기
+        foreach (var hero in Managers.HeroMng.HeroParty.RuntimeHeroes)
+        {
+            if (allHeroUIMap.TryGetValue(hero.InstanceId, out var ui))
+            {
+                _selectedHeroDetailUIs.Add(ui);
+            }
+        }
+
+        UpdateHeroDetailUIOrder();
     }
 
     /// <summary>
@@ -81,6 +87,9 @@ public class UI_PartyFormation : UI_Base
         UpdateHeroDetailUIOrder();
     }
 
+    /// <summary>
+    /// 파티에서 몇 번쨰 영웅인지 표시하는 UI 정보 업데이트
+    /// </summary>
     private void UpdateHeroDetailUIOrder()
     {
         for (int i = 1; i <= _selectedHeroDetailUIs.Count; i++)

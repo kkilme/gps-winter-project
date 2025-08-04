@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WebSocketSharp;
 
 
 [Serializable]
@@ -86,7 +87,14 @@ public class WeaponDataLoader : ILoader<int, WeaponData>
             weapon.ItemType = ItemType.Weapon;
             weapon.EquipmentType = EquipmentType.Weapon;
             weapon.MaxStack = 1;
-            weapon.ImagePath ??= "Default_Weapon";
+            if (weapon.ImagePath.IsNullOrEmpty())
+            {
+                weapon.ImagePath = weapon.WeaponType switch
+                {
+                    WeaponType.Wand => "Default_Wand",
+                    _ => "Default_Weapon",
+                };
+            }
             weapon.SoundPath ??= "Equipment";
             dic.Add(weapon.DataId, weapon);
         }
@@ -115,7 +123,16 @@ public class ArmorDataLoader : ILoader<int, ArmorData>
                 _ => EquipmentType.None
             };
             armor.MaxStack = 1;
-            armor.ImagePath ??= "Default_Armor";
+            if (armor.ImagePath.IsNullOrEmpty())
+            {
+                armor.ImagePath = armor.ArmorType switch
+                {
+                    ArmorType.Helmet => "Default_Helmet",
+                    ArmorType.Body => "Default_BodyArmor",
+                    ArmorType.Cloak => "Default_Cloak",
+                    _ => "Default_Armor"
+                };
+            }
             armor.SoundPath ??= "Equipment";
             dic.Add(armor.DataId, armor);
         }

@@ -135,7 +135,17 @@ public class WeaponItemDetailDesign : EquipmentItemDetailDesign
 
     protected override void ApplyItemTypeIconImage(UI_ItemDetailPopup ui, ItemData itemData)
     {
-        ui.SetItemTypeIcon("Default_Weapon"); // 무기 타입 별 다른 이미지 지정 가능
+        if (itemData is not WeaponData weaponData) return;
+
+        switch (weaponData.WeaponType) // 무기 타입별로 다른 아이콘 지정. 일단 Wand만 애셋을 구해서 적용함.
+        {
+            case WeaponType.Wand:
+                ui.SetItemTypeIcon("Wand");
+                break;
+            default:
+                ui.SetItemTypeIcon("Default_Weapon");
+                break;
+        }
     }
 }
 
@@ -143,7 +153,23 @@ public class ArmorItemDetailDesign : EquipmentItemDetailDesign
 {
     protected override void ApplyItemTypeIconImage(UI_ItemDetailPopup ui, ItemData itemData)
     {
-        ui.SetItemTypeIcon("Default_Armor"); // 방어구 부위별 다른 이미지 지정 가능. 맞는 애셋이 없어서 보류.
+        if (itemData is not EquipmentData equipmentData) return;
+
+        switch (equipmentData.EquipmentType) // 방어구 부위별로 다른 아이콘 지정.
+        {
+            case EquipmentType.Cloak:
+                ui.SetItemTypeIcon("Cloak");
+                break;
+            case EquipmentType.Body:
+                ui.SetItemTypeIcon("BodyArmor");
+                break;
+            case EquipmentType.Helmet:
+                ui.SetItemTypeIcon("Helmet");
+                break;  
+            default:
+                ui.SetItemTypeIcon("Default_Armor");
+                break;
+        }
     }
 }
 
