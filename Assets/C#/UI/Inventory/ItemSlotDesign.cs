@@ -40,7 +40,7 @@ public abstract class ItemSlotDesign
     public abstract Sprite GetDefaultSlotSprite();
 
     /// <summary>
-    /// 마우스 오버 시 변경될 슬롯의 배경 이미지 스프라이트를 반환.
+    /// 마우스 오버 시 변경될 슬롯의 배경 이미지 스프라이트를 반환. 존재하지 않는 경우 null을 반환.
     /// </summary>
     public abstract Sprite GetSlotSpriteOnMouseOver();
 

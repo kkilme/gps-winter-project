@@ -8,8 +8,8 @@ public abstract class ItemDetailDesign
 {
     public void Apply(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)
     {
-        // UI_ForceInsideScreen는를 통해 ItemDetailUI의 위치를 매 프레임 설정하는데, 디자인 적용이 끝나야만 ItemDetailUI의 RectTransform 값이 제대로 설정되어 올바른 위치가 결정됨.
-        // CanvasGroup을 통해 Design 적용이 끝났을 때 자연스럽게 보이도록 함.
+        // 디자인 적용이 끝나야만 ItemDetailUI의 RectTransform 값이 제대로 설정되어 올바른 위치가 결정됨.
+        // CanvasGroup을 통한 Fade 효과로 Design 적용이 끝났을 때 자연스럽게 보이도록 함.
         CanvasGroup canvasGroup = ui.gameObject.GetOrAddComponent<CanvasGroup>();
         canvasGroup.alpha = 0f;
 
@@ -165,7 +165,7 @@ public class ArmorItemDetailDesign : EquipmentItemDetailDesign
                 break;
             case EquipmentType.Helmet:
                 ui.SetItemTypeIcon("Helmet");
-                break;  
+                break;
             default:
                 ui.SetItemTypeIcon("Default_Armor");
                 break;
