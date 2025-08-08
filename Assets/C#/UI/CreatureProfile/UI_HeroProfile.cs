@@ -11,6 +11,8 @@ public class UI_HeroProfile : UI_CreatureProfile
         Text_Retreat
     }
 
+    private HeroInstanceData _bindingHeroData;
+
     public override void Init()
     {
         base.Init();
@@ -27,9 +29,11 @@ public class UI_HeroProfile : UI_CreatureProfile
         stat.OnStatChanged -= UpdateStatProfile;
         stat.OnStatChanged += UpdateStatProfile;
 
-        heroInstanceData.OnNameChanged -= UpdateName;
-        heroInstanceData.OnNameChanged += UpdateName;
-        UpdateName(heroInstanceData);
+        _bindingHeroData = heroInstanceData;
+
+        _bindingHeroData.OnNameChanged -= UpdateName;
+        _bindingHeroData.OnNameChanged += UpdateName;
+        UpdateName(_bindingHeroData);
 
         Get<Image>(Images.Creature_Image).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.CREATURE_IMAGE_PATH_PREFIX + $"{hero.CreatureData.Name}_Front");
 
@@ -45,5 +49,13 @@ public class UI_HeroProfile : UI_CreatureProfile
     public void OnFlee()
     {
         _canvasGroup.DOFade(0.33f, 1f).OnComplete(() => GetText(Enum.GetNames(typeof(Texts)).Length + HeroTexts.Text_Retreat).gameObject.SetActive(true));
+    }
+
+    private void OnDestroy()
+    {
+        if(_bindingHeroData != null)
+        {
+            _bindingHeroData.OnNameChanged -= UpdateName;
+        }
     }
 }

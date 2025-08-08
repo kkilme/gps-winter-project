@@ -100,4 +100,11 @@ public class UI_AreaButtons : UI_Base
             new Vector2(-10, 0)
             );
     }
+
+    public void CloseAllPopups()
+    {
+        Managers.UIMng.ClosePopupUI<UI_AreaLootListPopup>();
+        Managers.UIMng.ClosePopupUI<UI_AreaItemListPopup>();
+        _openPopup = null;
+    }
 }

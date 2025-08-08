@@ -211,7 +211,6 @@ public class HeroStorage
     /// <summary>
     /// 영웅이 착용중인 무기 해제.
     /// </summary>
-    /// <param name="heroInstanceId"></param>
     private void UnEquipWeapon(int heroInstanceId)
     {
         if (_ownedHeroes.TryGetValue(heroInstanceId, out HeroInstanceData savedHeroData) && savedHeroData.Weapon != null)

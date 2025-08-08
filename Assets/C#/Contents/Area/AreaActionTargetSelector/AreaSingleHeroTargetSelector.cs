@@ -31,12 +31,13 @@ public class AreaSingleHeroTargetSelector : IAreaActionTargetSelector
         var go = pointerEventData.pointerCurrentRaycast.gameObject;
 
         UI_HeroProfile heroProfile = go.GetComponentInParent<UI_HeroProfile>();
-        _onTargetSelected.Invoke(heroProfile.BindingCreature);
+        _onTargetSelected?.Invoke(heroProfile.BindingCreature);
         CleanUp();
     }
 
     private void CleanUp()
     {
+        _onTargetSelected = null;
         AreaManager.UI.HeroProfileGroupUI.StopBlinking();
         AreaManager.UI.HeroProfileGroupUI.ClearEvent();
         AreaManager.UI.ResetUI();

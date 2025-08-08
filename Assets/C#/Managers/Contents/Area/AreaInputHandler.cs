@@ -31,6 +31,7 @@ public class AreaInputHandler
         switch (mouseEvent)
         {
             case MouseEvent.PointerUp:
+                _areaManager.UI.ResetUI();
                 _areaManager.MoveHeroes(_currentMouseoverPosition);
                 break;
         }

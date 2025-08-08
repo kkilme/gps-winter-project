@@ -65,6 +65,7 @@ public class UI_AreaScene : UI_Scene
     {
         CoinTossDisplay.Hide();
         ChooseTargetUI.Hide();
+        AreaButtons.CloseAllPopups();
         DehighlightHeroProfiles();
         HideScreenDimTop();
     }
