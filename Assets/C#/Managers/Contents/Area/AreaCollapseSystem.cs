@@ -45,8 +45,8 @@ public class AreaCollapseSystem
             if (progressCount > 1) yield return tween.WaitForCompletion();
         }
 
-        // 보스 위치로부터 최대 2칸 아래까지만 파괴됨
-        if (_collapseCount * _collapseAmount >= _map.PlayableFieldHeight)
+        // 보스 위치로부터 2칸 아래까지만 파괴됨
+        if (_collapseCount * _collapseAmount >= _map.PlayableFieldHeight - 2)
         {
             _collapseFinished = true;
             _collapseInformer.OnCollapseFinished();
