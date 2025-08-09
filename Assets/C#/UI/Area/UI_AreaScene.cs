@@ -46,6 +46,7 @@ public class UI_AreaScene : UI_Scene
     {
         CoinTossDisplay.Hide();
         AreaButtons.Show();
+        TopBar.SetAreaName(Managers.AreaMng.AreaData.Name);
         TopBar.Show();
         CollapseInformer.Show();
         HeroProfileGroupUI.BindCreature();
