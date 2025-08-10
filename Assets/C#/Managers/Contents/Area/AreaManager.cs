@@ -204,7 +204,7 @@ public class AreaManager
 
     #region AreaContents
     /// <summary>
-    /// 영웅들 체력 회복 및 붕괴 턴 추가 진행
+    /// 파티 체력 회복 및 붕괴 턴 추가 진행
     /// </summary>
     public IEnumerator RestParty()
     {
