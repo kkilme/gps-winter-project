@@ -1,12 +1,5 @@
 public class Encounter_Pond : AreaEncounter
 {
-    public override void SetData(EncounterData encounterData)
-    {
-        _data = encounterData;
-        _coinCount = 4;
-        _usingStat = StatName.Vitality;
-    }
-
     protected override void AddResultLines()
     {
         int statValue = Managers.HeroMng.HeroParty.GetAverageStat(_usingStat);

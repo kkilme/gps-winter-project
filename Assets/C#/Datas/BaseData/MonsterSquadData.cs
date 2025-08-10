@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[Serializable]
 public class MonsterSquadData
 {
     public int DataId;
@@ -31,6 +31,7 @@ public class MonsterSquadData
     }
 }
 
+[Serializable]
 public class MonsterSquad_MonsterData
 {
     public int DataId;

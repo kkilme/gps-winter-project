@@ -55,13 +55,13 @@ public class UI_AreaEncounterPopup : UI_Popup
     /// <summary>
     /// encounterData를 UI에 바인딩하여 관련 UI 요소 업데이트.
     /// </summary>
-    public void BindEncounterData(EncounterData encounterData, int coinCount, StatName usingStat)
+    public void BindEncounterData(EncounterData encounterData)
     {
         Get<TextMeshProUGUI>(Texts.Text_EncounterName).text = encounterData.Name;
         Get<TextMeshProUGUI>(Texts.Text_EncounterDescription).text = encounterData.Description;
-        Get<TextMeshProUGUI>(Texts.Text_PartyAverageStat).text = $"Party Average {usingStat.ToString()}: {Managers.HeroMng.HeroParty.GetAverageStat(usingStat)}";
+        Get<TextMeshProUGUI>(Texts.Text_PartyAverageStat).text = $"Party Average {encounterData.UsingStat.ToString()}: {Managers.HeroMng.HeroParty.GetAverageStat(encounterData.UsingStat)}";
         Get<Image>(Images.Image_EncounterImage).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.AREAENCOUNTER_PATH_PREFIX + encounterData.ImagePath);
-        _coinTossDisplay.Show(coinCount, usingStat);
+        _coinTossDisplay.Show(encounterData.CoinCount, encounterData.UsingStat);
     }
 
     /// <summary>

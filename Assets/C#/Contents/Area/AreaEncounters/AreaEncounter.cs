@@ -5,15 +5,19 @@ using UnityEngine;
 public abstract class AreaEncounter
 {
     protected EncounterData _data;
-    protected int _coinCount;
-    protected StatName _usingStat;
+    protected StatName _usingStat => _data.UsingStat;
+    protected int _coinCount => _data.CoinCount;
+
 
     protected UI_AreaEncounterPopup _popup;
 
     /// <summary>
     /// 데이터 바인딩 및 coinCount와 usingStat을 초기화. ObjectHolder에서 Encounter 생성과 동시에 호출한다.
     /// </summary>
-    public abstract void SetData(EncounterData encounterData);
+    public void SetData(EncounterData encounterData)
+    {
+        _data = encounterData;
+    }
 
     /// <summary>
     /// Encounter 팝업 생성 및 초기화 로직
@@ -21,7 +25,7 @@ public abstract class AreaEncounter
     public virtual void ShowEncounterPopup()
     {
         _popup = Managers.UIMng.ShowPopupUI<UI_AreaEncounterPopup>();
-        _popup.BindEncounterData(_data, _coinCount, _usingStat);
+        _popup.BindEncounterData(_data);
         _popup.SetupButtons(
             _data.IsLeavable,
             onTry: () => CoroutineRunner.Instance.StartCoroutine(TryEncounter()),

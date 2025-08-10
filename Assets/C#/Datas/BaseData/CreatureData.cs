@@ -16,7 +16,7 @@ public class CreatureData
     public int Dexterity;
 }
 
-
+[Serializable]
 public class HeroData : CreatureData
 {
     public int StartWeapon; // 시작 무기의 DataId

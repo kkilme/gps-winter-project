@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
+[Serializable]
 public class EncounterData
 {
     public int DataId;
@@ -10,6 +11,9 @@ public class EncounterData
     public string Description;
     public string ImagePath;
     public bool IsLeavable; // 플레이어가 시도하지 않고 떠날 수 있는지 여부
+
+    public int CoinCount; // 코인 토스에 사용되는 코인의 개수
+    public StatName UsingStat; // 코인 토스에 사용되는 Stat
 }
 
 [Serializable]

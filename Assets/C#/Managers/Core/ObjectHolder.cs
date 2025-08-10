@@ -44,18 +44,18 @@ public class ObjectHolder
 
     private void BindEncounters()
     {
-        foreach (var encounterData in Managers.DataMng.EncounterDataDict)
+        foreach (var (id, data) in Managers.DataMng.EncounterDataDict)
         {
-            Type encounterType = Type.GetType(encounterData.Value.ClassName);
+            Type encounterType = Type.GetType(data.ClassName);
             if (encounterType == null || !typeof(AreaEncounter).IsAssignableFrom(encounterType))
             {
-                Debug.LogError("Failed to Bind Encounter: " + encounterData.Value.ClassName);
+                Debug.LogError("Failed to Bind Encounter: " + data.ClassName);
                 continue;
             }
 
             var encounter = Activator.CreateInstance(encounterType) as AreaEncounter;
-            encounter.SetData(encounterData.Value);
-            Encounters[encounterData.Key] = encounter;
+            encounter.SetData(data);
+            Encounters[id] = encounter;
         }
     }
 }

@@ -7,6 +7,8 @@
       "Description": "You found a pond. Would you drink some water here?",
       "ImagePath": "Pond",
       "IsLeavable": true,
+      "CoinCount": 4,
+      "UsingStat": "Vitality"
     }
   ]
 }
