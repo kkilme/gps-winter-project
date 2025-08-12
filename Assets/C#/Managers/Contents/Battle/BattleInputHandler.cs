@@ -31,6 +31,7 @@ public class BattleInputHandler
         _dragStartCell = null;
     }
 
+    #region Mouse Event Handlers
     public void HandleMouseOnPlacementPhase(MouseEvent mouseEvent)
     {
         switch (mouseEvent)
@@ -72,7 +73,8 @@ public class BattleInputHandler
                 break;
         }
     }
-
+    #endregion
+    #region Placement Phase
     private void OnMouseHover_PlacementPhase()
     {
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
@@ -93,7 +95,45 @@ public class BattleInputHandler
             CurrentMouseOverCell = null;
         }
     }
+    private void OnDragStart_PlacementPhase()
+    {
+        if (CurrentMouseOverCell?.PlacedCreature == null || CurrentMouseOverCell.GridSide == GridSide.MonsterSide) return;
 
+        _draggingCreature = CurrentMouseOverCell.PlacedCreature;
+        _dragStartCell = CurrentMouseOverCell;
+    }
+
+    private void OnDragging_PlacementPhase()
+    {
+        if (_draggingCreature == null) return;
+
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        _draggingCreature.transform.position = GetMouseWorldPosition();
+    }
+
+    public void OnDragEnd_PlacementPhase()
+    {
+        if (_draggingCreature == null) return;
+        if (CurrentMouseOverCell != null && CurrentMouseOverCell.GridSide == GridSide.HeroSide)
+        {
+            if (CurrentMouseOverCell.PlacedCreature == null)
+            {
+                _battleGridSystem.MoveCreature(_draggingCreature, CurrentMouseOverCell);
+            }
+            else
+            {
+                _battleGridSystem.SwapCreaturePosition(_draggingCreature, CurrentMouseOverCell.PlacedCreature);
+            }
+        }
+        else
+        {
+            _battleGridSystem.MoveCreature(_draggingCreature, _dragStartCell);
+        }
+        _draggingCreature = null;
+        _dragStartCell = null;
+    }
+    #endregion
+    #region Battle Phase
     private void OnMouseHover_BattleIdle()
     {
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
@@ -157,7 +197,8 @@ public class BattleInputHandler
         // 액션 실행
         CoroutineRunner.Instance.StartCoroutine(_currentAction.Execute());
     }
-
+    #endregion
+    #region Utility
     private Vector3 GetMouseWorldPosition()
     {
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
@@ -167,42 +208,5 @@ public class BattleInputHandler
         }
         return new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0f, GlobalValues.BATTLEFIELD_POS_Z);
     }
-
-    private void OnDragStart_PlacementPhase()
-    {
-        if (CurrentMouseOverCell?.PlacedCreature == null || CurrentMouseOverCell.GridSide == GridSide.MonsterSide) return;
-
-        _draggingCreature = CurrentMouseOverCell.PlacedCreature;
-        _dragStartCell = CurrentMouseOverCell;
-    }
-
-    private void OnDragging_PlacementPhase()
-    {
-        if (_draggingCreature == null) return;
-
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        _draggingCreature.transform.position = GetMouseWorldPosition();
-    }
-
-    public void OnDragEnd_PlacementPhase()
-    {
-        if (_draggingCreature == null) return;
-        if (CurrentMouseOverCell != null && CurrentMouseOverCell.GridSide == GridSide.HeroSide)
-        {
-            if (CurrentMouseOverCell.PlacedCreature == null)
-            {
-                _battleGridSystem.MoveCreature(_draggingCreature, CurrentMouseOverCell);
-            }
-            else
-            {
-                _battleGridSystem.SwapCreaturePosition(_draggingCreature, CurrentMouseOverCell.PlacedCreature);
-            }
-        }
-        else
-        {
-            _battleGridSystem.MoveCreature(_draggingCreature, _dragStartCell);
-        }
-        _draggingCreature = null;
-        _dragStartCell = null;
-    }
+    #endregion
 }

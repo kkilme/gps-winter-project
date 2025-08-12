@@ -20,14 +20,14 @@ public class MonsterAI : CreatureAI
 
     // 몬스터는 기본적으로 가진 스킬 중 하나를 랜덤으로 선택함.
     // 스킬 대상 또한 랜덤으로 선택함.
-    // 더 디테일한 AI 구현시, 오버라이딩 이용하기.
-    public override BattleSkill DecideSkill()
-    {
-        List<BattleSkill> skillList = new List<BattleSkill>(_skillList);
+    // 더 디테일한 AI 구현시, 오버라이딩하여 구현하기.
+    public override BattleSkill DecideSkill() => SelectRandomSkill(new List<BattleSkill>(_skillList));
 
+    protected BattleSkill SelectRandomSkill(List<BattleSkill> skillList)
+    {
         while (skillList.Count > 0)
         {
-            var skill = skillList[Random.Range(0, skillList.Count)];
+            var skill = skillList.GetRandomElement();
             if (skill.IsExecutable(_monster))
             {
                 skill.Set(_monster);

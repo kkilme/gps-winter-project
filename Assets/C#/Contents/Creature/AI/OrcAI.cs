@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class OrcAI : MonsterAI
 {
     private int _berserkSpinCooldown = 0;
 
-    private const int BERSERKSPIN_COLLDOWN = 1;
+    private const int BERSERKSPIN_COOLDOWN = 1;
 
     public override BattleSkill DecideSkill()
     {
@@ -19,26 +20,10 @@ public class OrcAI : MonsterAI
             return berserkSpin;
         }
 
-        _berserkSpinCooldown = Mathf.Max(0, _berserkSpinCooldown - 1);
+        _berserkSpinCooldown = Math.Max(0, _berserkSpinCooldown - 1);
         if (berserkSpin != null) skillList.Remove(berserkSpin);
 
-        while (skillList.Count > 0)
-        {
-            var skill = skillList[Random.Range(0, skillList.Count)];
-            if (skill.IsExecutable(_monster))
-            {
-                skill.Set(_monster);
-                skill.SetRandomTarget();
-                return skill;
-            }
-            else
-            {
-                skillList.Remove(skill);
-            }
-        }
-
-        // 아무 스킬도 선택할 수 없다면 DummySkill을 반환하여 턴을 넘김
-        return new DummySkill();
+        return SelectRandomSkill(skillList);
     }
 
     /// <summary>
@@ -66,8 +51,8 @@ public class OrcAI : MonsterAI
             if (maxTargetCount == range.GetAffectedTargets(targetable).Count) candidates.Add(targetable);
         }
 
-        berserkSpin.SetTarget(candidates[Random.Range(0, candidates.Count)]);
-        _berserkSpinCooldown = BERSERKSPIN_COLLDOWN;
+        berserkSpin.SetTarget(candidates.GetRandomElement());
+        _berserkSpinCooldown = BERSERKSPIN_COOLDOWN;
     }
 
 }

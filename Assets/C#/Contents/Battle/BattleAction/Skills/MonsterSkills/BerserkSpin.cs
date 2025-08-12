@@ -37,6 +37,8 @@ public class BerserkSpin : MeleeSkill
             yield return new WaitForSeconds(.35f);
             foreach (var target in targets)
             {
+                if (target.PlacedCreature == null) continue;
+                if (target.PlacedCreature.IsDead()) continue;
                 int tickDamage = damageToTarget[target].tickDamage;
                 target.PlacedCreature.TakeDamage(tickDamage, dmgTextType);
                 damageToTarget[target] = (damageToTarget[target].totalDamage - tickDamage, tickDamage);
@@ -46,6 +48,8 @@ public class BerserkSpin : MeleeSkill
         yield return new WaitForSeconds(.35f);
         foreach (var target in targets)
         {
+            if (target.PlacedCreature == null) continue;
+            if (target.PlacedCreature.IsDead()) continue;
             target.PlacedCreature.TakeDamage(damageToTarget[target].totalDamage, dmgTextType);
         }
     }

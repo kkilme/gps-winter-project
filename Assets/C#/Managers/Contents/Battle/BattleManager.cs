@@ -134,14 +134,15 @@ public class BattleManager
             Managers.InputMng.RemoveMouseAction(BattleInputHandler.HandleMouseOnBattlePhase);
             Managers.InputMng.AddMouseAction(BattleInputHandler.HandleMouseOnTargetSelect);
 
-            GridSystem.HighlightTargettableCells(action);
+            GridSystem.HighlightTargetableCells(action);
+            // 선택 가능한 대상이 없을 때 플레이어에게 알리는 로직이 필요할지도
         }
         else // 대상 선택이 필요 없는 액션인 경우: 대상이 액션에서 강제로 정해져 있거나, 랜덤 대상을 선택하는 액션임
         {
             if (!action.IsExecutable())
             {
-                // TODO: 선택 가능한 대상이 없을 때의 처리
-
+                UnsetAction();
+                // 선택 가능한 대상이 없을 때 플레이어에게 알리는 로직이 필요할지도
             }
             action.SetRandomTarget();
             GridSystem.ResetAllCellColor();
