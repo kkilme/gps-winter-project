@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public class StatLayer
+public struct StatLayer
 {
     public int MaxHp;
     public int BaseDamage;
@@ -14,31 +14,27 @@ public class StatLayer
 
     public static StatLayer operator +(StatLayer a, StatLayer b)
     {
-        return new StatLayer
-        {
-            MaxHp = a.MaxHp + b.MaxHp,
-            BaseDamage = a.BaseDamage + b.BaseDamage,
-            PhysicalDefense = a.PhysicalDefense + b.PhysicalDefense,
-            MagicDefense = a.MagicDefense + b.MagicDefense,
-            Strength = a.Strength + b.Strength,
-            Vitality = a.Vitality + b.Vitality,
-            Intelligence = a.Intelligence + b.Intelligence,
-            Dexterity = a.Dexterity + b.Dexterity,
-        };
+        a.MaxHp += b.MaxHp;
+        a.BaseDamage += b.BaseDamage;
+        a.PhysicalDefense += b.PhysicalDefense;
+        a.MagicDefense += b.MagicDefense;
+        a.Strength += b.Strength;
+        a.Vitality += b.Vitality;
+        a.Intelligence += b.Intelligence;
+        a.Dexterity += b.Dexterity;
+        return a;
     }
 
     public static StatLayer operator -(StatLayer a, StatLayer b)
     {
-        return new StatLayer
-        {
-            MaxHp = a.MaxHp - b.MaxHp,
-            BaseDamage = a.BaseDamage - b.BaseDamage,
-            PhysicalDefense = a.PhysicalDefense - b.PhysicalDefense,
-            MagicDefense = a.MagicDefense - b.MagicDefense,
-            Strength = a.Strength - b.Strength,
-            Vitality = a.Vitality - b.Vitality,
-            Intelligence = a.Intelligence - b.Intelligence,
-            Dexterity = a.Dexterity - b.Dexterity,
-        };
+        a.MaxHp -= b.MaxHp;
+        a.BaseDamage -= b.BaseDamage;
+        a.PhysicalDefense -= b.PhysicalDefense;
+        a.MagicDefense -= b.MagicDefense;
+        a.Strength -= b.Strength;
+        a.Vitality -= b.Vitality;
+        a.Intelligence -= b.Intelligence;
+        a.Dexterity -= b.Dexterity;
+        return a;
     }
 }

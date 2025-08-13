@@ -5,10 +5,9 @@ public class CreatureStat
 {
     public virtual StatLayer FinalStat => BaseStat + BuffStat + DebuffStat;
 
-    public StatLayer BaseStat { get; protected set; }
-    public StatLayer BuffStat { get; protected set; } // TODO: 버프와 디버프는 추후 구현
-    public StatLayer DebuffStat { get; protected set; }
-
+    public StatLayer BaseStat;
+    public StatLayer BuffStat; // 버프와 디버프는 현재 구현하지 않았으나 Layer만 존재
+    public StatLayer DebuffStat;
 
     public Action<CreatureStat> OnStatChanged;
 

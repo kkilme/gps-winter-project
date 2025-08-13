@@ -111,9 +111,10 @@ public class Hero : Creature
 
     public void UnEquipWeapon()
     {
+        HideWeaponObject();
+
         if (Weapon == null || Weapon.DataId == GlobalValues.HERO_HANDWEAPON_ID) return;
 
-        HideWeaponObject();
         Weapon = null;
         EquipWeapon(GlobalValues.HERO_HANDWEAPON_ID); // 손 무기로 변경
     }

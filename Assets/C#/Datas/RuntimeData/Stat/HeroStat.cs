@@ -4,13 +4,17 @@ public class HeroStat : CreatureStat
 {
     public int HeroInstanceId { get; set; } // 이 스탯을 가지는 Hero의 InstanceId
     public override StatLayer FinalStat => BaseStat + EquipmentStat + BuffStat + DebuffStat;
-    public StatLayer EquipmentStat { get; protected set; }
+    protected StatLayer EquipmentStat;
+
     public HeroStat(CreatureData creatureData, int heroInstanceId) : base(creatureData)
     {
         EquipmentStat = new StatLayer();
         HeroInstanceId = heroInstanceId;
     }
 
+    /// <summary>
+    /// BaseStat의 특정 스탯을 delta만큼 증가 또는 감소시킴.
+    /// </summary>
     public void ModifyBaseStat(StatName stat, int delta)
     {
         switch (stat)
