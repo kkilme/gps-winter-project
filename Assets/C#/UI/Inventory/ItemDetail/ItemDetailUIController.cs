@@ -52,7 +52,7 @@ public static class ItemDetailUIController
 
         if (_ui == null)
         {
-            _ui = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
+            _ui = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>(setSortingOrder: false);
         }
 
         _ui.ApplyDesign(itemData, itemQuantity);
@@ -67,7 +67,7 @@ public static class ItemDetailUIController
         if (goldAmount <= 0) return;
         if (_ui == null)
         {
-            _ui = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
+            _ui = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>(setSortingOrder: false);
         }
 
         _ui.ApplyGoldDesign(goldAmount);

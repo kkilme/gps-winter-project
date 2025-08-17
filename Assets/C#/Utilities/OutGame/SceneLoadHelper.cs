@@ -13,7 +13,7 @@ public static class SceneLoadHelper
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / duration);
-            float progress = Mathf.Lerp(from, to, t); // 부드럽게 올림
+            float progress = Mathf.Lerp(from, to, t);
             loadingUI.UpdateProgress(progress);
             yield return null;
         }
