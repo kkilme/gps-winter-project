@@ -29,7 +29,7 @@ public abstract class UI_Base : MonoBehaviour
     }
 
     /// <summary>
-    /// DOTween을 사용해 UI를 보여주는 메소드
+    /// DOTween을 사용해 UI를 보여주는 메소드. 필요 시 오버라이드하여 구현.
     /// </summary>
     public virtual Tween Show()
     {
@@ -39,7 +39,7 @@ public abstract class UI_Base : MonoBehaviour
     }
 
     /// <summary>
-    /// DOTween을 사용해 UI를 숨기는 메소드
+    /// DOTween을 사용해 UI를 숨기는 메소드. 필요 시 오버라이드하여 구현.
     /// </summary>
     public virtual Tween Hide()
     {

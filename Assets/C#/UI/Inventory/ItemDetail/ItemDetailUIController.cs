@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 
-public static class ItemDetailUIFactory
+public static class ItemDetailUIController
 {
+    private static UI_ItemDetailPopup _ui;
+
     private static Dictionary<ItemType, ItemDetailDesign> _designCache = new();
     private static GoldDetailDesign _goldDesign;
 
@@ -14,36 +17,61 @@ public static class ItemDetailUIFactory
         _goldDesign = new GoldDetailDesign();
     }
 
+    public static void HideItemDetailUI()
+    {
+        if (_ui == null)
+        {
+            Debug.LogWarning("[ItemDetailUIController] HideItemDetailUI() has been called when _ui is null!");
+            return;
+        }
+        _ui.HideInstantly();
+    }
+
     /// <summary>
-    /// ItemInstanceData에 대한 아이템 상세 UI를 생성한다.
+    /// ItemInstanceData에 대한 아이템 상세 UI를 보인다.
     /// </summary>
-    public static void CreateItemDetailUI(ItemInstanceData itemInstanceData, int itemQuantity = 0)
+    public static void ShowItemDetailUI(ItemInstanceData itemInstanceData, int itemQuantity = 0)
     {
         if (itemInstanceData == null) return;
 
-        UI_ItemDetailPopup ui = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
-        ui.ApplyDesign(itemInstanceData, itemQuantity);
+        if (_ui == null)
+        {
+            _ui = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>(setSortingOrder: false);
+        }
+
+        _ui.ApplyDesign(itemInstanceData, itemQuantity);
+        _ui.Show();
     }
 
     /// <summary>
-    /// ItemData에 대한 아이템 상세 UI를 생성한다.
+    /// ItemData에 대한 아이템 상세 UI를 보인다.
     /// </summary>
-    public static void CreateItemDetailUI(ItemData itemData, int itemQuantity = 0)
+    public static void ShowItemDetailUI(ItemData itemData, int itemQuantity = 0)
     {
         if (itemData == null) return;
 
-        UI_ItemDetailPopup ui = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
-        ui.ApplyDesign(itemData, itemQuantity);
+        if (_ui == null)
+        {
+            _ui = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
+        }
+
+        _ui.ApplyDesign(itemData, itemQuantity);
+        _ui.Show();
     }
 
     /// <summary>
-    /// Gold에 대한 아이템 상세 UI를 생성한다.
+    /// Gold에 대한 아이템 상세 UI를 보인다.
     /// </summary>
-    public static void CreateGoldDetailUI(int goldAmount)
+    public static void ShowGoldDetailUI(int goldAmount)
     {
         if (goldAmount <= 0) return;
-        UI_ItemDetailPopup ui = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
-        ui.ApplyGoldDesign(goldAmount);
+        if (_ui == null)
+        {
+            _ui = Managers.UIMng.ShowPopupUI<UI_ItemDetailPopup>();
+        }
+
+        _ui.ApplyGoldDesign(goldAmount);
+        _ui.Show();
     }
 
     // UI_ItemDetailPopup에 디자인을 적용하는 확장 메소드들 /////////

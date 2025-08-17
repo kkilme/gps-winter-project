@@ -97,14 +97,14 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         _slotImage.sprite = _slotDesign.GetSlotSpriteOnMouseOver();
         if (_equipmentInstance != null)
         {
-            ItemDetailUIFactory.CreateItemDetailUI(_equipmentInstance);
+            ItemDetailUIController.ShowItemDetailUI(_equipmentInstance);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         _slotImage.sprite = _slotDesign.GetDefaultSlotSprite();
-        Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
+        ItemDetailUIController.HideItemDetailUI();
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -118,7 +118,7 @@ public class UI_HeroEquipmentSlot : UI_Base, IPointerEnterHandler, IPointerExitH
         UI_EquipmentSelectPopup equipmentSelectWindow = Managers.UIMng.ShowPopupUI<UI_EquipmentSelectPopup>();
         equipmentSelectWindow.LateInit(this, _equipmentType);
 
-        Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
+        ItemDetailUIController.HideItemDetailUI();
     }
 
     // 장비 선택 창에서 장비를 선택하면 호출됨

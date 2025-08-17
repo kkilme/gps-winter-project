@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,11 +30,15 @@ public class UI_ItemDetailPopup : UI_Popup
         EquippedHeroFrame
     }
 
+    private CanvasGroup _canvasGroup;
+
     public override void Init()
     {
         Bind<TextMeshProUGUI>(typeof(Texts));
         Bind<Image>(typeof(Images));
         Bind<GameObject>(typeof(GameObjects));
+
+        _canvasGroup = GetComponent<CanvasGroup>();
     }
 
     public void SetName(string name) => GetText(Texts.Text_ItemName).text = name;
@@ -54,5 +59,13 @@ public class UI_ItemDetailPopup : UI_Popup
         GetGameObject(GameObjects.EquippedHeroFrame).SetActive(true);
         GetImage(Images.Image_Hero).sprite = Managers.ResourceMng.Load<Sprite>(GlobalValues.CREATURE_IMAGE_PATH_PREFIX + heroInstanceData.ClassName + "_front");
         GetText(Texts.Text_EquippedHero).text = "Equipped By " + heroInstanceData.CustomName;
+    }
+
+    public override Tween Show()
+    {
+        _canvasGroup.alpha = 0f;
+        gameObject.SetActive(true);
+
+        return _canvasGroup.DOFade(1f, 0.4f).SetEase(Ease.OutSine);
     }
 }

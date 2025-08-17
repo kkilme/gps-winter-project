@@ -205,23 +205,23 @@ public class UI_ItemSlot : UI_Base, IPointerEnterHandler, IPointerExitHandler, I
         // 바인딩된 아이템의 상세 정보 UI 생성
         if (ItemInstanceData != null)
         {
-            ItemDetailUIFactory.CreateItemDetailUI(ItemInstanceData);
+            ItemDetailUIController.ShowItemDetailUI(ItemInstanceData);
         }
         else if (ItemData != null)
         {
-            ItemDetailUIFactory.CreateItemDetailUI(ItemData);
+            ItemDetailUIController.ShowItemDetailUI(ItemData);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (_slotDesign != null) _slotImage.sprite = _slotDesign.GetDefaultSlotSprite();
-        Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
+        ItemDetailUIController.HideItemDetailUI();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Managers.UIMng.ClosePopupUI<UI_ItemDetailPopup>();
+        ItemDetailUIController.HideItemDetailUI();
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             OnClickAction?.Invoke(this);

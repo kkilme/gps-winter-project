@@ -1,38 +1,15 @@
-using DG.Tweening;
 using System;
 using System.Text;
-using UnityEngine;
 
 
 public abstract class ItemDetailDesign
 {
-    public void Apply(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)
+    public virtual void Apply(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)
     {
-        // 디자인 적용이 끝나야만 ItemDetailUI의 RectTransform 값이 제대로 설정되어 올바른 위치가 결정됨.
-        // CanvasGroup을 통한 Fade 효과로 Design 적용이 끝났을 때 자연스럽게 보이도록 함.
-        CanvasGroup canvasGroup = ui.gameObject.GetOrAddComponent<CanvasGroup>();
-        canvasGroup.alpha = 0f;
-
-        ApplyDesign(ui, itemInstanceData, quantity);
-
-        canvasGroup.DOFade(1f, 0.4f).SetEase(Ease.OutSine);
-    }
-    public void Apply(UI_ItemDetailPopup ui, ItemData itemData, int quantity = 0)
-    {
-        CanvasGroup canvasGroup = ui.gameObject.GetOrAddComponent<CanvasGroup>();
-        canvasGroup.alpha = 0f;
-
-        ApplyDesign(ui, itemData, quantity);
-
-        canvasGroup.DOFade(1f, 0.4f).SetEase(Ease.OutSine);
+        Apply(ui, itemInstanceData.ItemData, quantity);
     }
 
-    protected virtual void ApplyDesign(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)
-    {
-        ApplyDesign(ui, itemInstanceData.ItemData, quantity);
-    }
-
-    protected virtual void ApplyDesign(UI_ItemDetailPopup ui, ItemData itemData, int quantity = 0)
+    public virtual void Apply(UI_ItemDetailPopup ui, ItemData itemData, int quantity = 0)
     {
         ApplyName(ui, itemData);
         ApplyItemImage(ui, itemData);
@@ -59,9 +36,9 @@ public abstract class ItemDetailDesign
 
 public abstract class EquipmentItemDetailDesign : ItemDetailDesign
 {
-    protected override void ApplyDesign(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)
+    public override void Apply(UI_ItemDetailPopup ui, ItemInstanceData itemInstanceData, int quantity = 0)
     {
-        base.ApplyDesign(ui, itemInstanceData, quantity);
+        base.Apply(ui, itemInstanceData, quantity);
         ApplyEquippedHeroInfo(ui, itemInstanceData as EquipmentInstanceData);
     }
 
@@ -210,7 +187,7 @@ public class ConsumableItemDetailDesign : ItemDetailDesign
 // 골드만을 위한 특수 디자인
 public class GoldDetailDesign : ItemDetailDesign
 {
-    protected override void ApplyDesign(UI_ItemDetailPopup ui, ItemData itemData, int quantity = 0)
+    public override void Apply(UI_ItemDetailPopup ui, ItemData itemData, int quantity = 0)
     {
         ui.SetName("Gold");
         ui.SetImage("Gold");

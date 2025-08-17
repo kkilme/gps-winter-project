@@ -134,7 +134,7 @@ public class UIManager
     /// <summary>
     /// UI/PopupUI/{path}의 PopupUI를 생성한 후 T컴포넌트로 반환
     /// </summary>
-    public T ShowPopupUI<T>(string path = null) where T : UI_Popup
+    public T ShowPopupUI<T>(string path = null, bool setSortingOrder = true) where T : UI_Popup
     {
         if (string.IsNullOrEmpty(path))
             path = typeof(T).Name;
@@ -142,8 +142,12 @@ public class UIManager
         GameObject go = Managers.ResourceMng.Instantiate($"UI/PopupUI/{path}");
         T popupUI = GlobalUtility.GetOrAddComponent<T>(go);
 
-        Canvas canvas = GlobalUtility.GetOrAddComponent<Canvas>(go);
-        canvas.sortingOrder = _order++;
+        if (setSortingOrder)
+        {
+            Canvas canvas = GlobalUtility.GetOrAddComponent<Canvas>(go);
+            canvas.sortingOrder = _order++;
+        }
+
         PopupUIs.Add(popupUI);
 
         SetUIParent(go, Root.transform);
