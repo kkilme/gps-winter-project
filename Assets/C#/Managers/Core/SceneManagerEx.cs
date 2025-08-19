@@ -72,7 +72,7 @@ public class SceneManagerEx
         areaManager.OnBattleSceneLoadStart();
 
         // Battle 씬 로드 및 활성화
-        yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.BATTLE_SCENE_NAME, loadingUI, 0, LoadSceneMode.Additive);
+        yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.BATTLE_SCENE_NAME, loadingUI, 0, .9f, LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.BATTLE_SCENE_NAME));
         CurrentSceneType = SceneType.BattleScene;
 
@@ -89,6 +89,8 @@ public class SceneManagerEx
         // BattleManager 초기화
         Managers.BattleMng.Init(squadId, areaManager.AreaData.BattleFieldName);
 
+        yield return SceneLoadHelper.FakeProgress(loadingUI, 1f, .5f);
+
         Managers.SoundMng.PlayBGM("BattleBGM");
 
         // 로딩 화면 fade out, 삭제
@@ -100,7 +102,7 @@ public class SceneManagerEx
     // 전투씬 종료 흐름 //////////////////
     // 1. 로딩화면 Fade in 완료
     // 2. 전투씬 언로드
-    // 3-1. 영웅 모두 사망시(전투 패배 시): Area 씬 언로드, Town 씬 로드
+    // 3-1. 영웅 모두 사망시(전투 패배 시): Town 씬 로드, Area 씬 언로드
     // 4-2. 승리 / 도망친 영웅 존재시: Area 씬 활성화
     // 5. 로딩화면 Fade out
     /////////////////////////////////////
@@ -119,24 +121,27 @@ public class SceneManagerEx
 
         // BattleScene 언로드
         yield return SceneManager.UnloadSceneAsync(GlobalValues.BATTLE_SCENE_NAME);
-        yield return SceneLoadHelper.FakeProgress(loadingUI, 0, 0.1f);
+        yield return SceneLoadHelper.FakeProgress(loadingUI, 0.1f);
 
         if (result == BattleResultType.Defeat) // 전투에서 패배 시 - TownScene으로
         {
+            // TownScene 로드
+            yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.TOWN_SCENE_NAME, loadingUI, 0.1f, 0.8f, LoadSceneMode.Additive);
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.TOWN_SCENE_NAME));
+
             // AreaScene 언로드
             if (SceneManager.GetSceneByName(GlobalValues.AREA_SCENE_NAME).isLoaded)
             {
                 Managers.AreaMng.Clear();
                 yield return SceneManager.UnloadSceneAsync(GlobalValues.AREA_SCENE_NAME);
             }
-            yield return SceneLoadHelper.FakeProgress(loadingUI, 0.1f, 0.2f);
 
-            // TownScene 로드
-            yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.TOWN_SCENE_NAME, loadingUI, 0.2f);
+            yield return SceneLoadHelper.FakeProgress(loadingUI, 0.9f);
 
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.TOWN_SCENE_NAME));
             CurrentSceneType = SceneType.TownScene;
             Managers.TownMng.Init();
+
+            yield return SceneLoadHelper.FakeProgress(loadingUI, 1f, 0.5f);
 
             Managers.SoundMng.PlayBGM("TownBGM");
 
@@ -163,7 +168,7 @@ public class SceneManagerEx
             Managers.SoundMng.PlayBGM("AreaBGM");
 
             // AreaScene은 열려있음 → 활성화
-            yield return SceneLoadHelper.FakeProgress(loadingUI, 0.1f, 1f);
+            yield return SceneLoadHelper.FakeProgress(loadingUI, 1f, 0.5f);
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.AREA_SCENE_NAME));
             CurrentSceneType = SceneType.AreaScene;
 
@@ -192,18 +197,22 @@ public class SceneManagerEx
         yield return loadingUI.FadeIn();
 
         // Area 씬 로드 및 활성화
-        yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.AREA_SCENE_NAME, loadingUI);
+        yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.AREA_SCENE_NAME, loadingUI, endProgress:0.9f);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.AREA_SCENE_NAME));
         CurrentSceneType = SceneType.AreaScene;
 
         // Area 씬 초기화
         GetCurrentScene<AreaScene>().InitArea(areaInitContext);
 
+        yield return SceneLoadHelper.FakeProgress(loadingUI, 1f, 0.5f);
+
         // BGM 재생
         Managers.SoundMng.PlayBGM("AreaBGM");
 
         // 로딩 화면 fade out
         yield return loadingUI.FadeOut();
+
+        Debug.Log($"[SceneManagerEx] AreaScene Load Finish");
     }
 
     // AreaScene -> TownScene 전환 //////////////////
@@ -226,7 +235,7 @@ public class SceneManagerEx
         yield return loadingUI.FadeIn();
 
         // TownScene 로드
-        yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.TOWN_SCENE_NAME, loadingUI, 0f, LoadSceneMode.Additive);
+        yield return SceneLoadHelper.LoadSceneWithProgress(GlobalValues.TOWN_SCENE_NAME, loadingUI, endProgress: 0.9f, loadSceneMode:LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(GlobalValues.TOWN_SCENE_NAME));
 
         // AreaScene 언로드
@@ -239,9 +248,13 @@ public class SceneManagerEx
         CurrentSceneType = SceneType.TownScene;
         Managers.TownMng.Init();
 
+        yield return SceneLoadHelper.FakeProgress(loadingUI, 1f, 0.5f);
+
         Managers.SoundMng.PlayBGM("TownBGM");
 
         // 로딩 화면 fade out
         yield return loadingUI.FadeOut();
+
+        Debug.Log($"[SceneManagerEx] TownScene Load Finish");
     }
 }

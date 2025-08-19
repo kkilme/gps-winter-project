@@ -18,6 +18,8 @@ public class UI_Loading : UI_Base
         Text_Loading
     }
 
+    public float Progress => _progressBar.value;
+
     private Slider _progressBar;
     private TextMeshProUGUI _progressText;
 
