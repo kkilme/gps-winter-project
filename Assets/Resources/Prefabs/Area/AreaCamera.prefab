@@ -47,6 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeedMin: 0.5
   _moveSpeedMax: 1
+  _zoomoutLimit: 25
+  _zoominLimit: 15
   _moveTime: 3
   _zoomAmount: 2
   _borderThickness: 10
@@ -54,8 +56,6 @@ MonoBehaviour:
   _posLimitXmax: 0
   _posLimitZmin: 0
   _posLimitZmax: 0
-  _zoomoutLimit: 25
-  _zoominLimit: 15
   _newPosition: {x: 0, y: 0, z: 0}
   _newZoom: 0
 --- !u!1 &4387366094694045893

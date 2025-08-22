@@ -43,7 +43,7 @@ public class AreaCameraController : MonoBehaviour
     private float _entry;
 
     // 현재 줌 단계. 이에 따라 카메라 이동속도 조정
-    private int _zoomLevel;
+    [SerializeField, ReadOnly] private int _zoomLevel;
 
     private const float TILE_PREFAB_THICKNESS = 1.0f;
     private const float Y_COORDINATE = 50.0f; // 본 스크립트가 부착된 오브젝트의 y좌표는 고정
@@ -71,8 +71,8 @@ public class AreaCameraController : MonoBehaviour
     {
         if (Freeze) return;
         HandleZoom();
-        HandleMouseInput();
         CalculateZoomlevel();
+        HandleMouseInput();
         HandleMouseScreenMove();
         CalculateZLimit();
         UpdateCamera();
@@ -92,11 +92,10 @@ public class AreaCameraController : MonoBehaviour
     // 카메라의 Z 제한값 설정
     private void CalculateZLimit()
     {
-        float cameraHeight = gameObject.transform.position.y + _cameraTransform.localPosition.y - TILE_PREFAB_THICKNESS;
-        float angle = Mathf.Deg2Rad * (90 - _cameraRotation);
+        float cameraHeight = _cameraTransform.position.y - TILE_PREFAB_THICKNESS;
 
-        _posLimitZmin = _startZ - cameraHeight * Mathf.Tan(angle);
-        _posLimitZmax = _bossZ - cameraHeight * Mathf.Tan(angle);
+        _posLimitZmin = _startZ - cameraHeight / Mathf.Tan(Mathf.Deg2Rad * _cameraRotation);
+        _posLimitZmax = _bossZ - cameraHeight / Mathf.Tan(Mathf.Deg2Rad * _cameraRotation);
     }
 
     public bool GetMouseoverPosition(out Vector3 mouseOverPosition)
@@ -161,6 +160,11 @@ public class AreaCameraController : MonoBehaviour
         /////////////////////////////////////////////////////////////////////////////////
     }
 
+    private void CalculateZoomlevel()
+    {
+        _zoomLevel = Mathf.Abs((_zoomoutLimit - _newZoom) / _zoomAmount) + 1;
+    }
+
     // 키보드 입력을 통한 카메라 이동
     private void HandleKeyScreenMove()
     {
@@ -219,10 +223,6 @@ public class AreaCameraController : MonoBehaviour
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
-    private void CalculateZoomlevel()
-    {
-        _zoomLevel = Mathf.Abs((_zoomoutLimit - _newZoom) / _zoomAmount) + 1;
-    }
 
     // zoom 단계에 따른 카메라 이동 속도를 미리 계산해서 저장
     private void InitializeMoveSpeedWithZoom()
