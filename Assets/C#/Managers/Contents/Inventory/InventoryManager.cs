@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// 플레이어가 소유한 모든 아이템, 재화 관리.
@@ -8,7 +9,19 @@ using UnityEngine;
 public class InventoryManager
 {
     private int _nextInstanceId = 0;
-    public int Gold { get; private set; } = 0; // 플레이어가 소유한 골드
+
+    private int _gold = 0;
+    public Action<int> OnGoldChanged;
+    public int Gold
+    {
+        get => _gold;
+        set
+        {
+            _gold = Mathf.Max(0, value);
+            OnGoldChanged?.Invoke(_gold);
+        }
+    }
+
     public Dictionary<int, ItemInstanceData> ItemDict { get; private set; } = new Dictionary<int, ItemInstanceData>(); // key: instanceId, value: ItemData
     public List<ItemInstanceData> ItemList => ItemDict.Values.ToList();
 

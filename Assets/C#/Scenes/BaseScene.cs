@@ -21,8 +21,8 @@ public abstract class BaseScene : MonoBehaviour
 
     protected virtual void Init()
     {
-        // TODO- 최초 Scene에서만 실행
-        if (!Managers.ObjectHolder.Initialized)
+        // 최초 Scene에서만 실행
+        if (Managers.SceneMng.IsFirstScene)
         {
             Managers.Init();
             Managers.InputMng.Init();

@@ -77,6 +77,8 @@ public class BattleInputHandler
     #region Placement Phase
     private void OnMouseHover_PlacementPhase()
     {
+        if (!_camera.pixelRect.Contains(Input.mousePosition)) return;
+
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: GlobalValues.LAYERMASK_BATTLEGRIDCELL))
@@ -106,6 +108,7 @@ public class BattleInputHandler
     private void OnDragging_PlacementPhase()
     {
         if (_draggingCreature == null) return;
+        if (!_camera.pixelRect.Contains(Input.mousePosition)) return;
 
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         _draggingCreature.transform.position = GetMouseWorldPosition();
@@ -136,6 +139,7 @@ public class BattleInputHandler
     #region Battle Phase
     private void OnMouseHover_BattleIdle()
     {
+        if (!_camera.pixelRect.Contains(Input.mousePosition)) return;
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: GlobalValues.LAYERMASK_BATTLEGRIDCELL))
@@ -155,6 +159,7 @@ public class BattleInputHandler
 
     private void OnMouseHover_TargetSelect()
     {
+        if (!_camera.pixelRect.Contains(Input.mousePosition)) return;
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: GlobalValues.LAYERMASK_BATTLEGRIDCELL))
@@ -199,14 +204,18 @@ public class BattleInputHandler
     }
     #endregion
     #region Utility
+
+    private static Vector3 mousePosition_default = new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0f, GlobalValues.BATTLEFIELD_POS_Z);
+
     private Vector3 GetMouseWorldPosition()
     {
+        if (!_camera.pixelRect.Contains(Input.mousePosition)) return mousePosition_default;
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: GlobalValues.LAYERMASK_BATTLEGROUND))
         {
             return rayHit.point;
         }
-        return new Vector3(GlobalValues.BATTLEFIELD_POS_X, 0f, GlobalValues.BATTLEFIELD_POS_Z);
+        return mousePosition_default;
     }
     #endregion
 }

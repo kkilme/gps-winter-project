@@ -8,7 +8,7 @@ public class TownScene : BaseScene
 
     private void Start()
     {
-        if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
+        if (Managers.SceneMng.IsFirstScene)
         {
             Managers.SoundMng.PlayBGM("TownBGM");
             Managers.TownMng.Init();

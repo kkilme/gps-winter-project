@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
-    private static bool _initialized;
-
     private static Managers s_instance;
     public static Managers Instance { get { Init(); return s_instance; } }
 
@@ -42,18 +40,27 @@ public class Managers : MonoBehaviour
 
     #endregion
 
+    private void Awake()
+    {
+        if (s_instance != null && s_instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        s_instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
     public static void Init()
     {
-        if (s_instance == null || !_initialized)
+        if (s_instance == null)
         {
-            _initialized = true;
-
             GameObject go = GameObject.Find("@Managers");
             if (go == null)
             {
                 go = new GameObject { name = "@Managers" };
                 go.AddComponent<Managers>();
-                go.AddComponent<CoroutineRunner>();
             }
 
             DontDestroyOnLoad(go);

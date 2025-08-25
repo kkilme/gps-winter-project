@@ -20,7 +20,7 @@ public class BattleScene : BaseScene
     [SerializeField] private int testSquadId = 0; // 테스트용 squadId
     private void Start()
     {
-        if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
+        if (Managers.SceneMng.IsFirstScene)
         {
             Managers.SoundMng.PlayBGM("BattleBGM");
             for (int i = 0; i < 7; i++) Managers.AreaMng.Items.Add(new HealPotion(GlobalValues.ITEM_HEALPOTION_ID)); // 테스트용 아이템 추가

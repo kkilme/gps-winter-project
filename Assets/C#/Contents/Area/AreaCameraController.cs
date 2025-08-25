@@ -102,6 +102,8 @@ public class AreaCameraController : MonoBehaviour
     {
         mouseOverPosition = Vector3.zero;
 
+        if (!_camera.pixelRect.Contains(Input.mousePosition)) return false;
+        
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 100f, layerMask: LayerMask.GetMask("AreaGrid")))
         {
@@ -111,7 +113,7 @@ public class AreaCameraController : MonoBehaviour
 
             return true;
         }
-
+        
         return false;
     }
 

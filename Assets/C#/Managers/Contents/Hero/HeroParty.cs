@@ -10,7 +10,7 @@ public class HeroParty
     public Dictionary<int, Hero> RuntimeHeroesDict { get; private set; } = new(); // key: heroInstanceId, value: Hero
     public List<Hero> RuntimeHeroes => RuntimeHeroesDict.Values.ToList(); // Area/Battle에서 사용되는 Hero객체 리스트
 
-    private Dictionary<int, Vector2Int> _battlePositions = new(); // key: heroInstanceId, value: Battle에서 배치되는 위치(col, row). 현재 파티에 포함되어 있지 않은 영웅의 위치 정보도 저장되어있음. 
+    private Dictionary<int, Vector2Int> _battlePositions = new(); // key: heroInstanceId, value: Battle에서 배치되는 위치(col, row). 현재 파티에 포함되어 있지 않은 영웅의 위치 정보까지 모두 저장되어있음. 
     private Dictionary<int, Vector2Int> _battlePositionsCache = new(); // key: heroInstanceId, value: 좌표. 현재 파티에 포함되어 있는 영웅의 battlePosition만 저장되는 딕셔너리. - 최대 Length 4
 
     /// <summary>

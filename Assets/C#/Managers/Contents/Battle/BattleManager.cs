@@ -89,12 +89,11 @@ public class BattleManager
     /// </summary>
     private void StartPlacementPhase()
     {
-        BattleState = BattleState.HeroPlacement;
-
         Managers.InputMng.AddMouseAction(BattleInputHandler.HandleMouseOnPlacementPhase);
         Managers.InputMng.AddPointerOverGameObjectAction(BattleInputHandler.OnDragEnd_PlacementPhase);
 
         UI.OnPlacementPhaseStart();
+        BattleState = BattleState.HeroPlacement;
     }
 
     /// <summary>

@@ -8,7 +8,8 @@ public class SceneManagerEx
     /// <summary>
     /// 현재 씬 이전에 활성화되어있던 씬. 첫 시작 시 UnknownScene이며, 이를 통해 테스트 환경 구현
     /// </summary>
-    public SceneType LastSceneType;
+    public SceneType LastSceneType = SceneType.UnknownScene;
+    public bool IsFirstScene => LastSceneType == SceneType.UnknownScene;
     public SceneType CurrentSceneType;
     private BaseScene _currentScene;
     /// <summary>
@@ -41,7 +42,6 @@ public class SceneManagerEx
 
     public void Init()
     {
-        LastSceneType = SceneType.UnknownScene;
         CurrentSceneType = CurrentScene.SceneType;
     }
 

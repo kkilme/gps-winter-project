@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ObjectHolder
 {
-    public bool Initialized { get; protected set; }
     public Dictionary<int, BattleSkill> Skills { get; protected set; } // 미리 생성해놓고 반복해서 사용
                                                                        // 객체를 하나씩만 생성하여 반복 사용하기 때문에,
                                                                        // 전투에서 한 턴에 한 Creature만 Action을 실행하는 것이 보장되지 않거나
@@ -20,8 +19,6 @@ public class ObjectHolder
 
         BindSkills();
         BindEncounters();
-
-        Initialized = true;
     }
 
     private void BindSkills()

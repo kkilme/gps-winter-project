@@ -28,7 +28,7 @@ public class AreaScene : BaseScene
     private void Start()
     {
         // AreaScene에서 시작하여 플레이 테스트 시에만 실행
-        if (Managers.SceneMng.LastSceneType == SceneType.UnknownScene)
+        if (Managers.SceneMng.IsFirstScene)
         {
             Managers.SoundMng.PlayBGM("AreaBGM");
             AreaInitContext testContext = new TestAreaInitContext();

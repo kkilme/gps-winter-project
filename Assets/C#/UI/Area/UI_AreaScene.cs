@@ -7,7 +7,6 @@ public class UI_AreaScene : UI_Scene
     enum SubItemUI
     {
         UI_AreaTopBar,
-        UI_CoinTossDisplay,
         UI_AreaButtons,
         UI_CollapseInformer,
         UI_HeroProfileGroup_Horizontal,
@@ -23,7 +22,6 @@ public class UI_AreaScene : UI_Scene
     public UI_AreaTopBar TopBar { get; private set; }
     public UI_AreaButtons AreaButtons { get; private set; }
     public UI_CollapseInformer CollapseInformer { get; private set; }
-    public UI_CoinTossDisplay CoinTossDisplay { get; private set; }
     public UI_HeroProfileGroup HeroProfileGroupUI { get; private set; }
     public UI_ChooseTarget_Area ChooseTargetUI { get; private set; }
 
@@ -36,7 +34,6 @@ public class UI_AreaScene : UI_Scene
         AreaButtons = GetGameObject(SubItemUI.UI_AreaButtons).GetOrAddComponent<UI_AreaButtons>();
         TopBar = GetGameObject(SubItemUI.UI_AreaTopBar).GetOrAddComponent<UI_AreaTopBar>();
         CollapseInformer = GetGameObject(SubItemUI.UI_CollapseInformer).GetOrAddComponent<UI_CollapseInformer>();
-        CoinTossDisplay = GetGameObject(SubItemUI.UI_CoinTossDisplay).GetOrAddComponent<UI_CoinTossDisplay>();
         HeroProfileGroupUI = GetGameObject(SubItemUI.UI_HeroProfileGroup_Horizontal).GetOrAddComponent<UI_HeroProfileGroup>();
         ChooseTargetUI = GetGameObject(SubItemUI.UI_ChooseTarget_Area).GetOrAddComponent<UI_ChooseTarget_Area>();
     }
@@ -44,7 +41,6 @@ public class UI_AreaScene : UI_Scene
     // AreaManager의 Init 완료 후 호출
     public void OnAreaInitComplete()
     {
-        CoinTossDisplay.Hide();
         AreaButtons.Show();
         TopBar.SetAreaName(Managers.AreaMng.AreaData.Name);
         TopBar.Show();
@@ -64,7 +60,6 @@ public class UI_AreaScene : UI_Scene
 
     public void ResetUI()
     {
-        CoinTossDisplay.Hide();
         ChooseTargetUI.Hide();
         AreaButtons.CloseAllPopups();
         DehighlightHeroProfiles();
