@@ -87,7 +87,7 @@ public class SceneManagerEx
         };
 
         // BattleManager 초기화
-        Managers.BattleMng.Init(squadId, areaManager.AreaData.BattleFieldName);
+        Managers.BattleMng.Init(squadId, areaManager.AreaData.BattleFieldName, battleType);
 
         yield return SceneLoadHelper.FakeProgress(loadingUI, 1f, .5f);
 

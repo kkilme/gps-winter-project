@@ -9,15 +9,16 @@ public class BattleScene : BaseScene
         base.Init();
     }
 
-    public void InitBattle(int squadId, string battleFieldName)
-    {
-        Managers.BattleMng.Init(squadId, battleFieldName);
-    }
 
 #if UNITY_EDITOR
     // Test용 코드 //////////////////////////////////////////////////
-
     [SerializeField] private int testSquadId = 0; // 테스트용 squadId
+
+    private void InitBattle(int squadId, string battleFieldName, BattleType battleType = BattleType.Normal)
+    {
+        Managers.BattleMng.Init(squadId, battleFieldName, battleType);
+    }
+
     private void Start()
     {
         if (Managers.SceneMng.IsFirstScene)

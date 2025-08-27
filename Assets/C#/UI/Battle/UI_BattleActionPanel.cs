@@ -29,6 +29,8 @@ public class UI_BattleActionPanel : UI_Base
     private RectTransform _rect;
     private Transform _actionButtonParent;
 
+    private BattleManager _battleManager => Managers.BattleMng;
+
     public override void Init()
     {
         Bind<GameObject>(typeof(GameObjects));
@@ -44,14 +46,14 @@ public class UI_BattleActionPanel : UI_Base
 
     public override Tween Show()
     {
-        _hero = Managers.BattleMng.CurrentTurnCreature as Hero;
-        if (_hero == null) return DOVirtual.DelayedCall(0, () => { });
+        _hero = _battleManager.CurrentTurnCreature as Hero;
+        if (_hero == null) return base.Show();
+
         ClearActionInfo();
         SetupActionButtons();
         gameObject.SetActive(true);
 
-        if (_showTween != null) return _showTween; // 이미 진행중이면 중복 실행 방지
-        _showTween = _rect.DOAnchorPosY(-400f, 1f).From(true).SetEase(Ease.OutCirc).OnComplete(() => { _showTween = null; });
+        _showTween ??= _rect.DOAnchorPosY(-400f, 1f).From(true).SetEase(Ease.OutCirc).OnComplete(() => { _rect.anchoredPosition = _initialPosition; _showTween = null; });
 
         return _showTween;
     }
@@ -69,6 +71,12 @@ public class UI_BattleActionPanel : UI_Base
         gameObject.SetActive(true);
     }
 
+    public override void HideInstantly()
+    {
+        _rect.anchoredPosition = _initialPosition; // 초기 위치로 되돌리기
+        base.HideInstantly();
+    }
+
     /// <summary>
     /// 영웅(무기)이 가진 스킬 버튼들 생성 및 배치
     /// </summary>
@@ -77,6 +85,8 @@ public class UI_BattleActionPanel : UI_Base
         ClearActionButtons();
         foreach (BattleSkill skill in _hero.Weapon.Skills)
         {
+            if (_battleManager.BattleType == BattleType.Boss && skill is Flee) continue; // 보스전에서는 도망 스킬 비활성화
+
             var actionButton = Managers.UIMng.MakeSubItemUI<UI_BattleActionButton>(_actionButtonParent, "Battle/" + nameof(UI_BattleActionButton));
             actionButton.SetSkill(skill);
 

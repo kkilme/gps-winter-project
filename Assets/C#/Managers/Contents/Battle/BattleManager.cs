@@ -8,6 +8,7 @@ public class BattleManager
     #region Field
 
     public BattleState BattleState { get; private set; }
+    public BattleType BattleType { get; private set; }
     public UI_BattleScene UI { get; private set; }
     public TurnSystem TurnSystem { get; private set; }
     public BattleGridSystem GridSystem { get; private set; }
@@ -55,9 +56,10 @@ public class BattleManager
 
     #endregion
 
-    public void Init(int monsterSquadId, string battleFieldName)
+    public void Init(int monsterSquadId, string battleFieldName, BattleType battleType)
     {
         BattleState = BattleState.Starting;
+        BattleType = battleType;
         TurnSystem = new TurnSystem();
         GridSystem = new BattleGridSystem();
         BattleInputHandler = new BattleInputHandler();
@@ -250,8 +252,12 @@ public class BattleManager
     /// </summary>
     public void RemoveHero(Hero hero, bool isFlee)
     {
-        if (isFlee) UI.HeroProfileGroupUI.OnFlee(hero);
-        else UI.HeroProfileGroupUI.OnDead(hero);
+        if (isFlee) UI.HeroProfileGroupUI.OnFlee(hero); // 도망친 경우
+        else// 죽은 경우
+        {
+            Managers.AreaMng.UI.HeroProfileGroupUI.OnDead(hero); // Area UI에도 반영
+            UI.HeroProfileGroupUI.OnDead(hero);
+        }
 
         AliveHeroes.Remove(hero);
 

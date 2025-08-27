@@ -8,7 +8,7 @@ public class AreaManager
     public AreaMap Map { get; private set; }
     public AreaData AreaData { get; private set; }
     public Quest Quest { get; private set; } // 현재 Area의 퀘스트
-    public Loot Loots { get; set; } = new(); // Area에서 획득한 아이템들
+    public Loot Loots { get; set; } // Area에서 획득한 아이템들
     public List<Item> Items { get; set; } = new(); // Area에서 사용하고자 가져온 아이템들: 현재는 ConsumableItem만 사용 가능
 
     public AreaInputHandler AreaInputHandler { get; private set; }
@@ -37,6 +37,8 @@ public class AreaManager
         AreaData = Managers.DataMng.AreaDataDict[areaInitContext.AreaName];
         Quest = areaInitContext.Quest;
         UI = Managers.UIMng.ShowSceneUI<UI_AreaScene>();
+        Loots = new Loot();
+        Items.Clear();
         foreach (var itemData in areaInitContext.Items)
         {
             Items.Add(ItemFactory.CreateItemById(itemData.DataId));

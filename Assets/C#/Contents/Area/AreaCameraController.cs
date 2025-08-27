@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 public class AreaCameraController : MonoBehaviour
@@ -41,6 +42,7 @@ public class AreaCameraController : MonoBehaviour
     private Vector3 _dragCurrentPosition;
     private Plane _plane;
     private float _entry;
+    private bool _isDragging;
 
     // 현재 줌 단계. 이에 따라 카메라 이동속도 조정
     [SerializeField, ReadOnly] private int _zoomLevel;
@@ -120,16 +122,21 @@ public class AreaCameraController : MonoBehaviour
     // 클릭 + 드래그를 통한 카메라 이동
     private void HandleMouseInput()
     {
+        // UI 위 클릭이면 리턴
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             if (_plane.Raycast(ray, out _entry))
             {
                 _dragStartPosition = ray.GetPoint(_entry);
+                _isDragging = true;
             }
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && _isDragging)
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             if (_plane.Raycast(ray, out _entry))
@@ -138,11 +145,20 @@ public class AreaCameraController : MonoBehaviour
                 _newPosition = transform.position + _dragStartPosition - _dragCurrentPosition;
             }
         }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _isDragging = false;
+        }
     }
 
     // 마우스 휠을 이용한 zoom
     private void HandleZoom()
     {
+        // UI 위 드래그면 리턴
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
+
         if (Input.mouseScrollDelta.y != 0)
         {
             _newZoom += (int)(Input.mouseScrollDelta.y * -_zoomAmount);
